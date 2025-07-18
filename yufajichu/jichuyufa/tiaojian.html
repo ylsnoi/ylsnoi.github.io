@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>条件语句 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：鲜明的蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        syntax: '#FF9800', // 语法部分：橙色
+                        algorithm: '#2ECC71', // 算法部分：绿色
+                        datastructure: '#9C27B0', // 数据结构部分：深紫色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                        condition: '#2196F3', // 条件语句主题色：蓝色
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .subcategory-bg {
+                @apply bg-gradient-to-r from-secondary/5 to-secondary/10;
+            }
+            .condition-bg {
+                @apply bg-gradient-to-r from-condition/5 to-condition/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .condition-header {
+                @apply font-bold text-condition mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-condition bg-condition/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-condition text-white text-center mr-2 text-xs;
+            }
+            .condition-block {
+                @apply border-2 border-gray-300 rounded-md p-3 mb-4 bg-gray-50 transition-all duration-300;
+            }
+            .condition-block-active {
+                @apply border-condition bg-condition/10 transform scale-[1.01];
+            }
+            .condition-keyword {
+                @apply text-red-500 font-semibold;
+            }
+            .condition-variable {
+                @apply text-blue-400;
+            }
+            .condition-value {
+                @apply text-green-400;
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-gray-100 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-condition h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">语法基础</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">控制结构</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-condition font-medium">条件语句</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="condition-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-condition mb-2">条件语句</h1>
+                    <p class="text-gray-700">
+                        条件语句是编程中的基础控制结构，用于根据不同条件执行不同的代码块。
+                        本页面将详细讲解条件语句的语法、用法和最佳实践，专为编程初学者设计。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-condition hover:bg-condition/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#problems" class="bg-white border border-condition text-condition hover:bg-condition/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看题目
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 条件语句概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-condition mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 条件语句概述
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">什么是条件语句？</h3>
+                    <p class="text-gray-700">
+                        条件语句是编程语言中用于根据特定条件决定执行不同代码块的结构。
+                        它允许程序根据不同情况做出判断和选择，使程序具有决策能力。
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">条件语句的作用</h3>
+                    <p class="text-gray-700">
+                        在编程中，我们经常需要根据不同的条件执行不同的操作。例如：
+                    </p>
+                    <ul class="list-disc pl-6 mt-2 space-y-2">
+                        <li>如果成绩大于等于60分，则判定为"及格"，否则判定为"不及格"</li>
+                        <li>如果用户输入的是"Y"，则继续执行程序，否则退出程序</li>
+                        <li>根据不同的选择，执行不同的功能模块</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">常见的条件语句类型</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-condition mb-2">if语句</h4>
+                            <p class="text-gray-700 text-sm">
+                                最基本的条件语句，当条件为真时执行特定代码块
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-condition mb-2">if-else语句</h4>
+                            <p class="text-gray-700 text-sm">
+                                当条件为真时执行一个代码块，否则执行另一个代码块
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-condition mb-2">if-else if-else语句</h4>
+                            <p class="text-gray-700 text-sm">
+                                多条件判断，依次检查条件，执行第一个为真的条件对应的代码块
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-condition mb-2">switch语句</h4>
+                            <p class="text-gray-700 text-sm">
+                                多分支选择结构，根据表达式的值选择执行相应的代码块
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-condition mb-2">三元运算符</h4>
+                            <p class="text-gray-700 text-sm">
+                                简洁的条件判断形式，根据条件返回两个值中的一个
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 条件语句动画演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-condition mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> 条件语句执行流程演示
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- if-else语句演示 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">if-else语句执行流程</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了if-else语句的执行流程。程序会先判断条件是否成立，
+                                如果成立则执行if块中的代码，否则执行else块中的代码。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">设置变量x的值:</label>
+                                <input type="range" id="x-value" min="0" max="100" value="75" 
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-condition">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>0</span>
+                                    <span id="x-value-display">75</span>
+                                    <span>100</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button id="ifelse-run" class="bg-condition hover:bg-condition/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行动画
+                                </button>
+                                <button id="ifelse-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="ifelse-status" class="animation-status hidden">
+                                状态: 等待开始
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 min-h-[300px]" id="ifelse-animation">
+                                <div class="text-center text-gray-500 py-8">
+                                    <i class="fa fa-arrow-down mb-2"></i>
+                                    <p>点击"运行动画"开始演示</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 多分支条件语句演示 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">多分支条件语句执行流程</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了多分支条件语句(if-else if-else)的执行流程：
+                            </p>
+                            <ul class="list-disc pl-6 mb-4 space-y-1">
+                                <li>程序会依次检查每个条件</li>
+                                <li>执行第一个条件为真的分支</li>
+                                <li>如果所有条件都为假，则执行else分支</li>
+                            </ul>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">设置分数值:</label>
+                                <input type="range" id="score-value" min="0" max="100" value="85" 
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-condition">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>0</span>
+                                    <span id="score-value-display">85</span>
+                                    <span>100</span>
+                                </div>
+                            </div>
+                            
+                            <div class="animation-controls">
+                                <button id="multibranch-run" class="bg-condition hover:bg-condition/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行动画
+                                </button>
+                                <button id="multibranch-step" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-step-forward mr-2"></i> 单步执行
+                                </button>
+                                <button id="multibranch-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div class="animation-progress">
+                                <div id="multibranch-progress" class="animation-progress-bar" style="width: 0%"></div>
+                            </div>
+                            
+                            <div class="animation-step bg-blue-50 text-blue-800 p-3 rounded-lg mb-4">
+                                <h4 class="font-medium mb-1">当前步骤说明</h4>
+                                <p id="multibranch-step-info" class="text-sm">点击"运行动画"或"单步执行"开始演示</p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 min-h-[400px]" id="multibranch-animation">
+                                <div class="text-center text-gray-500 py-16">
+                                    <i class="fa fa-arrow-down mb-2"></i>
+                                    <p>点击"运行动画"或"单步执行"开始演示</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 条件语句代码示例 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-condition mb-6 flex items-center">
+                <i class="fa fa-code mr-2"></i> 条件语句代码示例 (C++)
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- if语句示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">1. if语句</h3>
+                    <p class="text-gray-700 mb-3">
+                        if语句是最基本的条件判断结构，当条件为真时执行其后的代码块：
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int age;
+    cout << "请输入你的年龄: ";
+    cin >> age;
+    
+    // 如果年龄大于等于18岁，则输出成年信息
+    <span class="condition-keyword">if</span> (age >= 18) {
+        cout << "你已经成年了，可以独立生活了！" << endl;
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- if-else语句示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">2. if-else语句</h3>
+                    <p class="text-gray-700 mb-3">
+                        if-else语句提供了两种选择，条件为真时执行if块，否则执行else块：
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int score;
+    cout << "请输入你的分数: ";
+    cin >> score;
+    
+    // 判断分数是否及格
+    <span class="condition-keyword">if</span> (score >= 60) {
+        cout << "恭喜你，考试及格了！" << endl;
+    } <span class="condition-keyword">else</span> {
+        cout << "很遗憾，考试不及格，需要补考。" << endl;
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- if-else if-else语句示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">3. if-else if-else语句</h3>
+                    <p class="text-gray-700 mb-3">
+                        多分支条件语句，用于处理多种可能的情况：
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int score;
+    cout << "请输入你的分数: ";
+    cin >> score;
+    
+    // 根据分数判断等级
+    <span class="condition-keyword">if</span> (score >= 90) {
+        cout << "优秀" << endl;
+    } <span class="condition-keyword">else if</span> (score >= 80) {
+        cout << "良好" << endl;
+    } <span class="condition-keyword">else if</span> (score >= 60) {
+        cout << "及格" << endl;
+    } <span class="condition-keyword">else</span> {
+        cout << "不及格" << endl;
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- switch语句示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">4. switch语句</h3>
+                    <p class="text-gray-700 mb-3">
+                        switch语句用于基于不同的值执行不同的代码块，适合判断离散的值：
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    char grade;
+    cout << "请输入你的等级(A/B/C/D/E): ";
+    cin >> grade;
+    
+    // 根据等级输出评价
+    <span class="condition-keyword">switch</span> (grade) {
+        <span class="condition-keyword">case</span> 'A':
+            cout << "优秀，继续保持！" << endl;
+            <span class="condition-keyword">break</span>;
+        <span class="condition-keyword">case</span> 'B':
+            cout << "良好，再加把劲！" << endl;
+            <span class="condition-keyword">break</span>;
+        <span class="condition-keyword">case</span> 'C':
+            cout << "中等，还需努力！" << endl;
+            <span class="condition-keyword">break</span>;
+        <span class="condition-keyword">case</span> 'D':
+            cout << "及格，不能松懈！" << endl;
+            <span class="condition-keyword">break</span>;
+        <span class="condition-keyword">case</span> 'E':
+            cout << "不及格，需要补考！" << endl;
+            <span class="condition-keyword">break</span>;
+        <span class="condition-keyword">default</span>:
+            cout << "无效的等级！" << endl;
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 三元运算符示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">5. 三元运算符</h3>
+                    <p class="text-gray-700 mb-3">
+                        三元运算符是if-else语句的简洁形式，语法为：条件 ? 表达式1 : 表达式2
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int a, b, max;
+    cout << "请输入两个整数: ";
+    cin >> a >> b;
+    
+    // 使用三元运算符求两个数中的最大值
+    max = (a > b) ? a : b;
+    
+    cout << "两个数中最大的是: " << max << endl;
+    
+    return 0;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 条件语句应用 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-condition mb-6 flex items-center">
+                <i class="fa fa-lightbulb-o mr-2"></i> 条件语句应用
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">条件语句的典型应用场景</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-condition mb-2">输入验证</h4>
+                            <p class="text-gray-700">
+                                检查用户输入是否符合要求，如年龄是否在有效范围内、邮箱格式是否正确等。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-condition mb-2">流程控制</h4>
+                            <p class="text-gray-700">
+                                根据不同条件执行不同的程序流程，如登录验证成功则进入系统，否则提示错误。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-condition mb-2">数据分类</h4>
+                            <p class="text-gray-700">
+                                将数据按照特定规则分类，如根据成绩分级、根据年龄分组等。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-condition mb-2">错误处理</h4>
+                            <p class="text-gray-700">
+                                处理程序运行中可能出现的异常情况，如文件打开失败时的错误处理。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">条件语句的注意事项</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>条件表达式的正确性</strong>：确保条件表达式能正确判断所需情况，注意比较运算符(==)与赋值运算符(=)的区别</li>
+                        <li><strong>代码块的范围</strong>：使用大括号明确代码块范围，避免因缩进错误导致逻辑错误</li>
+                        <li><strong>分支覆盖</strong>：确保所有可能的情况都有对应的处理分支，避免遗漏</li>
+                        <li><strong>嵌套层次</strong>：避免过多的条件语句嵌套，保持代码的可读性</li>
+                        <li><strong>switch语句的break</strong>：在switch的case分支中不要忘记使用break，否则会导致穿透执行</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 洛谷推荐题目 -->
+        <section id="problems" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-condition mb-6 flex items-center">
+                <i class="fa fa-puzzle-piece mr-2"></i> 洛谷推荐题目
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">入门题</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-lg mb-2">P5710 【深基3.例2】数的性质</h4>
+                        <p class="text-gray-700 mb-3">
+                            一些整数可能拥有以下的性质：<br>
+                            性质 1：是偶数；<br>
+                            性质 2：大于 4 且不大于 12。<br>
+                            小A 喜欢这两个性质同时成立的整数；Uim 喜欢这至少符合其中一种性质的整数；八尾勇喜欢刚好符合其中一个性质的整数；正妹喜欢不符合这两个性质的整数。<br>
+                            现在给出一个整数 x，请问他们是否喜欢这个整数？
+                        </p>
+                        <div class="flex space-x-3 mt-3">
+                            <a href="https://www.luogu.com.cn/problem/P5710" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                <i class="fa fa-external-link mr-2"></i> 题目链接
+                            </a>
+                            <a href="#" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                <i class="fa fa-code mr-2"></i> 题解代码
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">基础题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P5711 【深基3.例3】闰年判断</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                输入一个年份，判断这一年是否为闰年。
+                                闰年的判断规则如下：
+                                （1）能被4整除，但不能被100整除的年份是闰年；
+                                （2）能被400整除的年份是闰年。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P5711" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1085 不高兴的津津</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                津津上初中了。妈妈认为津津应该更加用功学习，所以津津除了上学之外，还要参加妈妈为她报名的各科复习班。另外每周妈妈还会送她去学习朗诵、舞蹈和钢琴。但是津津如果一天上课超过八个小时就会不高兴，而且上得越久就越不高兴。假设津津不会因为其它事不高兴，并且她的不高兴不会持续到第二天。请你帮忙检查一下津津下周的日程安排，看看下周她会不会不高兴；如果会的话，哪天最不高兴。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1085" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">进阶题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1909 买铅笔</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                P老师需要去商店买n支铅笔作为小朋友们参加编程比赛的礼物。她发现商店一共有 3 种包装的铅笔，不同包装内的铅笔数量有可能不同，价格也有可能不同。为了公平起见，P老师决定只买同一种包装的铅笔。
+                                商店不允许将铅笔的包装拆开，因此P老师可能需要购买超过n支铅笔才够给小朋友们发礼物。
+                                现在P老师想知道，在商店每种包装的数量都足够的情况下，要买够至少n支铅笔最少需要花费多少钱。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1909" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1055  ISBN号码</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                每一本正式出版的图书都有一个ISBN号码与之对应，ISBN码包括9位数字、1位识别码和3个连接符“-”，其规定格式如“x-xxx-xxxxx-x”，其中符号“x”分别表示1位数字，首位数字不为0。
+                                识别码是通过前9位数字按照一定的算法计算得出的。计算方法如下：
+                                前9位数字分别乘以1，2，…，9，再求和，用和除以11，所得的余数即为识别码，如果余数为10，则识别码为大写字母X。
+                                你的任务是编写程序判断输入的ISBN号码中识别码是否正确，如果正确，则输出“Right”；否则，输出你认为正确的ISBN号码。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1055" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white border-t border-gray-200 py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa fa-code text-primary text-xl"></i>
+                        <span class="font-bold text-gray-800">姚老师信奥网</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-1">专注于信息学奥赛教育的在线平台</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-500 hover:text-primary transition-colors">
+                        <i class="fa fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-primary transition-colors">
+                        <i class="fa fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-primary transition-colors">
+                        <i class="fa fa-envelope text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-6 text-center text-gray-500 text-sm">
+                &copy; 2023 姚老师信奥网 版权所有
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化代码高亮
+        hljs.highlightAll();
+        
+        // 显示滑块值
+        document.getElementById('x-value').addEventListener('input', function() {
+            document.getElementById('x-value-display').textContent = this.value;
+        });
+        
+        document.getElementById('score-value').addEventListener('input', function() {
+            document.getElementById('score-value-display').textContent = this.value;
+        });
+        
+        // if-else动画演示
+        document.getElementById('ifelse-run').addEventListener('click', function() {
+            const x = parseInt(document.getElementById('x-value').value);
+            const animationContainer = document.getElementById('ifelse-animation');
+            const statusElement = document.getElementById('ifelse-status');
+            
+            statusElement.classList.remove('hidden');
+            statusElement.textContent = '状态: 开始执行';
+            
+            // 构建代码可视化
+            animationContainer.innerHTML = `
+                <div class="space-y-4">
+                    <div class="condition-block">int x = <span class="condition-value">${x}</span>;</div>
+                    <div class="condition-block" id="if-condition">if (x > 50) {</div>
+                    <div class="condition-block ml-6" id="if-body">cout << "x大于50";}</div>
+                    <div class="condition-block" id="else-block">else {</div>
+                    <div class="condition-block ml-6" id="else-body">cout << "x小于等于50";}</div>
+                </div>
+            `;
+            
+            // 执行动画
+            setTimeout(() => {
+                document.getElementById('if-condition').classList.add('condition-block-active');
+                statusElement.textContent = `状态: 判断条件 x > 50 (${x} > 50 结果为 ${x > 50})`;
+                
+                setTimeout(() => {
+                    document.getElementById('if-condition').classList.remove('condition-block-active');
+                    
+                    if (x > 50) {
+                        document.getElementById('if-body').classList.add('condition-block-active');
+                        statusElement.textContent = '状态: 条件为真，执行if块';
+                    } else {
+                        document.getElementById('else-block').classList.add('condition-block-active');
+                        setTimeout(() => {
+                            document.getElementById('else-block').classList.remove('condition-block-active');
+                            document.getElementById('else-body').classList.add('condition-block-active');
+                            statusElement.textContent = '状态: 条件为假，执行else块';
+                        }, 800);
+                    }
+                    
+                    setTimeout(() => {
+                        statusElement.textContent = '状态: 执行完成';
+                    }, 1600);
+                }, 1000);
+            }, 500);
+        });
+        
+        // 重置if-else动画
+        document.getElementById('ifelse-reset').addEventListener('click', function() {
+            const animationContainer = document.getElementById('ifelse-animation');
+            const statusElement = document.getElementById('ifelse-status');
+            
+            animationContainer.innerHTML = `
+                <div class="text-center text-gray-500 py-8">
+                    <i class="fa fa-arrow-down mb-2"></i>
+                    <p>点击"运行动画"开始演示</p>
+                </div>
+            `;
+            
+            statusElement.classList.add('hidden');
+        });
+        
+        // 多分支条件语句动画
+        let currentStep = 0;
+        let animationInterval;
+        
+        function runMultiBranchStep() {
+            const score = parseInt(document.getElementById('score-value').value);
+            const animationContainer = document.getElementById('multibranch-animation');
+            const progressBar = document.getElementById('multibranch-progress');
+            const stepInfo = document.getElementById('multibranch-step-info');
+            
+            // 初始化
+            if (currentStep === 0) {
+                animationContainer.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="condition-block">int score = <span class="condition-value">${score}</span>;</div>
+                        <div class="condition-block" id="cond1">if (score >= 90) {</div>
+                        <div class="condition-block ml-6" id="body1">cout << "优秀";}</div>
+                        <div class="condition-block" id="cond2">else if (score >= 80) {</div>
+                        <div class="condition-block ml-6" id="body2">cout << "良好";}</div>
+                        <div class="condition-block" id="cond3">else if (score >= 60) {</div>
+                        <div class="condition-block ml-6" id="body3">cout << "及格";}</div>
+                        <div class="condition-block" id="cond4">else {</div>
+                        <div class="condition-block ml-6" id="body4">cout << "不及格";}</div>
+                    </div>
+                `;
+            }
+            
+            // 清除所有活跃状态
+            document.querySelectorAll('.condition-block-active').forEach(el => {
+                el.classList.remove('condition-block-active');
+            });
+            
+            // 执行当前步骤
+            let stepDesc = '';
+            let progress = 0;
+            
+            switch(currentStep) {
+                case 0:
+                    document.getElementById('cond1').classList.add('condition-block-active');
+                    stepDesc = `判断条件 score >= 90 (${score} >= 90 结果为 ${score >= 90})`;
+                    progress = 25;
+                    break;
+                case 1:
+                    if (score >= 90) {
+                        document.getElementById('body1').classList.add('condition-block-active');
+                        stepDesc = '条件为真，执行"优秀"分支';
+                        progress = 100;
+                    } else {
+                        document.getElementById('cond2').classList.add('condition-block-active');
+                        stepDesc = `判断条件 score >= 80 (${score} >= 80 结果为 ${score >= 80})`;
+                        progress = 50;
+                    }
+                    break;
+                case 2:
+                    if (score >= 80 && score < 90) {
+                        document.getElementById('body2').classList.add('condition-block-active');
+                        stepDesc = '条件为真，执行"良好"分支';
+                        progress = 100;
+                    } else if (score < 80) {
+                        document.getElementById('cond3').classList.add('condition-block-active');
+                        stepDesc = `判断条件 score >= 60 (${score} >= 60 结果为 ${score >= 60})`;
+                        progress = 75;
+                    }
+                    break;
+                case 3:
+                    if (score >= 60 && score < 80) {
+                        document.getElementById('body3').classList.add('condition-block-active');
+                        stepDesc = '条件为真，执行"及格"分支';
+                        progress = 100;
+                    } else if (score < 60) {
+                        document.getElementById('cond4').classList.add('condition-block-active');
+                        stepDesc = '所有条件均为假，准备执行else分支';
+                        progress = 90;
+                    }
+                    break;
+                case 4:
+                    if (score < 60) {
+                        document.getElementById('body4').classList.add('condition-block-active');
+                        stepDesc = '执行"不及格"分支';
+                        progress = 100;
+                    }
+                    break;
+            }
+            
+            stepInfo.textContent = stepDesc;
+            progressBar.style.width = `${progress}%`;
+            
+            currentStep++;
+            
+            // 检查是否完成
+            if ((score >= 90 && currentStep > 2) || 
+                (score >= 80 && score < 90 && currentStep > 3) ||
+                (score >= 60 && score < 80 && currentStep > 4) ||
+                (score < 60 && currentStep > 5)) {
+                clearInterval(animationInterval);
+                document.getElementById('multibranch-run').classList.remove('hidden');
+                document.getElementById('multibranch-step').classList.remove('hidden');
+                return true;
+            }
+            
+            return false;
+        }
+        
+        // 单步执行
+        document.getElementById('multibranch-step').addEventListener('click', function() {
+            runMultiBranchStep();
+        });
+        
+        // 运行多分支动画
+        document.getElementById('multibranch-run').addEventListener('click', function() {
+            currentStep = 0;
+            this.classList.add('hidden');
+            document.getElementById('multibranch-step').classList.add('hidden');
+            
+            // 立即执行第一步
+            const isComplete = runMultiBranchStep();
+            
+            if (!isComplete) {
+                // 设置定时器执行后续步骤
+                animationInterval = setInterval(() => {
+                    const complete = runMultiBranchStep();
+                    if (complete) {
+                        document.getElementById('multibranch-run').classList.remove('hidden');
+                        document.getElementById('multibranch-step').classList.remove('hidden');
+                    }
+                }, 1500);
+            }
+        });
+        
+        // 重置多分支动画
+        document.getElementById('multibranch-reset').addEventListener('click', function() {
+            clearInterval(animationInterval);
+            currentStep = 0;
+            
+            const animationContainer = document.getElementById('multibranch-animation');
+            const progressBar = document.getElementById('multibranch-progress');
+            const stepInfo = document.getElementById('multibranch-step-info');
+            
+            animationContainer.innerHTML = `
+                <div class="text-center text-gray-500 py-16">
+                    <i class="fa fa-arrow-down mb-2"></i>
+                    <p>点击"运行动画"或"单步执行"开始演示</p>
+                </div>
+            `;
+            
+            progressBar.style.width = '0%';
+            stepInfo.textContent = '点击"运行动画"或"单步执行"开始演示';
+            
+            document.getElementById('multibranch-run').classList.remove('hidden');
+            document.getElementById('multibranch-step').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>

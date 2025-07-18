@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>递归算法 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：鲜明的蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        syntax: '#FF9800', // 语法部分：橙色
+                        algorithm: '#2ECC71', // 算法部分：绿色
+                        datastructure: '#9C27B0', // 数据结构部分：深紫色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                        recursion: '#FF5722', // 递归主题色：橙色
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .subcategory-bg {
+                @apply bg-gradient-to-r from-secondary/5 to-secondary/10;
+            }
+            .recursion-bg {
+                @apply bg-gradient-to-r from-recursion/5 to-recursion/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .recursion-header {
+                @apply font-bold text-recursion mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-recursion bg-recursion/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-recursion text-white text-center mr-2 text-xs;
+            }
+            .stack-frame {
+                @apply border-2 border-gray-300 rounded-md p-2 mb-1 bg-gray-50 transition-all duration-500;
+            }
+            .stack-frame-active {
+                @apply border-recursion bg-recursion/10 transform scale-[1.02];
+            }
+            .recursion-tree-node {
+                @apply inline-flex items-center justify-center w-14 h-14 rounded-full border-2 bg-white text-gray-700 font-medium transition-all duration-500 mb-6;
+            }
+            .recursion-tree-node-active {
+                @apply bg-recursion text-white border-recursion transform scale-110;
+            }
+            .recursion-tree-node-calculating {
+                @apply bg-blue-500 text-white border-blue-500 transform scale-110;
+            }
+            .recursion-tree-node-calculated {
+                @apply bg-green-500 text-white border-green-500;
+            }
+            .recursion-tree-node-duplicate {
+                @apply border-red-500;
+            }
+            .recursion-tree-line {
+                @apply border-l-2 border-gray-300 ml-7 pl-8 my-3;
+            }
+            .tree-container {
+                @apply overflow-x-auto px-4 py-2;
+                min-height: 400px;
+            }
+            .tree-branch {
+                @apply flex;
+            }
+            .tree-branch > div {
+                @apply flex-1;
+                text-align: center;
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-gray-100 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-recursion h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">语法基础</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">进阶语法</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-recursion font-medium">递归算法</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="recursion-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-recursion mb-2">递归算法</h1>
+                    <p class="text-gray-700">
+                        递归是编程中一种强大的技术，通过函数调用自身来解决问题。
+                        本页面将深入讲解递归的原理、应用和最佳实践，专为NOIP竞赛学生设计。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-recursion hover:bg-recursion/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#problems" class="bg-white border border-recursion text-recursion hover:bg-recursion/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看题目
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 递归算法概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-recursion mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 递归算法概述
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">什么是递归？</h3>
+                    <p class="text-gray-700">
+                        递归是一种解决问题的方法，其中函数通过调用自身来解决更小的子问题。递归通常包含两个部分：
+                    </p>
+                    <ul class="list-disc pl-6 mt-2 space-y-2">
+                        <li><strong>基本情况（Base Case）</strong>：递归终止的条件，不再进行进一步的调用</li>
+                        <li><strong>递归情况（Recursive Case）</strong>：函数调用自身来解决更小的子问题</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">递归的核心思想</h3>
+                    <p class="text-gray-700">
+                        递归的核心思想是将一个复杂的问题分解为相似的更小的子问题，直到达到可以直接解决的基本情况。这种方法通常能够使代码更加简洁和优雅。
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">递归与循环的对比</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-green-600 mb-2">递归的优势</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>代码更简洁易读</li>
+                                <li>适合解决具有递归结构的问题</li>
+                                <li>更容易实现分治策略</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-600 mb-2">递归的劣势</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>可能导致栈溢出（Stack Overflow）</li>
+                                <li>性能可能不如循环</li>
+                                <li>调试难度较大</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 递归动画演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-recursion mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> 递归动画演示
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 阶乘动画 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">阶乘计算过程演示</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了计算n!时的递归调用过程和调用栈变化。
+                                每个递归调用会创建一个新的栈帧，直到达到基本情况(0!)，然后逐层返回结果。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">输入n值:</label>
+                                <input type="range" id="factorial-n" min="1" max="7" value="5" 
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-recursion">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>1</span>
+                                    <span id="factorial-n-value">5</span>
+                                    <span>7</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button id="factorial-run" class="bg-recursion hover:bg-recursion/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行动画
+                                </button>
+                                <button id="factorial-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="factorial-status" class="animation-status hidden">
+                                状态: 等待开始
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="factorial-stack">
+                                <div class="text-center text-gray-500 py-8">
+                                    <i class="fa fa-arrow-down mb-2"></i>
+                                    <p>点击"运行动画"开始演示</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 斐波那契动画 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">斐波那契数列递归树</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                斐波那契数列的递归实现会产生大量重复计算。
+                                下面的动画展示了计算F(n)时的递归调用树：
+                            </p>
+                            <ul class="list-disc pl-6 mb-4 space-y-1">
+                                <li><span class="inline-block w-4 h-4 bg-blue-500 rounded-full mr-1"></span> 正在计算的节点</li>
+                                <li><span class="inline-block w-4 h-4 bg-green-500 rounded-full mr-1"></span> 已计算完成的节点</li>
+                                <li><span class="inline-block w-4 h-4 border-2 border-red-500 bg-white rounded-full mr-1"></span> 重复计算的节点</li>
+                            </ul>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">输入n值:</label>
+                                <input type="range" id="fibonacci-n" min="1" max="7" value="3" 
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-recursion">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>1</span>
+                                    <span id="fibonacci-n-value">3</span>
+                                    <span>7</span>
+                                </div>
+                            </div>
+                            
+                            <div class="animation-controls">
+                                <button id="fibonacci-run" class="bg-recursion hover:bg-recursion/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行动画
+                                </button>
+                                <button id="fibonacci-pause" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md transition-all flex items-center hidden">
+                                    <i class="fa fa-pause mr-2"></i> 暂停
+                                </button>
+                                <button id="fibonacci-step" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-step-forward mr-2"></i> 单步执行
+                                </button>
+                                <button id="fibonacci-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                                <div class="w-full">
+                                    <label class="block text-xs text-gray-600 mb-1">动画速度</label>
+                                    <input type="range" id="animation-speed" min="1" max="10" value="5" 
+                                        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                                </div>
+                            </div>
+                            
+                            <div class="animation-progress">
+                                <div id="fibonacci-progress" class="animation-progress-bar" style="width: 0%"></div>
+                            </div>
+                            
+                            <div class="animation-step bg-blue-50 text-blue-800 p-3 rounded-lg mb-4">
+                                <h4 class="font-medium mb-1">当前步骤说明</h4>
+                                <p id="fibonacci-step-info" class="text-sm">点击"运行动画"或"单步执行"开始演示</p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 min-h-[400px] tree-container" id="fibonacci-tree">
+                                <div class="text-center text-gray-500 py-16">
+                                    <i class="fa fa-arrow-down mb-2"></i>
+                                    <p>点击"运行动画"或"单步执行"开始演示</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 递归代码示例 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-recursion mb-6 flex items-center">
+                <i class="fa fa-code mr-2"></i> 递归代码示例 (C++)
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 阶乘示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">1. 阶乘计算</h3>
+                    <p class="text-gray-700 mb-3">
+                        阶乘是递归的经典示例。n的阶乘（表示为n!）定义为：
+                    </p>
+                    <div class="bg-gray-100 p-3 rounded-lg text-center mb-4">
+                        <p class="text-lg font-mono">n! = n × (n-1) × (n-2) × ... × 1</p>
+                        <p class="text-sm text-gray-600 mt-1">其中，0! = 1</p>
+                    </div>
+                    
+                    <pre class="code-block"><code class="language-cpp">// 计算n的阶乘
+int factorial(int n) {
+    // 基本情况：n为0时返回1
+    if (n == 0) {
+        return 1;
+    }
+    // 递归情况：n! = n * (n-1)!
+    else {
+        return n * factorial(n-1);
+    }
+}</code></pre>
+                </div>
+                
+                <!-- 斐波那契示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">2. 斐波那契数列</h3>
+                    <p class="text-gray-700 mb-3">
+                        斐波那契数列是指这样一个数列：0、1、1、2、3、5、8、13、21、34、……。
+                        在数学上，斐波那契数列以如下递推的方法定义：
+                    </p>
+                    <div class="bg-gray-100 p-3 rounded-lg text-center mb-4">
+                        <p class="text-lg font-mono">F(0)=0，F(1)=1, F(n)=F(n - 1)+F(n - 2)（n ≥ 2，n ∈ N*）</p>
+                    </div>
+                    
+                    <pre class="code-block"><code class="language-cpp">// 计算斐波那契数列的第n项
+int fibonacci(int n) {
+    // 基本情况：n为0或1时直接返回n
+    if (n == 0 || n == 1) {
+        return n;
+    }
+    // 递归情况：F(n) = F(n-1) + F(n-2)
+    else {
+        return fibonacci(n-1) + fibonacci(n-2);
+    }
+}</code></pre>
+                </div>
+                
+                <!-- 二分查找示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">3. 二分查找</h3>
+                    <p class="text-gray-700 mb-3">
+                        二分查找是一种在有序数组中查找某一特定元素的搜索算法。
+                        搜索过程从数组的中间元素开始，如果中间元素正好是要查找的元素，则搜索过程结束；
+                        如果某一特定元素大于或者小于中间元素，则在数组大于或小于中间元素的那一半中查找，
+                        而且跟开始一样从中间元素开始比较。如果在某一步骤数组为空，则代表找不到。
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">// 在有序数组arr中二分查找值x，返回其索引，若不存在返回-1
+int binarySearch(int arr[], int left, int right, int x) {
+    // 基本情况：搜索范围为空时返回-1
+    if (left > right) {
+        return -1;
+    }
+    
+    // 计算中间索引
+    int mid = left + (right - left) / 2;
+    
+    // 如果中间元素等于x，返回中间索引
+    if (arr[mid] == x) {
+        return mid;
+    }
+    // 如果中间元素大于x，则在左半部分继续搜索
+    else if (arr[mid] > x) {
+        return binarySearch(arr, left, mid - 1, x);
+    }
+    // 如果中间元素小于x，则在右半部分继续搜索
+    else {
+        return binarySearch(arr, mid + 1, right, x);
+    }
+}</code></pre>
+                </div>
+                
+                <!-- 汉诺塔示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">4. 汉诺塔问题</h3>
+                    <p class="text-gray-700 mb-3">
+                        汉诺塔问题是一个经典的问题。有三根杆子A，B，C。A杆上有N个(N>1)穿孔圆盘，盘的尺寸由下到上依次变小。
+                        要求按下列规则将所有圆盘移至C杆：
+                    </p>
+                    <ul class="list-disc pl-6 mb-4 space-y-1">
+                        <li>每次只能移动一个圆盘</li>
+                        <li>大盘不能叠在小盘上面</li>
+                    </ul>
+                    
+                    <pre class="code-block"><code class="language-cpp">// 汉诺塔问题：将n个盘子从源杆(source)移动到目标杆(target)，借助辅助杆(auxiliary)
+void hanoi(int n, char source, char auxiliary, char target) {
+    // 基本情况：只有一个盘子时直接移动
+    if (n == 1) {
+        cout << "将盘子1从杆" << source << "移动到杆" << target << endl;
+        return;
+    }
+    
+    // 递归情况：
+    // 1. 将上面的n-1个盘子从源杆移动到辅助杆
+    hanoi(n-1, source, target, auxiliary);
+    
+    // 2. 将第n个盘子从源杆移动到目标杆
+    cout << "将盘子" << n << "从杆" << source << "移动到杆" << target << endl;
+    
+    // 3. 将n-1个盘子从辅助杆移动到目标杆
+    hanoi(n-1, auxiliary, source, target);
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 递归算法应用 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-recursion mb-6 flex items-center">
+                <i class="fa fa-lightbulb-o mr-2"></i> 递归算法应用
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">递归算法的典型应用场景</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-recursion mb-2">树和图的遍历</h4>
+                            <p class="text-gray-700">
+                                递归是遍历树和图结构的自然方法，如前序、中序、后序遍历二叉树。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-recursion mb-2">分治算法</h4>
+                            <p class="text-gray-700">
+                                如快速排序、归并排序等，将问题分解为更小的子问题，递归解决后合并结果。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-recursion mb-2">数学表达式求值</h4>
+                            <p class="text-gray-700">
+                                解析和计算嵌套的数学表达式，如计算带有括号的算术表达式。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-recursion mb-2">回溯算法</h4>
+                            <p class="text-gray-700">
+                                如八皇后问题、迷宫路径搜索等，在每一步尝试多种选择，递归处理子问题。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">递归算法的注意事项</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>基本情况的重要性</strong>：必须有明确的基本情况，否则会导致无限递归</li>
+                        <li><strong>递归深度</strong>：过深的递归可能导致栈溢出，考虑尾递归优化或转换为迭代</li>
+                        <li><strong>性能问题</strong>：某些递归算法（如斐波那契数列）存在大量重复计算，可使用记忆化技术优化</li>
+                        <li><strong>调试技巧</strong>：递归函数调试较难，可使用打印中间结果、绘制递归树等方法辅助理解</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 洛谷推荐题目 -->
+        <section id="problems" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-recursion mb-6 flex items-center">
+                <i class="fa fa-puzzle-piece mr-2"></i> 洛谷推荐题目
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">模板题</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-lg mb-2">P1028 数的计算</h4>
+                        <p class="text-gray-700 mb-3">
+                            我们要求找出具有下列性质数的个数(包含输入的自然数n):<br>
+                            先输入一个自然数n(n≤1000),然后对此自然数按照如下方法进行处理:<br>
+                            1. 不作任何处理;<br>
+                            2. 在它的左边加上一个自然数,但该自然数不能超过原数的一半;<br>
+                            3. 加上数后,继续按此规则进行处理,直到不能再加自然数为止.
+                        </p>
+                        <div class="flex space-x-3 mt-3">
+                            <a href="https://www.luogu.com.cn/problem/P1028" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                <i class="fa fa-external-link mr-2"></i> 题目链接
+                            </a>
+                            <a href="#" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                <i class="fa fa-code mr-2"></i> 题解代码
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">基础题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1010 幂次方</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                任何一个正整数都可以用2的幂次方表示。例如：137=2^7+2^3+2^0。
+                                同时约定幂次方用括号来表示，即a^b可表示为a(b)。由此可知，137可表示为：2(7)+2(3)+2(0)。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1010" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1036 选数</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                已知n个整数x1,x2,…,xn，以及一个整数k(k≤n)。从n个整数中任选k个整数相加，可分别得到一系列的和。
+                                例如当n=4，k=3，4个整数分别为3,7,12,19时，可得全部的组合与它们的和为：3+7+12=22，3+7+19=29，7+12+19=38，3+12+19=34。
+                                现在，要求你计算出和为素数共有多少种。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1036" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">进阶题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1226 快速幂</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                给定三个正整数a,b,p，求a^b mod p的值。
+                                这道题虽然可以用快速幂解决，但也可以用递归的思想来实现分治。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1226" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1464 Function</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                对于一个递归函数w(a,b,c)，如果a≤0或b≤0或c≤0就返回值1；如果a>20或b>20或c>20就返回w(20,20,20)；
+                                如果a<b并且b<c就返回w(a,b,c-1)+w(a,b-1,c-1)-w(a,b-1,c)；其它的情况就返回w(a-1,b,c)+w(a-1,b-1,c)+w(a-1,b,c-1)-w(a-1,b-1,c-1)。
+                                给出a,b,c，计算w(a,b,c)的值。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1464" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 学习建议 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-recursion mb-6 flex items-center">
+                <i class="fa fa-lightbulb-o mr-2"></i> 递归学习建议
+            </h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">掌握递归的步骤</h3>
+                    <ol class="list-decimal pl-6 space-y-2">
+                        <li>理解问题的递归结构，确定如何将问题分解为更小的子问题</li>
+                        <li>确定基本情况，即问题最简单的形式</li>
+                        <li>编写递归函数，处理递归情况和基本情况</li>
+                        <li>考虑是否需要使用记忆化技术避免重复计算</li>
+                        <li>测试并验证递归函数的正确性</li>
+                    </ol>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">递归调试技巧</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>使用打印语句跟踪递归调用过程和参数变化</li>
+                        <li>从简单的输入开始测试，逐步增加复杂度</li>
+                        <li>绘制递归树，直观理解递归调用的结构</li>
+                        <li>使用调试工具单步执行，观察栈的变化</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">常见递归问题及解决方案</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-600 mb-2">无限递归</h4>
+                            <p class="text-gray-700 text-sm">
+                                <strong>原因</strong>：缺少基本情况或递归情况没有向基本情况逼近<br>
+                                <strong>解决方案</strong>：确保有明确的基本情况，并验证递归调用会逐步接近基本情况
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-600 mb-2">栈溢出</h4>
+                            <p class="text-gray-700 text-sm">
+                                <strong>原因</strong>：递归深度过大，超出系统栈空间<br>
+                                <strong>解决方案</strong>：考虑尾递归优化，或转换为迭代实现
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-600 mb-2">性能问题</h4>
+                            <p class="text-gray-700 text-sm">
+                                <strong>原因</strong>：重复计算相同的子问题<br>
+                                <strong>解决方案</strong>：使用记忆化（Memoization）技术，存储已计算的结果
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-600 mb-2">逻辑错误</h4>
+                            <p class="text-gray-700 text-sm">
+                                <strong>原因</strong>：递归关系定义错误<br>
+                                <strong>解决方案</strong>：仔细分析问题的递归结构，从小规模问题入手验证
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 相关资源 -->
+        <section class="topic-card">
+            <h2 class="text-2xl font-bold text-recursion mb-6 flex items-center">
+                <i class="fa fa-book mr-2"></i> 相关资源
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-2">在线教程</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><a href="#" class="text-primary hover:text-primary/80">递归算法基础教程</a></li>
+                        <li><a href="#" class="text-primary hover:text-primary/80">分治策略与递归</a></li>
+                        <li><a href="#" class="text-primary hover:text-primary/80">递归与迭代的对比</a></li>
+                        <li><a href="#" class="text-primary hover:text-primary/80">尾递归优化技术</a></li>
+                    </ul>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-2">视频课程</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><a href="#" class="text-primary hover:text-primary/80">递归算法详解（NOIP专题）</a></li>
+                        <li><a href="#" class="text-primary hover:text-primary/80">汉诺塔问题的递归解法</a></li>
+                        <li><a href="#" class="text-primary hover:text-primary/80">斐波那契数列的递归与优化</a></li>
+                        <li><a href="#" class="text-primary hover:text-primary/80">递归树与递归算法复杂度分析</a></li>
+                    </ul>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-2">练习题</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><a href="#" class="text-primary hover:text-primary/80">递归基础练习题</a></li>
+                        <li><a href="#" class="text-primary hover:text-primary/80">递归进阶挑战题</a></li>
+                        <li><a href="#" class="text-primary hover:text-primary/80">递归与回溯综合题</a></li>
+                        <li><a href="#" class="text-primary hover:text-primary/80">历年NOIP递归相关真题</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-800 text-white mt-12">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">姚老师信奥网</h3>
+                    <p class="text-gray-400">
+                        专注于信息学奥林匹克竞赛培训，为中学生提供专业的编程教育和竞赛指导。
+                    </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fa fa-weixin text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fa fa-weibo text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fa fa-github text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">快速链接</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">首页</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">课程中心</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">在线题库</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">竞赛资讯</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">关于我们</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">联系方式</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fa fa-envelope-o mr-2 text-gray-400"></i>
+                            <a href="mailto:info@yaoteacher.com" class="text-gray-400 hover:text-white">info@yaoteacher.com</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-phone mr-2 text-gray-400"></i>
+                            <span class="text-gray-400">400-123-4567</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-map-marker mr-2 text-gray-400"></i>
+                            <span class="text-gray-400">北京市海淀区中关村大街1号</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">订阅资讯</h3>
+                    <p class="text-gray-400 mb-4">订阅我们的资讯，获取最新竞赛信息和教学资源</p>
+                    <div class="flex">
+                        <input type="email" placeholder="输入您的邮箱" class="px-4 py-2 rounded-l-md w-full focus:outline-none text-gray-800">
+                        <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-r-md">
+                            订阅
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 姚老师信奥网 版权所有 | 京ICP备12345678号</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 确保DOM加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化代码高亮
+            hljs.highlightAll();
+            
+            // 阶乘动画相关元素
+            const factorialN = document.getElementById('factorial-n');
+            const factorialNValue = document.getElementById('factorial-n-value');
+            const factorialRunBtn = document.getElementById('factorial-run');
+            const factorialResetBtn = document.getElementById('factorial-reset');
+            const factorialStack = document.getElementById('factorial-stack');
+            const factorialStatus = document.getElementById('factorial-status');
+            
+            // 更新阶乘输入值显示
+            factorialN.addEventListener('input', function() {
+                factorialNValue.textContent = this.value;
+                showStatus('已更新n值为: ' + this.value, 'factorial');
+            });
+            
+            // 显示状态信息
+            function showStatus(message, type) {
+                let statusElement;
+                if (type === 'factorial') {
+                    statusElement = factorialStatus;
+                } else {
+                    return;
+                }
+                
+                statusElement.textContent = '状态: ' + message;
+                statusElement.classList.remove('hidden');
+                
+                // 5秒后自动隐藏非关键状态信息
+                if (!message.includes('正在') && !message.includes('等待')) {
+                    setTimeout(() => {
+                        statusElement.classList.add('hidden');
+                    }, 5000);
+                }
+            }
+            
+            // 阶乘动画运行按钮
+            factorialRunBtn.addEventListener('click', function() {
+                try {
+                    const n = parseInt(factorialN.value);
+                    if (isNaN(n) || n < 1 || n > 7) {
+                        showStatus('无效的n值，请选择1-7之间的数值', 'factorial');
+                        return;
+                    }
+                    showStatus('正在计算 ' + n + '! 的递归过程...', 'factorial');
+                    animateFactorial(n);
+                } catch (error) {
+                    showStatus('动画执行出错: ' + error.message, 'factorial');
+                    console.error('阶乘动画错误:', error);
+                }
+            });
+            
+            // 阶乘动画重置按钮
+            factorialResetBtn.addEventListener('click', function() {
+                resetFactorialAnimation();
+                showStatus('已重置动画', 'factorial');
+            });
+            
+            // 斐波那契动画相关元素
+            const fibonacciN = document.getElementById('fibonacci-n');
+            const fibonacciNValue = document.getElementById('fibonacci-n-value');
+            const fibonacciRunBtn = document.getElementById('fibonacci-run');
+            const fibonacciPauseBtn = document.getElementById('fibonacci-pause');
+            const fibonacciStepBtn = document.getElementById('fibonacci-step');
+            const fibonacciResetBtn = document.getElementById('fibonacci-reset');
+            const fibonacciTree = document.getElementById('fibonacci-tree');
+            const fibonacciStepInfo = document.getElementById('fibonacci-step-info');
+            const fibonacciProgress = document.getElementById('fibonacci-progress');
+            const animationSpeed = document.getElementById('animation-speed');
+            
+            // 斐波那契动画状态变量
+            let isAnimating = false;
+            let animationInterval = null;
+            let animationSteps = [];
+            let currentStep = 0;
+            let calculatedNodes = new Map();
+            
+            // 更新斐波那契输入值显示
+            fibonacciN.addEventListener('input', function() {
+                fibonacciNValue.textContent = this.value;
+                fibonacciStepInfo.textContent = '已更新n值为: ' + this.value + '，请点击运行或单步执行';
+            });
+            
+            // 斐波那契动画运行按钮
+            fibonacciRunBtn.addEventListener('click', function() {
+                try {
+                    if (isAnimating) return;
+                    
+                    const n = parseInt(fibonacciN.value);
+                    if (isNaN(n) || n < 1 || n > 7) {
+                        fibonacciStepInfo.textContent = '无效的n值，请选择1-7之间的数值';
+                        return;
+                    }
+                    
+                    startFibonacciAnimation(n);
+                } catch (error) {
+                    fibonacciStepInfo.textContent = '动画执行出错: ' + error.message;
+                    console.error('斐波那契动画错误:', error);
+                }
+            });
+            
+            // 斐波那契动画暂停按钮
+            fibonacciPauseBtn.addEventListener('click', function() {
+                pauseFibonacciAnimation();
+            });
+            
+            // 斐波那契动画单步按钮
+            fibonacciStepBtn.addEventListener('click', function() {
+                try {
+                    const n = parseInt(fibonacciN.value);
+                    if (isNaN(n) || n < 1 || n > 7) {
+                        fibonacciStepInfo.textContent = '无效的n值，请选择1-7之间的数值';
+                        return;
+                    }
+                    
+                    if (animationSteps.length === 0) {
+                        // 初始化动画步骤
+                        resetFibonacciAnimation();
+                        prepareFibonacciSteps(n);
+                    }
+                    
+                    if (currentStep < animationSteps.length) {
+                        executeFibonacciStep(currentStep);
+                        currentStep++;
+                        updateFibonacciProgress();
+                    } else {
+                        fibonacciStepInfo.textContent = "动画已完成！";
+                    }
+                } catch (error) {
+                    fibonacciStepInfo.textContent = '单步执行出错: ' + error.message;
+                    console.error('斐波那契单步错误:', error);
+                }
+            });
+            
+            // 斐波那契动画重置按钮
+            fibonacciResetBtn.addEventListener('click', function() {
+                resetFibonacciAnimation();
+            });
+            
+            // 重置阶乘动画
+            function resetFactorialAnimation() {
+                factorialStack.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fa fa-arrow-down mb-2"></i>
+                        <p>点击"运行动画"开始演示</p>
+                    </div>
+                `;
+            }
+            
+            // 重置斐波那契动画
+            function resetFibonacciAnimation() {
+                fibonacciTree.innerHTML = `
+                    <div class="text-center text-gray-500 py-16">
+                        <i class="fa fa-arrow-down mb-2"></i>
+                        <p>点击"运行动画"或"单步执行"开始演示</p>
+                    </div>
+                `;
+                fibonacciStepInfo.textContent = "点击\"运行动画\"或\"单步执行\"开始演示";
+                fibonacciProgress.style.width = "0%";
+                isAnimating = false;
+                if (animationInterval) {
+                    clearInterval(animationInterval);
+                    animationInterval = null;
+                }
+                fibonacciRunBtn.classList.remove('hidden');
+                fibonacciPauseBtn.classList.add('hidden');
+                animationSteps = [];
+                currentStep = 0;
+                calculatedNodes.clear();
+            }
+            
+            // 开始斐波那契动画
+            function startFibonacciAnimation(n) {
+                resetFibonacciAnimation();
+                prepareFibonacciSteps(n);
+                
+                isAnimating = true;
+                fibonacciRunBtn.classList.add('hidden');
+                fibonacciPauseBtn.classList.remove('hidden');
+                
+                // 根据速度控制设置动画间隔
+                const speed = parseInt(animationSpeed.value);
+                const intervalTime = 2000 - (speed * 150); // 速度越快，间隔越短
+                
+                animationInterval = setInterval(function() {
+                    if (currentStep < animationSteps.length) {
+                        executeFibonacciStep(currentStep);
+                        currentStep++;
+                        updateFibonacciProgress();
+                    } else {
+                        completeFibonacciAnimation();
+                    }
+                }, intervalTime);
+            }
+            
+            // 暂停斐波那契动画
+            function pauseFibonacciAnimation() {
+                isAnimating = false;
+                if (animationInterval) {
+                    clearInterval(animationInterval);
+                    animationInterval = null;
+                }
+                fibonacciRunBtn.classList.remove('hidden');
+                fibonacciPauseBtn.classList.add('hidden');
+                fibonacciStepInfo.textContent += "（已暂停）";
+            }
+            
+            // 完成斐波那契动画
+            function completeFibonacciAnimation() {
+                pauseFibonacciAnimation();
+                fibonacciStepInfo.textContent = "动画已完成！您可以尝试其他n值或点击重置重新开始。";
+            }
+            
+            // 更新斐波那契动画进度
+            function updateFibonacciProgress() {
+                const progress = (currentStep / animationSteps.length) * 100;
+                fibonacciProgress.style.width = `${progress}%`;
+            }
+            
+            // 准备斐波那契动画步骤
+            function prepareFibonacciSteps(n) {
+                animationSteps = [];
+                calculatedNodes.clear();
+                
+                // 递归收集动画步骤
+                function collectSteps(value, parentId = null, isLeftChild = false) {
+                    // 生成唯一ID
+                    const nodeId = `fib-node-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+                    
+                    // 添加"开始计算"步骤
+                    animationSteps.push({
+                        type: 'start',
+                        value: value,
+                        nodeId: nodeId,
+                        parentId: parentId,
+                        isLeftChild: isLeftChild
+                    });
+                    
+                    // 如果是基本情况，直接添加"完成计算"步骤
+                    if (value <= 1) {
+                        animationSteps.push({
+                            type: 'complete',
+                            value: value,
+                            nodeId: nodeId,
+                            result: value
+                        });
+                        return { nodeId, result: value };
+                    }
+                    
+                    // 递归计算左子树 (n-1)
+                    const leftChild = collectSteps(value - 1, nodeId, true);
+                    
+                    // 递归计算右子树 (n-2)
+                    const rightChild = collectSteps(value - 2, nodeId, false);
+                    
+                    // 添加"完成计算"步骤
+                    const result = leftChild.result + rightChild.result;
+                    animationSteps.push({
+                        type: 'complete',
+                        value: value,
+                        nodeId: nodeId,
+                        result: result
+                    });
+                    
+                    return { nodeId, result: result };
+                }
+                
+                // 从根节点开始收集
+                collectSteps(n);
+            }
+            
+            // 执行斐波那契动画步骤
+            function executeFibonacciStep(stepIndex) {
+                if (stepIndex >= animationSteps.length) return;
+                
+                const step = animationSteps[stepIndex];
+                
+                if (step.type === 'start') {
+                    // 开始计算一个节点
+                    createFibNode(step.value, step.nodeId, step.parentId, step.isLeftChild);
+                    
+                    // 更新步骤说明
+                    if (step.parentId) {
+                        fibonacciStepInfo.textContent = `开始计算 F(${step.value})，它是 F(${step.value + 1}) 的${step.isLeftChild ? '左' : '右'}子问题`;
+                    } else {
+                        fibonacciStepInfo.textContent = `开始计算 F(${step.value})，这是我们要解决的初始问题`;
+                    }
+                    
+                    // 检查是否是重复计算
+                    if (calculatedNodes.has(step.value)) {
+                        const node = document.getElementById(step.nodeId);
+                        if (node) {
+                            node.classList.add('recursion-tree-node-duplicate');
+                            fibonacciStepInfo.textContent += ` - 注意：F(${step.value}) 已经计算过一次，这是重复计算！`;
+                        }
+                    }
+                } else if (step.type === 'complete') {
+                    // 完成计算一个节点
+                    const node = document.getElementById(step.nodeId);
+                    if (node) {
+                        node.classList.remove('recursion-tree-node-active', 'recursion-tree-node-calculating');
+                        node.classList.add('recursion-tree-node-calculated');
+                        node.innerHTML = `${step.value}=${step.result}`;
+                    }
+                    
+                    // 记录已计算的节点
+                    calculatedNodes.set(step.value, step.result);
+                    
+                    // 更新步骤说明
+                    if (step.value <= 1) {
+                        fibonacciStepInfo.textContent = `完成计算 F(${step.value}) = ${step.result}（基本情况，直接返回结果）`;
+                    } else {
+                        fibonacciStepInfo.textContent = `完成计算 F(${step.value}) = F(${step.value - 1}) + F(${step.value - 2}) = ${step.result}`;
+                    }
+                }
+            }
+            
+            // 创建斐波那契节点
+            function createFibNode(value, nodeId, parentId = null, isLeftChild = false) {
+                // 确保节点ID不存在
+                if (document.getElementById(nodeId)) {
+                    nodeId = nodeId + "-" + Math.floor(Math.random() * 1000);
+                }
+                
+                // 创建节点元素
+                const node = document.createElement('div');
+                node.id = nodeId;
+                node.className = 'recursion-tree-node recursion-tree-node-calculating';
+                node.textContent = value;
+                
+                // 如果是根节点
+                if (!parentId) {
+                    // 为根节点创建一个容器，方便水平居中
+                    const rootContainer = document.createElement('div');
+                    rootContainer.className = 'tree-root';
+                    rootContainer.style.textAlign = 'center';
+                    rootContainer.appendChild(node);
+                    fibonacciTree.innerHTML = ''; // 清空树容器
+                    fibonacciTree.appendChild(rootContainer);
+                } else {
+                    // 找到父节点
+                    const parentNode = document.getElementById(parentId);
+                    if (parentNode) {
+                        // 获取父节点容器
+                        let parentContainer = parentNode.parentElement;
+                        
+                        // 找到或创建连接线容器
+                        let lineContainer = parentContainer.nextElementSibling;
+                        if (!lineContainer || !lineContainer.classList.contains('recursion-tree-line')) {
+                            lineContainer = document.createElement('div');
+                            lineContainer.className = 'recursion-tree-line';
+                            
+                            // 创建分支容器
+                            const branchContainer = document.createElement('div');
+                            branchContainer.className = 'tree-branch';
+                            lineContainer.appendChild(branchContainer);
+                            
+                            parentContainer.parentNode.insertBefore(lineContainer, parentContainer.nextSibling);
+                        }
+                        
+                        // 获取分支容器
+                        const branchContainer = lineContainer.querySelector('.tree-branch');
+                        
+                        // 创建子节点容器
+                        const childContainer = document.createElement('div');
+                        childContainer.appendChild(node);
+                        
+                        // 添加节点到适当的位置（左或右）
+                        if (isLeftChild || branchContainer.children.length === 0) {
+                            branchContainer.insertBefore(childContainer, branchContainer.firstChild);
+                        } else {
+                            branchContainer.appendChild(childContainer);
+                        }
+                    }
+                }
+                
+                // 确保节点可见
+                setTimeout(() => {
+                    node.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }, 300);
+            }
+            
+            // 阶乘动画函数
+            function animateFactorial(n) {
+                // 清空之前的动画
+                factorialStack.innerHTML = '';
+                
+                // 添加栈底元素
+                const stackBase = document.createElement('div');
+                stackBase.className = 'bg-gray-200 h-4 rounded-b-md mb-1';
+                factorialStack.appendChild(stackBase);
+                
+                const stack = [];
+                let results = []; // 存储每个阶乘的计算结果
+                
+                // 创建栈帧
+                function createStackFrame(value, isActive = false, returnValue = null) {
+                    const frame = document.createElement('div');
+                    frame.className = isActive ? 'stack-frame stack-frame-active' : 'stack-frame';
+                    
+                    if (returnValue !== null) {
+                        // 显示返回值
+                        frame.innerHTML = `
+                            <div class="font-medium">factorial(${value})</div>
+                            <div class="text-xs text-gray-500">返回 ${value === 0 ? '1' : `${value} * ${returnValue} = ${value * returnValue}`}</div>
+                        `;
+                    } else if (value === 0) {
+                        // 基本情况
+                        frame.innerHTML = `
+                            <div class="font-medium">factorial(${value})</div>
+                            <div class="text-xs text-gray-500">基本情况: 返回 1</div>
+                        `;
+                    } else {
+                        // 递归调用
+                        frame.innerHTML = `
+                            <div class="font-medium">factorial(${value})</div>
+                            <div class="text-xs text-gray-500">调用 factorial(${value - 1})</div>
+                        `;
+                    }
+                    
+                    return frame;
+                }
+                
+                // 更新栈显示
+                function updateStack() {
+                    // 保留栈底，清除其他所有帧
+                    while (factorialStack.children.length > 1) {
+                        factorialStack.removeChild(factorialStack.children[1]);
+                    }
+                    
+                    // 添加所有栈帧
+                    for (let i = stack.length - 1; i >= 0; i--) {
+                        const isActive = i === stack.length - 1;
+                        const returnValue = i < results.length ? results[i] : null;
+                        const frame = createStackFrame(stack[i], isActive, returnValue);
+                        factorialStack.appendChild(frame);
+                    }
+                    
+                    // 滚动到底部
+                    factorialStack.scrollTop = factorialStack.scrollHeight;
+                }
+                
+                // 递归展开阶段
+                function expand(value) {
+                    return new Promise(resolve => {
+                        stack.push(value);
+                        updateStack();
+                        
+                        // 继续递归或进入回溯阶段
+                        if (value > 0) {
+                            showStatus(`正在展开: 调用 factorial(${value - 1})`, 'factorial');
+                            setTimeout(() => expand(value - 1).then(resolve), 1000);
+                        } else {
+                            showStatus('已达到基本情况，开始回溯计算', 'factorial');
+                            setTimeout(resolve, 1000);
+                        }
+                    });
+                }
+                
+                // 递归回溯阶段
+                function backtrack() {
+                    return new Promise(resolve => {
+                        if (stack.length === 0) {
+                            resolve();
+                            return;
+                        }
+                        
+                        const value = stack.pop();
+                        let returnValue;
+                        
+                        if (value === 0) {
+                            returnValue = 1; // 基本情况
+                        } else {
+                            // 从结果数组获取子问题的解
+                            returnValue = value * results[0];
+                            // 移除已使用的子问题解
+                            results.shift();
+                        }
+                        
+                        // 将当前结果添加到结果数组
+                        results.unshift(returnValue);
+                        
+                        updateStack();
+                        
+                        if (stack.length === 0) {
+                            // 添加最终结果帧
+                            const resultFrame = document.createElement('div');
+                            resultFrame.className = 'stack-frame stack-frame-active bg-green-50 border-green-500 mt-4';
+                            resultFrame.innerHTML = `
+                                <div class="font-medium text-green-700">计算结果</div>
+                                <div class="text-sm text-green-700">${n}! = ${returnValue}</div>
+                            `;
+                            factorialStack.appendChild(resultFrame);
+                            showStatus(`计算完成: ${n}! = ${returnValue}`, 'factorial');
+                        } else {
+                            showStatus(`回溯计算: factorial(${value}) = ${returnValue}`, 'factorial');
+                        }
+                        
+                        factorialStack.scrollTop = factorialStack.scrollHeight;
+                        setTimeout(() => backtrack().then(resolve), 1000);
+                    });
+                }
+                
+                // 开始动画
+                expand(n).then(backtrack);
+            }
+            
+            // 初始化状态显示
+            factorialRunBtn.addEventListener('mouseover', function() {
+                showStatus('点击开始 ' + factorialN.value + '! 的递归过程演示', 'factorial');
+            });
+            
+            factorialResetBtn.addEventListener('mouseover', function() {
+                showStatus('点击重置当前动画', 'factorial');
+            });
+            
+            // 修复斐波那契步骤说明中的引号问题
+            fibonacciStepInfo.textContent = '点击"运行动画"或"单步执行"开始演示';
+            
+            // 验证动画功能是否正常加载
+            console.log('递归动画演示功能已加载');
+            showStatus('动画功能已准备就绪', 'factorial');
+            setTimeout(() => {
+                factorialStatus.classList.add('hidden');
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
+    

@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字符串处理 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：鲜明的蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        syntax: '#FF9800', // 语法部分：橙色
+                        algorithm: '#2ECC71', // 算法部分：绿色
+                        datastructure: '#9C27B0', // 数据结构部分：深紫色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                        string: '#E91E63', // 字符串主题色：粉红色
+                        execution: '#FFEB3B', // 执行高亮：黄色
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .subcategory-bg {
+                @apply bg-gradient-to-r from-secondary/5 to-secondary/10;
+            }
+            .string-bg {
+                @apply bg-gradient-to-r from-string/5 to-string/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .string-header {
+                @apply font-bold text-string mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-string bg-string/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-string text-white text-center mr-2 text-xs;
+            }
+            .string-operation {
+                @apply border-2 border-gray-300 rounded-md p-2 mb-1 bg-gray-50 transition-all duration-500;
+            }
+            .string-operation-active {
+                @apply border-string bg-string/10 transform scale-[1.02];
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-gray-100 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-string h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .code-line {
+                @apply transition-all duration-300;
+            }
+            .code-line-highlight {
+                @apply bg-execution/30 text-gray-900 font-medium;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">语法基础</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">数据类型与处理</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-string font-medium">字符串处理</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="string-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-string mb-2">字符串处理</h1>
+                    <p class="text-gray-700">
+                        字符串是信息学奥赛中的重要数据类型，广泛应用于文本处理、密码学、字符串匹配等问题。本页面将详细讲解C++字符串的表示、常用操作、
+                        处理技巧以及信奥中常见的字符串算法，帮助NOIP竞赛学生掌握字符串处理的核心技能。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-string hover:bg-string/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#problems" class="bg-white border border-string text-string hover:bg-string/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看题目
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 字符串概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-string mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 字符串概述
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">什么是字符串？</h3>
+                    <p class="text-gray-700">
+                        字符串是由零个或多个字符组成的有限序列，是信息学奥赛中处理文本数据的基本方式。在C++中，有两种主要的字符串表示方式：
+                        C风格字符串（字符数组）和C++标准库的string类。
+                    </p>
+                    <div class="bg-gray-50 p-4 rounded-lg mt-3">
+                        <h4 class="font-semibold mb-2">信奥中字符串的应用场景：</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>文本处理与分析</li>
+                            <li>字符串匹配算法（如KMP算法）</li>
+                            <li>密码学相关问题（加密、解密）</li>
+                            <li>模拟问题中的文本输出</li>
+                            <li>格式化数据处理</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">C++中的字符串表示</h3>
+                    <p class="text-gray-700 mb-3">
+                        C++提供两种字符串表示方法，各有特点：
+                    </p>
+                    <pre class="code-block"><code class="language-cpp">// 1. C风格字符串（字符数组）
+char str1[] = "Hello";          // 自动添加终止符'\0'
+char str2[6] = {'H', 'i', '\0'};// 手动添加终止符
+
+// 2. C++ string类（推荐使用）
+#include &lt;string&gt;
+using namespace std;
+
+string str3 = "World";          // 更安全、易用的字符串类型</code></pre>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-string">C风格字符串</h4>
+                            <p class="text-sm text-gray-700">
+                                本质是字符数组，以'\0'作为终止符。需要手动管理内存，容易出现越界问题，但执行效率高，适合对性能要求高的场景。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-string">C++ string类</h4>
+                            <p class="text-sm text-gray-700">
+                                标准库提供的字符串类，封装了字符串操作，自动管理内存，支持动态长度，是信奥中推荐使用的字符串类型。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 字符串操作演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-string mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> 字符串操作演示
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 字符串操作动画 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">字符串拼接与查找过程演示</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了字符串的拼接、查找和替换操作的执行过程，帮助理解字符串处理的内部机制。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">输入两个字符串:</label>
+                                <div class="space-y-4">
+                                    <div>
+                                        <input type="text" id="str-input1" value="information"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-string">
+                                    </div>
+                                    <div>
+                                        <input type="text" id="str-input2" value="olympiad"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-string">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">要查找的子串:</label>
+                                        <input type="text" id="substr-input" value="orm"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-string">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button id="string-run" class="bg-string hover:bg-string/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行动画
+                                </button>
+                                <button id="string-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="string-status" class="animation-status hidden">
+                                状态: 等待开始
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="string-execution">
+                                <div class="text-center text-gray-500 py-8">
+                                    <i class="fa fa-arrow-down mb-2"></i>
+                                    <p>点击"运行动画"开始演示</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="string-code">
+                                <div class="code-line" id="str-code-1">#include &lt;iostream&gt;</div>
+                                <div class="code-line" id="str-code-2">#include &lt;string&gt;</div>
+                                <div class="code-line" id="str-code-3">using namespace std;</div>
+                                <div class="code-line" id="str-code-4">&nbsp;</div>
+                                <div class="code-line" id="str-code-5">int main() {</div>
+                                <div class="code-line" id="str-code-6">&nbsp;&nbsp;string s1 = "<span id="str-code-s1">information</span>";</div>
+                                <div class="code-line" id="str-code-7">&nbsp;&nbsp;string s2 = "<span id="str-code-s2">olympiad</span>";</div>
+                                <div class="code-line" id="str-code-8">&nbsp;&nbsp;string sub = "<span id="str-code-sub">orm</span>";</div>
+                                <div class="code-line" id="str-code-9">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="str-code-10">&nbsp;&nbsp;// 字符串拼接</div>
+                                <div class="code-line" id="str-code-11">&nbsp;&nbsp;string s3 = s1 + " " + s2;</div>
+                                <div class="code-line" id="str-code-12">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="str-code-13">&nbsp;&nbsp;// 查找子串</div>
+                                <div class="code-line" id="str-code-14">&nbsp;&nbsp;size_t pos = s1.find(sub);</div>
+                                <div class="code-line" id="str-code-15">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="str-code-16">&nbsp;&nbsp;// 替换子串</div>
+                                <div class="code-line" id="str-code-17">&nbsp;&nbsp;if (pos != string::npos) {</div>
+                                <div class="code-line" id="str-code-18">&nbsp;&nbsp;&nbsp;&nbsp;s1.replace(pos, sub.length(), "XXX");</div>
+                                <div class="code-line" id="str-code-19">&nbsp;&nbsp;}</div>
+                                <div class="code-line" id="str-code-20">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="str-code-21">&nbsp;&nbsp;return 0;</div>
+                                <div class="code-line" id="str-code-22">}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 字符串常用操作 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">string类常用操作</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-string mb-2">基本属性</h4>
+                            <pre class="code-block text-xs"><code class="language-cpp">string s = "hello";
+int len = s.length();  // 获取长度: 5
+int size = s.size();   // 同上: 5
+bool empty = s.empty();// 判断是否为空: false
+char c = s[2];         // 访问字符: 'l'
+s[0] = 'H';            // 修改字符: "Hello"</code></pre>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-string mb-2">拼接与赋值</h4>
+                            <pre class="code-block text-xs"><code class="language-cpp">string s1 = "Hello", s2 = "World";
+string s3 = s1 + " " + s2;  // 拼接: "Hello World"
+s1 += " there";             // 追加: "Hello there"
+s1 = s2;                    // 赋值: s1变为"World"
+s1.assign("Hi", 1);         // 赋值前n个字符: "H"</code></pre>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-string mb-2">查找与替换</h4>
+                            <pre class="code-block text-xs"><code class="language-cpp">string s = "abcdefabc";
+size_t pos1 = s.find("abc");    // 首次出现位置: 0
+size_t pos2 = s.rfind("abc");   // 最后出现位置: 6
+size_t pos3 = s.find("x");      // 未找到: string::npos
+
+s.replace(3, 2, "XX");          // 从位置3开始替换2个字符
+// 结果: "abcXXfabc"</code></pre>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-string mb-2">子串与插入</h4>
+                            <pre class="code-block text-xs"><code class="language-cpp">string s = "Hello World";
+string sub1 = s.substr(6, 5);   // 从位置6取5个字符: "World"
+string sub2 = s.substr(6);      // 从位置6取到末尾: "World"
+
+s.insert(5, ",");               // 在位置5插入字符: "Hello, World"
+s.insert(0, "Hi! ");            // 在开头插入: "Hi! Hello, World"</code></pre>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-string mb-2">删除与清除</h4>
+                            <pre class="code-block text-xs"><code class="language-cpp">string s = "Hello World";
+s.erase(5, 1);                  // 从位置5删除1个字符: "HelloWorld"
+s.erase(5);                     // 从位置5删除到末尾: "Hello"
+s.clear();                       // 清空字符串: ""
+
+string s2 = "abc123def";
+s2.erase(remove(s2.begin(), s2.end(), '1'), s2.end());
+// 删除所有'1'字符</code></pre>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-string mb-2">比较与转换</h4>
+                            <pre class="code-block text-xs"><code class="language-cpp">// 比较操作
+string s1 = "apple", s2 = "banana";
+bool eq = (s1 == s2);           // 相等判断: false
+bool lt = (s1 < s2);            // 小于判断: true
+
+// 数值转换
+string s3 = to_string(123);     // 整数转字符串: "123"
+int num = stoi("456");          // 字符串转整数: 456
+double d = stod("3.14");        // 字符串转double: 3.14</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 字符串算法与技巧 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-string mb-6 flex items-center">
+                <i class="fa fa-code-fork mr-2"></i> 字符串算法与技巧
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-3">字符串反转</h3>
+                        <p class="text-gray-700 mb-3">
+                            字符串反转是信奥中的基础操作，可用于判断回文串等问题。
+                        </p>
+                        <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+// 方法1: 使用库函数
+string reverseString1(string s) {
+    reverse(s.begin(), s.end());
+    return s;
+}
+
+// 方法2: 手动交换
+string reverseString2(string s) {
+    int n = s.size();
+    for (int i = 0; i < n / 2; i++) {
+        swap(s[i], s[n - 1 - i]);
+    }
+    return s;
+}
+
+int main() {
+    string s = "hello";
+    cout << reverseString1(s) << endl; // 输出 "olleh"
+    cout << reverseString2(s) << endl; // 输出 "olleh"
+    return 0;
+}</code></pre>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-3">判断回文串</h3>
+                        <p class="text-gray-700 mb-3">
+                            回文串是指正读和反读都相同的字符串，是信奥常见问题。
+                        </p>
+                        <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <string>
+#include <cctype>
+using namespace std;
+
+// 判断是否为回文串（忽略大小写和非字母字符）
+bool isPalindrome(string s) {
+    int left = 0, right = s.size() - 1;
+    
+    while (left < right) {
+        // 跳过非字母字符
+        while (left < right && !isalpha(s[left])) left++;
+        while (left < right && !isalpha(s[right])) right--;
+        
+        // 转换为小写比较
+        if (tolower(s[left]) != tolower(s[right])) {
+            return false;
+        }
+        
+        left++;
+        right--;
+    }
+    return true;
+}
+
+int main() {
+    cout << isPalindrome("A man a plan a canal Panama") << endl; // 1
+    cout << isPalindrome("hello") << endl; // 0
+    return 0;
+}</code></pre>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-3">字符串匹配（暴力算法）</h3>
+                        <p class="text-gray-700 mb-3">
+                            在主串中查找子串的位置，是字符串处理的核心问题之一。
+                        </p>
+                        <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <string>
+using namespace std;
+
+// 暴力匹配算法
+int findSubstring(string mainStr, string subStr) {
+    int n = mainStr.size();
+    int m = subStr.size();
+    
+    // 主串剩余长度不足子串长度，无需比较
+    for (int i = 0; i <= n - m; i++) {
+        int j;
+        // 比较子串与主串中从i开始的字符
+        for (j = 0; j < m; j++) {
+            if (mainStr[i + j] != subStr[j]) {
+                break;
+            }
+        }
+        // 找到匹配的子串
+        if (j == m) {
+            return i; // 返回起始位置
+        }
+    }
+    return -1; // 未找到
+}
+
+int main() {
+    string s = "abcdeabcdf";
+    string sub = "abcd";
+    cout << findSubstring(s, sub) << endl; // 输出 0
+    return 0;
+}</code></pre>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-3">字符串排序</h3>
+                        <p class="text-gray-700 mb-3">
+                            对多个字符串进行排序，在信奥中常用于词典排序等问题。
+                        </p>
+                        <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    // 字符串数组排序
+    string arr[] = {"apple", "banana", "cherry", "date"};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    sort(arr, arr + n);
+    
+    cout << "排序后的字符串数组:" << endl;
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+    
+    // 字符串向量排序
+    vector<string> vec = {"cat", "apple", "banana", "dog"};
+    sort(vec.begin(), vec.end());
+    
+    cout << "排序后的字符串向量:" << endl;
+    for (string s : vec) {
+        cout << s << " ";
+    }
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">KMP算法（高效字符串匹配）</h3>
+                    <p class="text-gray-700 mb-3">
+                        KMP算法是一种高效的字符串匹配算法，通过预处理子串构建部分匹配表，避免不必要的字符比较，时间复杂度为O(n+m)。
+                    </p>
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+// 构建部分匹配表(前缀函数)
+vector<int> computeLPS(string pattern) {
+    int m = pattern.size();
+    vector<int> lps(m, 0);
+    int len = 0; // 最长前缀后缀的长度
+    
+    for (int i = 1; i < m; ) {
+        if (pattern[i] == pattern[len]) {
+            len++;
+            lps[i] = len;
+            i++;
+        } else {
+            if (len != 0) {
+                len = lps[len - 1];
+            } else {
+                lps[i] = 0;
+                i++;
+            }
+        }
+    }
+    return lps;
+}
+
+// KMP匹配算法
+int kmpSearch(string text, string pattern) {
+    int n = text.size();
+    int m = pattern.size();
+    
+    if (m == 0) return 0; // 空模式串
+    
+    vector<int> lps = computeLPS(pattern);
+    int i = 0; // 文本索引
+    int j = 0; // 模式串索引
+    
+    while (i < n) {
+        if (pattern[j] == text[i]) {
+            i++;
+            j++;
+        }
+        
+        if (j == m) {
+            return i - j; // 找到匹配，返回起始位置
+            j = lps[j - 1];
+        } else if (i < n && pattern[j] != text[i]) {
+            if (j != 0) {
+                j = lps[j - 1];
+            } else {
+                i++;
+            }
+        }
+    }
+    return -1; // 未找到
+}
+
+int main() {
+    string text = "ABABDABACDABABCABAB";
+    string pattern = "ABABCABAB";
+    cout << "模式串在文本中的位置: " << kmpSearch(text, pattern) << endl; // 10
+    return 0;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 信奥字符串例题解析 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-string mb-6 flex items-center">
+                <i class="fa fa-trophy mr-2"></i> 信奥字符串例题解析
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 例题1 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">例题1: 统计字符出现次数</h3>
+                    <p class="text-gray-700 mb-3">
+                        <strong>问题描述:</strong> 输入一个字符串，统计其中每个字符出现的次数，并按字符顺序输出。
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    string s;
+    getline(cin, s); // 读取整行字符串，包括空格
+    
+    // 统计每个字符出现的次数
+    int count[256] = {0}; // 假设使用ASCII字符集
+    for (char c : s) {
+        count[(unsigned char)c]++;
+    }
+    
+    // 输出统计结果
+    for (int i = 0; i < 256; i++) {
+        if (count[i] > 0) {
+            cout << "'" << (char)i << "': " << count[i] << "次" << endl;
+        }
+    }
+    
+    return 0;
+}</code></pre>
+                
+                <div class="bg-white p-3 rounded-lg border border-gray-200 mt-3">
+                    <h4 class="font-semibold mb-2">解题思路:</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                        <li>使用getline()函数读取完整输入，包括空格</li>
+                        <li>创建大小为256的数组（覆盖所有ASCII字符）存储每个字符的计数</li>
+                        <li>遍历字符串，对每个字符进行计数</li>
+                        <li>遍历计数数组，输出所有出现过的字符及其计数</li>
+                    </ul>
+                </div>
+                </div>
+                
+                <!-- 例题2 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">例题2: 字符串加密</h3>
+                    <p class="text-gray-700 mb-3">
+                        <strong>问题描述:</strong> 实现一个简单的凯撒密码加密算法，将字符串中的每个字母向后移动k位（循环移动，z后是a），非字母字符不变。
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <string>
+using namespace std;
+
+// 凯撒密码加密
+string caesarEncrypt(string s, int k) {
+    k %= 26; // 确保k在0-25之间
+    if (k < 0) k += 26; // 处理负数情况
+    
+    for (int i = 0; i < s.size(); i++) {
+        // 处理大写字母
+        if (s[i] >= 'A' && s[i] <= 'Z') {
+            s[i] = (s[i] - 'A' + k) % 26 + 'A';
+        }
+        // 处理小写字母
+        else if (s[i] >= 'a' && s[i] <= 'z') {
+            s[i] = (s[i] - 'a' + k) % 26 + 'a';
+        }
+        // 非字母字符不变
+    }
+    return s;
+}
+
+int main() {
+    string s;
+    int k;
+    getline(cin, s);
+    cin >> k;
+    
+    cout << "加密前: " << s << endl;
+    cout << "加密后: " << caesarEncrypt(s, k) << endl;
+    
+    return 0;
+}</code></pre>
+                
+                <div class="bg-white p-3 rounded-lg border border-gray-200 mt-3">
+                    <h4 class="font-semibold mb-2">解题思路:</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                        <li>对移动位数k进行取模26操作，确保在合理范围内</li>
+                        <li>区分处理大写字母和小写字母，保持原大小写不变</li>
+                        <li>使用字符ASCII码值进行计算，实现循环移动效果</li>
+                        <li>非字母字符不进行处理，保持原样</li>
+                    </ul>
+                </div>
+                </div>
+                
+                <!-- 例题3 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">例题3: 最长公共前缀</h3>
+                    <p class="text-gray-700 mb-3">
+                        <strong>问题描述:</strong> 输入n个字符串，找出它们的最长公共前缀。如果不存在公共前缀，输出空字符串。
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+// 查找最长公共前缀
+string longestCommonPrefix(vector<string>& strs) {
+    if (strs.empty()) return "";
+    
+    // 以第一个字符串为基准
+    for (int i = 0; i < strs[0].size(); i++) {
+        char c = strs[0][i];
+        // 与其他字符串的对应位置比较
+        for (int j = 1; j < strs.size(); j++) {
+            // 如果到达某个字符串的末尾，或者字符不匹配
+            if (i == strs[j].size() || strs[j][i] != c) {
+                return strs[0].substr(0, i);
+            }
+        }
+    }
+    return strs[0]; // 所有字符串都相同
+}
+
+int main() {
+    int n;
+    cin >> n;
+    cin.ignore(); // 忽略换行符
+    
+    vector<string> strs(n);
+    for (int i = 0; i < n; i++) {
+        getline(cin, strs[i]);
+    }
+    
+    cout << "最长公共前缀: " << longestCommonPrefix(strs) << endl;
+    
+    return 0;
+}</code></pre>
+                
+                <div class="bg-white p-3 rounded-lg border border-gray-200 mt-3">
+                    <h4 class="font-semibold mb-2">解题思路:</h4>
+                    <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                        <li>以第一个字符串为基准，逐个字符与其他字符串比较</li>
+                        <li>对于每个位置，检查所有字符串的对应位置是否有相同字符</li>
+                        <li>一旦发现不匹配或到达某个字符串的末尾，就返回当前找到的前缀</li>
+                        <li>如果所有字符都匹配，则第一个字符串就是最长公共前缀</li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 字符串处理常见错误 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-string mb-6 flex items-center">
+                <i class="fa fa-exclamation-triangle mr-2"></i> 常见错误与注意事项
+            </h2>
+            
+            <div class="space-y-4">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">字符串处理中的常见错误</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-3 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-red-500 mb-2">数组越界访问</h4>
+                            <p class="text-sm text-gray-700">
+                                访问字符串时超出其实际长度范围，尤其是使用C风格字符串时，忘记终止符'\0'会导致此问题。
+                            </p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-red-500 mb-2">字符串比较错误</h4>
+                            <p class="text-sm text-gray-700">
+                                对C风格字符串使用"=="进行比较（实际比较的是地址而非内容），应使用strcmp函数。
+                            </p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-red-500 mb-2">输入处理不当</h4>
+                            <p class="text-sm text-gray-700">
+                                使用cin读取字符串时遇到空格会停止，需要读取整行时应使用getline函数。
+                            </p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-red-500 mb-2">忽略字符编码</h4>
+                            <p class="text-sm text-gray-700">
+                                处理中文等多字节字符时，误用单字节处理方式导致乱码或处理错误。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">信奥中的字符串处理技巧</h3>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                        <li><strong>预处理输入:</strong> 读取字符串后先进行清洗（如去除空格、转换大小写），统一格式</li>
+                        <li><strong>善用标准库:</strong> 熟悉并使用string类的成员函数，避免重复造轮子</li>
+                        <li><strong>注意效率:</strong> 频繁拼接字符串时，考虑使用reserve()预分配空间提高效率</li>
+                        <li><strong>字符与ASCII码转换:</strong> 灵活运用字符与ASCII码的转换处理数字字符等</li>
+                        <li><strong>边界情况处理:</strong> 特别注意空字符串、单字符字符串等边界情况</li>
+                        <li><strong>算法选择:</strong> 小规模字符串匹配可用暴力算法，大规模数据应使用KMP等高效算法</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            
+            // 字符串动画演示功能
+            const runBtn = document.getElementById('string-run');
+            const resetBtn = document.getElementById('string-reset');
+            const statusEl = document.getElementById('string-status');
+            const executionEl = document.getElementById('string-execution');
+            const str1Input = document.getElementById('str-input1');
+            const str2Input = document.getElementById('str-input2');
+            const substrInput = document.getElementById('substr-input');
+            const codeS1 = document.getElementById('str-code-s1');
+            const codeS2 = document.getElementById('str-code-s2');
+            const codeSub = document.getElementById('str-code-sub');
+            
+            // 代码行元素
+            const codeLines = [];
+            for (let i = 1; i <= 22; i++) {
+                codeLines.push(document.getElementById(`str-code-${i}`));
+            }
+            
+            // 重置所有高亮
+            function resetHighlights() {
+                codeLines.forEach(line => {
+                    line.classList.remove('code-line-highlight');
+                });
+                statusEl.classList.add('hidden');
+                executionEl.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fa fa-arrow-down mb-2"></i>
+                        <p>点击"运行动画"开始演示</p>
+                    </div>
+                `;
+            }
+            
+            // 更新代码显示
+            function updateCodeDisplay() {
+                codeS1.textContent = str1Input.value;
+                codeS2.textContent = str2Input.value;
+                codeSub.textContent = substrInput.value;
+            }
+            
+            // 运行动画
+            runBtn.addEventListener('click', function() {
+                resetHighlights();
+                updateCodeDisplay();
+                statusEl.classList.remove('hidden');
+                
+                const s1 = str1Input.value;
+                const s2 = str2Input.value;
+                const sub = substrInput.value;
+                const s3 = s1 + " " + s2;
+                const pos = s1.indexOf(sub);
+                
+                let step = 0;
+                const steps = [
+                    {line: 6, status: "定义字符串s1 = '" + s1 + "'", execution: "创建字符串变量s1，值为: <strong>" + s1 + "</strong>"},
+                    {line: 7, status: "定义字符串s2 = '" + s2 + "'", execution: "创建字符串变量s2，值为: <strong>" + s2 + "</strong>"},
+                    {line: 8, status: "定义子串sub = '" + sub + "'", execution: "创建子串变量sub，值为: <strong>" + sub + "</strong>"},
+                    {line: 11, status: "字符串拼接: s3 = s1 + ' ' + s2", execution: "拼接后s3的值为: <strong>" + s3 + "</strong>"},
+                    {line: 14, status: "查找子串位置: pos = s1.find(sub)", execution: pos !== -1 ? 
+                        "在s1中找到子串，位置为: <strong>" + pos + "</strong>" : 
+                        "在s1中未找到子串"},
+                ];
+                
+                // 如果找到子串，增加替换步骤
+                if (pos !== -1) {
+                    const replaced = s1.substring(0, pos) + "XXX" + s1.substring(pos + sub.length);
+                    steps.push({
+                        line: 18, 
+                        status: "替换子串: s1.replace(pos, sub.length(), 'XXX')", 
+                        execution: "替换后s1的值为: <strong>" + replaced + "</strong>"
+                    });
+                }
+                
+                // 执行步骤展示
+                function executeStep() {
+                    if (step < steps.length) {
+                        // 移除上一步的高亮
+                        if (step > 0) {
+                            codeLines[steps[step-1].line - 1].classList.remove('code-line-highlight');
+                        }
+                        
+                        // 设置当前步的高亮
+                        codeLines[steps[step].line - 1].classList.add('code-line-highlight');
+                        
+                        // 更新状态和执行区域
+                        statusEl.textContent = "状态: " + steps[step].status;
+                        executionEl.innerHTML = `<p>${steps[step].execution}</p>`;
+                        
+                        step++;
+                        setTimeout(executeStep, 1500);
+                    } else {
+                        // 完成所有步骤
+                        statusEl.textContent = "状态: 操作完成";
+                        executionEl.innerHTML += `<p class="mt-2 text-string"><i class="fa fa-check-circle"></i> 所有字符串操作已完成</p>`;
+                    }
+                }
+                
+                // 开始执行第一步
+                setTimeout(executeStep, 500);
+            });
+            
+            // 重置按钮
+            resetBtn.addEventListener('click', function() {
+                resetHighlights();
+                str1Input.value = "information";
+                str2Input.value = "olympiad";
+                substrInput.value = "orm";
+                updateCodeDisplay();
+            });
+        });
+    </script>
+</body>
+</html>

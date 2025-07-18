@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>循环语句 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：鲜明的蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        syntax: '#FF9800', // 语法部分：橙色
+                        algorithm: '#2ECC71', // 算法部分：绿色
+                        datastructure: '#9C27B0', // 数据结构部分：深紫色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                        loop: '#3498DB', // 循环主题色：蓝色
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .subcategory-bg {
+                @apply bg-gradient-to-r from-secondary/5 to-secondary/10;
+            }
+            .loop-bg {
+                @apply bg-gradient-to-r from-loop/5 to-loop/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .loop-header {
+                @apply font-bold text-loop mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-loop bg-loop/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-loop text-white text-center mr-2 text-xs;
+            }
+            .loop-iteration {
+                @apply border-2 border-gray-300 rounded-md p-2 mb-1 bg-gray-50 transition-all duration-500;
+            }
+            .loop-iteration-active {
+                @apply border-loop bg-loop/10 transform scale-[1.02];
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-gray-100 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-loop h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">语法基础</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">流程控制</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-loop font-medium">循环语句</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="loop-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-loop mb-2">循环语句</h1>
+                    <p class="text-gray-700">
+                        循环是编程中重复执行代码块的重要结构。本页面将详细讲解C++中的三种循环结构：for循环、while循环和do-while循环，
+                        以及循环控制语句的使用方法，专为NOIP竞赛学生设计。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-loop hover:bg-loop/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#problems" class="bg-white border border-loop text-loop hover:bg-loop/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看题目
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 循环语句概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-loop mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 循环语句概述
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">什么是循环？</h3>
+                    <p class="text-gray-700">
+                        循环是一种控制结构，允许程序重复执行一段代码，直到满足特定条件为止。循环可以大大减少代码冗余，提高程序效率。
+                        C++提供了三种主要的循环结构：
+                    </p>
+                    <ul class="list-disc pl-6 mt-2 space-y-2">
+                        <li><strong>for循环</strong>：当循环次数已知时使用，结构清晰</li>
+                        <li><strong>while循环</strong>：当循环次数未知，只知道循环条件时使用</li>
+                        <li><strong>do-while循环</strong>：至少执行一次的循环，然后根据条件决定是否继续</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">循环的核心作用</h3>
+                    <p class="text-gray-700">
+                        循环的核心作用是让计算机自动重复执行相同或相似的操作，这对于处理批量数据、迭代计算、实现算法逻辑等非常重要。
+                        例如：遍历数组元素、累加求和、生成序列等都需要用到循环。
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">循环的组成部分</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><strong>初始化</strong>：设置循环开始前的初始状态</li>
+                            <li><strong>循环条件</strong>：判断是否继续执行循环的条件表达式</li>
+                            <li><strong>循环体</strong>：被重复执行的代码块</li>
+                            <li><strong>迭代更新</strong>：修改循环变量，使循环逐渐接近终止条件</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 循环动画演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-loop mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> 循环动画演示
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- for循环动画 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">for循环执行过程演示</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了for循环的执行过程，包括初始化、条件判断、循环体执行和迭代更新四个步骤。
+                                示例展示计算1到n的累加和。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">输入n值:</label>
+                                <input type="range" id="for-n" min="1" max="10" value="5" 
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-loop">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>1</span>
+                                    <span id="for-n-value">5</span>
+                                    <span>10</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button id="for-run" class="bg-loop hover:bg-loop/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行动画
+                                </button>
+                                <button id="for-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="for-status" class="animation-status hidden">
+                                状态: 等待开始
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="for-execution">
+                                <div class="text-center text-gray-500 py-8">
+                                    <i class="fa fa-arrow-down mb-2"></i>
+                                    <p>点击"运行动画"开始演示</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 三种循环对比 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">三种循环结构对比</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-loop mb-2">for循环</h4>
+                            <pre class="code-block text-xs"><code class="language-cpp">for (初始化; 条件; 更新) {
+    // 循环体
+}</code></pre>
+                            <p class="text-gray-700 text-sm mt-3">
+                                适用于已知循环次数的情况，结构紧凑，将循环控制的三个部分集中在一起。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-loop mb-2">while循环</h4>
+                            <pre class="code-block text-xs"><code class="language-cpp">初始化;
+while (条件) {
+    // 循环体
+    更新;
+}</code></pre>
+                            <p class="text-gray-700 text-sm mt-3">
+                                适用于循环次数未知的情况，条件判断在循环体执行之前，可能一次都不执行。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-loop mb-2">do-while循环</h4>
+                            <pre class="code-block text-xs"><code class="language-cpp">初始化;
+do {
+    // 循环体
+    更新;
+} while (条件);</code></pre>
+                            <p class="text-gray-700 text-sm mt-3">
+                                至少执行一次循环体，然后再判断条件，适用于需要先执行后判断的场景。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 循环控制语句 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-loop mb-6 flex items-center">
+                <i class="fa fa-sliders mr-2"></i> 循环控制语句
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-3">break语句</h3>
+                        <p class="text-gray-700 mb-3">
+                            break语句用于立即终止当前循环，并跳出循环体，继续执行循环后面的代码。
+                            常用于在满足特定条件时提前结束循环。
+                        </p>
+                        <pre class="code-block"><code class="language-cpp">// 查找数组中第一个偶数
+int arr[] = {1, 3, 5, 4, 7, 8};
+int n = 6;
+int result = -1;
+
+for (int i = 0; i < n; i++) {
+    if (arr[i] % 2 == 0) {
+        result = arr[i];
+        break;  // 找到后立即退出循环
+    }
+}
+
+cout << "第一个偶数是: " << result << endl;</code></pre>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-3">continue语句</h3>
+                        <p class="text-gray-700 mb-3">
+                            continue语句用于跳过当前循环中的剩余语句，直接进入下一次循环迭代。
+                            常用于跳过某些不满足条件的迭代。
+                        </p>
+                        <pre class="code-block"><code class="language-cpp">// 计算1到10中所有奇数的和
+int sum = 0;
+for (int i = 1; i <= 10; i++) {
+    if (i % 2 == 0) {
+        continue;  // 跳过偶数
+    }
+    sum += i;
+}
+
+cout << "1到10中所有奇数的和是: " << sum << endl;</code></pre>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">嵌套循环</h3>
+                    <p class="text-gray-700 mb-3">
+                        嵌套循环是指在一个循环内部包含另一个完整的循环结构。外层循环执行一次，内层循环要执行完所有次数。
+                        嵌套循环常用于处理二维数据结构或需要多层迭代的问题。
+                    </p>
+                    <pre class="code-block"><code class="language-cpp">// 打印5x5的乘法表
+for (int i = 1; i <= 5; i++) {       // 外层循环控制行数
+    for (int j = 1; j <= 5; j++) {   // 内层循环控制列数
+        cout << i * j << "\t";
+    }
+    cout << endl;  // 每行结束后换行
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 循环代码示例 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-loop mb-6 flex items-center">
+                <i class="fa fa-code mr-2"></i> 循环代码示例 (C++)
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- for循环示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">1. for循环 - 计算阶乘</h3>
+                    <p class="text-gray-700 mb-3">
+                        使用for循环计算n的阶乘（n! = 1 × 2 × 3 × ... × n）
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cout << "请输入一个正整数: ";
+    cin >> n;
+    
+    long long factorial = 1;
+    // for循环计算阶乘
+    for (int i = 1; i <= n; i++) {
+        factorial *= i;
+    }
+    
+    cout << n << "的阶乘是: " << factorial << endl;
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- while循环示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">2. while循环 - 求斐波那契数列</h3>
+                    <p class="text-gray-700 mb-3">
+                        使用while循环计算斐波那契数列的前n项（F(1)=1, F(2)=1, F(n)=F(n-1)+F(n-2)）
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cout << "请输入项数: ";
+    cin >> n;
+    
+    int a = 1, b = 1, c;
+    int count = 2;
+    
+    cout << "斐波那契数列前" << n << "项为: ";
+    if (n >= 1) cout << a;
+    if (n >= 2) cout << ", " << b;
+    
+    // while循环计算后续项
+    while (count < n) {
+        c = a + b;
+        cout << ", " << c;
+        a = b;
+        b = c;
+        count++;
+    }
+    
+    cout << endl;
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- do-while循环示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">3. do-while循环 - 菜单选择</h3>
+                    <p class="text-gray-700 mb-3">
+                        使用do-while循环实现一个简单的菜单选择功能，确保至少显示一次菜单
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+using namespace std;
+
+int main() {
+    int choice;
+    
+    // do-while循环实现菜单
+    do {
+        cout << "\n===== 菜单 =====" << endl;
+        cout << "1. 查看信息" << endl;
+        cout << "2. 修改设置" << endl;
+        cout << "3. 帮助" << endl;
+        cout << "0. 退出" << endl;
+        cout << "请选择: ";
+        cin >> choice;
+        
+        switch (choice) {
+            case 1:
+                cout << "显示信息..." << endl;
+                break;
+            case 2:
+                cout << "修改设置..." << endl;
+                break;
+            case 3:
+                cout << "帮助信息..." << endl;
+                break;
+            case 0:
+                cout << "谢谢使用，再见！" << endl;
+                break;
+            default:
+                cout << "无效的选择，请重试！" << endl;
+        }
+    } while (choice != 0);  // 当选择0时退出循环
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 嵌套循环示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">4. 嵌套循环 - 打印杨辉三角</h3>
+                    <p class="text-gray-700 mb-3">
+                        使用嵌套循环打印杨辉三角的前n行，杨辉三角的每个数等于它上方两数之和
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cout << "请输入杨辉三角的行数: ";
+    cin >> n;
+    
+    // 外层循环控制行数
+    for (int i = 0; i < n; i++) {
+        // 打印空格
+        for (int j = 0; j < n - i - 1; j++) {
+            cout << " ";
+        }
+        
+        int num = 1;
+        // 内层循环控制每行的数字
+        for (int j = 0; j <= i; j++) {
+            cout << num << " ";
+            num = num * (i - j) / (j + 1);
+        }
+        cout << endl;
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 循环算法应用 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-loop mb-6 flex items-center">
+                <i class="fa fa-lightbulb-o mr-2"></i> 循环算法应用
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">循环的典型应用场景</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-loop mb-2">数据遍历</h4>
+                            <p class="text-gray-700">
+                                循环最常见的用途是遍历数组、字符串等数据结构，对每个元素进行处理。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-loop mb-2">数值计算</h4>
+                            <p class="text-gray-700">
+                                如累加、累乘、求平均数、求最大/最小值等需要重复计算的场景。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-loop mb-2">算法实现</h4>
+                            <p class="text-gray-700">
+                                许多算法如排序、查找、动态规划等都离不开循环结构。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-loop mb-2">用户交互</h4>
+                            <p class="text-gray-700">
+                                实现菜单、游戏循环等需要持续与用户交互的功能。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">循环使用的注意事项</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>避免死循环</strong>：确保循环条件最终会变为假，否则会导致程序无限执行</li>
+                        <li><strong>循环效率</strong>：嵌套循环的时间复杂度较高，注意优化算法</li>
+                        <li><strong>循环变量控制</strong>：正确更新循环变量，避免逻辑错误</li>
+                        <li><strong>选择合适的循环类型</strong>：根据具体场景选择for、while或do-while循环</li>
+                        <li><strong>循环内操作最小化</strong>：将与循环无关的操作移到循环外部，提高效率</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 洛谷推荐题目 -->
+        <section id="problems" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-loop mb-6 flex items-center">
+                <i class="fa fa-puzzle-piece mr-2"></i> 洛谷推荐题目
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">入门题</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-lg mb-2">P5721 数字直角三角形</h4>
+                        <p class="text-gray-700 mb-3">
+                            给出n，请输出一个直角边长度为n的数字直角三角形。所有数字都是2位组成的，如果没有2位则加上前导0。
+                        </p>
+                        <div class="flex space-x-3 mt-3">
+                            <a href="https://www.luogu.com.cn/problem/P5721" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                <i class="fa fa-external-link mr-2"></i> 题目链接
+                            </a>
+                            <a href="#" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                <i class="fa fa-code mr-2"></i> 题解代码
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">基础题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1009 阶乘之和</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                用高精度计算出S=1!+2!+3!+...+n!（n≤50）。其中"!"表示阶乘，例如：5!=5×4×3×2×1。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1009" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1217 [USACO1.5] 回文质数 Prime Palindromes</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                因为151既是一个质数又是一个回文数(从左到右和从右到左是看一样的)，所以 151 是回文质数。
+                                编写一个程序来找出范围[a,b] (5 ≤ a < b ≤ 100,000,000)间的所有回文质数。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1217" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">进阶题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1035 级数求和</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                已知：S_n= 1 + 1/2 + 1/3 + ... + 1/n。显然对于任意一个整数k，当n足够大的时候，S_n大于k。
+                                现给出一个整数k，要求计算出最小的n，使得S_n > k。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1035" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P2615 神奇的幻方</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                幻方是一种很神奇的N×N矩阵：它由数字1,2,...,N×N构成，且每行、每列及两条对角线上的数字之和都相同。
+                                当N为奇数时，我们可以通过以下方法构建一个幻方：
+                                1. 第一个数字写在第一行的中间
+                                2. 下一个数字，都写在上一个数字的右上方。如果右上方没有格子，则写到相应的对面。
+                                3. 如果右上方已经有数字，则写到上一个数字的正下方。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P2615" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            
+            // 初始化for循环演示的n值显示
+            const forNRange = document.getElementById('for-n');
+            const forNValue = document.getElementById('for-n-value');
+            
+            forNRange.addEventListener('input', function() {
+                forNValue.textContent = this.value;
+            });
+            
+            // 运行for循环动画
+            document.getElementById('for-run').addEventListener('click', function() {
+                const n = parseInt(forNRange.value);
+                const executionDiv = document.getElementById('for-execution');
+                const statusDiv = document.getElementById('for-status');
+                
+                executionDiv.innerHTML = '';
+                statusDiv.classList.remove('hidden');
+                statusDiv.textContent = '状态: 开始执行for循环';
+                
+                let sum = 0;
+                let step = 1;
+                
+                // 创建初始化步骤
+                const initStep = document.createElement('div');
+                initStep.className = 'loop-iteration';
+                initStep.innerHTML = `<strong>步骤 ${step++}:</strong> 初始化 sum = 0, i = 1`;
+                executionDiv.appendChild(initStep);
+                
+                // 延迟执行循环步骤
+                let delay = 1000;
+                
+                for (let i = 1; i <= n; i++) {
+                    setTimeout(() => {
+                        // 条件判断步骤
+                        const conditionStep = document.createElement('div');
+                        conditionStep.className = 'loop-iteration';
+                        conditionStep.innerHTML = `<strong>步骤 ${step++}:</strong> 判断条件 i <= ${n} (${i} <= ${n}) → 真`;
+                        executionDiv.appendChild(conditionStep);
+                        conditionStep.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        
+                        // 循环体执行步骤
+                        setTimeout(() => {
+                            const bodyStep = document.createElement('div');
+                            bodyStep.className = 'loop-iteration loop-iteration-active';
+                            const prevSum = sum;
+                            sum += i;
+                            bodyStep.innerHTML = `<strong>步骤 ${step++}:</strong> 执行循环体 sum = ${prevSum} + ${i} = ${sum}`;
+                            executionDiv.appendChild(bodyStep);
+                            bodyStep.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                            
+                            // 迭代更新步骤
+                            setTimeout(() => {
+                                bodyStep.classList.remove('loop-iteration-active');
+                                
+                                if (i < n) {
+                                    const updateStep = document.createElement('div');
+                                    updateStep.className = 'loop-iteration';
+                                    updateStep.innerHTML = `<strong>步骤 ${step++}:</strong> 迭代更新 i = ${i} → ${i + 1}`;
+                                    executionDiv.appendChild(updateStep);
+                                    updateStep.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                                } else {
+                                    // 循环结束
+                                    setTimeout(() => {
+                                        const endStep1 = document.createElement('div');
+                                        endStep1.className = 'loop-iteration';
+                                        endStep1.innerHTML = `<strong>步骤 ${step++}:</strong> 判断条件 i <= ${n} (${i + 1} <= ${n}) → 假`;
+                                        executionDiv.appendChild(endStep1);
+                                        
+                                        const endStep2 = document.createElement('div');
+                                        endStep2.className = 'loop-iteration bg-green-50 border-green-300 mt-2';
+                                        endStep2.innerHTML = `<strong>循环结束:</strong> 1到${n}的累加和为 ${sum}`;
+                                        executionDiv.appendChild(endStep2);
+                                        endStep2.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                                        
+                                        statusDiv.textContent = `状态: 循环结束，结果为 ${sum}`;
+                                    }, 1000);
+                                }
+                            }, 1500);
+                        }, 1000);
+                    }, delay);
+                    
+                    delay += 3500;
+                }
+            });
+            
+            // 重置for循环动画
+            document.getElementById('for-reset').addEventListener('click', function() {
+                const executionDiv = document.getElementById('for-execution');
+                const statusDiv = document.getElementById('for-status');
+                
+                executionDiv.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fa fa-arrow-down mb-2"></i>
+                        <p>点击"运行动画"开始演示</p>
+                    </div>
+                `;
+                statusDiv.classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>

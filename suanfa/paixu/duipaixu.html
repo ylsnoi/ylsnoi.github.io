@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>堆排序 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：鲜明的蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        syntax: '#FF9800', // 语法部分：橙色
+                        algorithm: '#2ECC71', // 算法部分：绿色
+                        datastructure: '#9C27B0', // 数据结构部分：深紫色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                        heap: '#E91E63', // 堆排序主题色：粉红色
+                        execution: '#FFEB3B', // 执行高亮：黄色
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .subcategory-bg {
+                @apply bg-gradient-to-r from-secondary/5 to-secondary/10;
+            }
+            .heap-bg {
+                @apply bg-gradient-to-r from-heap/5 to-heap/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .heap-header {
+                @apply font-bold text-heap mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-heap bg-heap/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-heap text-white text-center mr-2 text-xs;
+            }
+            .heap-element {
+                @apply inline-block w-10 h-10 rounded-full bg-gray-200 text-center leading-10 mx-1 transition-all duration-300;
+            }
+            .heap-element-active {
+                @apply bg-heap text-white transform scale-110;
+            }
+            .heap-element-compare {
+                @apply bg-execution text-gray-800;
+            }
+            .heap-tree {
+                @apply my-8;
+            }
+            .heap-level {
+                @apply flex justify-center my-4;
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-gray-100 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-heap h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .code-line {
+                @apply transition-all duration-300;
+            }
+            .code-line-highlight {
+                @apply bg-execution/30 text-gray-900 font-medium;
+            }
+            .problem-card {
+                @apply bg-white border border-gray-200 rounded-lg p-4 hover:border-primary transition-all duration-300;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">算法基础</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">排序算法</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-heap font-medium">堆排序</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="heap-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-heap mb-2">堆排序</h1>
+                    <p class="text-gray-700">
+                        堆排序是一种基于堆数据结构的高效排序算法，时间复杂度为O(n log n)。本页面将详细讲解堆排序的原理、实现步骤以及在信息学奥赛中的应用，
+                        帮助NOIP竞赛学生掌握这一重要排序算法。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-heap hover:bg-heap/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#problems" class="bg-white border border-heap text-heap hover:bg-heap/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看题目
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 堆排序概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-heap mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 堆排序概述
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">什么是堆排序？</h3>
+                    <p class="text-gray-700">
+                        堆排序(Heap Sort)是一种基于堆数据结构的比较排序算法，由计算机科学家J. W. J. Williams于1964年提出。它利用了堆的性质来实现排序，
+                        具有优秀的时间复杂度和空间复杂度，是信息学奥赛中常用的高效排序算法之一。
+                    </p>
+                    <div class="bg-gray-50 p-4 rounded-lg mt-3">
+                        <h4 class="font-semibold mb-2">堆排序的特点：</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>时间复杂度：O(n log n)，在最好、最坏和平均情况下均为此复杂度</li>
+                            <li>空间复杂度：O(1)，属于原地排序算法</li>
+                            <li>不稳定排序算法</li>
+                            <li>适用于大量数据的排序</li>
+                            <li>不需要额外的辅助空间</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">堆的基本概念</h3>
+                    <p class="text-gray-700 mb-3">
+                        堆是一种特殊的完全二叉树，满足以下性质：
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-heap">大根堆（最大堆）</h4>
+                            <p class="text-sm text-gray-700">
+                                每个节点的值都大于或等于其左右孩子节点的值，根节点是整个堆中的最大值。
+                            </p>
+                            <div class="heap-tree mt-4">
+                                <div class="heap-level">
+                                    <div class="heap-element">90</div>
+                                </div>
+                                <div class="heap-level">
+                                    <div class="heap-element">70</div>
+                                    <div class="heap-element">80</div>
+                                </div>
+                                <div class="heap-level">
+                                    <div class="heap-element">50</div>
+                                    <div class="heap-element">40</div>
+                                    <div class="heap-element">60</div>
+                                    <div class="heap-element">30</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-heap">小根堆（最小堆）</h4>
+                            <p class="text-sm text-gray-700">
+                                每个节点的值都小于或等于其左右孩子节点的值，根节点是整个堆中的最小值。
+                            </p>
+                            <div class="heap-tree mt-4">
+                                <div class="heap-level">
+                                    <div class="heap-element">10</div>
+                                </div>
+                                <div class="heap-level">
+                                    <div class="heap-element">20</div>
+                                    <div class="heap-element">30</div>
+                                </div>
+                                <div class="heap-level">
+                                    <div class="heap-element">40</div>
+                                    <div class="heap-element">50</div>
+                                    <div class="heap-element">60</div>
+                                    <div class="heap-element">70</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-700 mt-4">
+                        在实际实现中，堆通常使用数组来表示，对于索引为i的节点：
+                    </p>
+                    <ul class="list-disc pl-5 space-y-1 mt-2">
+                        <li>左孩子节点的索引为：2i + 1</li>
+                        <li>右孩子节点的索引为：2i + 2</li>
+                        <li>父节点的索引为：(i - 1) / 2（整数除法）</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">堆排序的基本步骤</h3>
+                    <p class="text-gray-700 mb-3">堆排序主要分为两个阶段：</p>
+                    
+                    <div class="space-y-4 mt-4">
+                        <div class="step-item">
+                            <span class="step-number">1</span>
+                            <div>
+                                <h4 class="font-semibold">构建堆</h4>
+                                <p class="text-gray-700 text-sm">将待排序的数组转换为一个大根堆（或小根堆）</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <span class="step-number">2</span>
+                            <div>
+                                <h4 class="font-semibold">排序阶段</h4>
+                                <p class="text-gray-700 text-sm">
+                                    反复执行以下操作，直到所有元素排序完成：
+                                    <ul class="list-disc pl-5 mt-1">
+                                        <li>将堆顶元素（最大值）与堆的最后一个元素交换</li>
+                                        <li>将堆的大小减小1</li>
+                                        <li>对新的堆顶元素执行"下沉"操作，维持堆的性质</li>
+                                    </ul>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 堆排序动画演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-heap mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> 堆排序过程演示
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 堆排序动画 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">堆排序算法动态演示</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了堆排序的完整过程，包括建堆和排序两个主要阶段。
+                                您可以控制动画的播放、暂停和单步执行，观察每一步的变化。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">输入待排序数组:</label>
+                                <input type="text" id="array-input" value="4,6,8,5,9,3,2,7,1"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-heap">
+                                <p class="text-xs text-gray-500 mt-1">请用逗号分隔数字，如: 3,1,4,2</p>
+                            </div>
+                            
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <button id="sort-run" class="bg-heap hover:bg-heap/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 开始
+                                </button>
+                                <button id="sort-pause" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md transition-all flex items-center" disabled>
+                                    <i class="fa fa-pause mr-2"></i> 暂停
+                                </button>
+                                <button id="sort-step" class="bg-secondary hover:bg-secondary/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-step-forward mr-2"></i> 单步
+                                </button>
+                                <button id="sort-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">动画速度:</label>
+                                <input type="range" id="animation-speed" min="100" max="2000" value="800" step="100"
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                            
+                            <div id="sort-status" class="animation-status">
+                                状态: 准备就绪
+                            </div>
+                            
+                            <div class="animation-progress">
+                                <div id="sort-progress-bar" class="animation-progress-bar" style="width: 0%"></div>
+                            </div>
+                            <div class="text-right text-sm text-gray-500">
+                                <span id="sort-progress-text">0/0 步</span>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 h-80 overflow-y-auto">
+                                <h4 class="font-semibold mb-3 text-center">堆结构可视化</h4>
+                                <div id="heap-visualization" class="flex justify-center items-center h-[calc(100%-2rem)]">
+                                    <div class="text-center text-gray-500">
+                                        <i class="fa fa-arrow-down mb-2"></i>
+                                        <p>点击"开始"或"单步"开始演示</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 h-80 overflow-hidden flex flex-col">
+                                <h4 class="font-semibold mb-3 text-center">排序过程与代码</h4>
+                                <div class="bg-gray-800 text-gray-100 rounded-lg p-3 flex-grow overflow-y-auto font-mono text-sm" id="heap-code">
+                                    <div class="code-line" id="code-1">#include &lt;iostream&gt;</div>
+                                    <div class="code-line" id="code-2">#include &lt;vector&gt;</div>
+                                    <div class="code-line" id="code-3">using namespace std;</div>
+                                    <div class="code-line" id="code-4">&nbsp;</div>
+                                    <div class="code-line" id="code-5">// 下沉操作，维持堆的性质</div>
+                                    <div class="code-line" id="code-6">void heapify(vector&lt;int&gt;& arr, int n, int i) {</div>
+                                    <div class="code-line" id="code-7">&nbsp;&nbsp;int largest = i;       // 初始化最大值为根节点</div>
+                                    <div class="code-line" id="code-8">&nbsp;&nbsp;int left = 2*i + 1;    // 左孩子索引</div>
+                                    <div class="code-line" id="code-9">&nbsp;&nbsp;int right = 2*i + 2;   // 右孩子索引</div>
+                                    <div class="code-line" id="code-10">&nbsp;</div>
+                                    <div class="code-line" id="code-11">&nbsp;&nbsp;// 如果左孩子大于根节点</div>
+                                    <div class="code-line" id="code-12">&nbsp;&nbsp;if (left &lt; n &amp;&amp; arr[left] &gt; arr[largest])</div>
+                                    <div class="code-line" id="code-13">&nbsp;&nbsp;&nbsp;&nbsp;largest = left;</div>
+                                    <div class="code-line" id="code-14">&nbsp;</div>
+                                    <div class="code-line" id="code-15">&nbsp;&nbsp;// 如果右孩子大于当前最大值</div>
+                                    <div class="code-line" id="code-16">&nbsp;&nbsp;if (right &lt; n &amp;&amp; arr[right] &gt; arr[largest])</div>
+                                    <div class="code-line" id="code-17">&nbsp;&nbsp;&nbsp;&nbsp;largest = right;</div>
+                                    <div class="code-line" id="code-18">&nbsp;</div>
+                                    <div class="code-line" id="code-19">&nbsp;&nbsp;// 如果最大值不是根节点</div>
+                                    <div class="code-line" id="code-20">&nbsp;&nbsp;if (largest != i) {</div>
+                                    <div class="code-line" id="code-21">&nbsp;&nbsp;&nbsp;&nbsp;swap(arr[i], arr[largest]);</div>
+                                    <div class="code-line" id="code-22">&nbsp;&nbsp;&nbsp;&nbsp;// 递归地对受影响的子树执行heapify</div>
+                                    <div class="code-line" id="code-23">&nbsp;&nbsp;&nbsp;&nbsp;heapify(arr, n, largest);</div>
+                                    <div class="code-line" id="code-24">&nbsp;&nbsp;}</div>
+                                    <div class="code-line" id="code-25">}</div>
+                                    <div class="code-line" id="code-26">&nbsp;</div>
+                                    <div class="code-line" id="code-27">// 堆排序主函数</div>
+                                    <div class="code-line" id="code-28">void heapSort(vector&lt;int&gt;& arr) {</div>
+                                    <div class="code-line" id="code-29">&nbsp;&nbsp;int n = arr.size();</div>
+                                    <div class="code-line" id="code-30">&nbsp;</div>
+                                    <div class="code-line" id="code-31">&nbsp;&nbsp;// 构建大根堆</div>
+                                    <div class="code-line" id="code-32">&nbsp;&nbsp;for (int i = n / 2 - 1; i &gt;= 0; i--)</div>
+                                    <div class="code-line" id="code-33">&nbsp;&nbsp;&nbsp;&nbsp;heapify(arr, n, i);</div>
+                                    <div class="code-line" id="code-34">&nbsp;</div>
+                                    <div class="code-line" id="code-35">&nbsp;&nbsp;// 从堆中提取元素</div>
+                                    <div class="code-line" id="code-36">&nbsp;&nbsp;for (int i = n - 1; i &gt;= 0; i--) {</div>
+                                    <div class="code-line" id="code-37">&nbsp;&nbsp;&nbsp;&nbsp;// 将根节点(最大值)与当前堆的最后一个元素交换</div>
+                                    <div class="code-line" id="code-38">&nbsp;&nbsp;&nbsp;&nbsp;swap(arr[0], arr[i]);</div>
+                                    <div class="code-line" id="code-39">&nbsp;</div>
+                                    <div class="code-line" id="code-40">&nbsp;&nbsp;&nbsp;&nbsp;// 对剩余的元素执行heapify，维持堆的性质</div>
+                                    <div class="code-line" id="code-41">&nbsp;&nbsp;&nbsp;&nbsp;heapify(arr, i, 0);</div>
+                                    <div class="code-line" id="code-42">&nbsp;&nbsp;}</div>
+                                    <div class="code-line" id="code-43">}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 排序过程说明 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">堆排序关键操作解析</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-semibold text-heap mb-2">Heapify（堆化）操作</h4>
+                            <p class="text-gray-700 mb-2">
+                                Heapify是堆排序中最核心的操作，用于维持堆的性质。当某个节点的值小于其孩子节点时，需要将其"下沉"到合适的位置。
+                            </p>
+                            <ol class="list-decimal pl-5 text-gray-700">
+                                <li>比较当前节点与其左右孩子节点的值</li>
+                                <li>找出三者中的最大值</li>
+                                <li>如果最大值不是当前节点，则与最大值节点交换</li>
+                                <li>对交换后的节点递归执行Heapify操作</li>
+                            </ol>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold text-heap mb-2">建堆过程</h4>
+                            <p class="text-gray-700 mb-2">
+                                建堆过程从最后一个非叶子节点开始，依次对每个节点执行Heapify操作，直到根节点。
+                            </p>
+                            <p class="text-gray-700">
+                                对于包含n个元素的堆，最后一个非叶子节点的索引是n/2 - 1。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold text-heap mb-2">排序过程</h4>
+                            <p class="text-gray-700 mb-2">
+                                建堆完成后，堆顶元素是最大值。排序过程通过以下步骤实现：
+                            </p>
+                            <ol class="list-decimal pl-5 text-gray-700">
+                                <li>将堆顶元素（最大值）与堆的最后一个元素交换</li>
+                                <li>将堆的大小减1（排除已排好序的元素）</li>
+                                <li>对新的堆顶元素执行Heapify操作，维持堆的性质</li>
+                                <li>重复上述步骤，直到所有元素排序完成</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 堆排序代码示例 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-heap mb-6 flex items-center">
+                <i class="fa fa-code mr-2"></i> 堆排序代码示例 (C++)
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 基础堆排序实现 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">1. 基础堆排序实现</h3>
+                    <p class="text-gray-700 mb-3">
+                        标准的大根堆实现，适用于大多数排序场景
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+// 下沉操作：将以i为根的子树调整为大根堆
+void heapify(vector<int>& arr, int n, int i) {
+    int largest = i;       // 初始化最大值位置为根节点
+    int left = 2 * i + 1;  // 左孩子索引
+    int right = 2 * i + 2; // 右孩子索引
+    
+    // 如果左孩子大于当前最大值
+    if (left < n && arr[left] > arr[largest])
+        largest = left;
+    
+    // 如果右孩子大于当前最大值
+    if (right < n && arr[right] > arr[largest])
+        largest = right;
+    
+    // 如果最大值不是根节点，需要交换并继续调整
+    if (largest != i) {
+        swap(arr[i], arr[largest]);
+        // 递归调整受影响的子树
+        heapify(arr, n, largest);
+    }
+}
+
+// 堆排序主函数
+void heapSort(vector<int>& arr) {
+    int n = arr.size();
+    
+    // 构建大根堆
+    // 从最后一个非叶子节点开始向前调整
+    for (int i = n / 2 - 1; i >= 0; i--)
+        heapify(arr, n, i);
+    
+    // 从堆中提取元素，进行排序
+    for (int i = n - 1; i >= 0; i--) {
+        // 将当前根节点（最大值）与最后一个元素交换
+        swap(arr[0], arr[i]);
+        
+        // 对剩余的元素重新调整为大根堆
+        heapify(arr, i, 0);
+    }
+}
+
+// 打印数组
+void printArray(const vector<int>& arr) {
+    for (int num : arr) {
+        cout << num << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    vector<int> arr = {12, 11, 13, 5, 6, 7};
+    cout << "排序前的数组: ";
+    printArray(arr);
+    
+    heapSort(arr);
+    
+    cout << "排序后的数组: ";
+    printArray(arr);
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 优化版本 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">2. 迭代版Heapify（效率更高）</h3>
+                    <p class="text-gray-700 mb-3">
+                        使用迭代而非递归实现Heapify操作，避免递归调用的开销，在竞赛中更常用
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+// 迭代版本的heapify，效率更高
+void heapify(vector<int>& arr, int n, int i) {
+    while (true) {
+        int largest = i;       // 当前节点
+        int left = 2 * i + 1;  // 左孩子
+        int right = 2 * i + 2; // 右孩子
+        
+        // 找到最大值的位置
+        if (left < n && arr[left] > arr[largest])
+            largest = left;
+        if (right < n && arr[right] > arr[largest])
+            largest = right;
+        
+        // 如果当前节点已是最大值，无需继续调整
+        if (largest == i)
+            break;
+        
+        // 交换并继续向下调整
+        swap(arr[i], arr[largest]);
+        i = largest;
+    }
+}
+
+// 堆排序函数
+void heapSort(vector<int>& arr) {
+    int n = arr.size();
+    if (n <= 1) return;
+    
+    // 构建大根堆
+    for (int i = n / 2 - 1; i >= 0; i--)
+        heapify(arr, n, i);
+    
+    // 排序过程
+    for (int i = n - 1; i > 0; i--) {
+        swap(arr[0], arr[i]);  // 将最大值放到末尾
+        heapify(arr, i, 0);    // 调整剩余元素为大根堆
+    }
+}
+
+// 测试
+int main() {
+    vector<int> testCases[] = {
+        {3, 1, 4, 1, 5, 9, 2, 6},
+        {10, 9, 8, 7, 6, 5, 4, 3, 2, 1},
+        {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+        {5},
+        {}
+    };
+    
+    for (auto& arr : testCases) {
+        cout << "排序前: ";
+        for (int num : arr) cout << num << " ";
+        cout << endl;
+        
+        heapSort(arr);
+        
+        cout << "排序后: ";
+        for (int num : arr) cout << num << " ";
+        cout << "\n-----------------\n";
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 小根堆实现 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">3. 小根堆实现（升序排序）</h3>
+                    <p class="text-gray-700 mb-3">
+                        使用小根堆实现排序，思路与大根堆略有不同
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <algorithm> // for reverse
+using namespace std;
+
+// 小根堆的heapify操作
+void minHeapify(vector<int>& arr, int n, int i) {
+    int smallest = i;        // 初始化最小值位置为根节点
+    int left = 2 * i + 1;    // 左孩子索引
+    int right = 2 * i + 2;   // 右孩子索引
+    
+    // 找到最小值的位置
+    if (left < n && arr[left] < arr[smallest])
+        smallest = left;
+    if (right < n && arr[right] < arr[smallest])
+        smallest = right;
+    
+    // 如果最小值不是当前节点，交换并继续调整
+    if (smallest != i) {
+        swap(arr[i], arr[smallest]);
+        minHeapify(arr, n, smallest);
+    }
+}
+
+// 使用小根堆进行排序
+void minHeapSort(vector<int>& arr) {
+    int n = arr.size();
+    
+    // 构建小根堆
+    for (int i = n / 2 - 1; i >= 0; i--)
+        minHeapify(arr, n, i);
+    
+    // 提取最小元素并排序
+    vector<int> temp;
+    for (int i = n - 1; i >= 0; i--) {
+        temp.push_back(arr[0]);  // 提取最小值
+        swap(arr[0], arr[i]);    // 将最后一个元素移到根位置
+        minHeapify(arr, i, 0);   // 调整剩余元素为小根堆
+    }
+    
+    // 小根堆提取的是从小到大的元素，直接复制即可
+    arr = temp;
+}
+
+int main() {
+    vector<int> arr = {5, 3, 8, 4, 2, 7, 1, 6};
+    cout << "排序前: ";
+    for (int num : arr) cout << num << " ";
+    cout << endl;
+    
+    minHeapSort(arr);
+    
+    cout << "排序后: ";
+    for (int num : arr) cout << num << " ";
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 堆排序的应用 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">4. 堆排序的典型应用 - 求前k大元素</h3>
+                    <p class="text-gray-700 mb-3">
+                        利用堆的特性，可以高效地找出数组中前k个最大的元素，时间复杂度为O(n log k)
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// 小根堆的heapify操作
+void minHeapify(vector<int>& heap, int n, int i) {
+    int smallest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+    
+    if (left < n && heap[left] < heap[smallest])
+        smallest = left;
+    if (right < n && heap[right] < heap[smallest])
+        smallest = right;
+    
+    if (smallest != i) {
+        swap(heap[i], heap[smallest]);
+        minHeapify(heap, n, smallest);
+    }
+}
+
+// 构建小根堆
+void buildMinHeap(vector<int>& heap) {
+    int n = heap.size();
+    for (int i = n / 2 - 1; i >= 0; i--)
+        minHeapify(heap, n, i);
+}
+
+// 查找数组中前k个最大的元素
+vector<int> findTopK(vector<int>& arr, int k) {
+    if (k <= 0 || k > arr.size()) {
+        return {};
+    }
+    
+    // 用前k个元素构建小根堆
+    vector<int> minHeap(arr.begin(), arr.begin() + k);
+    buildMinHeap(minHeap);
+    
+    // 处理剩余元素
+    for (int i = k; i < arr.size(); i++) {
+        // 如果当前元素大于堆顶元素（堆中最小的元素）
+        if (arr[i] > minHeap[0]) {
+            minHeap[0] = arr[i];      // 替换堆顶
+            minHeapify(minHeap, k, 0); // 调整堆
+        }
+    }
+    
+    // 对结果排序（从大到小）
+    sort(minHeap.rbegin(), minHeap.rend());
+    return minHeap;
+}
+
+int main() {
+    vector<int> arr = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5};
+    int k = 3;
+    
+    vector<int> topK = findTopK(arr, k);
+    
+    cout << "数组中前" << k << "个最大的元素是: ";
+    for (int num : topK) {
+        cout << num << " ";
+    }
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 堆排序算法分析 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-heap mb-6 flex items-center">
+                <i class="fa fa-bar-chart mr-2"></i> 堆排序算法分析
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-3">时间复杂度分析</h3>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <h4 class="font-semibold text-heap">建堆过程</h4>
+                                <p class="text-gray-700 text-sm">
+                                    建堆过程的时间复杂度为O(n)，而非O(n log n)。这是因为堆的高度为log n，而不同层的节点数不同，
+                                    底层节点不需要下沉太多。
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold text-heap">排序过程</h4>
+                                <p class="text-gray-700 text-sm">
+                                    排序过程需要执行n-1次heapify操作，每次heapify的时间复杂度为O(log n)，
+                                    因此排序阶段的时间复杂度为O(n log n)。
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold text-heap">整体复杂度</h4>
+                                <p class="text-gray-700 text-sm">
+                                    堆排序的整体时间复杂度为O(n log n)，且在最好、最坏和平均情况下均为此复杂度，
+                                    这是堆排序相比快速排序的一个优势。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-3">空间复杂度与稳定性</h3>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <h4 class="font-semibold text-heap">空间复杂度</h4>
+                                <p class="text-gray-700 text-sm">
+                                    堆排序是一种原地排序算法，只需要O(1)的额外空间（不包括输入数组本身）。
+                                    递归实现的heapify会使用O(log n)的栈空间，而迭代实现则完全是O(1)。
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold text-heap">稳定性</h4>
+                                <p class="text-gray-700 text-sm">
+                                    堆排序是不稳定的排序算法。在交换元素的过程中，相同值元素的相对顺序可能会改变。
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-semibold text-heap">适用场景</h4>
+                                <p class="text-gray-700 text-sm">
+                                    堆排序适用于需要稳定时间复杂度且对空间开销敏感的场景，尤其适合处理大量数据。
+                                    在信息学奥赛中，堆排序常被用于求解Top K问题、优先队列等场景。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">堆排序与其他排序算法的比较</h3>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white border border-gray-200">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="py-2 px-4 border-b text-left">排序算法</th>
+                                    <th class="py-2 px-4 border-b text-left">平均时间复杂度</th>
+                                    <th class="py-2 px-4 border-b text-left">最坏时间复杂度</th>
+                                    <th class="py-2 px-4 border-b text-left">空间复杂度</th>
+                                    <th class="py-2 px-4 border-b text-left">稳定性</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-2 px-4 border-b font-medium">堆排序</td>
+                                    <td class="py-2 px-4 border-b">O(n log n)</td>
+                                    <td class="py-2 px-4 border-b">O(n log n)</td>
+                                    <td class="py-2 px-4 border-b">O(1)</td>
+                                    <td class="py-2 px-4 border-b">不稳定</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b font-medium">快速排序</td>
+                                    <td class="py-2 px-4 border-b">O(n log n)</td>
+                                    <td class="py-2 px-4 border-b">O(n²)</td>
+                                    <td class="py-2 px-4 border-b">O(log n)</td>
+                                    <td class="py-2 px-4 border-b">不稳定</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b font-medium">归并排序</td>
+                                    <td class="py-2 px-4 border-b">O(n log n)</td>
+                                    <td class="py-2 px-4 border-b">O(n log n)</td>
+                                    <td class="py-2 px-4 border-b">O(n)</td>
+                                    <td class="py-2 px-4 border-b">稳定</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b font-medium">冒泡排序</td>
+                                    <td class="py-2 px-4 border-b">O(n²)</td>
+                                    <td class="py-2 px-4 border-b">O(n²)</td>
+                                    <td class="py-2 px-4 border-b">O(1)</td>
+                                    <td class="py-2 px-4 border-b">稳定</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 推荐题目 -->
+        <section id="problems" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-heap mb-6 flex items-center">
+                <i class="fa fa-tasks mr-2"></i> 推荐练习题目 (洛谷)
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">模板题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">P1177 【模板】排序</h4>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">入门</span>
+                            </div>
+                            <p class="text-gray-700 text-sm mb-3">
+                                对数组进行排序，直接应用堆排序算法的基础题目，适合初学者练习堆排序的基本实现。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1177" target="_blank" class="text-heap hover:text-heap/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">P1908 逆序对</h4>
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">普及/提高-</span>
+                            </div>
+                            <p class="text-gray-700 text-sm mb-3">
+                                虽然通常用归并排序解决，但也可以用堆排序的思想来实现，有助于理解堆在排序中的应用。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1908" target="_blank" class="text-heap hover:text-heap/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">入门题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">P1090 合并果子</h4>
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">普及/提高-</span>
+                            </div>
+                            <p class="text-gray-700 text-sm mb-3">
+                                经典的哈夫曼编码问题，可以用小根堆高效解决，是堆的典型应用场景。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1090" target="_blank" class="text-heap hover:text-heap/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">P1168 中位数</h4>
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">普及/提高-</span>
+                            </div>
+                            <p class="text-gray-700 text-sm mb-3">
+                                动态维护中位数，可以用两个堆（大根堆+小根堆）来实现，考察堆的灵活应用。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1168" target="_blank" class="text-heap hover:text-heap/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">P2676 [USACO07DEC] Bookshelf B</h4>
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">普及/提高-</span>
+                            </div>
+                            <p class="text-gray-700 text-sm mb-3">
+                                利用大根堆解决的贪心问题，需要维护一个滑动窗口中的最大值。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P2676" target="_blank" class="text-heap hover:text-heap/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">进阶题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">P3378 【模板】堆</h4>
+                                <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">普及+/提高</span>
+                            </div>
+                            <p class="text-gray-700 text-sm mb-3">
+                                实现一个完整的小根堆，并支持插入、删除等操作，深入理解堆的各种操作。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P3378" target="_blank" class="text-heap hover:text-heap/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">P2085 最小函数值</h4>
+                                <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">普及+/提高</span>
+                            </div>
+                            <p class="text-gray-700 text-sm mb-3">
+                                多个二次函数的最小值问题，使用堆来高效找出全局最小值，考察堆的优化应用。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P2085" target="_blank" class="text-heap hover:text-heap/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">P1631 序列合并</h4>
+                                <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">普及+/提高</span>
+                            </div>
+                            <p class="text-gray-700 text-sm mb-3">
+                                两个有序序列合并后的前n小元素，使用堆可以在O(n log n)时间内解决，是堆的经典应用。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1631" target="_blank" class="text-heap hover:text-heap/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            
+            // 堆排序动画相关变量
+            let animationInterval;
+            let isAnimating = false;
+            let currentStep = 0;
+            let totalSteps = 0;
+            let steps = [];
+            let originalArray = [];
+            let currentArray = [];
+            let heapSize = 0;
+            
+            // DOM元素
+            const arrayInput = document.getElementById('array-input');
+            const sortRunBtn = document.getElementById('sort-run');
+            const sortPauseBtn = document.getElementById('sort-pause');
+            const sortStepBtn = document.getElementById('sort-step');
+            const sortResetBtn = document.getElementById('sort-reset');
+            const animationSpeed = document.getElementById('animation-speed');
+            const sortStatus = document.getElementById('sort-status');
+            const heapVisualization = document.getElementById('heap-visualization');
+            const sortProgressBar = document.getElementById('sort-progress-bar');
+            const sortProgressText = document.getElementById('sort-progress-text');
+            
+            // 解析输入的数组
+            function parseArrayInput() {
+                const input = arrayInput.value.trim();
+                if (!input) return [4, 6, 8, 5, 9, 3, 2, 7, 1];
+                
+                try {
+                    return input.split(',').map(num => parseInt(num.trim())).filter(num => !isNaN(num));
+                } catch (e) {
+                    return [4, 6, 8, 5, 9, 3, 2, 7, 1];
+                }
+            }
+            
+            // 重置动画
+            function resetAnimation() {
+                clearInterval(animationInterval);
+                isAnimating = false;
+                currentStep = 0;
+                steps = [];
+                totalSteps = 0;
+                
+                originalArray = parseArrayInput();
+                currentArray = [...originalArray];
+                heapSize = currentArray.length;
+                
+                updateProgress();
+                updateStatus("状态: 准备就绪");
+                renderHeap();
+                resetCodeHighlight();
+                
+                sortRunBtn.disabled = false;
+                sortPauseBtn.disabled = true;
+            }
+            
+            // 更新进度条
+            function updateProgress() {
+                const progress = totalSteps > 0 ? (currentStep / totalSteps) * 100 : 0;
+                sortProgressBar.style.width = `${progress}%`;
+                sortProgressText.textContent = `${currentStep}/${totalSteps} 步`;
+            }
+            
+            // 更新状态文本
+            function updateStatus(text) {
+                sortStatus.textContent = text;
+                sortStatus.classList.remove('hidden');
+            }
+            
+            // 重置代码高亮
+            function resetCodeHighlight() {
+                for (let i = 1; i <= 43; i++) {
+                    const line = document.getElementById(`code-${i}`);
+                    if (line) line.classList.remove('code-line-highlight');
+                }
+            }
+            
+            // 高亮代码行
+            function highlightCodeLines(lineNumbers) {
+                resetCodeHighlight();
+                lineNumbers.forEach(lineNum => {
+                    const line = document.getElementById(`code-${lineNum}`);
+                    if (line) line.classList.add('code-line-highlight');
+                });
+            }
+            
+            // 渲染堆的可视化
+            function renderHeap() {
+                heapVisualization.innerHTML = '';
+                
+                if (currentArray.length === 0) {
+                    heapVisualization.innerHTML = `
+                        <div class="text-center text-gray-500">
+                            <p>数组为空</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // 计算堆的高度
+                const height = Math.floor(Math.log2(heapSize)) + 1;
+                
+                // 创建每一层
+                for (let level = 0; level < height; level++) {
+                    const levelDiv = document.createElement('div');
+                    levelDiv.className = 'heap-level';
+                    
+                    // 当前层的节点数量
+                    const nodesCount = Math.min(Math.pow(2, level), heapSize - Math.pow(2, level) + 1);
+                    
+                    // 当前层的起始索引
+                    const startIndex = Math.pow(2, level) - 1;
+                    
+                    // 创建节点
+                    for (let i = 0; i < nodesCount; i++) {
+                        const index = startIndex + i;
+                        if (index >= heapSize) break;
+                        
+                        const nodeDiv = document.createElement('div');
+                        nodeDiv.className = `heap-element ${steps[currentStep]?.highlight?.includes(index) ? 'heap-element-active' : ''} ${steps[currentStep]?.compare?.includes(index) ? 'heap-element-compare' : ''}`;
+                        nodeDiv.textContent = currentArray[index];
+                        nodeDiv.title = `索引: ${index}`;
+                        
+                        levelDiv.appendChild(nodeDiv);
+                    }
+                    
+                    heapVisualization.appendChild(levelDiv);
+                }
+            }
+            
+            // 生成堆排序的步骤
+            function generateHeapSortSteps() {
+                steps = [];
+                const arr = [...originalArray];
+                const n = arr.length;
+                let stepId = 0;
+                
+                // 记录步骤
+                function recordStep(description, highlight = [], compare = [], codeLines = []) {
+                    steps.push({
+                        id: stepId++,
+                        description,
+                        array: [...arr],
+                        heapSize: heapSize,
+                        highlight: [...highlight],
+                        compare: [...compare],
+                        codeLines: [...codeLines]
+                    });
+                }
+                
+                // 构建大根堆
+                recordStep("开始构建大根堆", [], [], [31, 32]);
+                
+                for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+                    recordStep(`对索引 ${i} 执行heapify操作`, [i], [], [6, 33]);
+                    
+                    // 模拟heapify过程
+                    let current = i;
+                    while (true) {
+                        let largest = current;
+                        const left = 2 * current + 1;
+                        const right = 2 * current + 2;
+                        
+                        recordStep(`比较节点 ${current} 与其子节点`, [current, left, right], [current, left, right], [7, 8, 9, 11, 12, 15, 16]);
+                        
+                        if (left < heapSize && arr[left] > arr[largest]) {
+                            largest = left;
+                        }
+                        if (right < heapSize && arr[right] > arr[largest]) {
+                            largest = right;
+                        }
+                        
+                        if (largest !== current) {
+                            recordStep(`交换节点 ${current} 和 ${largest}`, [current, largest], [], [21]);
+                            [arr[current], arr[largest]] = [arr[largest], arr[current]];
+                            current = largest;
+                        } else {
+                            recordStep(`节点 ${current} 已是最大值，无需交换`, [current], [], []);
+                            break;
+                        }
+                    }
+                }
+                
+                recordStep("大根堆构建完成", [], [], []);
+                
+                // 排序阶段
+                for (let i = n - 1; i > 0; i--) {
+                    recordStep(`将堆顶元素与第 ${i} 个元素交换`, [0, i], [], [38]);
+                    [arr[0], arr[i]] = [arr[i], arr[0]];
+                    heapSize--;
+                    
+                    recordStep(`堆大小减小为 ${heapSize}，对根节点执行heapify`, [0], [], [41]);
+                    
+                    // 对根节点执行heapify
+                    let current = 0;
+                    while (true) {
+                        let largest = current;
+                        const left = 2 * current + 1;
+                        const right = 2 * current + 2;
+                        
+                        recordStep(`比较节点 ${current} 与其子节点`, [current, left, right], [current, left, right], [7, 8, 9, 11, 12, 15, 16]);
+                        
+                        if (left < heapSize && arr[left] > arr[largest]) {
+                            largest = left;
+                        }
+                        if (right < heapSize && arr[right] > arr[largest]) {
+                            largest = right;
+                        }
+                        
+                        if (largest !== current) {
+                            recordStep(`交换节点 ${current} 和 ${largest}`, [current, largest], [], [21]);
+                            [arr[current], arr[largest]] = [arr[largest], arr[current]];
+                            current = largest;
+                        } else {
+                            recordStep(`节点 ${current} 已是最大值，无需交换`, [current], [], []);
+                            break;
+                        }
+                    }
+                }
+                
+                recordStep("堆排序完成", [], [], []);
+                
+                totalSteps = steps.length;
+                return steps;
+            }
+            
+            // 执行下一步
+            function executeNextStep() {
+                if (currentStep >= steps.length) {
+                    // 动画结束
+                    clearInterval(animationInterval);
+                    isAnimating = false;
+                    sortRunBtn.disabled = false;
+                    sortPauseBtn.disabled = true;
+                    updateStatus("状态: 排序完成");
+                    return;
+                }
+                
+                const step = steps[currentStep];
+                currentArray = step.array;
+                heapSize = step.heapSize;
+                
+                updateStatus(`状态: ${step.description}`);
+                highlightCodeLines(step.codeLines);
+                renderHeap();
+                currentStep++;
+                updateProgress();
+            }
+            
+            // 开始动画
+            function startAnimation() {
+                if (isAnimating) return;
+                
+                if (steps.length === 0) {
+                    generateHeapSortSteps();
+                }
+                
+                isAnimating = true;
+                sortRunBtn.disabled = true;
+                sortPauseBtn.disabled = false;
+                
+                // 立即执行一步
+                executeNextStep();
+                
+                // 设置定时器执行后续步骤
+                const speed = 2100 - animationSpeed.value; // 反转速度值，使滑块右侧更快
+                animationInterval = setInterval(executeNextStep, speed);
+            }
+            
+            // 暂停动画
+            function pauseAnimation() {
+                clearInterval(animationInterval);
+                isAnimating = false;
+                sortRunBtn.disabled = false;
+                sortPauseBtn.disabled = true;
+                updateStatus(`状态: 已暂停 - ${steps[currentStep - 1]?.description || '准备就绪'}`);
+            }
+            
+            // 事件监听
+            sortRunBtn.addEventListener('click', startAnimation);
+            sortPauseBtn.addEventListener('click', pauseAnimation);
+            sortStepBtn.addEventListener('click', function() {
+                if (isAnimating) {
+                    pauseAnimation();
+                }
+                if (steps.length === 0) {
+                    generateHeapSortSteps();
+                }
+                executeNextStep();
+            });
+            sortResetBtn.addEventListener('click', resetAnimation);
+            arrayInput.addEventListener('change', resetAnimation);
+            
+            // 初始化
+            resetAnimation();
+        });
+    </script>
+</body>
+</html>

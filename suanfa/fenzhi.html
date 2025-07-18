@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分治算法 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：鲜明的蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        syntax: '#FF9800', // 语法部分：橙色
+                        algorithm: '#2ECC71', // 算法部分：绿色
+                        datastructure: '#9C27B0', // 数据结构部分：深紫色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                        divide: '#E91E63', // 分治主题色：粉红色
+                        execution: '#FFEB3B', // 执行高亮：黄色
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .subcategory-bg {
+                @apply bg-gradient-to-r from-secondary/5 to-secondary/10;
+            }
+            .divide-bg {
+                @apply bg-gradient-to-r from-divide/5 to-divide/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .divide-header {
+                @apply font-bold text-divide mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-divide bg-divide/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-divide text-white text-center mr-2 text-xs;
+            }
+            .algorithm-call {
+                @apply border-2 border-gray-300 rounded-md p-2 mb-1 bg-gray-50 transition-all duration-500;
+            }
+            .algorithm-call-active {
+                @apply border-divide bg-divide/10 transform scale-[1.02];
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-gray-100 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-divide h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .code-line {
+                @apply transition-all duration-300;
+            }
+            .code-line-highlight {
+                @apply bg-execution/30 text-gray-900 font-medium;
+            }
+            .problem-tag {
+                @apply inline-block px-2 py-1 rounded text-xs font-medium mr-2 mb-2;
+            }
+            .problem-template {
+                @apply bg-blue-100 text-blue-800;
+            }
+            .problem-easy {
+                @apply bg-green-100 text-green-800;
+            }
+            .problem-hard {
+                @apply bg-orange-100 text-orange-800;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">算法基础</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">分治与递归</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-divide font-medium">分治算法</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="divide-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-divide mb-2">分治算法</h1>
+                    <p class="text-gray-700">
+                        分治算法是一种重要的算法设计思想，通过将复杂问题分解为更小的子问题来解决。本页面将详细讲解分治算法的基本原理、实现步骤以及在NOIP竞赛中的典型应用。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-divide hover:bg-divide/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#problems" class="bg-white border border-divide text-divide hover:bg-divide/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看题目
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分治算法概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-divide mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 分治算法概述
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">什么是分治算法？</h3>
+                    <p class="text-gray-700">
+                        分治（Divide and Conquer）算法是一种将复杂问题分解为更小的、相似的子问题，递归地解决子问题，然后将子问题的解组合起来得到原问题解的算法设计策略。
+                    </p>
+                    <div class="bg-gray-50 p-4 rounded-lg mt-3">
+                        <h4 class="font-semibold mb-2">分治算法的核心思想：</h4>
+                        <ol class="list-decimal pl-5 space-y-2">
+                            <li><span class="font-medium">分解（Divide）</span>：将原问题分解为若干个规模较小、结构与原问题相似的子问题</li>
+                            <li><span class="font-medium">解决（Conquer）</span>：若子问题规模较小而容易解决则直接解决，否则递归解决各个子问题</li>
+                            <li><span class="font-medium">合并（Combine）</span>：将各个子问题的解合并为原问题的解</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">分治算法的适用条件</h3>
+                    <p class="text-gray-700 mb-3">
+                        分治算法并非适用于所有问题，通常需要满足以下条件：
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-divide">可分解性</h4>
+                            <p class="text-sm text-gray-700">
+                                问题可以分解为若干个规模较小的相同类型子问题
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-divide">子问题独立性</h4>
+                            <p class="text-sm text-gray-700">
+                                子问题之间相互独立，不会相互影响
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-divide">最小子问题可解</h4>
+                            <p class="text-sm text-gray-700">
+                                当问题规模足够小时，可以直接求解
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-divide">解的可合并性</h4>
+                            <p class="text-sm text-gray-700">
+                                子问题的解可以合并为原问题的解
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 分治算法动画演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-divide mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> 分治算法过程演示
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 归并排序动画演示 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">归并排序算法演示（分治经典应用）</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了归并排序的完整过程，这是分治算法的经典应用。
+                                归并排序将数组不断二分，排序子数组，最后合并有序子数组。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">输入待排序数组:</label>
+                                <input type="text" id="array-input" value="8,3,1,7,0,10,2" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-divide">
+                                <p class="text-xs text-gray-500 mt-1">请用逗号分隔数字，例如: 5,3,8,4,2</p>
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button id="sort-run" class="bg-divide hover:bg-divide/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行动画
+                                </button>
+                                <button id="sort-step" class="bg-secondary hover:bg-secondary/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-step-forward mr-2"></i> 单步执行
+                                </button>
+                                <button id="sort-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="sort-status" class="animation-status mt-4">
+                                状态: 等待开始
+                            </div>
+                            
+                            <div class="animation-progress mt-4">
+                                <div id="sort-progress-bar" class="animation-progress-bar" style="width: 0%"></div>
+                            </div>
+                            <div class="text-xs text-gray-500 text-right">
+                                <span id="sort-progress-text">0% 完成</span>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 h-80 overflow-y-auto" id="sort-visualization">
+                                <div class="text-center text-gray-500 py-16">
+                                    <i class="fa fa-arrow-down mb-2"></i>
+                                    <p>点击"运行动画"开始演示</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-80 overflow-y-auto font-mono text-sm" id="merge-code">
+                                <div class="code-line" id="merge-code-1">#include &lt;iostream&gt;</div>
+                                <div class="code-line" id="merge-code-2">#include &lt;vector&gt;</div>
+                                <div class="code-line" id="merge-code-3">using namespace std;</div>
+                                <div class="code-line" id="merge-code-4">&nbsp;</div>
+                                <div class="code-line" id="merge-code-5">// 合并两个有序数组</div>
+                                <div class="code-line" id="merge-code-6">void merge(vector&lt;int&gt;& arr, int left, int mid, int right) {</div>
+                                <div class="code-line" id="merge-code-7">&nbsp;&nbsp;int n1 = mid - left + 1;</div>
+                                <div class="code-line" id="merge-code-8">&nbsp;&nbsp;int n2 = right - mid;</div>
+                                <div class="code-line" id="merge-code-9">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="merge-code-10">&nbsp;&nbsp;vector&lt;int&gt; L(n1), R(n2);</div>
+                                <div class="code-line" id="merge-code-11">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="merge-code-12">&nbsp;&nbsp;for (int i = 0; i &lt; n1; i++)</div>
+                                <div class="code-line" id="merge-code-13">&nbsp;&nbsp;&nbsp;&nbsp;L[i] = arr[left + i];</div>
+                                <div class="code-line" id="merge-code-14">&nbsp;&nbsp;for (int j = 0; j &lt; n2; j++)</div>
+                                <div class="code-line" id="merge-code-15">&nbsp;&nbsp;&nbsp;&nbsp;R[j] = arr[mid + 1 + j];</div>
+                                <div class="code-line" id="merge-code-16">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="merge-code-17">&nbsp;&nbsp;int i = 0, j = 0, k = left;</div>
+                                <div class="code-line" id="merge-code-18">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="merge-code-19">&nbsp;&nbsp;// 合并两个子数组</div>
+                                <div class="code-line" id="merge-code-20">&nbsp;&nbsp;while (i &lt; n1 &amp;&amp; j &lt; n2) {</div>
+                                <div class="code-line" id="merge-code-21">&nbsp;&nbsp;&nbsp;&nbsp;if (L[i] &lt;= R[j]) {</div>
+                                <div class="code-line" id="merge-code-22">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arr[k] = L[i];</div>
+                                <div class="code-line" id="merge-code-23">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i++;</div>
+                                <div class="code-line" id="merge-code-24">&nbsp;&nbsp;&nbsp;&nbsp;} else {</div>
+                                <div class="code-line" id="merge-code-25">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arr[k] = R[j];</div>
+                                <div class="code-line" id="merge-code-26">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;j++;</div>
+                                <div class="code-line" id="merge-code-27">&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+                                <div class="code-line" id="merge-code-28">&nbsp;&nbsp;&nbsp;&nbsp;k++;</div>
+                                <div class="code-line" id="merge-code-29">&nbsp;&nbsp;}</div>
+                                <div class="code-line" id="merge-code-30">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="merge-code-31">&nbsp;&nbsp;// 处理剩余元素</div>
+                                <div class="code-line" id="merge-code-32">&nbsp;&nbsp;while (i &lt; n1) {</div>
+                                <div class="code-line" id="merge-code-33">&nbsp;&nbsp;&nbsp;&nbsp;arr[k] = L[i];</div>
+                                <div class="code-line" id="merge-code-34">&nbsp;&nbsp;&nbsp;&nbsp;i++;</div>
+                                <div class="code-line" id="merge-code-35">&nbsp;&nbsp;&nbsp;&nbsp;k++;</div>
+                                <div class="code-line" id="merge-code-36">&nbsp;&nbsp;}</div>
+                                <div class="code-line" id="merge-code-37">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="merge-code-38">&nbsp;&nbsp;while (j &lt; n2) {</div>
+                                <div class="code-line" id="merge-code-39">&nbsp;&nbsp;&nbsp;&nbsp;arr[k] = R[j];</div>
+                                <div class="code-line" id="merge-code-40">&nbsp;&nbsp;&nbsp;&nbsp;j++;</div>
+                                <div class="code-line" id="merge-code-41">&nbsp;&nbsp;&nbsp;&nbsp;k++;</div>
+                                <div class="code-line" id="merge-code-42">&nbsp;&nbsp;}</div>
+                                <div class="code-line" id="merge-code-43">}</div>
+                                <div class="code-line" id="merge-code-44">&nbsp;</div>
+                                <div class="code-line" id="merge-code-45">// 归并排序主函数</div>
+                                <div class="code-line" id="merge-code-46">void mergeSort(vector&lt;int&gt;& arr, int left, int right) {</div>
+                                <div class="code-line" id="merge-code-47">&nbsp;&nbsp;if (left &lt; right) {</div>
+                                <div class="code-line" id="merge-code-48">&nbsp;&nbsp;&nbsp;&nbsp;// 找到中间点</div>
+                                <div class="code-line" id="merge-code-49">&nbsp;&nbsp;&nbsp;&nbsp;int mid = left + (right - left) / 2;</div>
+                                <div class="code-line" id="merge-code-50">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                                <div class="code-line" id="merge-code-51">&nbsp;&nbsp;&nbsp;&nbsp;// 递归排序左半部分</div>
+                                <div class="code-line" id="merge-code-52">&nbsp;&nbsp;&nbsp;&nbsp;mergeSort(arr, left, mid);</div>
+                                <div class="code-line" id="merge-code-53">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                                <div class="code-line" id="merge-code-54">&nbsp;&nbsp;&nbsp;&nbsp;// 递归排序右半部分</div>
+                                <div class="code-line" id="merge-code-55">&nbsp;&nbsp;&nbsp;&nbsp;mergeSort(arr, mid + 1, right);</div>
+                                <div class="code-line" id="merge-code-56">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                                <div class="code-line" id="merge-code-57">&nbsp;&nbsp;&nbsp;&nbsp;// 合并已排序的两部分</div>
+                                <div class="code-line" id="merge-code-58">&nbsp;&nbsp;&nbsp;&nbsp;merge(arr, left, mid, right);</div>
+                                <div class="code-line" id="merge-code-59">&nbsp;&nbsp;}</div>
+                                <div class="code-line" id="merge-code-60">}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分治算法类型对比 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">常见分治算法应用</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-divide mb-2">排序算法</h4>
+                            <ul class="list-disc pl-5 mb-3">
+                                <li>归并排序（Merge Sort）</li>
+                                <li>快速排序（Quick Sort）</li>
+                                <li>希尔排序（Shell Sort）</li>
+                            </ul>
+                            <p class="text-gray-700 text-sm">
+                                分治思想在排序算法中应用广泛，通过将数组分解为子数组排序后合并，实现高效排序。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-divide mb-2">查找算法</h4>
+                            <ul class="list-disc pl-5 mb-3">
+                                <li>二分查找（Binary Search）</li>
+                                <li>快速选择（Quick Select）</li>
+                            </ul>
+                            <p class="text-gray-700 text-sm">
+                                通过不断将查找区间减半，大幅提高查找效率，时间复杂度可达O(log n)。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-divide mb-2">数学问题</h4>
+                            <ul class="list-disc pl-5 mb-3">
+                                <li>大整数乘法（Karatsuba算法）</li>
+                                <li>矩阵乘法（Strassen算法）</li>
+                                <li>快速傅里叶变换（FFT）</li>
+                            </ul>
+                            <p class="text-gray-700 text-sm">
+                                分治算法可以优化许多数学运算的时间复杂度，解决传统算法效率低下的问题。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-divide mb-2">组合问题</h4>
+                            <ul class="list-disc pl-5 mb-3">
+                                <li>汉诺塔问题</li>
+                                <li>棋盘覆盖问题</li>
+                                <li>循环赛日程表</li>
+                            </ul>
+                            <p class="text-gray-700 text-sm">
+                                许多组合问题可以通过分治策略简化求解过程，将复杂问题分解为相似的子问题。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 分治算法代码示例 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-divide mb-6 flex items-center">
+                <i class="fa fa-code mr-2"></i> 分治算法代码示例 (C++)
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 二分查找示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">1. 二分查找（查找算法）</h3>
+                    <p class="text-gray-700 mb-3">
+                        二分查找是分治思想在查找问题中的典型应用，适用于有序数组的查找操作
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+// 二分查找：在有序数组中查找目标值
+// 参数：arr-有序数组, left-左边界, right-右边界, target-目标值
+// 返回：找到返回索引，否则返回-1
+int binarySearch(vector<int>& arr, int left, int right, int target) {
+    // 基本情况：查找区间无效
+    if (left > right) {
+        return -1;
+    }
+    
+    // 分解：找到中间位置
+    int mid = left + (right - left) / 2;  // 避免溢出
+    
+    // 解决：中间元素就是目标值
+    if (arr[mid] == target) {
+        return mid;
+    }
+    
+    // 递归解决子问题
+    if (arr[mid] > target) {
+        // 目标值在左半部分
+        return binarySearch(arr, left, mid - 1, target);
+    } else {
+        // 目标值在右半部分
+        return binarySearch(arr, mid + 1, right, target);
+    }
+}
+
+int main() {
+    vector<int> arr = {2, 5, 8, 12, 16, 23, 38, 56, 72, 91};
+    int target = 23;
+    
+    int result = binarySearch(arr, 0, arr.size() - 1, target);
+    
+    if (result != -1) {
+        cout << "元素 " << target << " 找到，索引为 " << result << endl;
+    } else {
+        cout << "元素 " << target << " 未找到" << endl;
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 快速排序示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">2. 快速排序（排序算法）</h3>
+                    <p class="text-gray-700 mb-3">
+                        快速排序通过选择基准元素将数组分区，然后递归排序各分区
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+// 交换两个元素
+void swap(int& a, int& b) {
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+// 分区操作：选择最后一个元素作为基准
+int partition(vector<int>& arr, int low, int high) {
+    int pivot = arr[high];  // 基准元素
+    int i = low - 1;       // 小于基准的元素索引
+    
+    for (int j = low; j <= high - 1; j++) {
+        // 当前元素小于或等于基准
+        if (arr[j] <= pivot) {
+            i++;  // 增加小于基准区域的索引
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[high]);
+    return i + 1;  // 返回基准元素的最终位置
+}
+
+// 快速排序主函数
+void quickSort(vector<int>& arr, int low, int high) {
+    if (low < high) {
+        // 分解：获取分区索引
+        int pi = partition(arr, low, high);
+        
+        // 递归排序左半部分
+        quickSort(arr, low, pi - 1);
+        // 递归排序右半部分
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+// 打印数组
+void printArray(const vector<int>& arr) {
+    for (int num : arr) {
+        cout << num << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    vector<int> arr = {10, 7, 8, 9, 1, 5};
+    int n = arr.size();
+    
+    cout << "排序前数组: ";
+    printArray(arr);
+    
+    quickSort(arr, 0, n - 1);
+    
+    cout << "排序后数组: ";
+    printArray(arr);
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 最大子数组和示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">3. 最大子数组和（ Kadane算法的分治实现）</h3>
+                    <p class="text-gray-700 mb-3">
+                        求解数组中具有最大和的连续子数组，使用分治策略实现
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+// 查找跨越中点的最大子数组
+int maxCrossingSum(vector<int>& arr, int left, int mid, int right) {
+    // 计算左半部分的最大和
+    int sum = 0;
+    int left_sum = INT_MIN;
+    for (int i = mid; i >= left; i--) {
+        sum += arr[i];
+        if (sum > left_sum) {
+            left_sum = sum;
+        }
+    }
+    
+    // 计算右半部分的最大和
+    sum = 0;
+    int right_sum = INT_MIN;
+    for (int i = mid + 1; i <= right; i++) {
+        sum += arr[i];
+        if (sum > right_sum) {
+            right_sum = sum;
+        }
+    }
+    
+    // 返回跨越中点的最大和
+    return left_sum + right_sum;
+}
+
+// 分治求解最大子数组和
+int maxSubarraySum(vector<int>& arr, int left, int right) {
+    // 基本情况：只有一个元素
+    if (left == right) {
+        return arr[left];
+    }
+    
+    // 分解：找到中间点
+    int mid = left + (right - left) / 2;
+    
+    // 递归求解三个子问题并合并结果
+    return max({
+        maxSubarraySum(arr, left, mid),          // 左半部分
+        maxSubarraySum(arr, mid + 1, right),     // 右半部分
+        maxCrossingSum(arr, left, mid, right)    // 跨越中点部分
+    });
+}
+
+int main() {
+    vector<int> arr = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+    
+    int max_sum = maxSubarraySum(arr, 0, arr.size() - 1);
+    cout << "最大子数组和为: " << max_sum << endl;  // 输出应为6 (4,-1,2,1)
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 汉诺塔问题示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">4. 汉诺塔问题（组合问题）</h3>
+                    <p class="text-gray-700 mb-3">
+                        经典的递归问题，使用分治思想将复杂的移动过程分解为简单子问题
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+using namespace std;
+
+// 汉诺塔问题求解函数
+// 参数：n-盘子数量, from-源柱子, to-目标柱子, aux-辅助柱子
+void towerOfHanoi(int n, char from, char to, char aux) {
+    // 基本情况：只有一个盘子
+    if (n == 1) {
+        cout << "移动盘子 1 从 " << from << " 到 " << to << endl;
+        return;
+    }
+    
+    // 分解：将n-1个盘子从源柱子移到辅助柱子
+    towerOfHanoi(n - 1, from, aux, to);
+    
+    // 解决：将第n个盘子从源柱子移到目标柱子
+    cout << "移动盘子 " << n << " 从 " << from << " 到 " << to << endl;
+    
+    // 合并：将n-1个盘子从辅助柱子移到目标柱子
+    towerOfHanoi(n - 1, aux, to, from);
+}
+
+int main() {
+    int n = 3;  // 盘子数量
+    cout << "汉诺塔移动步骤 (" << n << " 个盘子):" << endl;
+    towerOfHanoi(n, 'A', 'C', 'B');  // A, B, C分别代表三个柱子
+    
+    return 0;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 分治算法优化策略 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-divide mb-6 flex items-center">
+                <i class="fa fa-line-chart mr-2"></i> 分治算法优化策略
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">分治算法的效率分析</h3>
+                    <p class="text-gray-700 mb-4">
+                        分治算法的时间复杂度通常可以通过递归关系式分析，常见的递归关系形式为：
+                    </p>
+                    <div class="bg-gray-800 text-gray-100 p-3 rounded-lg font-mono text-center mb-4">
+                        T(n) = a·T(n/b) + f(n)
+                    </div>
+                    <p class="text-gray-700 mb-3">
+                        其中：
+                    </p>
+                    <ul class="list-disc pl-5 space-y-1 mb-4">
+                        <li>n 是问题规模</li>
+                        <li>a 是子问题数量</li>
+                        <li>n/b 是每个子问题的规模</li>
+                        <li>f(n) 是分解和合并子问题的时间</li>
+                    </ul>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-divide mb-2">主方法（Master Theorem）</h4>
+                            <p class="text-sm text-gray-700">
+                                提供了一种求解常见递归关系的快速方法，根据a、b和f(n)的关系确定时间复杂度。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-divide mb-2">递归树法</h4>
+                            <p class="text-sm text-gray-700">
+                                将递归关系转换为树结构，计算每一层的时间复杂度并求和，得到总时间复杂度。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-divide mb-2">代入法</h4>
+                            <p class="text-sm text-gray-700">
+                                猜测时间复杂度，然后用数学归纳法验证猜测是否正确。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">分治算法的优化技巧</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-divide mb-2">合理选择分解点</h4>
+                            <p class="text-sm text-gray-700">
+                                如快速排序中选择合适的基准元素（如三数取中法）可以避免最坏情况，提高平均效率。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-divide mb-2">小规模问题优化</h4>
+                            <p class="text-sm text-gray-700">
+                                当问题规模较小时，改用插入排序等简单算法，减少递归调用开销。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-divide mb-2">减少重复计算</h4>
+                            <p class="text-sm text-gray-700">
+                                对于有重叠子问题的情况，可以结合记忆化技术存储子问题解，避免重复计算。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-divide mb-2">尾递归优化</h4>
+                            <p class="text-sm text-gray-700">
+                                将递归转换为迭代，或使用尾递归形式，减少栈空间开销，避免栈溢出。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 推荐题目 -->
+        <section id="problems" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-divide mb-6 flex items-center">
+                <i class="fa fa-tasks mr-2"></i> 推荐练习题目（洛谷）
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 模板题 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="problem-tag problem-template">模板题</span>
+                        基础分治算法实现
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P1177 【模板】快速排序</h4>
+                                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">普及-</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                实现快速排序算法，对给定的整数数组进行排序。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1177" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P1908 逆序对</h4>
+                                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">普及+</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                使用归并排序的思想计算一个序列中逆序对的数量。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1908" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P2249 【深基13.例1】查找</h4>
+                                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">普及-</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                实现二分查找算法，在有序数组中查找特定元素的位置。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P2249" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 入门题 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="problem-tag problem-easy">入门题</span>
+                        分治算法应用入门
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P1024 一元三次方程求解</h4>
+                                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">普及</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                使用二分法求解一元三次方程的实根，考察二分查找的灵活应用。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1024" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P1226 【模板】快速幂</h4>
+                                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">普及-</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                实现快速幂算法（分治思想），高效计算a^b mod p的值。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1226" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P1429 平面最近点对</h4>
+                                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">普及</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                给定平面上的点，找出距离最近的一对点，典型的分治算法应用。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1429" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 进阶题 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="problem-tag problem-hard">进阶题</span>
+                        分治算法综合应用
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P3373 【模板】线段树 2</h4>
+                                <span class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">提高+</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                实现支持区间乘、区间加和区间查询的线段树，体现分治思想的高级应用。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P3373" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P4715 【深基16.例1】淘汰赛</h4>
+                                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">普及</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                模拟淘汰赛过程，使用分治思想找出亚军，考察分治策略的灵活运用。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P4715" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P2617 Dynamic Rankings</h4>
+                                <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">省选/NOI-</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                动态维护序列并支持查询区间第k小，可使用分治思想结合树状数组解决。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P2617" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            // 归并排序动画相关变量
+            let animationSteps = [];
+            let currentStep = 0;
+            let animationInterval = null;
+            let isAnimating = false;
+            
+            // 解析数组输入
+            function parseArrayInput(input) {
+                return input.split(',').map(num => parseInt(num.trim())).filter(num => !isNaN(num));
+            }
+            
+            // 生成归并排序的所有步骤
+            function generateMergeSortSteps(arr) {
+                const steps = [];
+                const tempArr = [...arr];
+                
+                // 记录步骤
+                function recordStep(description, currentArr, left = -1, right = -1, mid = -1) {
+                    steps.push({
+                        description,
+                        array: [...currentArr],
+                        left,
+                        right,
+                        mid
+                    });
+                }
+                
+                // 归并排序实现
+                function mergeSort(arr, left, right) {
+                    recordStep(`分解: 处理区间 [${left}, ${right}]`, arr, left, right);
+                    
+                    if (left < right) {
+                        const mid = Math.floor(left + (right - left) / 2);
+                        recordStep(`找到中点: mid = ${mid}`, arr, left, right, mid);
+                        
+                        // 递归排序左半部分
+                        mergeSort(arr, left, mid);
+                        
+                        // 递归排序右半部分
+                        mergeSort(arr, mid + 1, right);
+                        
+                        // 合并
+                        recordStep(`合并区间 [${left}, ${mid}] 和 [${mid+1}, ${right}]`, arr, left, right, mid);
+                        merge(arr, left, mid, right);
+                        recordStep(`合并完成: 区间 [${left}, ${right}] 已排序`, arr, left, right);
+                    } else if (left === right) {
+                        recordStep(`基本情况: 单个元素 ${arr[left]} 已排序`, arr, left, right);
+                    }
+                }
+                
+                // 合并函数
+                function merge(arr, left, mid, right) {
+                    const n1 = mid - left + 1;
+                    const n2 = right - mid;
+                    
+                    const L = new Array(n1);
+                    const R = new Array(n2);
+                    
+                    for (let i = 0; i < n1; i++) {
+                        L[i] = arr[left + i];
+                    }
+                    for (let j = 0; j < n2; j++) {
+                        R[j] = arr[mid + 1 + j];
+                    }
+                    
+                    recordStep(`创建临时数组: L = [${L}], R = [${R}]`, arr, left, right, mid);
+                    
+                    let i = 0, j = 0, k = left;
+                    
+                    while (i < n1 && j < n2) {
+                        if (L[i] <= R[j]) {
+                            arr[k] = L[i];
+                            recordStep(`比较: L[${i}] = ${L[i]} ≤ R[${j}] = ${R[j]}, 取 L[${i}]`, arr, left, right, mid);
+                            i++;
+                        } else {
+                            arr[k] = R[j];
+                            recordStep(`比较: L[${i}] = ${L[i]} > R[${j}] = ${R[j]}, 取 R[${j}]`, arr, left, right, mid);
+                            j++;
+                        }
+                        k++;
+                    }
+                    
+                    while (i < n1) {
+                        arr[k] = L[i];
+                        recordStep(`剩余元素: 取 L[${i}] = ${L[i]}`, arr, left, right, mid);
+                        i++;
+                        k++;
+                    }
+                    
+                    while (j < n2) {
+                        arr[k] = R[j];
+                        recordStep(`剩余元素: 取 R[${j}] = ${R[j]}`, arr, left, right, mid);
+                        j++;
+                        k++;
+                    }
+                }
+                
+                // 开始排序
+                mergeSort(tempArr, 0, tempArr.length - 1);
+                recordStep("排序完成", tempArr);
+                
+                return steps;
+            }
+            
+            // 显示当前步骤
+            function showStep(step) {
+                // 更新状态
+                document.getElementById('sort-status').textContent = `状态: ${step.description}`;
+                
+                // 更新可视化
+                const visualization = document.getElementById('sort-visualization');
+                visualization.innerHTML = '';
+                
+                const arrayContainer = document.createElement('div');
+                arrayContainer.className = 'flex flex-wrap gap-2 justify-center my-4';
+                
+                step.array.forEach((num, index) => {
+                    const numElement = document.createElement('div');
+                    numElement.className = 'flex flex-col items-center';
+                    
+                    const bar = document.createElement('div');
+                    bar.className = 'bg-primary text-white px-3 py-1 rounded mb-1 text-center transition-all';
+                    bar.style.minWidth = '30px';
+                    
+                    // 高亮当前处理的区间
+                    if (step.left !== -1 && step.right !== -1 && index >= step.left && index <= step.right) {
+                        bar.classList.add('bg-divide');
+                    }
+                    
+                    // 高亮中点
+                    if (step.mid !== -1 && index === step.mid) {
+                        bar.classList.add('ring-2', 'ring-yellow-400');
+                    }
+                    
+                    bar.textContent = num;
+                    
+                    const indexLabel = document.createElement('div');
+                    indexLabel.className = 'text-xs text-gray-500';
+                    indexLabel.textContent = index;
+                    
+                    numElement.appendChild(bar);
+                    numElement.appendChild(indexLabel);
+                    arrayContainer.appendChild(numElement);
+                });
+                
+                visualization.appendChild(arrayContainer);
+                
+                // 更新代码高亮
+                // 清除所有高亮
+                for (let i = 1; i <= 60; i++) {
+                    const line = document.getElementById(`merge-code-${i}`);
+                    if (line) line.classList.remove('code-line-highlight');
+                }
+                
+                // 根据步骤描述高亮相应代码行
+                if (step.description.includes('分解: 处理区间')) {
+                    document.getElementById('merge-code-46').classList.add('code-line-highlight');
+                    document.getElementById('merge-code-47').classList.add('code-line-highlight');
+                } else if (step.description.includes('找到中点')) {
+                    document.getElementById('merge-code-49').classList.add('code-line-highlight');
+                } else if (step.description.includes('递归排序左半部分')) {
+                    document.getElementById('merge-code-52').classList.add('code-line-highlight');
+                } else if (step.description.includes('递归排序右半部分')) {
+                    document.getElementById('merge-code-55').classList.add('code-line-highlight');
+                } else if (step.description.includes('合并区间')) {
+                    document.getElementById('merge-code-58').classList.add('code-line-highlight');
+                    document.getElementById('merge-code-6').classList.add('code-line-highlight');
+                } else if (step.description.includes('创建临时数组')) {
+                    document.getElementById('merge-code-10').classList.add('code-line-highlight');
+                    document.getElementById('merge-code-12').classList.add('code-line-highlight');
+                    document.getElementById('merge-code-14').classList.add('code-line-highlight');
+                } else if (step.description.includes('比较:')) {
+                    document.getElementById('merge-code-20').classList.add('code-line-highlight');
+                    document.getElementById('merge-code-21').classList.add('code-line-highlight');
+                    document.getElementById('merge-code-24').classList.add('code-line-highlight');
+                } else if (step.description.includes('剩余元素: 取 L')) {
+                    document.getElementById('merge-code-32').classList.add('code-line-highlight');
+                    document.getElementById('merge-code-33').classList.add('code-line-highlight');
+                } else if (step.description.includes('剩余元素: 取 R')) {
+                    document.getElementById('merge-code-38').classList.add('code-line-highlight');
+                    document.getElementById('merge-code-39').classList.add('code-line-highlight');
+                } else if (step.description.includes('基本情况')) {
+                    document.getElementById('merge-code-47').classList.add('code-line-highlight');
+                }
+                
+                // 更新进度
+                const progress = (currentStep / (animationSteps.length - 1)) * 100;
+                document.getElementById('sort-progress-bar').style.width = `${progress}%`;
+                document.getElementById('sort-progress-text').textContent = `${Math.round(progress)}% 完成`;
+            }
+            
+            // 运行动画
+            function runAnimation() {
+                if (isAnimating) return;
+                
+                const arrInput = document.getElementById('array-input').value;
+                const arr = parseArrayInput(arrInput);
+                
+                if (arr.length < 2) {
+                    alert('请输入至少两个数字');
+                    return;
+                }
+                
+                // 生成动画步骤
+                animationSteps = generateMergeSortSteps(arr);
+                currentStep = 0;
+                
+                // 开始动画
+                isAnimating = true;
+                document.getElementById('sort-run').disabled = true;
+                document.getElementById('sort-step').disabled = true;
+                
+                // 显示第一步
+                showStep(animationSteps[currentStep]);
+                currentStep++;
+                
+                // 继续动画
+                animationInterval = setInterval(() => {
+                    if (currentStep < animationSteps.length) {
+                        showStep(animationSteps[currentStep]);
+                        currentStep++;
+                    } else {
+                        // 动画结束
+                        clearInterval(animationInterval);
+                        isAnimating = false;
+                        document.getElementById('sort-run').disabled = false;
+                        document.getElementById('sort-step').disabled = false;
+                    }
+                }, 1500);
+            }
+            
+            // 单步执行
+            function stepAnimation() {
+                if (isAnimating) return;
+                
+                if (animationSteps.length === 0) {
+                    const arrInput = document.getElementById('array-input').value;
+                    const arr = parseArrayInput(arrInput);
+                    
+                    if (arr.length < 2) {
+                        alert('请输入至少两个数字');
+                        return;
+                    }
+                    
+                    // 生成动画步骤
+                    animationSteps = generateMergeSortSteps(arr);
+                    currentStep = 0;
+                }
+                
+                if (currentStep < animationSteps.length) {
+                    showStep(animationSteps[currentStep]);
+                    currentStep++;
+                } else {
+                    alert('动画已完成');
+                }
+            }
+            
+            // 重置动画
+            function resetAnimation() {
+                clearInterval(animationInterval);
+                isAnimating = false;
+                animationSteps = [];
+                currentStep = 0;
+                
+                document.getElementById('sort-visualization').innerHTML = `
+                    <div class="text-center text-gray-500 py-16">
+                        <i class="fa fa-arrow-down mb-2"></i>
+                        <p>点击"运行动画"开始演示</p>
+                    </div>
+                `;
+                
+                document.getElementById('sort-status').textContent = '状态: 等待开始';
+                document.getElementById('sort-progress-bar').style.width = '0%';
+                document.getElementById('sort-progress-text').textContent = '0% 完成';
+                
+                // 清除代码高亮
+                for (let i = 1; i <= 60; i++) {
+                    const line = document.getElementById(`merge-code-${i}`);
+                    if (line) line.classList.remove('code-line-highlight');
+                }
+                
+                document.getElementById('sort-run').disabled = false;
+                document.getElementById('sort-step').disabled = false;
+            }
+            
+            // 绑定按钮事件
+            document.getElementById('sort-run').addEventListener('click', runAnimation);
+            document.getElementById('sort-step').addEventListener('click', stepAnimation);
+            document.getElementById('sort-reset').addEventListener('click', resetAnimation);
+            
+            // 初始化代码高亮
+            hljs.highlightAll();
+        });
+    </script>
+</body>
+</html>

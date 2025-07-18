@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>背包问题 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：鲜明的蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        syntax: '#FF9800', // 语法部分：橙色
+                        algorithm: '#2ECC71', // 算法部分：绿色
+                        datastructure: '#9C27B0', // 数据结构部分：深紫色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                        knapsack: '#E91E63', // 背包问题主题色：粉红色
+                        execution: '#FFEB3B', // 执行高亮：黄色
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .subcategory-bg {
+                @apply bg-gradient-to-r from-secondary/5 to-secondary/10;
+            }
+            .knapsack-bg {
+                @apply bg-gradient-to-r from-knapsack/5 to-knapsack/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .knapsack-header {
+                @apply font-bold text-knapsack mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-knapsack bg-knapsack/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-knapsack text-white text-center mr-2 text-xs;
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-gray-100 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-knapsack h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .code-line {
+                @apply transition-all duration-300;
+            }
+            .code-line-highlight {
+                @apply bg-execution/30 text-gray-900 font-medium;
+            }
+            .dp-cell {
+                @apply border border-gray-300 p-2 text-center transition-all duration-300;
+            }
+            .dp-cell-highlight {
+                @apply bg-knapsack/20 border-knapsack font-bold;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">算法基础</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">动态规划</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-knapsack font-medium">背包问题</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="knapsack-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-knapsack mb-2">背包问题</h1>
+                    <p class="text-gray-700">
+                        背包问题是信息学奥赛中经典的动态规划问题，主要研究如何在有限的背包容量下，选择物品使得总价值最大。
+                        本页面将详细讲解0-1背包、完全背包等基本类型的原理与实现，帮助NOIP竞赛学生掌握动态规划的核心思想。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-knapsack hover:bg-knapsack/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#problems" class="bg-white border border-knapsack text-knapsack hover:bg-knapsack/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看题目
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 背包问题概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-knapsack mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 背包问题概述
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">什么是背包问题？</h3>
+                    <p class="text-gray-700">
+                        背包问题是一类经典的组合优化问题，其基本描述为：给定一组物品，每个物品有重量和价值两个属性，
+                        在限定的总重量（背包容量）内，如何选择物品使得总价值最大。
+                    </p>
+                    <div class="bg-gray-50 p-4 rounded-lg mt-3">
+                        <h4 class="font-semibold mb-2">常见的背包问题类型：</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><span class="font-medium">0-1背包</span>：每种物品只有一个，要么选要么不选</li>
+                            <li><span class="font-medium">完全背包</span>：每种物品可以选无限多个</li>
+                            <li><span class="font-medium">多重背包</span>：每种物品有有限个</li>
+                            <li><span class="font-medium">分组背包</span>：物品分为若干组，每组只能选一个物品</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">0-1背包问题</h3>
+                    <p class="text-gray-700 mb-3">
+                        0-1背包是最基础的背包问题，其数学模型如下：
+                    </p>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-3">
+                        <p class="mb-2"><span class="font-medium">已知条件：</span></p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>有n件物品，每件物品的重量为w[i]，价值为v[i]</li>
+                            <li>背包的最大容量为C</li>
+                        </ul>
+                        <p class="mt-2 mb-2"><span class="font-medium">目标：</span></p>
+                        <p>选择若干物品放入背包，使得物品总重量不超过C，且总价值最大</p>
+                    </div>
+                    
+                    <p class="text-gray-700 mb-3">
+                        0-1背包问题可以用动态规划求解，定义状态dp[i][j]表示前i件物品中选择若干件放入容量为j的背包中所能获得的最大价值。
+                        状态转移方程如下：
+                    </p>
+                    <div class="code-block text-center bg-gray-50 text-gray-800">
+                        dp[i][j] = max(dp[i-1][j], dp[i-1][j-w[i]] + v[i]) 当j >= w[i]
+                        <br>
+                        dp[i][j] = dp[i-1][j] 当j < w[i]
+                    </div>
+                    <p class="text-gray-700 mt-3">
+                        其中，dp[i-1][j]表示不选第i件物品，dp[i-1][j-w[i]] + v[i]表示选择第i件物品。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 0-1背包动画演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-knapsack mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> 0-1背包算法演示
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 算法动画 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">0-1背包动态规划过程演示</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了0-1背包问题的动态规划求解过程，包括状态表的构建和最优解的选择。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">背包容量:</label>
+                                <input type="number" id="capacity" value="10" min="5" max="20"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-knapsack">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">物品设置:</label>
+                                <div class="space-y-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-16">物品1:</span>
+                                        <input type="number" id="w1" value="2" min="1" max="10" class="w-16 px-2 py-1 border border-gray-300 rounded">
+                                        <span class="text-gray-500">重量</span>
+                                        <input type="number" id="v1" value="6" min="1" max="100" class="w-16 px-2 py-1 border border-gray-300 rounded">
+                                        <span class="text-gray-500">价值</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-16">物品2:</span>
+                                        <input type="number" id="w2" value="3" min="1" max="10" class="w-16 px-2 py-1 border border-gray-300 rounded">
+                                        <span class="text-gray-500">重量</span>
+                                        <input type="number" id="v2" value="5" min="1" max="100" class="w-16 px-2 py-1 border border-gray-300 rounded">
+                                        <span class="text-gray-500">价值</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-16">物品3:</span>
+                                        <input type="number" id="w3" value="5" min="1" max="10" class="w-16 px-2 py-1 border border-gray-300 rounded">
+                                        <span class="text-gray-500">重量</span>
+                                        <input type="number" id="v3" value="10" min="1" max="100" class="w-16 px-2 py-1 border border-gray-300 rounded">
+                                        <span class="text-gray-500">价值</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-16">物品4:</span>
+                                        <input type="number" id="w4" value="7" min="1" max="10" class="w-16 px-2 py-1 border border-gray-300 rounded">
+                                        <span class="text-gray-500">重量</span>
+                                        <input type="number" id="v4" value="12" min="1" max="100" class="w-16 px-2 py-1 border border-gray-300 rounded">
+                                        <span class="text-gray-500">价值</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button id="knapsack-run" class="bg-knapsack hover:bg-knapsack/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行动画
+                                </button>
+                                <button id="knapsack-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="knapsack-status" class="animation-status hidden">
+                                状态: 等待开始
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="knapsack-execution">
+                                <div class="text-center text-gray-500 py-8">
+                                    <i class="fa fa-arrow-down mb-2"></i>
+                                    <p>点击"运行动画"开始演示</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="knapsack-code">
+                                <div class="code-line" id="kcode-1">#include &lt;iostream&gt;</div>
+                                <div class="code-line" id="kcode-2">#include &lt;vector&gt;</div>
+                                <div class="code-line" id="kcode-3">using namespace std;</div>
+                                <div class="code-line" id="kcode-4">&nbsp;</div>
+                                <div class="code-line" id="kcode-5">// 0-1背包问题求解函数</div>
+                                <div class="code-line" id="kcode-6">int knapsack(int capacity, vector&lt;int&gt;&amp; weights, vector&lt;int&gt;&amp; values) {</div>
+                                <div class="code-line" id="kcode-7">&nbsp;&nbsp;int n = weights.size();</div>
+                                <div class="code-line" id="kcode-8">&nbsp;&nbsp;// dp[i][j]表示前i个物品在容量j下的最大价值</div>
+                                <div class="code-line" id="kcode-9">&nbsp;&nbsp;vector&lt;vector&lt;int&gt;&gt; dp(n+1, vector&lt;int&gt;(capacity+1, 0));</div>
+                                <div class="code-line" id="kcode-10">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="kcode-11">&nbsp;&nbsp;for (int i = 1; i <= n; i++) {</div>
+                                <div class="code-line" id="kcode-12">&nbsp;&nbsp;&nbsp;&nbsp;for (int j = 1; j <= capacity; j++) {</div>
+                                <div class="code-line" id="kcode-13">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// 如果当前物品重量大于背包容量，不选</div>
+                                <div class="code-line" id="kcode-14">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (weights[i-1] > j) {</div>
+                                <div class="code-line" id="kcode-15">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp[i][j] = dp[i-1][j];</div>
+                                <div class="code-line" id="kcode-16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} else {</div>
+                                <div class="code-line" id="kcode-17">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// 选或不选，取最大值</div>
+                                <div class="code-line" id="kcode-18">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp[i][j] = max(dp[i-1][j], dp[i-1][j-weights[i-1]] + values[i-1]);</div>
+                                <div class="code-line" id="kcode-19">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+                                <div class="code-line" id="kcode-20">&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+                                <div class="code-line" id="kcode-21">&nbsp;&nbsp;}</div>
+                                <div class="code-line" id="kcode-22">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="kcode-23">&nbsp;&nbsp;return dp[n][capacity];</div>
+                                <div class="code-line" id="kcode-24">}</div>
+                                <div class="code-line" id="kcode-25">&nbsp;</div>
+                                <div class="code-line" id="kcode-26">int main() {</div>
+                                <div class="code-line" id="kcode-27">&nbsp;&nbsp;int capacity = <span id="kcode-capacity">10</span>;</div>
+                                <div class="code-line" id="kcode-28">&nbsp;&nbsp;vector&lt;int&gt; weights = {<span id="kcode-ws">2, 3, 5, 7</span>};</div>
+                                <div class="code-line" id="kcode-29">&nbsp;&nbsp;vector&lt;int&gt; values = {<span id="kcode-vs">6, 5, 10, 12</span>};</div>
+                                <div class="code-line" id="kcode-30">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="kcode-31">&nbsp;&nbsp;int maxValue = knapsack(capacity, weights, values);</div>
+                                <div class="code-line" id="kcode-32">&nbsp;&nbsp;cout << "最大价值为: " << maxValue << endl;</div>
+                                <div class="code-line" id="kcode-33">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="kcode-34">&nbsp;&nbsp;return 0;</div>
+                                <div class="code-line" id="kcode-35">}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 空间优化 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">0-1背包的空间优化</h3>
+                    <p class="text-gray-700 mb-3">
+                        观察状态转移方程可以发现，计算dp[i][j]只需要用到dp[i-1][j]和dp[i-1][j-w[i]]，因此可以将二维数组优化为一维数组，
+                        节省空间复杂度。
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">// 0-1背包空间优化版本
+int knapsackOptimized(int capacity, vector&lt;int&gt;&amp; weights, vector&lt;int&gt;&amp; values) {
+    int n = weights.size();
+    // 一维数组，dp[j]表示容量为j的背包的最大价值
+    vector&lt;int&gt; dp(capacity + 1, 0);
+    
+    // 从后往前遍历，防止覆盖需要的数据
+    for (int i = 0; i < n; i++) {
+        for (int j = capacity; j >= weights[i]; j--) {
+            dp[j] = max(dp[j], dp[j - weights[i]] + values[i]);
+        }
+    }
+    
+    return dp[capacity];
+}</code></pre>
+                    <p class="text-gray-700 mt-3">
+                        空间优化后，时间复杂度仍为O(n*C)，但空间复杂度从O(n*C)降低为O(C)，其中n是物品数量，C是背包容量。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 完全背包问题 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-knapsack mb-6 flex items-center">
+                <i class="fa fa-refresh mr-2"></i> 完全背包问题
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">完全背包的定义与解法</h3>
+                    <p class="text-gray-700 mb-3">
+                        完全背包问题与0-1背包的区别在于：每种物品可以选择无限多次。因此状态转移方程略有不同。
+                    </p>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg mb-3">
+                        <p class="mb-2"><span class="font-medium">完全背包状态转移方程：</span></p>
+                        <div class="code-block text-center bg-gray-800 text-gray-100">
+                            dp[i][j] = max(dp[i-1][j], dp[i][j-w[i]] + v[i]) 当j >= w[i]
+                            <br>
+                            dp[i][j] = dp[i-1][j] 当j < w[i]
+                        </div>
+                        <p class="mt-2">
+                            与0-1背包的区别在于，选择第i件物品后，我们仍然可以继续选择第i件物品，因此是dp[i][j-w[i]]而不是dp[i-1][j-w[i]]。
+                        </p>
+                    </div>
+                    
+                    <p class="text-gray-700 mb-3">
+                        完全背包同样可以进行空间优化，与0-1背包的区别是，完全背包的内层循环是正向遍历的：
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">// 完全背包问题求解函数
+int completeKnapsack(int capacity, vector&lt;int&gt;&amp; weights, vector&lt;int&gt;&amp; values) {
+    int n = weights.size();
+    vector&lt;int&gt; dp(capacity + 1, 0);
+    
+    // 完全背包内层循环正向遍历
+    for (int i = 0; i < n; i++) {
+        for (int j = weights[i]; j <= capacity; j++) {
+            dp[j] = max(dp[j], dp[j - weights[i]] + values[i]);
+        }
+    }
+    
+    return dp[capacity];
+}</code></pre>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">0-1背包与完全背包的对比</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="py-3 px-4 border-b text-left">特性</th>
+                                    <th class="py-3 px-4 border-b text-left">0-1背包</th>
+                                    <th class="py-3 px-4 border-b text-left">完全背包</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-3 px-4 border-b font-medium">物品选择</td>
+                                    <td class="py-3 px-4 border-b">每种物品最多选1个</td>
+                                    <td class="py-3 px-4 border-b">每种物品可以选无限个</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-3 px-4 border-b font-medium">状态转移</td>
+                                    <td class="py-3 px-4 border-b">dp[i][j] = max(dp[i-1][j], dp[i-1][j-w[i]]+v[i])</td>
+                                    <td class="py-3 px-4 border-b">dp[i][j] = max(dp[i-1][j], dp[i][j-w[i]]+v[i])</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 border-b font-medium">空间优化后遍历方向</td>
+                                    <td class="py-3 px-4 border-b">内层循环逆向遍历</td>
+                                    <td class="py-3 px-4 border-b">内层循环正向遍历</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-3 px-4 font-medium">典型应用</td>
+                                    <td class="py-3 px-4">选择不重复的物品</td>
+                                    <td class="py-3 px-4">硬币找零、无限供应物品选择</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 背包问题代码示例 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-knapsack mb-6 flex items-center">
+                <i class="fa fa-code mr-2"></i> 背包问题代码示例 (C++)
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 0-1背包示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">1. 基础0-1背包实现</h3>
+                    <p class="text-gray-700 mb-3">
+                        标准0-1背包问题的实现，包含状态表构建和最优解回溯
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// 求解0-1背包问题并回溯最优解
+int knapsack(int capacity, vector<int>& weights, vector<int>& values, vector<bool>& selected) {
+    int n = weights.size();
+    vector<vector<int>> dp(n + 1, vector<int>(capacity + 1, 0));
+    
+    // 构建动态规划表
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= capacity; j++) {
+            if (weights[i - 1] > j) {
+                dp[i][j] = dp[i - 1][j];
+            } else {
+                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - weights[i - 1]] + values[i - 1]);
+            }
+        }
+    }
+    
+    // 回溯找到选中的物品
+    int remaining = capacity;
+    for (int i = n; i > 0; i--) {
+        if (dp[i][remaining] != dp[i - 1][remaining]) {
+            selected[i - 1] = true;
+            remaining -= weights[i - 1];
+        } else {
+            selected[i - 1] = false;
+        }
+    }
+    
+    return dp[n][capacity];
+}
+
+int main() {
+    int capacity = 10;
+    vector<int> weights = {2, 3, 5, 7};
+    vector<int> values = {6, 5, 10, 12};
+    vector<bool> selected(weights.size(), false);
+    
+    int maxValue = knapsack(capacity, weights, values, selected);
+    
+    cout << "背包最大容量: " << capacity << endl;
+    cout << "物品信息:" << endl;
+    for (int i = 0; i < weights.size(); i++) {
+        cout << "物品" << i + 1 << ": 重量=" << weights[i] << ", 价值=" << values[i] << endl;
+    }
+    
+    cout << "最大价值: " << maxValue << endl;
+    cout << "选中的物品: ";
+    for (int i = 0; i < selected.size(); i++) {
+        if (selected[i]) {
+            cout << i + 1 << " ";
+        }
+    }
+    cout << endl;
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 完全背包示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">2. 完全背包问题实现</h3>
+                    <p class="text-gray-700 mb-3">
+                        完全背包问题的实现，物品可以无限次选择
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// 完全背包问题求解
+int completeKnapsack(int capacity, vector<int>& weights, vector<int>& values) {
+    int n = weights.size();
+    vector<int> dp(capacity + 1, 0);
+    
+    // 完全背包：内层循环正向遍历
+    for (int i = 0; i < n; i++) {
+        for (int j = weights[i]; j <= capacity; j++) {
+            dp[j] = max(dp[j], dp[j - weights[i]] + values[i]);
+        }
+    }
+    
+    return dp[capacity];
+}
+
+// 完全背包问题求解（带数量限制）
+int completeKnapsackWithCount(int capacity, vector<int>& weights, vector<int>& values, vector<int>& counts) {
+    int n = weights.size();
+    vector<int> dp(capacity + 1, 0);
+    
+    for (int i = 0; i < n; i++) {
+        // 对每件物品，最多选counts[i]个
+        for (int j = capacity; j >= weights[i]; j--) {
+            for (int k = 1; k <= counts[i] && k * weights[i] <= j; k++) {
+                dp[j] = max(dp[j], dp[j - k * weights[i]] + k * values[i]);
+            }
+        }
+    }
+    
+    return dp[capacity];
+}
+
+int main() {
+    int capacity = 10;
+    vector<int> weights = {2, 3, 5};
+    vector<int> values = {3, 5, 8};
+    vector<int> counts = {3, 2, 1}; // 物品数量限制
+    
+    int maxValue1 = completeKnapsack(capacity, weights, values);
+    int maxValue2 = completeKnapsackWithCount(capacity, weights, values, counts);
+    
+    cout << "完全背包(无数量限制)最大价值: " << maxValue1 << endl;
+    cout << "完全背包(有数量限制)最大价值: " << maxValue2 << endl;
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 混合背包示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">3. 混合背包问题</h3>
+                    <p class="text-gray-700 mb-3">
+                        同时包含0-1背包、完全背包和多重背包的混合问题
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// 物品结构体：type=0表示0-1背包，type=1表示完全背包，type>1表示多重背包
+struct Item {
+    int weight;
+    int value;
+    int type; // 0:0-1背包, 1:完全背包, >1:多重背包(数量)
+};
+
+// 混合背包问题求解
+int mixedKnapsack(int capacity, vector<Item>& items) {
+    vector<int> dp(capacity + 1, 0);
+    
+    for (const auto& item : items) {
+        if (item.type == 0) {
+            // 0-1背包：逆向遍历
+            for (int j = capacity; j >= item.weight; j--) {
+                dp[j] = max(dp[j], dp[j - item.weight] + item.value);
+            }
+        } else if (item.type == 1) {
+            // 完全背包：正向遍历
+            for (int j = item.weight; j <= capacity; j++) {
+                dp[j] = max(dp[j], dp[j - item.weight] + item.value);
+            }
+        } else {
+            // 多重背包：二进制优化
+            int count = item.type;
+            for (int k = 1; count > 0; k *= 2) {
+                int take = min(k, count);
+                // 当作0-1背包处理
+                for (int j = capacity; j >= take * item.weight; j--) {
+                    dp[j] = max(dp[j], dp[j - take * item.weight] + take * item.value);
+                }
+                count -= take;
+            }
+        }
+    }
+    
+    return dp[capacity];
+}
+
+int main() {
+    int capacity = 15;
+    vector<Item> items = {
+        {2, 3, 0},   // 0-1背包物品
+        {3, 5, 1},   // 完全背包物品
+        {5, 8, 2}    // 多重背包物品，最多2个
+    };
+    
+    int maxValue = mixedKnapsack(capacity, items);
+    cout << "混合背包最大价值: " << maxValue << endl;
+    
+    return 0;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 推荐题目 -->
+        <section id="problems" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-knapsack mb-6 flex items-center">
+                <i class="fa fa-tasks mr-2"></i> 推荐练习题目 (洛谷)
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 模板题 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="inline-block w-8 h-8 rounded-full bg-green-500 text-white text-center mr-2 text-sm line-height-8">1</span>
+                        模板题
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P1048 [NOIP2005 普及组] 采药</h4>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">简单</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                经典的0-1背包问题，时间就是背包容量，药的价值就是物品价值。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1048" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P1616 疯狂的采药</h4>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">简单</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                完全背包问题，与采药问题类似，但每种药可以无限采集。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1616" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P1060 [NOIP2006 普及组] 开心的金明</h4>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">简单</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                0-1背包变形，物品的价值是价格和重要度的乘积。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1060" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 入门题 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="inline-block w-8 h-8 rounded-full bg-yellow-500 text-white text-center mr-2 text-sm line-height-8">2</span>
+                        入门题
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P2925 [USACO08DEC] Hay For Sale S</h4>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">入门</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                0-1背包问题的应用，判断能否用给定物品组合出特定价值。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P2925" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P1164 小A点菜</h4>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">入门</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                计数类0-1背包，计算恰好花完所有钱的点菜方案数。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1164" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P2722 [USACO3.1] 总分 Score Inflation</h4>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">入门</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                完全背包问题，选择题目使得总分最高，时间不超过限制。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P2722" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 进阶题 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="inline-block w-8 h-8 rounded-full bg-red-500 text-white text-center mr-2 text-sm line-height-8">3</span>
+                        进阶题
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P1776 宝物筛选</h4>
+                                <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">进阶</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                多重背包问题，使用二进制优化方法求解。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1776" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P1064 [NOIP2006 提高组] 金明的预算方案</h4>
+                                <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">进阶</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                有依赖的背包问题，物品之间存在主从关系。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1064" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P2347 砝码称重</h4>
+                                <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">进阶</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                背包问题变形，计算用给定砝码可以称出的不同重量的数量。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P2347" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化高亮
+        hljs.highlightAll();
+        
+        // 0-1背包动画演示逻辑
+        document.addEventListener('DOMContentLoaded', function() {
+            const runBtn = document.getElementById('knapsack-run');
+            const resetBtn = document.getElementById('knapsack-reset');
+            const statusEl = document.getElementById('knapsack-status');
+            const executionEl = document.getElementById('knapsack-execution');
+            const capacityInput = document.getElementById('capacity');
+            const wInputs = [
+                document.getElementById('w1'),
+                document.getElementById('w2'),
+                document.getElementById('w3'),
+                document.getElementById('w4')
+            ];
+            const vInputs = [
+                document.getElementById('v1'),
+                document.getElementById('v2'),
+                document.getElementById('v3'),
+                document.getElementById('v4')
+            ];
+            
+            // 更新代码中的值
+            function updateCodeValues() {
+                document.getElementById('kcode-capacity').textContent = capacityInput.value;
+                
+                const weights = wInputs.map(input => input.value);
+                document.getElementById('kcode-ws').textContent = weights.join(', ');
+                
+                const values = vInputs.map(input => input.value);
+                document.getElementById('kcode-vs').textContent = values.join(', ');
+            }
+            
+            // 重置动画
+            function resetAnimation() {
+                // 清除所有高亮
+                for (let i = 1; i <= 35; i++) {
+                    const line = document.getElementById(`kcode-${i}`);
+                    if (line) line.classList.remove('code-line-highlight');
+                }
+                
+                statusEl.textContent = '状态: 等待开始';
+                statusEl.classList.add('hidden');
+                executionEl.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fa fa-arrow-down mb-2"></i>
+                        <p>点击"运行动画"开始演示</p>
+                    </div>
+                `;
+            }
+            
+            // 运行动画
+            async function runAnimation() {
+                resetAnimation();
+                statusEl.classList.remove('hidden');
+                
+                // 获取输入值
+                const capacity = parseInt(capacityInput.value);
+                const weights = wInputs.map(input => parseInt(input.value));
+                const values = vInputs.map(input => parseInt(input.value));
+                const n = weights.length;
+                
+                // 初始化执行区域
+                executionEl.innerHTML = `
+                    <div class="mb-4">
+                        <h4 class="font-semibold mb-2">物品列表:</h4>
+                        <table class="min-w-full text-sm">
+                            <tr class="bg-gray-50">
+                                <th class="px-2 py-1 border-b">物品</th>
+                                <th class="px-2 py-1 border-b">重量</th>
+                                <th class="px-2 py-1 border-b">价值</th>
+                            </tr>
+                            ${weights.map((w, i) => `
+                                <tr>
+                                    <td class="px-2 py-1 border-b text-center">${i+1}</td>
+                                    <td class="px-2 py-1 border-b text-center">${w}</td>
+                                    <td class="px-2 py-1 border-b text-center">${values[i]}</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="font-semibold mb-2">背包容量: ${capacity}</h4>
+                        <div id="dp-table-container" class="overflow-x-auto"></div>
+                    </div>
+                    <div id="steps-container"></div>
+                `;
+                
+                // 初始化DP表
+                let dp = Array.from({length: n+1}, () => Array(capacity+1).fill(0));
+                updateDPTable(dp, n, capacity);
+                
+                // 高亮代码并执行算法
+                statusEl.textContent = '状态: 开始初始化DP表';
+                await highlightCodeLine(9, 500);
+                
+                statusEl.textContent = '状态: 开始填充DP表';
+                await highlightCodeLine(11, 500);
+                
+                // 外层循环：遍历物品
+                for (let i = 1; i <= n; i++) {
+                    addStep(`处理第${i}个物品 (重量: ${weights[i-1]}, 价值: ${values[i-1]})`);
+                    await highlightCodeLine(12, 500);
+                    
+                    // 内层循环：遍历容量
+                    for (let j = 1; j <= capacity; j++) {
+                        addStep(`计算dp[${i}][${j}]`);
+                        await highlightCodeLine(14, 500);
+                        
+                        if (weights[i-1] > j) {
+                            // 物品重量大于当前容量，不能选
+                            addStep(`物品${i}重量${weights[i-1]} > 容量${j}，不选择`);
+                            dp[i][j] = dp[i-1][j];
+                            await highlightCodeLine(15, 800);
+                        } else {
+                            // 可以选择，取最大值
+                            addStep(`比较：不选(价值${dp[i-1][j]}) vs 选(价值${dp[i-1][j-weights[i-1]] + values[i-1]})`);
+                            await highlightCodeLine(18, 800);
+                            
+                            dp[i][j] = Math.max(dp[i-1][j], dp[i-1][j-weights[i-1]] + values[i-1]);
+                            addStep(`选择${dp[i][j] === dp[i-1][j] ? '不选' : '选'}，dp[${i}][${j}] = ${dp[i][j]}`);
+                        }
+                        
+                        // 更新DP表显示
+                        updateDPTable(dp, n, capacity, i, j);
+                        await sleep(1000);
+                    }
+                    await highlightCodeLine(20, 500);
+                }
+                
+                await highlightCodeLine(23, 500);
+                
+                // 回溯找出选中的物品
+                statusEl.textContent = '状态: 回溯寻找最优解';
+                let remaining = capacity;
+                const selected = [];
+                
+                for (let i = n; i > 0; i--) {
+                    if (dp[i][remaining] !== dp[i-1][remaining]) {
+                        selected.push(i);
+                        remaining -= weights[i-1];
+                    }
+                }
+                
+                // 显示结果
+                addStep(`计算完成！最大价值为: ${dp[n][capacity]}`);
+                addStep(`选中的物品: ${selected.reverse().join(', ')}`);
+                
+                statusEl.textContent = `状态: 完成！最大价值为 ${dp[n][capacity]}`;
+                
+                // 高亮最终结果代码
+                await highlightCodeLine(31, 500);
+                await highlightCodeLine(32, 1000);
+            }
+            
+            // 更新DP表显示
+            function updateDPTable(dp, n, capacity, highlightI = -1, highlightJ = -1) {
+                const container = document.getElementById('dp-table-container');
+                
+                let tableHtml = `
+                    <table class="min-w-full text-xs border-collapse">
+                        <tr class="bg-gray-100">
+                            <th class="dp-cell w-12">物品/容量</th>
+                `;
+                
+                // 表头：容量
+                for (let j = 0; j <= capacity; j++) {
+                    tableHtml += `<th class="dp-cell ${j === highlightJ ? 'dp-cell-highlight' : ''}">${j}</th>`;
+                }
+                tableHtml += `</tr>`;
+                
+                // 表内容：物品
+                for (let i = 0; i <= n; i++) {
+                    tableHtml += `<tr class="${i === 0 ? 'bg-gray-100' : ''}">`;
+                    tableHtml += `<td class="dp-cell font-medium ${i === highlightI ? 'dp-cell-highlight' : ''}">${i}</td>`;
+                    
+                    for (let j = 0; j <= capacity; j++) {
+                        const isHighlighted = i === highlightI && j === highlightJ;
+                        tableHtml += `<td class="dp-cell ${isHighlighted ? 'dp-cell-highlight' : ''}">${dp[i][j]}</td>`;
+                    }
+                    
+                    tableHtml += `</tr>`;
+                }
+                
+                tableHtml += `</table>`;
+                container.innerHTML = tableHtml;
+            }
+            
+            // 添加步骤说明
+            function addStep(text) {
+                const container = document.getElementById('steps-container');
+                const stepEl = document.createElement('div');
+                stepEl.className = 'bg-gray-50 p-2 rounded mb-1 text-sm';
+                stepEl.textContent = text;
+                container.appendChild(stepEl);
+                container.scrollTop = container.scrollHeight;
+            }
+            
+            // 高亮代码行
+            async function highlightCodeLine(lineNumber, duration) {
+                // 清除之前的高亮
+                for (let i = 1; i <= 35; i++) {
+                    const line = document.getElementById(`kcode-${i}`);
+                    if (line) line.classList.remove('code-line-highlight');
+                }
+                
+                // 高亮当前行
+                const line = document.getElementById(`kcode-${lineNumber}`);
+                if (line) {
+                    line.classList.add('code-line-highlight');
+                    await sleep(duration);
+                }
+            }
+            
+            // 休眠函数
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+            
+            // 事件监听
+            runBtn.addEventListener('click', runAnimation);
+            resetBtn.addEventListener('click', resetAnimation);
+            
+            // 输入变化时更新代码
+            capacityInput.addEventListener('input', updateCodeValues);
+            wInputs.forEach(input => input.addEventListener('input', updateCodeValues));
+            vInputs.forEach(input => input.addEventListener('input', updateCodeValues));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>格式化输入输出 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：鲜明的蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        syntax: '#FF9800', // 语法部分：橙色
+                        algorithm: '#2ECC71', // 算法部分：绿色
+                        datastructure: '#9C27B0', // 数据结构部分：深紫色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                        io: '#03A9F4', // 输入输出主题色：亮蓝色
+                        execution: '#FFEB3B', // 执行高亮：黄色
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .subcategory-bg {
+                @apply bg-gradient-to-r from-secondary/5 to-secondary/10;
+            }
+            .io-bg {
+                @apply bg-gradient-to-r from-io/5 to-io/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .io-header {
+                @apply font-bold text-io mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-io bg-io/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-io text-white text-center mr-2 text-xs;
+            }
+            .io-call {
+                @apply border-2 border-gray-300 rounded-md p-2 mb-1 bg-gray-50 transition-all duration-500;
+            }
+            .io-call-active {
+                @apply border-io bg-io/10 transform scale-[1.02];
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-gray-100 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-io h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .code-line {
+                @apply transition-all duration-300;
+            }
+            .code-line-highlight {
+                @apply bg-execution/30 text-gray-900 font-medium;
+            }
+            .io-box {
+                @apply border border-gray-300 rounded-lg p-3 mb-4;
+            }
+            .input-box {
+                @apply bg-gray-50 border-l-4 border-secondary;
+            }
+            .output-box {
+                @apply bg-gray-50 border-l-4 border-io;
+            }
+            .io-label {
+                @apply font-semibold text-sm mb-1 block;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">语法基础</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">输入输出</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-io font-medium">格式化输入输出</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="io-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-io mb-2">格式化输入输出</h1>
+                    <p class="text-gray-700">
+                        格式化输入输出是C++程序与用户交互的基础，也是信息学奥赛中处理数据的关键技能。本页面将详细讲解C++中常用的格式化输入输出方法，
+                        包括cin/cout基础用法、格式控制符以及scanf/printf的使用，帮助NOIP竞赛学生掌握正确处理输入输出的技巧。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-io hover:bg-io/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#problems" class="bg-white border border-io text-io hover:bg-io/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看题目
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 格式化输入输出概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-io mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 格式化输入输出概述
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">为什么需要格式化输入输出？</h3>
+                    <p class="text-gray-700">
+                        在信息学奥赛中，程序的输入输出格式往往有严格要求。正确的格式化输入输出能够：
+                    </p>
+                    <div class="bg-gray-50 p-4 rounded-lg mt-3">
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>确保程序能够正确读取测试数据</li>
+                            <li>保证输出结果符合题目要求，避免格式错误导致的失分</li>
+                            <li>提高数据处理效率，尤其是在处理大量数据时</li>
+                            <li>使输出结果更清晰易读，便于调试程序</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">C++中的输入输出方式</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-io mb-2">iostream库 (cin/cout)</h4>
+                            <p class="text-gray-700 mb-3">
+                                C++标准输入输出流，使用方便，类型安全，是C++推荐的输入输出方式。
+                            </p>
+                            <pre class="code-block text-xs"><code class="language-cpp">#include <iostream>
+using namespace std;
+
+int main() {
+    int a;
+    cin >> a;  // 输入
+    cout << a; // 输出
+    return 0;
+}</code></pre>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-io mb-2">cstdio库 (scanf/printf)</h4>
+                            <p class="text-gray-700 mb-3">
+                                继承自C语言的输入输出函数，需要指定格式控制符，效率较高，在竞赛中广泛使用。
+                            </p>
+                            <pre class="code-block text-xs"><code class="language-cpp">#include <cstdio>
+
+int main() {
+    int a;
+    scanf("%d", &a);  // 输入
+    printf("%d", a);  // 输出
+    return 0;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 输入输出动画演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-io mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> 输入输出过程演示
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 输入输出动画 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">cin/cout与scanf/printf执行过程</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了格式化输入输出的执行过程，包括数据的读取、处理和输出三个主要步骤。
+                                示例展示一个计算两数之和并输出结果的程序。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">输入两个整数:</label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <input type="number" id="input-num1" value="15" min="1" max="1000"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-io">
+                                    </div>
+                                    <div>
+                                        <input type="number" id="input-num2" value="28" min="1" max="1000"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-io">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button id="io-run" class="bg-io hover:bg-io/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行动画
+                                </button>
+                                <button id="io-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="io-status" class="animation-status hidden">
+                                状态: 等待开始
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="io-execution">
+                                <div class="text-center text-gray-500 py-8">
+                                    <i class="fa fa-arrow-down mb-2"></i>
+                                    <p>点击"运行动画"开始演示</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="io-code">
+                                <div class="code-line" id="io-code-1">#include &lt;iostream&gt;</div>
+                                <div class="code-line" id="io-code-2">#include &lt;cstdio&gt;</div>
+                                <div class="code-line" id="io-code-3">using namespace std;</div>
+                                <div class="code-line" id="io-code-4">&nbsp;</div>
+                                <div class="code-line" id="io-code-5">int main() {</div>
+                                <div class="code-line" id="io-code-6">&nbsp;&nbsp;int a, b, sum;</div>
+                                <div class="code-line" id="io-code-7">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="io-code-8">&nbsp;&nbsp;// 使用cin输入</div>
+                                <div class="code-line" id="io-code-9">&nbsp;&nbsp;cin >> a >> b;</div>
+                                <div class="code-line" id="io-code-10">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="io-code-11">&nbsp;&nbsp;sum = a + b;</div>
+                                <div class="code-line" id="io-code-12">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="io-code-13">&nbsp;&nbsp;// 使用cout输出</div>
+                                <div class="code-line" id="io-code-14">&nbsp;&nbsp;cout << "和为: " << sum << endl;</div>
+                                <div class="code-line" id="io-code-15">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="io-code-16">&nbsp;&nbsp;// 使用printf输出</div>
+                                <div class="code-line" id="io-code-17">&nbsp;&nbsp;printf("和为: %d\n", sum);</div>
+                                <div class="code-line" id="io-code-18">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="io-code-19">&nbsp;&nbsp;return 0;</div>
+                                <div class="code-line" id="io-code-20">}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 格式控制符对比 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">常用格式控制符</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="py-3 px-4 border-b text-left">数据类型</th>
+                                    <th class="py-3 px-4 border-b text-left">scanf格式符</th>
+                                    <th class="py-3 px-4 border-b text-left">printf格式符</th>
+                                    <th class="py-3 px-4 border-b text-left">说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-2 px-4 border-b">int</td>
+                                    <td class="py-2 px-4 border-b">%d</td>
+                                    <td class="py-2 px-4 border-b">%d</td>
+                                    <td class="py-2 px-4 border-b">十进制整数</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-2 px-4 border-b">long long</td>
+                                    <td class="py-2 px-4 border-b">%lld</td>
+                                    <td class="py-2 px-4 border-b">%lld</td>
+                                    <td class="py-2 px-4 border-b">长整数（竞赛常用）</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b">float</td>
+                                    <td class="py-2 px-4 border-b">%f</td>
+                                    <td class="py-2 px-4 border-b">%f</td>
+                                    <td class="py-2 px-4 border-b">单精度浮点数</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-2 px-4 border-b">double</td>
+                                    <td class="py-2 px-4 border-b">%lf</td>
+                                    <td class="py-2 px-4 border-b">%lf</td>
+                                    <td class="py-2 px-4 border-b">双精度浮点数</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b">char</td>
+                                    <td class="py-2 px-4 border-b">%c</td>
+                                    <td class="py-2 px-4 border-b">%c</td>
+                                    <td class="py-2 px-4 border-b">字符</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-2 px-4 border-b">string</td>
+                                    <td class="py-2 px-4 border-b">%s</td>
+                                    <td class="py-2 px-4 border-b">%s</td>
+                                    <td class="py-2 px-4 border-b">字符串</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 输入输出技巧与示例 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-io mb-6 flex items-center">
+                <i class="fa fa-code mr-2"></i> 输入输出技巧与示例
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 基本输入输出示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">1. 基本输入输出</h3>
+                    <p class="text-gray-700 mb-3">
+                        读取多个整数并输出它们的和与积
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+using namespace std;
+
+int main() {
+    int a, b, c;
+    
+    // 输入三个整数
+    cin >> a >> b >> c;
+    
+    // 计算和与积
+    int sum = a + b + c;
+    int product = a * b * c;
+    
+    // 输出结果
+    cout << "和: " << sum << endl;
+    cout << "积: " << product << endl;
+    
+    return 0;
+}</code></pre>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="io-box input-box">
+                        <span class="io-label">输入示例:</span>
+                        <div>3 5 7</div>
+                    </div>
+                    <div class="io-box output-box">
+                        <span class="io-label">输出示例:</span>
+                        <div>和: 15<br>积: 105</div>
+                    </div>
+                </div>
+                </div>
+                
+                <!-- 浮点数格式化示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">2. 浮点数格式化输出</h3>
+                    <p class="text-gray-700 mb-3">
+                        控制浮点数的输出精度和格式
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <cstdio>
+#include <iomanip> // 用于setprecision等操纵符
+using namespace std;
+
+int main() {
+    double pi = 3.141592653589793;
+    
+    // 使用cout格式化
+    cout << "默认输出: " << pi << endl;
+    cout << "保留2位小数: " << fixed << setprecision(2) << pi << endl;
+    cout << "保留4位小数: " << fixed << setprecision(4) << pi << endl;
+    
+    // 使用printf格式化
+    printf("\n使用printf:\n");
+    printf("默认输出: %lf\n", pi);
+    printf("保留2位小数: %.2lf\n", pi);
+    printf("保留4位小数: %.4lf\n", pi);
+    
+    return 0;
+}</code></pre>
+                
+                <div class="io-box output-box mt-4">
+                    <span class="io-label">输出示例:</span>
+                    <div>默认输出: 3.14159<br>
+                    保留2位小数: 3.14<br>
+                    保留4位小数: 3.1416<br>
+                    <br>
+                    使用printf:<br>
+                    默认输出: 3.141593<br>
+                    保留2位小数: 3.14<br>
+                    保留4位小数: 3.1416</div>
+                </div>
+                </div>
+                
+                <!-- 占位与对齐示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">3. 输出占位与对齐</h3>
+                    <p class="text-gray-700 mb-3">
+                        控制输出宽度和对齐方式，常用于表格形式输出
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <cstdio>
+#include <iomanip>
+using namespace std;
+
+int main() {
+    // 左对齐，占10个字符宽度
+    cout << "左对齐:" << endl;
+    cout << left << setw(10) << "姓名" << setw(10) << "年龄" << endl;
+    cout << left << setw(10) << "张三" << setw(10) << 18 << endl;
+    cout << left << setw(10) << "李四" << setw(10) << 20 << endl;
+    
+    // 使用printf右对齐
+    printf("\n右对齐:\n");
+    printf("%10s%10s\n", "姓名", "年龄");
+    printf("%10s%10d\n", "张三", 18);
+    printf("%10s%10d\n", "李四", 20);
+    
+    return 0;
+}</code></pre>
+                
+                <div class="io-box output-box mt-4">
+                    <span class="io-label">输出示例:</span>
+                    <div>左对齐:<br>
+                    姓名      年龄<br>
+                    张三      18<br>
+                    李四      20<br>
+                    <br>
+                    右对齐:<br>
+                        姓名        年龄<br>
+                        张三        18<br>
+                        李四        20</div>
+                </div>
+                </div>
+                
+                <!-- 字符串输入输出示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">4. 字符串输入输出</h3>
+                    <p class="text-gray-700 mb-3">
+                        处理字符串的输入输出，注意空格对输入的影响
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <cstdio>
+#include <string>
+using namespace std;
+
+int main() {
+    char str1[100];
+    string str2;
+    
+    cout << "请输入带空格的字符串: ";
+    // cin >> str2;  // 遇到空格会停止读取
+    getline(cin, str2);  // 读取整行，包括空格
+    
+    cout << "你输入的是: " << str2 << endl;
+    
+    printf("\n使用cstdio:\n");
+    printf("请输入带空格的字符串: ");
+    // scanf("%s", str1);  // 遇到空格会停止读取
+    fgets(str1, 100, stdin);  // 读取整行，包括空格
+    
+    printf("你输入的是: %s", str1);
+    
+    return 0;
+}</code></pre>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="io-box input-box">
+                        <span class="io-label">输入示例:</span>
+                        <div>Hello World! 123</div>
+                    </div>
+                    <div class="io-box output-box">
+                        <span class="io-label">输出示例:</span>
+                        <div>你输入的是: Hello World! 123<br>
+                        <br>
+                        使用cstdio:<br>
+                        请输入带空格的字符串: 你输入的是: Hello World! 123</div>
+                    </div>
+                </div>
+                </div>
+                
+                <!-- 竞赛常用技巧 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">5. 竞赛常用输入输出优化</h3>
+                    <p class="text-gray-700 mb-3">
+                        在处理大量数据时，使用输入输出优化可以显著提高程序效率
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <cstdio>
+using namespace std;
+
+// 关闭同步流，使cin/cout效率接近scanf/printf
+void optimizeIO() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+}
+
+int main() {
+    optimizeIO();  // 启用IO优化
+    
+    int n, sum = 0;
+    cin >> n;
+    
+    // 快速读取大量整数
+    for (int i = 0; i < n; i++) {
+        int x;
+        cin >> x;  // 优化后的cin速度很快
+        sum += x;
+    }
+    
+    cout << sum << endl;
+    
+    return 0;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 常见错误与注意事项 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-io mb-6 flex items-center">
+                <i class="fa fa-exclamation-triangle mr-2"></i> 常见错误与注意事项
+            </h2>
+            
+            <div class="space-y-4">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">格式错误导致的常见问题</h3>
+                    <div class="space-y-4">
+                        <div class="flex">
+                            <div class="step-number flex-shrink-0 mt-0.5">1</div>
+                            <div>
+                                <h4 class="font-semibold">多余或缺少空格</h4>
+                                <p class="text-gray-700 text-sm">
+                                    题目要求严格时，多一个或少一个空格都会导致答案错误。特别是在输出多个数据时，要注意数据之间的分隔符。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="step-number flex-shrink-0 mt-0.5">2</div>
+                            <div>
+                                <h4 class="font-semibold">换行符问题</h4>
+                                <p class="text-gray-700 text-sm">
+                                    多数题目要求每行输出结束后必须换行，但不要在最后一行多输出一个空行。可使用endl或"\n"控制换行。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="step-number flex-shrink-0 mt-0.5">3</div>
+                            <div>
+                                <h4 class="font-semibold">浮点数精度问题</h4>
+                                <p class="text-gray-700 text-sm">
+                                    输出浮点数时要严格按照题目要求保留小数位数，通常使用fixed和setprecision组合，或printf的%.nlf格式。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="step-number flex-shrink-0 mt-0.5">4</div>
+                            <div>
+                                <h4 class="font-semibold">变量类型不匹配</h4>
+                                <p class="text-gray-700 text-sm">
+                                    使用scanf/printf时，格式符要与变量类型严格匹配（如%lld对应long long），否则会导致数据读取或输出错误。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="step-number flex-shrink-0 mt-0.5">5</div>
+                            <div>
+                                <h4 class="font-semibold">大量数据输入超时</h4>
+                                <p class="text-gray-700 text-sm">
+                                    处理上万甚至上百万数据时，未优化的cin/cout可能超时，建议使用scanf/printf或对cin/cout进行优化。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 推荐练习题 -->
+        <section id="problems" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-io mb-6 flex items-center">
+                <i class="fa fa-tasks mr-2"></i> 推荐练习题（洛谷）
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 模板题 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-secondary">模板题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-secondary/50 transition-all duration-300">
+                            <div class="font-semibold mb-2">P1001 A+B Problem</div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                最基础的A+B问题，检验基本输入输出能力
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1001" target="_blank" class="text-secondary hover:text-secondary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-secondary/50 transition-all duration-300">
+                            <div class="font-semibold mb-2">P5707 【深基2.例12】上学迟到</div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                简单计算后格式化输出时间
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P5707" target="_blank" class="text-secondary hover:text-secondary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-secondary/50 transition-all duration-300">
+                            <div class="font-semibold mb-2">P5708 【深基2.习2】三角形面积</div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                浮点数输入输出与简单计算
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P5708" target="_blank" class="text-secondary hover:text-secondary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 入门题 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-primary">入门题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-primary/50 transition-all duration-300">
+                            <div class="font-semibold mb-2">P1045 麦森数</div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                处理大整数输出，控制输出格式
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1045" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-primary/50 transition-all duration-300">
+                            <div class="font-semibold mb-2">P1540 机器翻译</div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                综合输入处理与模拟算法
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1540" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-primary/50 transition-all duration-300">
+                            <div class="font-semibold mb-2">P5710 【深基3.例2】数的性质</div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                多条件判断与格式化输出
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P5710" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 进阶题 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-io">进阶题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-io/50 transition-all duration-300">
+                            <div class="font-semibold mb-2">P1056 排座椅</div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                复杂输入处理与排序输出
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1056" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-io/50 transition-all duration-300">
+                            <div class="font-semibold mb-2">P1067 多项式输出</div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                复杂格式化输出，处理符号和系数
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1067" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-io/50 transition-all duration-300">
+                            <div class="font-semibold mb-2">P1957 口算练习题</div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                字符串处理与格式化输出综合应用
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1957" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            
+            // 输入输出动画演示
+            const runBtn = document.getElementById('io-run');
+            const resetBtn = document.getElementById('io-reset');
+            const statusEl = document.getElementById('io-status');
+            const executionEl = document.getElementById('io-execution');
+            const num1Input = document.getElementById('input-num1');
+            const num2Input = document.getElementById('input-num2');
+            
+            // 重置所有代码行高亮
+            function resetCodeHighlights() {
+                for (let i = 1; i <= 20; i++) {
+                    const line = document.getElementById(`io-code-${i}`);
+                    line.classList.remove('code-line-highlight');
+                }
+            }
+            
+            // 高亮指定代码行
+            function highlightCodeLine(lineNum) {
+                resetCodeHighlights();
+                const line = document.getElementById(`io-code-${lineNum}`);
+                line.classList.add('code-line-highlight');
+            }
+            
+            // 重置动画
+            resetBtn.addEventListener('click', function() {
+                resetCodeHighlights();
+                statusEl.textContent = '状态: 已重置';
+                statusEl.classList.remove('hidden');
+                executionEl.innerHTML = `
+                    <div class="text-center text-gray-500 py-8">
+                        <i class="fa fa-arrow-down mb-2"></i>
+                        <p>点击"运行动画"开始演示</p>
+                    </div>
+                `;
+            });
+            
+            // 运行动画
+            runBtn.addEventListener('click', async function() {
+                const num1 = num1Input.value;
+                const num2 = num2Input.value;
+                const sum = parseInt(num1) + parseInt(num2);
+                
+                resetCodeHighlights();
+                executionEl.innerHTML = '';
+                statusEl.textContent = '状态: 开始执行';
+                statusEl.classList.remove('hidden');
+                
+                // 步骤1: 声明变量
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                highlightCodeLine(6);
+                statusEl.textContent = '状态: 声明变量 a, b, sum';
+                executionEl.innerHTML += `
+                    <div class="step-item">
+                        <span class="step-number">1</span>
+                        <div>
+                            <p>声明整数变量: a, b, sum</p>
+                            <div class="bg-gray-100 p-2 rounded mt-1 text-sm">
+                                a: 未初始化<br>
+                                b: 未初始化<br>
+                                sum: 未初始化
+                            </div>
+                        </div>
+                    </div>
+                `;
+                executionEl.scrollTop = executionEl.scrollHeight;
+                
+                // 步骤2: 输入数据
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                highlightCodeLine(9);
+                statusEl.textContent = '状态: 读取输入数据';
+                executionEl.innerHTML += `
+                    <div class="step-item">
+                        <span class="step-number">2</span>
+                        <div>
+                            <p>使用 cin 读取输入: ${num1} 和 ${num2}</p>
+                            <div class="io-box input-box mt-1">
+                                <span class="io-label">输入:</span>
+                                <div>${num1} ${num2}</div>
+                            </div>
+                            <div class="bg-gray-100 p-2 rounded mt-1 text-sm">
+                                a: ${num1}<br>
+                                b: ${num2}<br>
+                                sum: 未初始化
+                            </div>
+                        </div>
+                    </div>
+                `;
+                executionEl.scrollTop = executionEl.scrollHeight;
+                
+                // 步骤3: 计算和
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                highlightCodeLine(11);
+                statusEl.textContent = '状态: 计算两数之和';
+                executionEl.innerHTML += `
+                    <div class="step-item">
+                        <span class="step-number">3</span>
+                        <div>
+                            <p>计算 sum = a + b = ${num1} + ${num2} = ${sum}</p>
+                            <div class="bg-gray-100 p-2 rounded mt-1 text-sm">
+                                a: ${num1}<br>
+                                b: ${num2}<br>
+                                sum: ${sum}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                executionEl.scrollTop = executionEl.scrollHeight;
+                
+                // 步骤4: 使用cout输出
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                highlightCodeLine(14);
+                statusEl.textContent = '状态: 使用cout输出结果';
+                executionEl.innerHTML += `
+                    <div class="step-item">
+                        <span class="step-number">4</span>
+                        <div>
+                            <p>使用 cout 输出计算结果</p>
+                            <div class="io-box output-box mt-1">
+                                <span class="io-label">输出:</span>
+                                <div>和为: ${sum}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                executionEl.scrollTop = executionEl.scrollHeight;
+                
+                // 步骤5: 使用printf输出
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                highlightCodeLine(17);
+                statusEl.textContent = '状态: 使用printf输出结果';
+                executionEl.innerHTML += `
+                    <div class="step-item">
+                        <span class="step-number">5</span>
+                        <div>
+                            <p>使用 printf 输出计算结果</p>
+                            <div class="io-box output-box mt-1">
+                                <span class="io-label">输出:</span>
+                                <div>和为: ${sum}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                executionEl.scrollTop = executionEl.scrollHeight;
+                
+                // 步骤6: 程序结束
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                highlightCodeLine(19);
+                statusEl.textContent = '状态: 程序执行完毕';
+                executionEl.innerHTML += `
+                    <div class="step-item">
+                        <span class="step-number">6</span>
+                        <div>
+                            <p>程序执行完成，返回0</p>
+                        </div>
+                    </div>
+                `;
+                executionEl.scrollTop = executionEl.scrollHeight;
+            });
+        });
+    </script>
+</body>
+</html>

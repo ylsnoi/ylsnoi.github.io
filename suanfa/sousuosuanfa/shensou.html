@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深度优先搜索(DFS) - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：鲜明的蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        syntax: '#FF9800', // 语法部分：橙色
+                        algorithm: '#2ECC71', // 算法部分：绿色
+                        datastructure: '#9C27B0', // 数据结构部分：深紫色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                        dfs: '#E91E63', // DFS主题色：粉红色
+                        execution: '#FFEB3B', // 执行高亮：黄色
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .subcategory-bg {
+                @apply bg-gradient-to-r from-secondary/5 to-secondary/10;
+            }
+            .dfs-bg {
+                @apply bg-gradient-to-r from-dfs/5 to-dfs/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .dfs-header {
+                @apply font-bold text-dfs mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-dfs bg-dfs/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-dfs text-white text-center mr-2 text-xs;
+            }
+            .dfs-call {
+                @apply border-2 border-gray-300 rounded-md p-2 mb-1 bg-gray-50 transition-all duration-500;
+            }
+            .dfs-call-active {
+                @apply border-dfs bg-dfs/10 transform scale-[1.02];
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-gray-100 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-dfs h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .code-line {
+                @apply transition-all duration-300;
+            }
+            .code-line-highlight {
+                @apply bg-execution/30 text-gray-900 font-medium;
+            }
+            .grid-cell {
+                @apply w-12 h-12 flex items-center justify-center border border-gray-300 text-sm font-medium transition-all duration-300;
+            }
+            .grid-cell-visited {
+                @apply bg-dfs/20 border-dfs;
+            }
+            .grid-cell-current {
+                @apply bg-dfs text-white border-dfs scale-110 font-bold;
+            }
+            .grid-cell-wall {
+                @apply bg-gray-700 text-white;
+            }
+            .grid-cell-start {
+                @apply bg-green-100 border-green-500 text-green-700 font-bold;
+            }
+            .grid-cell-end {
+                @apply bg-blue-100 border-blue-500 text-blue-700 font-bold;
+            }
+            .grid-cell-backtracked {
+                @apply bg-dfs/10 border-dfs/50;
+            }
+            /* 确保表格正确显示为网格 */
+            .grid-table {
+                border-collapse: collapse;
+                margin: 0 auto;
+            }
+            .grid-row {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">算法基础</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">搜索算法</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-dfs font-medium">深度优先搜索(DFS)</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="dfs-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-dfs mb-2">深度优先搜索(DFS)</h1>
+                    <p class="text-gray-700">
+                        深度优先搜索是一种重要的图遍历算法，它沿着树的深度优先遍历树的节点，尽可能深地搜索树的分支。
+                        本页面将详细讲解DFS的原理、实现方法及其在信息学奥赛中的典型应用。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-dfs hover:bg-dfs/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#problems" class="bg-white border border-dfs text-dfs hover:bg-dfs/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看题目
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DFS定义概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-dfs mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 深度优先搜索概述
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">什么是深度优先搜索？</h3>
+                    <p class="text-gray-700">
+                        深度优先搜索（Depth-First Search，简称DFS）是一种用于遍历或搜索树或图的算法。
+                        其基本思想是：沿着一条路径尽可能深入地搜索，当无法继续前进时，回溯到上一个节点，选择另一条未探索的路径继续搜索，直到所有节点都被访问。
+                    </p>
+                    <div class="bg-gray-50 p-4 rounded-lg mt-3">
+                        <h4 class="font-semibold mb-2">DFS的主要特点：</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>不撞南墙不回头，尽可能深入搜索</li>
+                            <li>可以用递归或栈实现</li>
+                            <li>适合解决连通性问题、拓扑排序、路径查找等</li>
+                            <li>空间复杂度通常为O(V)，其中V是顶点数</li>
+                            <li>时间复杂度为O(V+E)，其中V是顶点数，E是边数</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">DFS的基本原理</h3>
+                    <p class="text-gray-700 mb-3">
+                        DFS的工作过程可以简单描述为：
+                    </p>
+                    <div class="space-y-3">
+                        <div class="step-item">
+                            <span class="step-number">1</span>
+                            <span>从起始节点开始访问，并标记为已访问</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-number">2</span>
+                            <span>选择一个未访问的邻接节点，递归地进行DFS</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-number">3</span>
+                            <span>如果当前节点的所有邻接节点都已访问，则回溯到上一个节点</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-number">4</span>
+                            <span>重复步骤2和3，直到所有可达节点都被访问</span>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-700 mt-4">
+                        在实现DFS时，通常需要使用一个访问标记数组来记录哪些节点已经被访问过，以避免重复访问和陷入无限循环。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- DFS动画演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-dfs mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> DFS遍历过程演示
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- DFS动画 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">二维网格中的DFS遍历演示</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了DFS在二维网格中的遍历过程，从左上角(0,0)开始，按照上、右、下、左的顺序探索邻接单元格。
+                                灰色单元格表示墙壁，无法通过。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">网格大小:</label>
+                                <select id="grid-size" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-dfs">
+                                    <option value="5">5×5</option>
+                                    <option value="6" selected>6×6</option>
+                                    <option value="7">7×7</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">墙壁数量:</label>
+                                <input type="range" id="wall-count" min="0" max="10" value="5"
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-dfs">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>0</span>
+                                    <span id="wall-value">5</span>
+                                    <span>10</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button id="dfs-generate" class="bg-secondary hover:bg-secondary/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 生成网格
+                                </button>
+                                <button id="dfs-run" class="bg-dfs hover:bg-dfs/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行DFS
+                                </button>
+                                <button id="dfs-reset" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-stop mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="dfs-status" class="animation-status mt-4">
+                                状态: 请生成网格并点击"运行DFS"
+                            </div>
+                            
+                            <div class="mt-4">
+                                <div class="animation-progress">
+                                    <div id="dfs-progress-bar" class="animation-progress-bar" style="width: 0%"></div>
+                                </div>
+                                <div class="text-sm text-gray-600">
+                                    进度: <span id="dfs-progress-text">0%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 p-3 bg-gray-50 rounded-lg text-sm">
+                                <h4 class="font-medium mb-2">图例:</h4>
+                                <div class="flex items-center mb-1">
+                                    <div class="w-4 h-4 bg-green-100 border border-green-500 mr-2"></div>
+                                    <span>起点 (S)</span>
+                                </div>
+                                <div class="flex items-center mb-1">
+                                    <div class="w-4 h-4 bg-blue-100 border border-blue-500 mr-2"></div>
+                                    <span>终点 (E)</span>
+                                </div>
+                                <div class="flex items-center mb-1">
+                                    <div class="w-4 h-4 bg-gray-700 mr-2"></div>
+                                    <span>墙壁 (W)</span>
+                                </div>
+                                <div class="flex items-center mb-1">
+                                    <div class="w-4 h-4 bg-dfs text-white flex items-center justify-center text-xs mr-2">C</div>
+                                    <span>当前位置</span>
+                                </div>
+                                <div class="flex items-center mb-1">
+                                    <div class="w-4 h-4 bg-dfs/20 border border-dfs mr-2"></div>
+                                    <span>已访问</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-4 h-4 bg-dfs/10 border border-dfs/50 mr-2"></div>
+                                    <span>已回溯</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="dfs-execution">
+                                <div class="text-center text-gray-500 py-8">
+                                    <i class="fa fa-arrow-down mb-2"></i>
+                                    <p>生成网格并点击"运行DFS"开始演示</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="dfs-code">
+                                <div class="code-line" id="dfs-code-1">// 二维网格DFS遍历示例</div>
+                                <div class="code-line" id="dfs-code-2">int grid[6][6] = { ... };</div>
+                                <div class="code-line" id="dfs-code-3">bool visited[6][6] = {false};</div>
+                                <div class="code-line" id="dfs-code-4">&nbsp;</div>
+                                <div class="code-line" id="dfs-code-5">// 方向数组: 上、右、下、左</div>
+                                <div class="code-line" id="dfs-code-6">int dx[] = {-1, 0, 1, 0};</div>
+                                <div class="code-line" id="dfs-code-7">int dy[] = {0, 1, 0, -1};</div>
+                                <div class="code-line" id="dfs-code-8">&nbsp;</div>
+                                <div class="code-line" id="dfs-code-9">void dfs(int x, int y) {</div>
+                                <div class="code-line" id="dfs-code-10">&nbsp;&nbsp;// 越界检查</div>
+                                <div class="code-line" id="dfs-code-11">&nbsp;&nbsp;if (x < 0 || x >= 6 || y < 0 || y >= 6)</div>
+                                <div class="code-line" id="dfs-code-12">&nbsp;&nbsp;&nbsp;&nbsp;return;</div>
+                                <div class="code-line" id="dfs-code-13">&nbsp;</div>
+                                <div class="code-line" id="dfs-code-14">&nbsp;&nbsp;// 检查是否访问过或为墙壁</div>
+                                <div class="code-line" id="dfs-code-15">&nbsp;&nbsp;if (visited[x][y] || grid[x][y] == 1)</div>
+                                <div class="code-line" id="dfs-code-16">&nbsp;&nbsp;&nbsp;&nbsp;return;</div>
+                                <div class="code-line" id="dfs-code-17">&nbsp;</div>
+                                <div class="code-line" id="dfs-code-18">&nbsp;&nbsp;// 标记为已访问</div>
+                                <div class="code-line" id="dfs-code-19">&nbsp;&nbsp;visited[x][y] = true;</div>
+                                <div class="code-line" id="dfs-code-20">&nbsp;&nbsp;记录访问顺序</div>
+                                <div class="code-line" id="dfs-code-21">&nbsp;</div>
+                                <div class="code-line" id="dfs-code-22">&nbsp;&nbsp;// 递归访问四个方向</div>
+                                <div class="code-line" id="dfs-code-23">&nbsp;&nbsp;for (int i = 0; i < 4; i++) {</div>
+                                <div class="code-line" id="dfs-code-24">&nbsp;&nbsp;&nbsp;&nbsp;dfs(x + dx[i], y + dy[i]);</div>
+                                <div class="code-line" id="dfs-code-25">&nbsp;&nbsp;}</div>
+                                <div class="code-line" id="dfs-code-26">}</div>
+                                <div class="code-line" id="dfs-code-27">&nbsp;</div>
+                                <div class="code-line" id="dfs-code-28">int main() {</div>
+                                <div class="code-line" id="dfs-code-29">&nbsp;&nbsp;// 从(0,0)开始DFS</div>
+                                <div class="code-line" id="dfs-code-30">&nbsp;&nbsp;dfs(0, 0);</div>
+                                <div class="code-line" id="dfs-code-31">&nbsp;&nbsp;return 0;</div>
+                                <div class="code-line" id="dfs-code-32">}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 网格可视化区域 - 修复为矩阵形式展示 -->
+                    <div class="mt-6 overflow-x-auto">
+                        <h4 class="font-semibold mb-3">网格可视化:</h4>
+                        <div id="grid-container" class="flex justify-center min-w-[400px]">
+                            <table class="grid-table" id="grid-table">
+                                <tbody id="grid-body">
+                                    <!-- 网格将通过JavaScript动态生成 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DFS实现与应用 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-dfs mb-6 flex items-center">
+                <i class="fa fa-code mr-2"></i> DFS实现与典型应用
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 基础DFS实现 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">1. 基础DFS实现 - 连通分量计数</h3>
+                    <p class="text-gray-700 mb-3">
+                        统计二维网格中连通分量的数量（8连通或4连通）
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+// 4个方向: 上、右、下、左
+const int dx[] = {-1, 0, 1, 0};
+const int dy[] = {0, 1, 0, -1};
+int n, m;
+vector<vector<int>> grid;
+vector<vector<bool>> visited;
+
+// 深度优先搜索
+void dfs(int x, int y) {
+    // 越界检查
+    if (x < 0 || x >= n || y < 0 || y >= m)
+        return;
+    
+    // 如果已经访问过或者不是连通区域的一部分
+    if (visited[x][y] || grid[x][y] == 0)
+        return;
+    
+    // 标记为已访问
+    visited[x][y] = true;
+    
+    // 递归访问四个方向
+    for (int i = 0; i < 4; i++) {
+        dfs(x + dx[i], y + dy[i]);
+    }
+}
+
+int main() {
+    cin >> n >> m;
+    grid.resize(n, vector<int>(m));
+    visited.resize(n, vector<bool>(m, false));
+    
+    // 读取网格数据
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cin >> grid[i][j];
+        }
+    }
+    
+    // 统计连通分量数量
+    int components = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            // 如果找到一个未访问的连通区域起点
+            if (!visited[i][j] && grid[i][j] == 1) {
+                dfs(i, j);
+                components++;
+            }
+        }
+    }
+    
+    cout << "连通分量数量: " << components << endl;
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 迷宫求解 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">2. 迷宫求解 - DFS寻找路径</h3>
+                    <p class="text-gray-700 mb-3">
+                        使用DFS寻找从起点到终点的路径，适用于迷宫问题
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <stack>
+using namespace std;
+
+// 4个方向: 上、右、下、左
+const int dx[] = {-1, 0, 1, 0};
+const int dy[] = {0, 1, 0, -1};
+const char dir[] = {'^', '>', 'v', '<'}; // 方向符号
+
+int n, m;
+vector<vector<int>> maze;
+vector<vector<bool>> visited;
+vector<vector<char>> path;
+bool found = false;
+
+// 深度优先搜索寻找迷宫路径
+void dfs(int x, int y) {
+    // 如果到达终点
+    if (x == n-1 && y == m-1) {
+        found = true;
+        return;
+    }
+    
+    // 尝试四个方向
+    for (int i = 0; i < 4; i++) {
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+        
+        // 检查新位置是否合法且未访问
+        if (nx >= 0 && nx < n && ny >= 0 && ny < m 
+            && maze[nx][ny] == 0 && !visited[nx][ny]) {
+            
+            // 标记为已访问
+            visited[nx][ny] = true;
+            // 记录路径方向
+            path[x][y] = dir[i];
+            
+            // 递归搜索
+            dfs(nx, ny);
+            
+            // 如果找到路径，不再继续搜索
+            if (found) return;
+            
+            // 回溯：撤销路径标记
+            path[x][y] = ' ';
+        }
+    }
+}
+
+int main() {
+    cin >> n >> m;
+    maze.resize(n, vector<int>(m));
+    visited.resize(n, vector<bool>(n, false));
+    path.resize(n, vector<char>(m, ' '));
+    
+    // 读取迷宫数据，0表示通路，1表示墙壁
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cin >> maze[i][j];
+        }
+    }
+    
+    // 从起点(0,0)开始搜索
+    visited[0][0] = true;
+    dfs(0, 0);
+    
+    // 输出结果
+    if (found) {
+        cout << "找到路径:" << endl;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                cout << path[i][j] << " ";
+            }
+            cout << endl;
+        }
+    } else {
+        cout << "没有找到路径" << endl;
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 全排列生成 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">3. 全排列生成 - DFS的回溯应用</h3>
+                    <p class="text-gray-700 mb-3">
+                        使用DFS回溯法生成1~n的所有全排列
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+int n;
+vector<int> permutation; // 当前排列
+vector<bool> used;       // 记录元素是否被使用
+
+// 深度优先搜索生成全排列
+void dfs(int pos) {
+    // 如果排列已完成
+    if (pos == n) {
+        // 输出当前排列
+        for (int num : permutation) {
+            cout << num << " ";
+        }
+        cout << endl;
+        return;
+    }
+    
+    // 尝试放置每个未使用的数字
+    for (int i = 1; i <= n; i++) {
+        if (!used[i]) {
+            // 选择数字i
+            used[i] = true;
+            permutation.push_back(i);
+            
+            // 递归处理下一个位置
+            dfs(pos + 1);
+            
+            // 回溯：撤销选择
+            permutation.pop_back();
+            used[i] = false;
+        }
+    }
+}
+
+int main() {
+    cin >> n;
+    used.resize(n + 1, false); // 1-based索引
+    
+    // 从位置0开始生成排列
+    dfs(0);
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 子集生成 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">4. 子集生成 - 组合问题的DFS解法</h3>
+                    <p class="text-gray-700 mb-3">
+                        使用DFS生成一个集合的所有子集，典型的组合问题
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<int> nums;
+vector<int> current; // 当前子集
+int n;
+
+// 深度优先搜索生成子集
+// start: 从哪个位置开始考虑元素
+void dfs(int start) {
+    // 输出当前子集
+    cout << "{";
+    for (int i = 0; i < current.size(); i++) {
+        if (i > 0) cout << ", ";
+        cout << current[i];
+    }
+    cout << "}" << endl;
+    
+    // 考虑从start开始的每个元素
+    for (int i = start; i < n; i++) {
+        // 选择nums[i]
+        current.push_back(nums[i]);
+        
+        // 递归生成包含nums[i]的子集
+        dfs(i + 1); // 注意这里是i+1，避免重复选择
+        
+        // 回溯：撤销选择
+        current.pop_back();
+    }
+}
+
+int main() {
+    cin >> n;
+    nums.resize(n);
+    
+    for (int i = 0; i < n; i++) {
+        cin >> nums[i];
+    }
+    
+    // 从第0个元素开始生成子集
+    dfs(0);
+    
+    return 0;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 推荐题目 -->
+        <section id="problems" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-dfs mb-6 flex items-center">
+                <i class="fa fa-tasks mr-2"></i> 推荐练习题目
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">DFS模板题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">洛谷 P1596 [USACO10OCT] Lake Counting S</h4>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">入门</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                经典的连通分量计数问题，使用DFS统计网格中的连通区域数量。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1596" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                前往做题 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">洛谷 P1605 迷宫</h4>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">入门</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                基础迷宫问题，统计从起点到终点的不同路径数量，适合练习DFS的基本应用。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1605" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                前往做题 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">洛谷 P2404 自然数的拆分问题</h4>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">普及-</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                将一个自然数拆分成若干个连续自然数之和，适合练习DFS的回溯思想。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P2404" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                前往做题 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">DFS入门题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">洛谷 P1036 选数</h4>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">普及-</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                从n个数中选k个数，求其和为素数的方案数，结合了DFS和素数判断。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1036" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                前往做题 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">洛谷 P1162 填涂颜色</h4>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">普及-</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                给一个封闭区域填色，需要使用DFS从外部开始遍历，标记非封闭区域。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1162" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                前往做题 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">洛谷 P1219 八皇后</h4>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">普及-</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                经典的八皇后问题，使用DFS回溯法求解，适合练习剪枝优化。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1219" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                前往做题 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">DFS进阶题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">洛谷 P1019 单词接龙</h4>
+                                <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">普及/提高-</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                单词接龙游戏，需要使用DFS寻找最长的接龙序列，涉及字符串处理。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1019" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                前往做题 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">洛谷 P1332 血色先锋队</h4>
+                                <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">普及/提高-</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                病毒扩散问题，多起点DFS，需要记录每个点被感染的时间。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1332" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                前往做题 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-primary">洛谷 P2036 [COCI2008-2009#2] PERKET</h4>
+                                <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">普及/提高-</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">
+                                选择食材问题，使用DFS枚举所有可能的组合，计算最优解。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P2036" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                前往做题 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            
+            // 初始化DFS演示
+            initDfsDemo();
+        });
+
+        // DFS演示相关功能
+        function initDfsDemo() {
+            const gridSizeSelect = document.getElementById('grid-size');
+            const wallCountInput = document.getElementById('wall-count');
+            const wallValueSpan = document.getElementById('wall-value');
+            const generateBtn = document.getElementById('dfs-generate');
+            const runBtn = document.getElementById('dfs-run');
+            const resetBtn = document.getElementById('dfs-reset');
+            const statusSpan = document.getElementById('dfs-status');
+            const progressBar = document.getElementById('dfs-progress-bar');
+            const progressText = document.getElementById('dfs-progress-text');
+            const executionLog = document.getElementById('dfs-execution');
+            const gridBody = document.getElementById('grid-body');
+            const gridTable = document.getElementById('grid-table');
+            
+            let gridSize = 6;
+            let wallCount = 5;
+            let grid = [];
+            let visited = [];
+            let totalCells = 0;
+            let accessibleCells = 0; // 可访问的单元格总数（减去墙壁）
+            let visitedCount = 0;
+            let isRunning = false;
+            let currentPath = []; // 记录当前DFS路径，用于回溯显示
+            
+            // 方向数组: 上、右、下、左
+            const dx = [-1, 0, 1, 0];
+            const dy = [0, 1, 0, -1];
+            const dirNames = ['上', '右', '下', '左'];
+            
+            // 更新墙壁数量显示
+            wallCountInput.addEventListener('input', function() {
+                wallCount = parseInt(this.value);
+                wallValueSpan.textContent = wallCount;
+            });
+            
+            // 生成网格
+            generateBtn.addEventListener('click', generateGrid);
+            
+            // 运行DFS
+            runBtn.addEventListener('click', runDfs);
+            
+            // 重置演示
+            resetBtn.addEventListener('click', resetDemo);
+            
+            // 初始生成网格
+            generateGrid();
+            
+            // 生成网格函数
+            function generateGrid() {
+                if (isRunning) return;
+                
+                gridSize = parseInt(gridSizeSelect.value);
+                totalCells = gridSize * gridSize;
+                
+                // 初始化网格和访问标记
+                grid = Array(gridSize).fill().map(() => Array(gridSize).fill(0));
+                visited = Array(gridSize).fill().map(() => Array(gridSize).fill(false));
+                
+                // 生成随机墙壁
+                let wallsPlaced = 0;
+                while (wallsPlaced < wallCount) {
+                    const x = Math.floor(Math.random() * gridSize);
+                    const y = Math.floor(Math.random() * gridSize);
+                    
+                    // 确保起点(0,0)和终点(gridSize-1, gridSize-1)不是墙壁
+                    if ((x === 0 && y === 0) || (x === gridSize-1 && y === gridSize-1)) {
+                        continue;
+                    }
+                    
+                    if (grid[x][y] === 0) {
+                        grid[x][y] = 1;
+                        wallsPlaced++;
+                    }
+                }
+                
+                // 计算可访问的单元格数量
+                accessibleCells = totalCells - wallCount;
+                
+                // 清空执行日志
+                executionLog.innerHTML = '<div class="text-center text-gray-500 py-8"><i class="fa fa-arrow-down mb-2"></i><p>点击"运行DFS"开始演示</p></div>';
+                
+                // 重置进度
+                progressBar.style.width = '0%';
+                progressText.textContent = '0%';
+                statusSpan.textContent = '状态: 网格已生成，请点击"运行DFS"';
+                
+                // 绘制网格
+                drawGrid();
+            }
+            
+            // 绘制网格 - 确保网格以矩阵形式展示
+            function drawGrid() {
+                gridBody.innerHTML = '';
+                
+                // 确保表格样式正确应用
+                gridTable.className = 'grid-table';
+                
+                // 生成网格行和列
+                for (let i = 0; i < gridSize; i++) {
+                    const row = document.createElement('tr');
+                    row.className = 'grid-row';
+                    
+                    for (let j = 0; j < gridSize; j++) {
+                        const cell = document.createElement('td');
+                        cell.className = 'grid-cell';
+                        cell.dataset.x = i;
+                        cell.dataset.y = j;
+                        
+                        // 标记起点和终点
+                        if (i === 0 && j === 0) {
+                            cell.classList.add('grid-cell-start');
+                            cell.textContent = 'S';
+                        } else if (i === gridSize-1 && j === gridSize-1) {
+                            cell.classList.add('grid-cell-end');
+                            cell.textContent = 'E';
+                        } else if (grid[i][j] === 1) {
+                            cell.classList.add('grid-cell-wall');
+                            cell.textContent = 'W';
+                        } else {
+                            cell.textContent = `${i},${j}`;
+                        }
+                        
+                        row.appendChild(cell);
+                    }
+                    
+                    gridBody.appendChild(row);
+                }
+            }
+            
+            // 重置演示
+            function resetDemo() {
+                isRunning = false;
+                runBtn.disabled = false;
+                generateBtn.disabled = false;
+                
+                // 重置访问标记和计数
+                visited = Array(gridSize).fill().map(() => Array(gridSize).fill(false));
+                visitedCount = 0;
+                currentPath = [];
+                
+                // 清空执行日志
+                executionLog.innerHTML = '<div class="text-center text-gray-500 py-8"><i class="fa fa-arrow-down mb-2"></i><p>生成网格并点击"运行DFS"开始演示</p></div>';
+                
+                // 重置进度
+                progressBar.style.width = '0%';
+                progressText.textContent = '0%';
+                statusSpan.textContent = '状态: 已重置，请点击"运行DFS"';
+                
+                // 重置网格显示
+                drawGrid();
+                
+                // 重置代码高亮
+                resetCodeHighlight();
+            }
+            
+            // 运行DFS
+            function runDfs() {
+                if (isRunning) return;
+                
+                isRunning = true;
+                runBtn.disabled = true;
+                generateBtn.disabled = true;
+                statusSpan.textContent = '状态: 开始DFS遍历...';
+                
+                // 重置访问标记和计数
+                visited = Array(gridSize).fill().map(() => Array(gridSize).fill(false));
+                visitedCount = 0;
+                currentPath = [];
+                
+                // 清空执行日志
+                executionLog.innerHTML = '<div class="text-sm"><p>开始DFS遍历...</p></div>';
+                
+                // 重置代码高亮
+                resetCodeHighlight();
+                
+                // 从起点开始DFS
+                dfsStep(0, 0);
+            }
+            
+            // 递归DFS步骤（带延迟，用于动画演示）
+            async function dfsStep(x, y) {
+                // 如果已被重置，停止执行
+                if (!isRunning) return false;
+                
+                // 越界检查
+                if (x < 0 || x >= gridSize || y < 0 || y >= gridSize) {
+                    logExecution(`(${x},${y}) 越界，返回`);
+                    await delay(200);
+                    return false;
+                }
+                
+                // 检查是否访问过或为墙壁
+                if (visited[x][y]) {
+                    logExecution(`(${x},${y}) 已访问，返回`);
+                    await delay(200);
+                    return false;
+                }
+                
+                if (grid[x][y] === 1) {
+                    logExecution(`(${x},${y}) 是墙壁，返回`);
+                    await delay(200);
+                    return false;
+                }
+                
+                // 高亮当前代码行
+                highlightCodeLine(9); // void dfs(int x, int y) {
+                await delay(200);
+                
+                // 高亮参数检查
+                highlightCodeLine(11); // if (x < 0 || x >= 6 || y < 0 || y >= 6)
+                highlightCodeLine(12); // return;
+                await delay(200);
+                
+                // 高亮访问和墙壁检查
+                highlightCodeLine(15); // if (visited[x][y] || grid[x][y] == 1)
+                highlightCodeLine(16); // return;
+                await delay(200);
+                
+                // 标记为已访问
+                visited[x][y] = true;
+                visitedCount++;
+                updateProgress();
+                
+                // 将当前位置加入路径
+                currentPath.push({x, y});
+                
+                // 高亮标记访问代码
+                highlightCodeLine(19); // visited[x][y] = true;
+                await delay(200);
+                
+                // 更新网格显示 - 设置为当前位置
+                updateGridDisplay();
+                
+                logExecution(`访问 (${x},${y})，已访问 ${visitedCount} 个单元格`);
+                
+                // 如果到达终点
+                if (x === gridSize-1 && y === gridSize-1) {
+                    logExecution(`到达终点 (${x},${y})！`);
+                    highlightCodeLine(20); // 记录访问顺序
+                    await delay(1000);
+                    
+                    // 完成遍历
+                    completeTraversal();
+                    return true;
+                }
+                
+                // 高亮循环开始
+                highlightCodeLine(23); // for (int i = 0; i < 4; i++) {
+                await delay(200);
+                
+                // 尝试四个方向
+                for (let i = 0; i < 4; i++) {
+                    const nx = x + dx[i];
+                    const ny = y + dy[i];
+                    
+                    logExecution(`从 (${x},${y}) 尝试向${dirNames[i]}移动到 (${nx},${ny})`);
+                    
+                    // 高亮递归调用
+                    highlightCodeLine(24); // dfs(x + dx[i], y + dy[i]);
+                    await delay(200);
+                    
+                    // 递归调用
+                    const found = await dfsStep(nx, ny);
+                    
+                    if (found) {
+                        return true;
+                    }
+                }
+                
+                // 所有方向都探索完毕，回溯
+                logExecution(`(${x},${y}) 所有方向都已探索，回溯`);
+                
+                // 从当前路径移除
+                currentPath.pop();
+                
+                // 更新网格显示 - 标记为已回溯
+                updateGridDisplay();
+                await delay(200);
+                
+                return false;
+            }
+            
+            // 更新整个网格的显示状态
+            function updateGridDisplay() {
+                // 重置所有单元格的状态
+                document.querySelectorAll('.grid-cell').forEach(cell => {
+                    cell.classList.remove('grid-cell-current', 'grid-cell-visited', 'grid-cell-backtracked');
+                    
+                    const x = parseInt(cell.dataset.x);
+                    const y = parseInt(cell.dataset.y);
+                    
+                    // 保持起点和终点的特殊标记
+                    if (!((x === 0 && y === 0) || (x === gridSize-1 && y === gridSize-1)) && 
+                        grid[x][y] !== 1 && visited[x][y]) {
+                        
+                        // 检查是否在当前路径中
+                        const isInCurrentPath = currentPath.some(pos => pos.x === x && pos.y === y);
+                        
+                        if (isInCurrentPath) {
+                            // 当前路径上的节点（除了最后一个）
+                            if (currentPath[currentPath.length - 1].x === x && 
+                                currentPath[currentPath.length - 1].y === y) {
+                                cell.classList.add('grid-cell-current');
+                            } else {
+                                cell.classList.add('grid-cell-visited');
+                            }
+                        } else {
+                            // 已回溯的节点
+                            cell.classList.add('grid-cell-backtracked');
+                        }
+                    }
+                });
+            }
+            
+            // 完成遍历
+            function completeTraversal() {
+                statusSpan.textContent = `状态: DFS遍历完成，共访问 ${visitedCount} 个单元格`;
+                runBtn.disabled = false;
+                generateBtn.disabled = false;
+                isRunning = false;
+            }
+            
+            // 记录执行日志
+            function logExecution(message) {
+                const logItem = document.createElement('p');
+                logItem.className = 'mb-1';
+                logItem.textContent = message;
+                executionLog.appendChild(logItem);
+                executionLog.scrollTop = executionLog.scrollHeight;
+            }
+            
+            // 更新进度
+            function updateProgress() {
+                const progress = Math.round((visitedCount / accessibleCells) * 100);
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `${progress}%`;
+                statusSpan.textContent = `状态: 已访问 ${visitedCount}/${accessibleCells} 个单元格`;
+                
+                // 如果所有可达单元格都已访问
+                if (visitedCount === accessibleCells) {
+                    completeTraversal();
+                }
+            }
+            
+            // 重置代码高亮
+            function resetCodeHighlight() {
+                for (let i = 1; i <= 32; i++) {
+                    const line = document.getElementById(`dfs-code-${i}`);
+                    if (line) line.classList.remove('code-line-highlight');
+                }
+            }
+            
+            // 高亮指定代码行
+            function highlightCodeLine(lineNumber) {
+                resetCodeHighlight();
+                const line = document.getElementById(`dfs-code-${lineNumber}`);
+                if (line) line.classList.add('code-line-highlight');
+            }
+            
+            // 延迟函数
+            // 延迟函数，返回一个Promise对象，在指定的时间后执行resolve
+            function delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+    </script>
+</body>
+</html>

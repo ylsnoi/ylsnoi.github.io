@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dijkstra算法 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：鲜明的蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        syntax: '#FF9800', // 语法部分：橙色
+                        algorithm: '#2ECC71', // 算法部分：绿色
+                        datastructure: '#9C27B0', // 数据结构部分：深紫色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                        dijkstra: '#E91E63', // Dijkstra算法主题色：粉红色
+                        execution: '#FFEB3B', // 执行高亮：黄色
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .subcategory-bg {
+                @apply bg-gradient-to-r from-secondary/5 to-secondary/10;
+            }
+            .dijkstra-bg {
+                @apply bg-gradient-to-r from-dijkstra/5 to-dijkstra/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .dijkstra-header {
+                @apply font-bold text-dijkstra mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-dijkstra bg-dijkstra/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-dijkstra text-white text-center mr-2 text-xs;
+            }
+            .graph-node {
+                @apply w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-500;
+            }
+            .graph-node-normal {
+                @apply bg-gray-200 text-gray-800;
+            }
+            .graph-node-selected {
+                @apply bg-dijkstra text-white scale-110;
+            }
+            .graph-node-visited {
+                @apply bg-primary text-white;
+            }
+            .graph-edge {
+                @apply stroke-gray-400 stroke-2 transition-all duration-500;
+            }
+            .graph-edge-selected {
+                @apply stroke-dijkstra stroke-3;
+            }
+            .distance-label {
+                @apply text-center font-mono text-sm transition-all duration-300;
+            }
+            .distance-label-updated {
+                @apply text-dijkstra font-bold;
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-gray-100 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-dijkstra h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .code-line {
+                @apply transition-all duration-300;
+            }
+            .code-line-highlight {
+                @apply bg-execution/30 text-gray-900 font-medium;
+            }
+            .problem-card {
+                @apply border border-gray-200 rounded-lg p-4 hover:border-primary transition-all duration-300;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">算法基础</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">图论算法</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-dijkstra font-medium">Dijkstra算法</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="dijkstra-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-dijkstra mb-2">Dijkstra算法</h1>
+                    <p class="text-gray-700">
+                        Dijkstra算法是一种用于寻找图中最短路径的经典算法，由荷兰计算机科学家Edsger W. Dijkstra于1956年提出。
+                        本页面将详细讲解Dijkstra算法的原理、实现方法和优化技巧，帮助NOIP竞赛学生掌握这一重要算法。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-dijkstra hover:bg-dijkstra/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#problems" class="bg-white border border-dijkstra text-dijkstra hover:bg-dijkstra/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看题目
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dijkstra算法概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-dijkstra mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> Dijkstra算法概述
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">什么是Dijkstra算法？</h3>
+                    <p class="text-gray-700">
+                        Dijkstra算法是一种单源最短路径算法，用于计算图中一个顶点到其他所有顶点的最短路径。
+                        该算法要求图中所有边的权重都是非负数，这是其与其他最短路径算法（如Bellman-Ford）的主要区别。
+                    </p>
+                    <div class="bg-gray-50 p-4 rounded-lg mt-3">
+                        <h4 class="font-semibold mb-2">Dijkstra算法的应用场景：</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>地图导航中的最短路径规划</li>
+                            <li>网络路由算法</li>
+                            <li>交通流量分析</li>
+                            <li>电路板布线设计</li>
+                            <li>信息学竞赛中的路径优化问题</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">算法基本思想</h3>
+                    <p class="text-gray-700 mb-3">
+                        Dijkstra算法采用贪心策略，其基本思想是：
+                    </p>
+                    <ol class="list-decimal pl-5 space-y-2 mb-4">
+                        <li>设置一个源点，初始化源点到所有其他顶点的距离为无穷大，源点到自身的距离为0</li>
+                        <li>维护一个已确定最短路径的顶点集合（称为"已访问"集合）和一个未确定最短路径的顶点集合</li>
+                        <li>每次从"未访问"集合中选择距离源点最近的顶点u，将其加入"已访问"集合</li>
+                        <li>以u为中间点，更新源点到所有与u相邻的未访问顶点v的距离：如果源点到v的距离大于源点到u的距离加上u到v的边权，则更新距离</li>
+                        <li>重复步骤3和4，直到所有顶点都被加入"已访问"集合</li>
+                    </ol>
+                    
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                        <h4 class="font-semibold text-dijkstra">算法关键点</h4>
+                        <p class="text-sm text-gray-700">
+                            Dijkstra算法的核心是贪心选择——每次都选择当前距离源点最近的未访问顶点。由于图中边的权重都是非负数，
+                            一旦某个顶点被加入"已访问"集合，其最短路径就被永久确定，不会再被修改。这保证了算法的正确性。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dijkstra算法动画演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-dijkstra mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> Dijkstra算法执行过程演示
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 算法动画 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">Dijkstra算法寻找最短路径的过程</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了Dijkstra算法从起点到其他所有顶点的最短路径计算过程。
+                                您可以控制动画速度，观察每一步的执行情况。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">选择起点:</label>
+                                <select id="start-node" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-dijkstra">
+                                    <option value="0">节点 A (0)</option>
+                                    <option value="1">节点 B (1)</option>
+                                    <option value="2">节点 C (2)</option>
+                                    <option value="3">节点 D (3)</option>
+                                    <option value="4">节点 E (4)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="flex space-x-2 mb-4">
+                                <button id="dijkstra-run" class="bg-dijkstra hover:bg-dijkstra/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行动画
+                                </button>
+                                <button id="dijkstra-step" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-step-forward mr-2"></i> 单步执行
+                                </button>
+                                <button id="dijkstra-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">动画速度:</label>
+                                <input type="range" id="animation-speed" min="1" max="10" value="5" 
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-dijkstra">
+                            </div>
+                            
+                            <div id="dijkstra-status" class="animation-status">
+                                状态: 等待开始
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h4 class="font-semibold text-sm mb-2">距离表:</h4>
+                                <div id="distance-table" class="grid grid-cols-2 gap-2 text-sm">
+                                    <div class="bg-white p-2 rounded border border-gray-200">A: <span id="dist-0" class="distance-label">∞</span></div>
+                                    <div class="bg-white p-2 rounded border border-gray-200">B: <span id="dist-1" class="distance-label">∞</span></div>
+                                    <div class="bg-white p-2 rounded border border-gray-200">C: <span id="dist-2" class="distance-label">∞</span></div>
+                                    <div class="bg-white p-2 rounded border border-gray-200">D: <span id="dist-3" class="distance-label">∞</span></div>
+                                    <div class="bg-white p-2 rounded border border-gray-200">E: <span id="dist-4" class="distance-label">∞</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 flex items-center justify-center" id="graph-container">
+                                <!-- 图将通过JS绘制 -->
+                                <svg id="graph-svg" width="100%" height="100%" viewBox="0 0 400 300">
+                                    <!-- 节点 -->
+                                    <g id="nodes">
+                                        <circle class="graph-node graph-node-normal" cx="200" cy="50" r="20" data-id="0">A</circle>
+                                        <circle class="graph-node graph-node-normal" cx="100" cy="150" r="20" data-id="1">B</circle>
+                                        <circle class="graph-node graph-node-normal" cx="300" cy="150" r="20" data-id="2">C</circle>
+                                        <circle class="graph-node graph-node-normal" cx="150" cy="250" r="20" data-id="3">D</circle>
+                                        <circle class="graph-node graph-node-normal" cx="250" cy="250" r="20" data-id="4">E</circle>
+                                    </g>
+                                    
+                                    <!-- 边 -->
+                                    <g id="edges">
+                                        <line class="graph-edge" x1="185" y1="70" x2="115" y2="130" data-from="0" data-to="1" data-weight="4"/>
+                                        <text x="145" y="90" text-anchor="middle" fill="#666" font-size="12">4</text>
+                                        
+                                        <line class="graph-edge" x1="215" y1="70" x2="285" y2="130" data-from="0" data-to="2" data-weight="2"/>
+                                        <text x="250" y="90" text-anchor="middle" fill="#666" font-size="12">2</text>
+                                        
+                                        <line class="graph-edge" x1="115" y1="170" x2="135" y2="230" data-from="1" data-to="3" data-weight="5"/>
+                                        <text x="120" y="200" text-anchor="middle" fill="#666" font-size="12">5</text>
+                                        
+                                        <line class="graph-edge" x1="100" y1="170" x2="100" y2="230" data-from="1" data-to="3" data-weight="5"/>
+                                        
+                                        <line class="graph-edge" x1="285" y1="170" x2="265" y2="230" data-from="2" data-to="4" data-weight="3"/>
+                                        <text x="275" y="200" text-anchor="middle" fill="#666" font-size="12">3</text>
+                                        
+                                        <line class="graph-edge" x1="115" y1="150" x2="285" y2="150" data-from="1" data-to="2" data-weight="1"/>
+                                        <text x="200" y="140" text-anchor="middle" fill="#666" font-size="12">1</text>
+                                        
+                                        <line class="graph-edge" x1="170" y1="250" x2="230" y2="250" data-from="3" data-to="4" data-weight="2"/>
+                                        <text x="200" y="260" text-anchor="middle" fill="#666" font-size="12">2</text>
+                                        
+                                        <line class="graph-edge" x1="200" y1="70" x2="200" y2="230" data-from="0" data-to="3" data-weight="7"/>
+                                        <text x="190" y="150" text-anchor="middle" fill="#666" font-size="12">7</text>
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="dijkstra-code">
+                                <div class="code-line" id="dcode-1">#include &lt;iostream&gt;</div>
+                                <div class="code-line" id="dcode-2">#include &lt;vector&gt;</div>
+                                <div class="code-line" id="dcode-3">#include &lt;queue&gt;</div>
+                                <div class="code-line" id="dcode-4">#include &lt;climits&gt;</div>
+                                <div class="code-line" id="dcode-5">using namespace std;</div>
+                                <div class="code-line" id="dcode-6">&nbsp;</div>
+                                <div class="code-line" id="dcode-7">const int INF = INT_MAX;</div>
+                                <div class="code-line" id="dcode-8">&nbsp;</div>
+                                <div class="code-line" id="dcode-9">// Dijkstra算法实现</div>
+                                <div class="code-line" id="dcode-10">vector<int> dijkstra(int start, const vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt;& graph) {</div>
+                                <div class="code-line" id="dcode-11">&nbsp;&nbsp;int n = graph.size();</div>
+                                <div class="code-line" id="dcode-12">&nbsp;&nbsp;vector&lt;int&gt; dist(n, INF); // 距离数组</div>
+                                <div class="code-line" id="dcode-13">&nbsp;&nbsp;vector&lt;bool&gt; visited(n, false); // 访问标记</div>
+                                <div class="code-line" id="dcode-14">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="dcode-15">&nbsp;&nbsp;dist[start] = 0; // 起点距离为0</div>
+                                <div class="code-line" id="dcode-16">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="dcode-17">&nbsp;&nbsp;// 优先队列: (距离, 节点)，小根堆</div>
+                                <div class="code-line" id="dcode-18">&nbsp;&nbsp;priority_queue&lt;pair&lt;int, int&gt;, vector&lt;pair&lt;int, int&gt;&gt;, greater&lt;pair&lt;int, int&gt;&gt;&gt; pq;</div>
+                                <div class="code-line" id="dcode-19">&nbsp;&nbsp;pq.push({0, start});</div>
+                                <div class="code-line" id="dcode-20">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="dcode-21">&nbsp;&nbsp;while (!pq.empty()) {</div>
+                                <div class="code-line" id="dcode-22">&nbsp;&nbsp;&nbsp;&nbsp;// 取出距离最小的节点</div>
+                                <div class="code-line" id="dcode-23">&nbsp;&nbsp;&nbsp;&nbsp;int u = pq.top().second;</div>
+                                <div class="code-line" id="dcode-24">&nbsp;&nbsp;&nbsp;&nbsp;int current_dist = pq.top().first;</div>
+                                <div class="code-line" id="dcode-25">&nbsp;&nbsp;&nbsp;&nbsp;pq.pop();</div>
+                                <div class="code-line" id="dcode-26">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                                <div class="code-line" id="dcode-27">&nbsp;&nbsp;&nbsp;&nbsp;// 已访问过，跳过</div>
+                                <div class="code-line" id="dcode-28">&nbsp;&nbsp;&nbsp;&nbsp;if (visited[u]) continue;</div>
+                                <div class="code-line" id="dcode-29">&nbsp;&nbsp;&nbsp;&nbsp;visited[u] = true;</div>
+                                <div class="code-line" id="dcode-30">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                                <div class="code-line" id="dcode-31">&nbsp;&nbsp;&nbsp;&nbsp;// 松弛操作</div>
+                                <div class="code-line" id="dcode-32">&nbsp;&nbsp;&nbsp;&nbsp;for (auto &edge : graph[u]) {</div>
+                                <div class="code-line" id="dcode-33">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int v = edge.first;</div>
+                                <div class="code-line" id="dcode-34">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int weight = edge.second;</div>
+                                <div class="code-line" id="dcode-35">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                                <div class="code-line" id="dcode-36">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// 更新距离</div>
+                                <div class="code-line" id="dcode-37">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (dist[v] > dist[u] + weight) {</div>
+                                <div class="code-line" id="dcode-38">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist[v] = dist[u] + weight;</div>
+                                <div class="code-line" id="dcode-39">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pq.push({dist[v], v});</div>
+                                <div class="code-line" id="dcode-40">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+                                <div class="code-line" id="dcode-41">&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+                                <div class="code-line" id="dcode-42">&nbsp;&nbsp;}</div>
+                                <div class="code-line" id="dcode-43">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="dcode-44">&nbsp;&nbsp;return dist;</div>
+                                <div class="code-line" id="dcode-45">}</div>
+                                <div class="code-line" id="dcode-46">&nbsp;</div>
+                                <div class="code-line" id="dcode-47">int main() {</div>
+                                <div class="code-line" id="dcode-48">&nbsp;&nbsp;// 图的邻接表表示</div>
+                                <div class="code-line" id="dcode-49">&nbsp;&nbsp;vector&lt;vector&lt;pair&lt;int, int&gt;&gt;&gt; graph = {</div>
+                                <div class="code-line" id="dcode-50">&nbsp;&nbsp;&nbsp;&nbsp;{{1, 4}, {2, 2}, {3, 7}}, // 节点0的邻居</div>
+                                <div class="code-line" id="dcode-51">&nbsp;&nbsp;&nbsp;&nbsp;{{3, 5}, {2, 1}},         // 节点1的邻居</div>
+                                <div class="code-line" id="dcode-52">&nbsp;&nbsp;&nbsp;&nbsp;{{4, 3}},                 // 节点2的邻居</div>
+                                <div class="code-line" id="dcode-53">&nbsp;&nbsp;&nbsp;&nbsp;{{4, 2}},                 // 节点3的邻居</div>
+                                <div class="code-line" id="dcode-54">&nbsp;&nbsp;&nbsp;&nbsp;{}                        // 节点4的邻居</div>
+                                <div class="code-line" id="dcode-55">&nbsp;&nbsp;};</div>
+                                <div class="code-line" id="dcode-56">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="dcode-57">&nbsp;&nbsp;int start = 0;</div>
+                                <div class="code-line" id="dcode-58">&nbsp;&nbsp;vector&lt;int&gt; distances = dijkstra(start, graph);</div>
+                                <div class="code-line" id="dcode-59">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="dcode-60">&nbsp;&nbsp;// 输出结果</div>
+                                <div class="code-line" id="dcode-61">&nbsp;&nbsp;cout << "从节点" << start << "出发的最短距离:" << endl;</div>
+                                <div class="code-line" id="dcode-62">&nbsp;&nbsp;for (int i = 0; i < distances.size(); i++) {</div>
+                                <div class="code-line" id="dcode-63">&nbsp;&nbsp;&nbsp;&nbsp;cout << "到节点" << i << ": " << distances[i] << endl;</div>
+                                <div class="code-line" id="dcode-64">&nbsp;&nbsp;}</div>
+                                <div class="code-line" id="dcode-65">&nbsp;&nbsp;</div>
+                                <div class="code-line" id="dcode-66">&nbsp;&nbsp;return 0;</div>
+                                <div class="code-line" id="dcode-67">}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dijkstra算法实现与优化 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-dijkstra mb-6 flex items-center">
+                <i class="fa fa-code-fork mr-2"></i> Dijkstra算法实现与优化
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-3">基础实现（邻接矩阵）</h3>
+                        <p class="text-gray-700 mb-3">
+                            使用邻接矩阵存储图，时间复杂度为O(n²)，适合顶点数量较少的情况（n ≤ 1000）。
+                        </p>
+                        
+                        <pre class="code-block text-xs"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+const int INF = INT_MAX;
+
+// 邻接矩阵实现的Dijkstra算法
+vector<int> dijkstraMatrix(int start, const vector<vector<int>>& graph) {
+    int n = graph.size();
+    vector<int> dist(n, INF);  // 距离数组
+    vector<bool> visited(n, false);  // 访问标记
+    
+    dist[start] = 0;  // 起点到自身距离为0
+    
+    for (int i = 0; i < n; i++) {
+        // 找到未访问节点中距离最小的节点
+        int u = -1;
+        for (int j = 0; j < n; j++) {
+            if (!visited[j] && (u == -1 || dist[j] < dist[u])) {
+                u = j;
+            }
+        }
+        
+        if (dist[u] == INF) break;  // 无法到达剩余节点
+        visited[u] = true;
+        
+        // 松弛操作
+        for (int v = 0; v < n; v++) {
+            if (!visited[v] && graph[u][v] != INF && 
+                dist[v] > dist[u] + graph[u][v]) {
+                dist[v] = dist[u] + graph[u][v];
+            }
+        }
+    }
+    
+    return dist;
+}</code></pre>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-3">优化实现（邻接表+优先队列）</h3>
+                        <p class="text-gray-700 mb-3">
+                            使用邻接表存储图，结合优先队列（小根堆）优化，时间复杂度为O(m log n)，适合稀疏图。
+                        </p>
+                        
+                        <pre class="code-block text-xs"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+using namespace std;
+
+const int INF = INT_MAX;
+
+// 邻接表+优先队列优化的Dijkstra算法
+vector<int> dijkstraHeap(int start, const vector<vector<pair<int, int>>>& graph) {
+    int n = graph.size();
+    vector<int> dist(n, INF);  // 距离数组
+    vector<bool> visited(n, false);  // 访问标记
+    
+    // 优先队列: (距离, 节点)，小根堆
+    priority_queue<pair<int, int>, vector<pair<int, int>>, 
+                  greater<pair<int, int>>> pq;
+    
+    dist[start] = 0;
+    pq.push({0, start});
+    
+    while (!pq.empty()) {
+        // 取出距离最小的节点
+        int u = pq.top().second;
+        pq.pop();
+        
+        if (visited[u]) continue;
+        visited[u] = true;
+        
+        // 松弛操作
+        for (const auto& edge : graph[u]) {
+            int v = edge.first;    // 邻接节点
+            int weight = edge.second;  // 边权
+            
+            if (dist[v] > dist[u] + weight) {
+                dist[v] = dist[u] + weight;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+    
+    return dist;
+}</code></pre>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">算法复杂度分析</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-dijkstra mb-2">邻接矩阵实现</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                                <li>时间复杂度：O(n²)，其中n是顶点数量</li>
+                                <li>外层循环执行n次，每次内层循环查找最小距离的顶点需要O(n)时间</li>
+                                <li>每次松弛操作需要O(n)时间</li>
+                                <li>空间复杂度：O(n²)，用于存储邻接矩阵</li>
+                                <li>适用于顶点数较少的稠密图</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-dijkstra mb-2">邻接表+优先队列实现</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                                <li>时间复杂度：O(m log n)，其中m是边的数量</li>
+                                <li>每个边最多被处理一次，每次优先队列操作是O(log n)</li>
+                                <li>空间复杂度：O(n + m)，用于存储邻接表和优先队列</li>
+                                <li>适用于顶点数较多的稀疏图</li>
+                                <li>是信息学竞赛中最常用的实现方式</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">竞赛中的常见优化技巧</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white p-3 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-primary mb-2">使用堆优化</h4>
+                            <p class="text-sm text-gray-700">
+                                采用优先队列（小根堆）替代线性查找，大幅降低查找最小距离顶点的时间开销。
+                            </p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-primary mb-2">忽略已处理节点</h4>
+                            <p class="text-sm text-gray-700">
+                                对已确定最短路径的节点做标记，避免重复处理，提高效率。
+                            </p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-primary mb-2">适当使用数组</h4>
+                            <p class="text-sm text-gray-700">
+                                在顶点编号连续且范围较小时，使用数组代替vector可略微提高效率。
+                            </p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-primary mb-2">距离无穷大设定</h4>
+                            <p class="text-sm text-gray-700">
+                                根据题目数据范围合理设置INF值，避免溢出（如1e9+7）。
+                            </p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-primary mb-2">提前退出</h4>
+                            <p class="text-sm text-gray-700">
+                                如果只需要到达特定终点的最短路径，找到该节点后可提前终止算法。
+                            </p>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-primary mb-2">手写堆结构</h4>
+                            <p class="text-sm text-gray-700">
+                                在极端性能要求下，可手写堆结构替代STL的priority_queue，减少开销。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dijkstra算法代码示例 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-dijkstra mb-6 flex items-center">
+                <i class="fa fa-code mr-2"></i> 算法代码示例 (C++)
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 基础示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">1. 基础模板 - 标准实现</h3>
+                    <p class="text-gray-700 mb-3">
+                        Dijkstra算法的标准实现，适用于大多数图论最短路径问题
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+using namespace std;
+
+const int INF = 1e9;  // 根据题目数据范围设置
+
+// 邻接表：graph[u]存储(u, v, w)的集合，即u到v的边权为w
+vector<int> dijkstra(int start, int n, const vector<vector<pair<int, int>>>& graph) {
+    vector<int> dist(n + 1, INF);  // 距离数组，1-based索引
+    vector<bool> visited(n + 1, false);  // 访问标记
+    
+    // 优先队列：(距离, 节点)，小根堆
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    
+    dist[start] = 0;
+    pq.push({0, start});
+    
+    while (!pq.empty()) {
+        int u = pq.top().second;
+        pq.pop();
+        
+        if (visited[u]) continue;
+        visited[u] = true;
+        
+        // 遍历所有邻接边
+        for (const auto& edge : graph[u]) {
+            int v = edge.first;
+            int weight = edge.second;
+            
+            // 松弛操作
+            if (dist[v] > dist[u] + weight) {
+                dist[v] = dist[u] + weight;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+    
+    return dist;
+}
+
+int main() {
+    int n, m;  // n: 顶点数, m: 边数
+    cin >> n >> m;
+    
+    // 初始化邻接表
+    vector<vector<pair<int, int>>> graph(n + 1);
+    
+    for (int i = 0; i < m; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        graph[u].push_back({v, w});
+        // 如果是无向图，添加下面一行
+        // graph[v].push_back({u, w});
+    }
+    
+    int start;
+    cin >> start;
+    
+    vector<int> distances = dijkstra(start, n, graph);
+    
+    // 输出从起点到各点的最短距离
+    for (int i = 1; i <= n; i++) {
+        if (distances[i] == INF) {
+            cout << "无法到达节点 " << i << endl;
+        } else {
+            cout << "到节点 " << i << " 的最短距离: " << distances[i] << endl;
+        }
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 记录路径示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">2. 进阶应用 - 记录最短路径</h3>
+                    <p class="text-gray-700 mb-3">
+                        在计算最短距离的同时，记录最短路径的具体走向
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+#include <stack>
+using namespace std;
+
+const int INF = 1e9;
+
+// 返回最短距离数组和路径前驱数组
+pair<vector<int>, vector<int>> dijkstraWithPath(int start, int n, 
+                              const vector<vector<pair<int, int>>>& graph) {
+    vector<int> dist(n + 1, INF);
+    vector<int> prev(n + 1, -1);  // 前驱节点，用于还原路径
+    vector<bool> visited(n + 1, false);
+    
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    
+    dist[start] = 0;
+    pq.push({0, start});
+    
+    while (!pq.empty()) {
+        int u = pq.top().second;
+        pq.pop();
+        
+        if (visited[u]) continue;
+        visited[u] = true;
+        
+        for (const auto& edge : graph[u]) {
+            int v = edge.first;
+            int weight = edge.second;
+            
+            if (dist[v] > dist[u] + weight) {
+                dist[v] = dist[u] + weight;
+                prev[v] = u;  // 记录前驱节点
+                pq.push({dist[v], v});
+            }
+        }
+    }
+    
+    return {dist, prev};
+}
+
+// 从前驱数组还原路径
+vector<int> getPath(int end, const vector<int>& prev) {
+    vector<int> path;
+    if (prev[end] == -1) {
+        return path;  // 无法到达
+    }
+    
+    // 从终点回溯到起点
+    stack<int> s;
+    for (int v = end; v != -1; v = prev[v]) {
+        s.push(v);
+    }
+    
+    // 反转得到路径
+    while (!s.empty()) {
+        path.push_back(s.top());
+        s.pop();
+    }
+    
+    return path;
+}
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    
+    vector<vector<pair<int, int>>> graph(n + 1);
+    
+    for (int i = 0; i < m; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        graph[u].push_back({v, w});
+    }
+    
+    int start, end;
+    cin >> start >> end;
+    
+    auto [dist, prev] = dijkstraWithPath(start, n, graph);
+    
+    if (dist[end] == INF) {
+        cout << "从 " << start << " 到 " << end << " 没有路径" << endl;
+    } else {
+        cout << "从 " << start << " 到 " << end << " 的最短距离: " << dist[end] << endl;
+        
+        vector<int> path = getPath(end, prev);
+        cout << "最短路径: ";
+        for (int i = 0; i < path.size(); i++) {
+            if (i > 0) cout << " -> ";
+            cout << path[i];
+        }
+        cout << endl;
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 多源最短路示例 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">3. 扩展应用 - 多源最短路径</h3>
+                    <p class="text-gray-700 mb-3">
+                        从多个起点同时出发，计算到各点的最短距离（如消防站选址问题）
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <queue>
+#include <climits>
+using namespace std;
+
+const int INF = 1e9;
+
+// 多源Dijkstra算法
+vector<int> multiSourceDijkstra(const vector<int>& sources, int n,
+                              const vector<vector<pair<int, int>>>& graph) {
+    vector<int> dist(n + 1, INF);
+    vector<bool> visited(n + 1, false);
+    
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    
+    // 所有源点的距离都设为0
+    for (int s : sources) {
+        dist[s] = 0;
+        pq.push({0, s});
+    }
+    
+    while (!pq.empty()) {
+        int u = pq.top().second;
+        pq.pop();
+        
+        if (visited[u]) continue;
+        visited[u] = true;
+        
+        for (const auto& edge : graph[u]) {
+            int v = edge.first;
+            int weight = edge.second;
+            
+            if (dist[v] > dist[u] + weight) {
+                dist[v] = dist[u] + weight;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+    
+    return dist;
+}
+
+int main() {
+    int n, m, k;  // k为源点数量
+    cin >> n >> m >> k;
+    
+    vector<vector<pair<int, int>>> graph(n + 1);
+    
+    for (int i = 0; i < m; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        graph[u].push_back({v, w});
+        graph[v].push_back({u, w});  // 无向图
+    }
+    
+    vector<int> sources(k);
+    cout << "输入" << k << "个源点: ";
+    for (int i = 0; i < k; i++) {
+        cin >> sources[i];
+    }
+    
+    vector<int> distances = multiSourceDijkstra(sources, n, graph);
+    
+    // 输出各点到最近源点的距离
+    for (int i = 1; i <= n; i++) {
+        cout << "节点 " << i << " 到最近源点的距离: " << distances[i] << endl;
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 推荐练习题 -->
+        <section id="problems" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-dijkstra mb-6 flex items-center">
+                <i class="fa fa-tasks mr-2"></i> 推荐练习题（洛谷）
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-primary">模板题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-bold">P3371 【模板】单源最短路径（弱化版）</h4>
+                                <span class="bg-primary/10 text-primary text-xs px-2 py-1 rounded">普及-</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">
+                                最基础的单源最短路径问题，适合初学者熟悉Dijkstra算法的基本实现。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P3371" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-bold">P4779 【模板】单源最短路径（标准版）</h4>
+                                <span class="bg-primary/10 text-primary text-xs px-2 py-1 rounded">普及+</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">
+                                需要使用堆优化的Dijkstra算法才能通过的模板题，适合练习优化实现。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P4779" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-bold">P1339 [USACO09OCT]Heat Wave G</h4>
+                                <span class="bg-primary/10 text-primary text-xs px-2 py-1 rounded">普及-</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">
+                                经典的单源最短路径问题，数据量适中，适合巩固基础实现。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1339" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-primary">入门题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-bold">P1629 邮递员送信</h4>
+                                <span class="bg-primary/10 text-primary text-xs px-2 py-1 rounded">普及+</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">
+                                往返路径问题，可通过建立反向图求解，考查对算法的灵活应用。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1629" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-bold">P2387 [NOI2014] 魔法森林</h4>
+                                <span class="bg-secondary/10 text-secondary text-xs px-2 py-1 rounded">提高+</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">
+                                结合了最小生成树思想的最短路径问题，适合练习算法的综合应用。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P2387" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-bold">P1462 通往奥格瑞玛的道路</h4>
+                                <span class="bg-primary/10 text-primary text-xs px-2 py-1 rounded">普及+</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">
+                                带限制条件的最短路径问题，可通过二分法结合Dijkstra算法求解。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1462" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-primary">进阶题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-bold">P5960 【模板】差分约束算法</h4>
+                                <span class="bg-secondary/10 text-secondary text-xs px-2 py-1 rounded">提高+</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">
+                                差分约束系统问题，可转化为最短路径问题求解，考查算法的变形应用。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P5960" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-bold">P3953 逛公园</h4>
+                                <span class="bg-secondary/10 text-secondary text-xs px-2 py-1 rounded">提高+</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">
+                                统计不超过最短路径长度k的路径数量，结合了动态规划和最短路径算法。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P3953" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="problem-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-bold">P4568 [JLOI2011] 飞行路线</h4>
+                                <span class="bg-secondary/10 text-secondary text-xs px-2 py-1 rounded">提高+</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">
+                                允许免费乘坐k次航班的最短路径问题，需要状态扩展的Dijkstra算法。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P4568" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            initDijkstraAnimation();
+        });
+
+        // Dijkstra算法动画演示
+        function initDijkstraAnimation() {
+            // 图的邻接表表示
+            const graph = [
+                [[1, 4], [2, 2], [3, 7]],  // 0
+                [[3, 5], [2, 1]],          // 1
+                [[4, 3]],                  // 2
+                [[4, 2]],                  // 3
+                []                         // 4
+            ];
+            
+            // 节点名称映射
+            const nodeNames = ['A', 'B', 'C', 'D', 'E'];
+            
+            // 动画状态变量
+            let animationRunning = false;
+            let animationStep = 0;
+            let animationInterval;
+            let currentStep = 0;
+            let steps = [];
+            let dist = [];
+            let visited = [];
+            let startNode = 0;
+            
+            // 获取DOM元素
+            const runBtn = document.getElementById('dijkstra-run');
+            const stepBtn = document.getElementById('dijkstra-step');
+            const resetBtn = document.getElementById('dijkstra-reset');
+            const speedSlider = document.getElementById('animation-speed');
+            const statusEl = document.getElementById('dijkstra-status');
+            const startNodeSelect = document.getElementById('start-node');
+            const codeLines = [];
+            for (let i = 1; i <= 67; i++) {
+                codeLines.push(document.getElementById(`dcode-${i}`));
+            }
+            
+            // 重置动画
+            resetBtn.addEventListener('click', resetAnimation);
+            
+            // 单步执行
+            stepBtn.addEventListener('click', () => {
+                if (animationRunning) return;
+                if (currentStep < steps.length) {
+                    executeStep(currentStep);
+                    currentStep++;
+                } else if (steps.length > 0) {
+                    statusEl.textContent = '状态: 算法执行完成';
+                }
+            });
+            
+            // 运行动画
+            runBtn.addEventListener('click', () => {
+                if (animationRunning) {
+                    // 停止动画
+                    clearInterval(animationInterval);
+                    runBtn.innerHTML = '<i class="fa fa-play mr-2"></i> 运行动画';
+                    animationRunning = false;
+                    return;
+                }
+                
+                // 开始或继续动画
+                if (steps.length === 0 || currentStep >= steps.length) {
+                    resetAnimation();
+                }
+                
+                const speed = 11 - speedSlider.value; // 反转速度值，使滑块右侧更快
+                animationInterval = setInterval(() => {
+                    if (currentStep < steps.length) {
+                        executeStep(currentStep);
+                        currentStep++;
+                    } else {
+                        clearInterval(animationInterval);
+                        runBtn.innerHTML = '<i class="fa fa-play mr-2"></i> 运行动画';
+                        animationRunning = false;
+                        statusEl.textContent = '状态: 算法执行完成';
+                    }
+                }, speed * 100);
+                
+                runBtn.innerHTML = '<i class="fa fa-pause mr-2"></i> 暂停';
+                animationRunning = true;
+            });
+            
+            // 选择起点变化
+            startNodeSelect.addEventListener('change', () => {
+                resetAnimation();
+            });
+            
+            // 重置动画状态
+            function resetAnimation() {
+                // 清除动画
+                if (animationRunning) {
+                    clearInterval(animationInterval);
+                    animationRunning = false;
+                    runBtn.innerHTML = '<i class="fa fa-play mr-2"></i> 运行动画';
+                }
+                
+                // 重置节点状态
+                document.querySelectorAll('.graph-node').forEach(node => {
+                    node.classList.remove('graph-node-selected', 'graph-node-visited');
+                    node.classList.add('graph-node-normal');
+                });
+                
+                // 重置边状态
+                document.querySelectorAll('.graph-edge').forEach(edge => {
+                    edge.classList.remove('graph-edge-selected');
+                });
+                
+                // 重置距离标签
+                for (let i = 0; i < 5; i++) {
+                    const el = document.getElementById(`dist-${i}`);
+                    el.textContent = '∞';
+                    el.classList.remove('distance-label-updated');
+                }
+                
+                // 重置代码高亮
+                codeLines.forEach(line => {
+                    line.classList.remove('code-line-highlight');
+                });
+                
+                // 重置状态变量
+                currentStep = 0;
+                steps = [];
+                startNode = parseInt(startNodeSelect.value);
+                
+                // 初始化距离数组
+                dist = new Array(5).fill(Infinity);
+                dist[startNode] = 0;
+                visited = new Array(5).fill(false);
+                
+                // 更新起点距离显示
+                document.getElementById(`dist-${startNode}`).textContent = '0';
+                
+                // 生成算法步骤
+                generateSteps();
+                
+                // 更新状态
+                statusEl.textContent = '状态: 已重置，等待开始';
+            }
+            
+            // 生成算法执行步骤
+            function generateSteps() {
+                // 复制初始距离数组
+                const tempDist = [...dist];
+                const tempVisited = [...visited];
+                
+                // 使用优先队列模拟Dijkstra算法，记录每一步
+                const pq = [];
+                pq.push({ distance: 0, node: startNode });
+                
+                // 步骤1: 初始化
+                steps.push({
+                    type: 'init',
+                    node: startNode,
+                    message: `初始化：起点为${nodeNames[startNode]}，距离设为0，其他节点距离设为无穷大`
+                });
+                
+                while (pq.length > 0) {
+                    // 排序找到距离最小的节点
+                    pq.sort((a, b) => a.distance - b.distance);
+                    const current = pq.shift();
+                    const u = current.node;
+                    
+                    if (tempVisited[u]) continue;
+                    tempVisited[u] = true;
+                    
+                    // 步骤2: 选择当前距离最小的未访问节点
+                    steps.push({
+                        type: 'select',
+                        node: u,
+                        message: `选择距离最小的未访问节点${nodeNames[u]}，距离为${tempDist[u]}`
+                    });
+                    
+                    // 步骤3: 标记为已访问
+                    steps.push({
+                        type: 'visit',
+                        node: u,
+                        message: `标记节点${nodeNames[u]}为已访问`
+                    });
+                    
+                    // 遍历邻居节点
+                    for (const edge of graph[u]) {
+                        const v = edge[0];
+                        const weight = edge[1];
+                        
+                        // 步骤4: 检查邻居节点
+                        steps.push({
+                            type: 'check',
+                            from: u,
+                            to: v,
+                            weight: weight,
+                            message: `检查节点${nodeNames[u]}到${nodeNames[v]}的边，权重为${weight}`
+                        });
+                        
+                        // 松弛操作
+                        if (tempDist[v] > tempDist[u] + weight) {
+                            const oldDist = tempDist[v];
+                            tempDist[v] = tempDist[u] + weight;
+                            
+                            // 步骤5: 更新距离
+                            steps.push({
+                                type: 'update',
+                                node: v,
+                                oldDist: oldDist,
+                                newDist: tempDist[v],
+                                message: `更新节点${nodeNames[v]}的距离：${oldDist === Infinity ? '∞' : oldDist} → ${tempDist[v]}`
+                            });
+                            
+                            pq.push({ distance: tempDist[v], node: v });
+                        } else {
+                            // 步骤5: 不更新距离
+                            steps.push({
+                                type: 'no-update',
+                                node: v,
+                                currentDist: tempDist[v],
+                                possibleDist: tempDist[u] + weight,
+                                message: `无需更新节点${nodeNames[v]}的距离：当前${tempDist[v] === Infinity ? '∞' : tempDist[v]} ≤ ${tempDist[u] + weight}`
+                            });
+                        }
+                    }
+                }
+                
+                // 步骤6: 算法完成
+                steps.push({
+                    type: 'complete',
+                    message: '算法执行完成，已找到从起点到所有可达节点的最短距离'
+                });
+            }
+            
+            // 执行一步动画
+            function executeStep(stepIndex) {
+                const step = steps[stepIndex];
+                const progress = ((stepIndex + 1) / steps.length) * 100;
+                
+                // 重置所有代码高亮
+                codeLines.forEach(line => {
+                    line.classList.remove('code-line-highlight');
+                });
+                
+                // 重置所有边状态
+                document.querySelectorAll('.graph-edge').forEach(edge => {
+                    edge.classList.remove('graph-edge-selected');
+                });
+                
+                // 重置所有距离标签高亮
+                for (let i = 0; i < 5; i++) {
+                    document.getElementById(`dist-${i}`).classList.remove('distance-label-updated');
+                }
+                
+                // 根据步骤类型执行不同操作
+                switch (step.type) {
+                    case 'init':
+                        // 高亮初始化代码
+                        codeLines[11].classList.add('code-line-highlight'); // vector<int> dist(n, INF);
+                        codeLines[12].classList.add('code-line-highlight'); // vector<bool> visited(n, false);
+                        codeLines[14].classList.add('code-line-highlight'); // dist[start] = 0;
+                        
+                        // 高亮起点
+                        document.querySelectorAll('.graph-node').forEach(node => {
+                            node.classList.remove('graph-node-selected', 'graph-node-visited');
+                            node.classList.add('graph-node-normal');
+                        });
+                        document.querySelector(`.graph-node[data-id="${step.node}"]`).classList.add('graph-node-selected');
+                        break;
+                        
+                    case 'select':
+                        // 高亮选择节点代码
+                        codeLines[22].classList.add('code-line-highlight'); // 取出距离最小的节点注释
+                        codeLines[23].classList.add('code-line-highlight'); // int u = pq.top().second;
+                        codeLines[24].classList.add('code-line-highlight'); // int current_dist = pq.top().first;
+                        codeLines[25].classList.add('code-line-highlight'); // pq.pop();
+                        
+                        // 高亮当前选中的节点
+                        document.querySelectorAll('.graph-node').forEach(node => {
+                            node.classList.remove('graph-node-selected');
+                        });
+                        document.querySelector(`.graph-node[data-id="${step.node}"]`).classList.add('graph-node-selected');
+                        break;
+                        
+                    case 'visit':
+                        // 高亮标记访问代码
+                        codeLines[27].classList.add('code-line-highlight'); // 已访问过，跳过注释
+                        codeLines[28].classList.add('code-line-highlight'); // if (visited[u]) continue;
+                        codeLines[29].classList.add('code-line-highlight'); // visited[u] = true;
+                        
+                        // 标记节点为已访问
+                        document.querySelector(`.graph-node[data-id="${step.node}"]`).classList.remove('graph-node-selected');
+                        document.querySelector(`.graph-node[data-id="${step.node}"]`).classList.add('graph-node-visited');
+                        break;
+                        
+                    case 'check':
+                        // 高亮检查邻居代码
+                        codeLines[31].classList.add('code-line-highlight'); // 松弛操作注释
+                        codeLines[32].classList.add('code-line-highlight'); // for (auto &edge : graph[u]) {
+                        codeLines[33].classList.add('code-line-highlight'); // int v = edge.first;
+                        codeLines[34].classList.add('code-line-highlight'); // int weight = edge.second;
+                        
+                        // 高亮当前边
+                        document.querySelectorAll(`.graph-edge[data-from="${step.from}"][data-to="${step.to}"]`).forEach(edge => {
+                            edge.classList.add('graph-edge-selected');
+                        });
+                        break;
+                        
+                    case 'update':
+                        // 高亮更新距离代码
+                        codeLines[36].classList.add('code-line-highlight'); // 更新距离注释
+                        codeLines[37].classList.add('code-line-highlight'); // if (dist[v] > dist[u] + weight) {
+                        codeLines[38].classList.add('code-line-highlight'); // dist[v] = dist[u] + weight;
+                        codeLines[39].classList.add('code-line-highlight'); // pq.push({dist[v], v});
+                        codeLines[40].classList.add('code-line-highlight'); // }
+                        
+                        // 更新距离显示
+                        const distEl = document.getElementById(`dist-${step.node}`);
+                        distEl.textContent = step.newDist;
+                        distEl.classList.add('distance-label-updated');
+                        dist[step.node] = step.newDist;
+                        break;
+                        
+                    case 'no-update':
+                        // 高亮不更新的条件
+                        codeLines[37].classList.add('code-line-highlight'); // if (dist[v] > dist[u] + weight) {
+                        break;
+                        
+                    case 'complete':
+                        // 高亮完成部分
+                        codeLines[44].classList.add('code-line-highlight'); // return dist;
+                        break;
+                }
+                
+                // 更新状态信息
+                statusEl.textContent = `状态: ${step.message}`;
+            }
+            
+            // 初始化动画
+            resetAnimation();
+        }
+    </script>
+</body>
+</html>
