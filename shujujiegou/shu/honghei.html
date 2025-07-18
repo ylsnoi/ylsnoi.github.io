@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>红黑树 - 信息学奥赛教程</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0',
+                        secondary: '#6C63FF',
+                        syntax: '#FF9800',
+                        algorithm: '#2ECC71',
+                        datastructure: '#9C27B0',
+                        darkbg: '#F8FAFC',
+                        cardbg: '#FFFFFF',
+                        hoverbg: '#F0F2F5',
+                        rb_red: '#E53E3E',
+                        rb_black: '#1A202C',
+                        execution: '#FFEB3B',
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .subcategory-bg {
+                @apply bg-gradient-to-r from-secondary/5 to-secondary/10;
+            }
+            .datastructure-bg {
+                @apply bg-gradient-to-r from-datastructure/5 to-datastructure/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .datastructure-header {
+                @apply font-bold text-datastructure mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-datastructure bg-datastructure/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-datastructure text-white text-center mr-2 text-xs;
+            }
+            .rb-node {
+                @apply w-12 h-12 rounded-full flex items-center justify-center text-white font-bold border-2 border-white transition-all duration-500;
+            }
+            .rb-node-red {
+                @apply bg-rb_red;
+            }
+            .rb-node-black {
+                @apply bg-rb_black;
+            }
+            .rb-node-highlight {
+                @apply scale-125 shadow-lg;
+            }
+            .rb-connection {
+                @apply absolute border-l-2 border-gray-400 transform -translate-x-1/2;
+            }
+            .tree-container {
+                @apply relative min-h-[400px] my-6 overflow-x-auto px-4;
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-gray-100 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-datastructure h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .code-line {
+                @apply transition-all duration-300;
+            }
+            .code-line-highlight {
+                @apply bg-execution/30 text-gray-900 font-medium;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">信息学奥赛教程</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">数据结构</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">树结构</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-datastructure font-medium">红黑树</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="datastructure-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-datastructure mb-2">红黑树</h1>
+                    <p class="text-gray-700">
+                        红黑树是一种自平衡二叉查找树，在信息学奥赛中常用于需要高效插入、删除和查找操作的场景。本页面将详细讲解红黑树的性质、操作原理和实现方法，
+                        帮助NOIP竞赛学生掌握这一重要数据结构。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-datastructure hover:bg-datastructure/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#problems" class="bg-white border border-datastructure text-datastructure hover:bg-datastructure/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看题目
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 红黑树概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-datastructure mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 红黑树概述
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">什么是红黑树？</h3>
+                    <p class="text-gray-700">
+                        红黑树是一种自平衡的二叉查找树（BST），它通过在每个节点上增加一个存储位来表示节点的颜色（红色或黑色），并通过一系列规则确保树在插入和删除操作后仍然保持平衡。
+                        这种平衡机制使得红黑树的查找、插入和删除操作的时间复杂度均为O(log n)。
+                    </p>
+                    <div class="bg-gray-50 p-4 rounded-lg mt-3">
+                        <h4 class="font-semibold mb-2">红黑树的优势：</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>保持二叉查找树的特性，支持高效的查找操作</li>
+                            <li>自平衡机制确保树的高度始终保持在O(log n)级别</li>
+                            <li>插入和删除操作的旋转次数少，实际性能优于AVL树</li>
+                            <li>适用于需要频繁插入和删除的场景</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">红黑树的五大性质</h3>
+                    <p class="text-gray-700 mb-3">
+                        红黑树通过以下五条性质保证其平衡性：
+                    </p>
+                    <div class="space-y-3">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="font-semibold text-datastructure">性质1：</div>
+                            <p class="text-gray-700">每个节点要么是红色，要么是黑色。</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="font-semibold text-datastructure">性质2：</div>
+                            <p class="text-gray-700">根节点是黑色的。</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="font-semibold text-datastructure">性质3：</div>
+                            <p class="text-gray-700">所有叶子节点（NIL节点）都是黑色的。</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="font-semibold text-datastructure">性质4：</div>
+                            <p class="text-gray-700">如果一个节点是红色的，则它的两个子节点都是黑色的（即不存在两个连续的红色节点）。</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <div class="font-semibold text-datastructure">性质5：</div>
+                            <p class="text-gray-700">从任意一个节点到其所有后代叶子节点的路径上，均包含相同数量的黑色节点。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 红黑树操作动画演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-datastructure mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> 红黑树插入操作演示
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 红黑树插入动画 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">红黑树插入与平衡调整过程</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了红黑树插入新节点的完整过程，包括节点插入、颜色调整和旋转操作，以维护红黑树的五大性质。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">输入要插入的值（1-100）:</label>
+                                <div>
+                                    <input type="number" id="insert-value" value="10" min="1" max="100"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-datastructure">
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-2 mb-4">
+                                <button id="insert-run" class="bg-datastructure hover:bg-datastructure/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 插入并演示
+                                </button>
+                                <button id="tree-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">演示速度:</label>
+                                <input type="range" id="animation-speed" min="1" max="10" value="5" 
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-datastructure">
+                            </div>
+                            
+                            <div id="insert-status" class="animation-status">
+                                状态: 准备就绪，请输入值并点击"插入并演示"
+                            </div>
+                            
+                            <div class="animation-progress">
+                                <div id="insert-progress-bar" class="animation-progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-2">
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 mb-4">
+                                <h4 class="font-semibold mb-2">红黑树结构</h4>
+                                <div id="tree-visualization" class="tree-container">
+                                    <div class="flex justify-center items-center h-64">
+                                        <div class="text-center text-gray-500">
+                                            <i class="fa fa-tree text-4xl mb-3 text-datastructure/50"></i>
+                                            <p>树为空，插入第一个节点开始演示</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border border-gray-200 rounded-lg p-4">
+                                <h4 class="font-semibold mb-2">操作步骤</h4>
+                                <div id="operation-steps" class="max-h-40 overflow-y-auto text-sm">
+                                    <p class="text-gray-500 italic text-center py-4">等待操作开始...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 红黑树基本操作代码 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">红黑树节点结构与基本操作</h3>
+                    <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+// 颜色定义
+enum Color { RED, BLACK };
+
+// 红黑树节点结构
+struct Node {
+    int data;
+    Color color;
+    Node *left, *right, *parent;
+    
+    // 构造函数
+    Node(int val) : data(val), color(RED), left(nullptr), right(nullptr), parent(nullptr) {}
+};
+
+class RedBlackTree {
+private:
+    Node* root;
+    Node* nil;  // 哨兵节点，代表NIL
+    
+    // 左旋操作
+    void leftRotate(Node* x) {
+        Node* y = x->right;
+        x->right = y->left;
+        
+        if (y->left != nil)
+            y->left->parent = x;
+            
+        y->parent = x->parent;
+        
+        if (x->parent == nil)
+            root = y;
+        else if (x == x->parent->left)
+            x->parent->left = y;
+        else
+            x->parent->right = y;
+            
+        y->left = x;
+        x->parent = y;
+    }
+    
+    // 右旋操作
+    void rightRotate(Node* y) {
+        Node* x = y->left;
+        y->left = x->right;
+        
+        if (x->right != nil)
+            x->right->parent = y;
+            
+        x->parent = y->parent;
+        
+        if (y->parent == nil)
+            root = x;
+        else if (y == y->parent->right)
+            y->parent->right = x;
+        else
+            y->parent->left = x;
+            
+        x->right = y;
+        y->parent = x;
+    }
+    
+    // 插入后修复红黑树性质
+    void insertFixup(Node* z) {
+        while (z->parent->color == RED) {
+            if (z->parent == z->parent->parent->left) {
+                Node* y = z->parent->parent->right;  // 叔叔节点
+                
+                // 情况1：叔叔是红色
+                if (y->color == RED) {
+                    z->parent->color = BLACK;
+                    y->color = BLACK;
+                    z->parent->parent->color = RED;
+                    z = z->parent->parent;
+                } 
+                // 情况2：叔叔是黑色，且z是右孩子
+                else {
+                    if (z == z->parent->right) {
+                        z = z->parent;
+                        leftRotate(z);
+                    }
+                    // 情况3：叔叔是黑色，且z是左孩子
+                    z->parent->color = BLACK;
+                    z->parent->parent->color = RED;
+                    rightRotate(z->parent->parent);
+                }
+            } 
+            // 镜像情况：父节点是祖父节点的右孩子
+            else {
+                Node* y = z->parent->parent->left;  // 叔叔节点
+                
+                // 情况1：叔叔是红色
+                if (y->color == RED) {
+                    z->parent->color = BLACK;
+                    y->color = BLACK;
+                    z->parent->parent->color = RED;
+                    z = z->parent->parent;
+                } 
+                // 情况2：叔叔是黑色，且z是左孩子
+                else {
+                    if (z == z->parent->left) {
+                        z = z->parent;
+                        rightRotate(z);
+                    }
+                    // 情况3：叔叔是黑色，且z是右孩子
+                    z->parent->color = BLACK;
+                    z->parent->parent->color = RED;
+                    leftRotate(z->parent->parent);
+                }
+            }
+        }
+        root->color = BLACK;  // 确保根节点是黑色
+    }
+    
+    // 中序遍历
+    void inorderHelper(Node* node) {
+        if (node != nil) {
+            inorderHelper(node->left);
+            cout << node->data << "(" << (node->color == RED ? "红" : "黑") << ") ";
+            inorderHelper(node->right);
+        }
+    }
+    
+public:
+    // 构造函数
+    RedBlackTree() {
+        nil = new Node(0);
+        nil->color = BLACK;
+        root = nil;
+    }
+    
+    // 插入操作
+    void insert(int val) {
+        Node* z = new Node(val);
+        Node* y = nil;
+        Node* x = root;
+        
+        // 找到插入位置
+        while (x != nil) {
+            y = x;
+            if (z->data < x->data)
+                x = x->left;
+            else
+                x = x->right;
+        }
+        
+        z->parent = y;
+        if (y == nil)
+            root = z;
+        else if (z->data < y->data)
+            y->left = z;
+        else
+            y->right = z;
+            
+        z->left = nil;
+        z->right = nil;
+        z->color = RED;  // 新节点默认为红色
+        
+        insertFixup(z);  // 修复红黑树性质
+    }
+    
+    // 中序遍历
+    void inorder() {
+        inorderHelper(root);
+        cout << endl;
+    }
+};</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 推荐题目 -->
+        <section id="problems" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-datastructure mb-6 flex items-center">
+                <i class="fa fa-tasks mr-2"></i> 推荐练习题目 (洛谷)
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 模板题 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="inline-block w-8 h-8 rounded-full bg-green-100 text-green-600 text-center leading-8 mr-2">1</span>
+                        模板题
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-datastructure/50 transition-all">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P3369 【模板】普通平衡树</h4>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">入门</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">
+                                实现一个支持插入、删除、查询排名、查询第k大等操作的平衡树。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P3369" target="_blank" class="text-datastructure hover:text-datastructure/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-datastructure/50 transition-all">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P6136 【模板】普通平衡树（数据加强版）</h4>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">普及+/提高</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">
+                                数据范围更大的平衡树模板题，对实现效率有更高要求。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P6136" target="_blank" class="text-datastructure hover:text-datastructure/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 入门题 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="inline-block w-8 h-8 rounded-full bg-blue-100 text-blue-600 text-center leading-8 mr-2">2</span>
+                        入门题
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-datastructure/50 transition-all">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P1168 中位数</h4>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">入门</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">
+                                动态维护一个序列的中位数，可使用平衡树或两个堆实现。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1168" target="_blank" class="text-datastructure hover:text-datastructure/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-datastructure/50 transition-all">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P1908 逆序对</h4>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">普及+/提高</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">
+                                统计逆序对数量，可用平衡树或归并排序实现。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1908" target="_blank" class="text-datastructure hover:text-datastructure/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 进阶题 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="inline-block w-8 h-8 rounded-full bg-red-100 text-red-600 text-center leading-8 mr-2">3</span>
+                        进阶题
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-datastructure/50 transition-all">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P3391 【模板】文艺平衡树</h4>
+                                <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">提高+/省选-</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">
+                                实现支持区间翻转的平衡树，即splay树或Treap的进阶应用。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P3391" target="_blank" class="text-datastructure hover:text-datastructure/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-datastructure/50 transition-all">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold">P5055 【模板】可持久化平衡树</h4>
+                                <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">省选/NOI-</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">
+                                实现可持久化的平衡树，支持查询历史版本，是平衡树的高级应用。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P5055" target="_blank" class="text-datastructure hover:text-datastructure/80 text-sm flex items-center">
+                                查看题目 <i class="fa fa-external-link ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white border-t border-gray-200 py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa fa-code text-primary text-xl"></i>
+                        <span class="font-bold text-gray-800">信息学奥赛教程</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-1">专注于信息学奥林匹克竞赛教学</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-500 hover:text-primary transition-colors">
+                        <i class="fa fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-primary transition-colors">
+                        <i class="fa fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-primary transition-colors">
+                        <i class="fa fa-envelope text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-6 text-center text-sm text-gray-500">
+                © 2023 信息学奥赛教程 版权所有
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            initRedBlackTreeDemo();
+        });
+
+        // 红黑树演示功能 - 修复了多次插入节点的问题
+        function initRedBlackTreeDemo() {
+            // 红黑树节点类
+            class RBNode {
+                constructor(value) {
+                    this.value = value;
+                    this.color = 'red'; // 新节点默认为红色
+                    this.left = null;
+                    this.right = null;
+                    this.parent = null;
+                    this.id = 'node-' + Date.now() + '-' + Math.floor(Math.random() * 10000); // 唯一ID用于DOM操作
+                }
+            }
+
+            // 红黑树演示类
+            class RBTreeDemo {
+                constructor(visualizationContainer, stepsContainer, statusElement, progressBar) {
+                    this.root = null;
+                    this.nil = new RBNode(null);
+                    this.nil.color = 'black';
+                    this.nil.id = 'nil-node';
+                    this.visualizationContainer = visualizationContainer;
+                    this.stepsContainer = stepsContainer;
+                    this.statusElement = statusElement;
+                    this.progressBar = progressBar;
+                    this.animationSpeed = 1000 - (document.getElementById('animation-speed').value - 1) * 100;
+                    this.currentStep = 0;
+                    this.totalSteps = 0;
+                    this.animationQueue = [];
+                    this.isAnimating = false;
+                }
+
+                // 重置树
+                reset() {
+                    this.root = null;
+                    this.animationQueue = [];
+                    this.isAnimating = false;
+                    this.currentStep = 0;
+                    this.totalSteps = 0;
+                    this.updateProgress();
+                    this.visualizationContainer.innerHTML = `
+                        <div class="flex justify-center items-center h-64">
+                            <div class="text-center text-gray-500">
+                                <i class="fa fa-tree text-4xl mb-3 text-datastructure/50"></i>
+                                <p>树为空，插入第一个节点开始演示</p>
+                            </div>
+                        </div>
+                    `;
+                    this.stepsContainer.innerHTML = '<p class="text-gray-500 italic text-center py-4">等待操作开始...</p>';
+                    this.statusElement.textContent = '状态: 准备就绪，请输入值并点击"插入并演示"';
+                }
+
+                // 设置动画速度
+                setSpeed(speedValue) {
+                    this.animationSpeed = 1000 - (speedValue - 1) * 100;
+                }
+
+                // 添加步骤说明
+                addStep(description) {
+                    this.totalSteps++;
+                    const stepElement = document.createElement('div');
+                    stepElement.className = 'p-2 border-b border-gray-100';
+                    stepElement.innerHTML = `<strong>步骤 ${this.totalSteps}:</strong> ${description}`;
+                    this.stepsContainer.appendChild(stepElement);
+                    this.stepsContainer.scrollTop = this.stepsContainer.scrollHeight;
+                }
+
+                // 更新进度条
+                updateProgress() {
+                    const progress = this.totalSteps > 0 ? (this.currentStep / this.totalSteps) * 100 : 0;
+                    this.progressBar.style.width = `${progress}%`;
+                }
+
+                // 更新状态
+                updateStatus(status) {
+                    this.statusElement.textContent = `状态: ${status}`;
+                }
+
+                // 添加动画到队列
+                queueAnimation(callback) {
+                    this.animationQueue.push(callback);
+                }
+
+                // 执行动画队列
+                async runAnimationQueue() {
+                    if (this.isAnimating) return;
+                    this.isAnimating = true;
+                    
+                    for (const animation of this.animationQueue) {
+                        this.currentStep++;
+                        this.updateProgress();
+                        await animation();
+                        await new Promise(resolve => setTimeout(resolve, this.animationSpeed));
+                    }
+                    
+                    this.animationQueue = [];
+                    this.isAnimating = false;
+                    this.updateStatus('操作完成，可以插入新节点');
+                }
+
+                // 插入节点并演示
+                async insertAndAnimate(value) {
+                    if (this.isAnimating) {
+                        alert('正在执行动画，请等待当前操作完成');
+                        return;
+                    }
+                    
+                    // 检查值是否已存在
+                    if (this.contains(value)) {
+                        alert(`值 ${value} 已存在于树中，请选择其他值`);
+                        return;
+                    }
+                    
+                    // 重置步骤
+                    this.stepsContainer.innerHTML = '';
+                    this.currentStep = 0;
+                    this.totalSteps = 0;
+                    this.updateProgress();
+                    
+                    this.updateStatus('开始插入操作');
+                    
+                    // 创建新节点
+                    const z = new RBNode(value);
+                    z.left = this.nil;
+                    z.right = this.nil;
+                    
+                    // 步骤1：查找插入位置
+                    this.addStep(`准备插入值为 ${value} 的节点`);
+                    this.queueAnimation(() => this.visualizeInsertPosition(z));
+                    
+                    let y = this.nil;
+                    let x = this.root;
+                    
+                    // 记录查找路径，用于动画展示
+                    const searchPath = [];
+                    if (x) searchPath.push(x);
+                    
+                    while (x !== this.nil && x !== null) {
+                        y = x;
+                        if (z.value < x.value) {
+                            x = x.left;
+                            if (x && x !== this.nil) searchPath.push(x);
+                        } else {
+                            x = x.right;
+                            if (x && x !== this.nil) searchPath.push(x);
+                        }
+                    }
+                    
+                    // 添加查找路径的动画步骤
+                    for (let i = 0; i < searchPath.length; i++) {
+                        const node = searchPath[i];
+                        const nextNode = searchPath[i+1];
+                        let direction = "";
+                        
+                        if (nextNode) {
+                            direction = node.left === nextNode ? 
+                                `${z.value} 更小，移向左子树` : 
+                                `${z.value} 更大，移向右子树`;
+                        } else {
+                            direction = z.value < node.value ? 
+                                `${z.value} 更小，将插入到左子树` : 
+                                `${z.value} 更大，将插入到右子树`;
+                        }
+                        
+                        this.addStep(`当前节点 ${node.value}，${direction}`);
+                        this.queueAnimation(() => {
+                            this.visualize();
+                            this.highlightNode(node, true);
+                        });
+                    }
+                    
+                    // 步骤2：插入节点
+                    z.parent = y;
+                    if (y === this.nil || y === null) {
+                        this.root = z;
+                        this.addStep(`树为空，${z.value} 成为根节点`);
+                    } else if (z.value < y.value) {
+                        y.left = z;
+                        this.addStep(`将 ${z.value} 插入为 ${y.value} 的左孩子`);
+                    } else {
+                        y.right = z;
+                        this.addStep(`将 ${z.value} 插入为 ${y.value} 的右孩子`);
+                    }
+                    
+                    // 确保新节点被正确渲染
+                    this.queueAnimation(() => {
+                        this.visualize();
+                        this.highlightNode(z, true);
+                    });
+                    
+                    // 新节点默认为红色
+                    this.addStep(`新插入节点 ${z.value} 初始颜色为红色`);
+                    this.queueAnimation(() => this.highlightNode(z, true));
+                    
+                    // 如果是根节点，设置为黑色
+                    if (z.parent === null) {
+                        z.color = 'black';
+                        this.addStep(`根节点 ${z.value} 颜色设置为黑色`);
+                        this.queueAnimation(() => this.visualize());
+                        await this.runAnimationQueue();
+                        return;
+                    }
+                    
+                    // 如果父节点是黑色，不需要调整
+                    if (z.parent.color === 'black') {
+                        this.addStep(`父节点是黑色，无需调整，插入完成`);
+                        this.queueAnimation(() => this.visualize());
+                        await this.runAnimationQueue();
+                        return;
+                    }
+                    
+                    // 否则需要修复红黑树性质
+                    this.addStep(`父节点是红色，需要修复红黑树性质`);
+                    this.queueAnimation(() => this.highlightNode(z.parent, true));
+                    
+                    // 执行插入修复
+                    await this.insertFixupAnimate(z);
+                    
+                    // 确保根节点是黑色
+                    if (this.root.color !== 'black') {
+                        this.root.color = 'black';
+                        this.addStep(`确保根节点为黑色`);
+                        this.queueAnimation(() => this.visualize());
+                    }
+                    
+                    this.addStep(`插入完成，红黑树性质已恢复`);
+                    this.queueAnimation(() => this.visualize());
+                    
+                    // 运行所有动画
+                    await this.runAnimationQueue();
+                }
+
+                // 检查树中是否包含某个值
+                contains(value) {
+                    let current = this.root;
+                    while (current !== null && current !== this.nil) {
+                        if (current.value === value) {
+                            return true;
+                        } else if (value < current.value) {
+                            current = current.left;
+                        } else {
+                            current = current.right;
+                        }
+                    }
+                    return false;
+                }
+
+                // 插入修复动画
+                async insertFixupAnimate(z) {
+                    // 确保z有父节点且父节点是红色
+                    while (z.parent && z.parent.color === 'red') {
+                        if (!z.parent.parent) break; // 防止空引用错误
+                        
+                        if (z.parent === z.parent.parent.left) {
+                            const y = z.parent.parent.right; // 叔叔节点
+                            
+                            this.addStep(`父节点是祖父节点的左孩子，获取叔叔节点 ${y.value || 'NIL'}`);
+                            this.queueAnimation(() => {
+                                this.visualize();
+                                if (y !== this.nil) this.highlightNode(y, true);
+                                if (z.parent.parent) this.highlightNode(z.parent.parent, true);
+                            });
+                            
+                            // 情况1：叔叔是红色
+                            if (y !== this.nil && y.color === 'red') {
+                                this.addStep(`情况1：叔叔节点 ${y.value} 是红色，进行颜色调整`);
+                                this.queueAnimation(() => {
+                                    this.highlightNode(z.parent, true);
+                                    this.highlightNode(y, true);
+                                    this.highlightNode(z.parent.parent, true);
+                                });
+                                
+                                z.parent.color = 'black';
+                                y.color = 'black';
+                                z.parent.parent.color = 'red';
+                                
+                                this.addStep(`父节点 ${z.parent.value} 和叔叔节点 ${y.value} 设为黑色，祖父节点 ${z.parent.parent.value} 设为红色`);
+                                this.queueAnimation(() => this.visualize());
+                                
+                                z = z.parent.parent;
+                                this.addStep(`将当前节点移至祖父节点 ${z.value}`);
+                                this.queueAnimation(() => this.highlightNode(z, true));
+                            } else {
+                                // 情况2：叔叔是黑色，且z是右孩子
+                                if (z === z.parent.right) {
+                                    this.addStep(`情况2：叔叔是黑色，且当前节点是右孩子，进行左旋`);
+                                    this.queueAnimation(() => {
+                                        this.highlightNode(z, true);
+                                        this.highlightNode(z.parent, true);
+                                    });
+                                    
+                                    z = z.parent;
+                                    this.leftRotate(z);
+                                    
+                                    this.addStep(`以 ${z.value} 为轴进行左旋`);
+                                    this.queueAnimation(() => this.visualize());
+                                }
+                                
+                                // 情况3：叔叔是黑色，且z是左孩子
+                                this.addStep(`情况3：叔叔是黑色，且当前节点是左孩子，进行颜色调整和右旋`);
+                                this.queueAnimation(() => {
+                                    this.highlightNode(z.parent, true);
+                                    this.highlightNode(z.parent.parent, true);
+                                });
+                                
+                                z.parent.color = 'black';
+                                z.parent.parent.color = 'red';
+                                
+                                this.addStep(`父节点 ${z.parent.value} 设为黑色，祖父节点 ${z.parent.parent.value} 设为红色`);
+                                this.queueAnimation(() => this.visualize());
+                                
+                                this.rightRotate(z.parent.parent);
+                                this.addStep(`以祖父节点 ${z.parent.parent.value} 为轴进行右旋`);
+                                this.queueAnimation(() => this.visualize());
+                                
+                                z = this.root; // 退出循环
+                            }
+                        } else {
+                            // 镜像情况：父节点是祖父节点的右孩子
+                            const y = z.parent.parent.left; // 叔叔节点
+                            
+                            this.addStep(`父节点是祖父节点的右孩子，获取叔叔节点 ${y.value || 'NIL'}`);
+                            this.queueAnimation(() => {
+                                this.visualize();
+                                if (y !== this.nil) this.highlightNode(y, true);
+                                if (z.parent.parent) this.highlightNode(z.parent.parent, true);
+                            });
+                            
+                            // 情况1：叔叔是红色
+                            if (y !== this.nil && y.color === 'red') {
+                                this.addStep(`情况1：叔叔节点 ${y.value} 是红色，进行颜色调整`);
+                                this.queueAnimation(() => {
+                                    this.highlightNode(z.parent, true);
+                                    this.highlightNode(y, true);
+                                    this.highlightNode(z.parent.parent, true);
+                                });
+                                
+                                z.parent.color = 'black';
+                                y.color = 'black';
+                                z.parent.parent.color = 'red';
+                                
+                                this.addStep(`父节点 ${z.parent.value} 和叔叔节点 ${y.value} 设为黑色，祖父节点 ${z.parent.parent.value} 设为红色`);
+                                this.queueAnimation(() => this.visualize());
+                                
+                                z = z.parent.parent;
+                                this.addStep(`将当前节点移至祖父节点 ${z.value}`);
+                                this.queueAnimation(() => this.highlightNode(z, true));
+                            } else {
+                                // 情况2：叔叔是黑色，且z是左孩子
+                                if (z === z.parent.left) {
+                                    this.addStep(`情况2：叔叔是黑色，且当前节点是左孩子，进行右旋`);
+                                    this.queueAnimation(() => {
+                                        this.highlightNode(z, true);
+                                        this.highlightNode(z.parent, true);
+                                    });
+                                    
+                                    z = z.parent;
+                                    this.rightRotate(z);
+                                    
+                                    this.addStep(`以 ${z.value} 为轴进行右旋`);
+                                    this.queueAnimation(() => this.visualize());
+                                }
+                                
+                                // 情况3：叔叔是黑色，且z是右孩子
+                                this.addStep(`情况3：叔叔是黑色，且当前节点是右孩子，进行颜色调整和左旋`);
+                                this.queueAnimation(() => {
+                                    this.highlightNode(z.parent, true);
+                                    this.highlightNode(z.parent.parent, true);
+                                });
+                                
+                                z.parent.color = 'black';
+                                z.parent.parent.color = 'red';
+                                
+                                this.addStep(`父节点 ${z.parent.value} 设为黑色，祖父节点 ${z.parent.parent.value} 设为红色`);
+                                this.queueAnimation(() => this.visualize());
+                                
+                                this.leftRotate(z.parent.parent);
+                                this.addStep(`以祖父节点 ${z.parent.parent.value} 为轴进行左旋`);
+                                this.queueAnimation(() => this.visualize());
+                                
+                                z = this.root; // 退出循环
+                            }
+                        }
+                        
+                        // 安全检查，防止无限循环
+                        if (!z.parent || !z.parent.parent) break;
+                    }
+                }
+
+                // 左旋
+                leftRotate(x) {
+                    if (!x || !x.right) return;
+                    
+                    const y = x.right;
+                    x.right = y.left;
+                    
+                    if (y.left !== this.nil) {
+                        y.left.parent = x;
+                    }
+                    
+                    y.parent = x.parent;
+                    
+                    if (x.parent === null) {
+                        this.root = y;
+                    } else if (x === x.parent.left) {
+                        x.parent.left = y;
+                    } else {
+                        x.parent.right = y;
+                    }
+                    
+                    y.left = x;
+                    x.parent = y;
+                }
+
+                // 右旋
+                rightRotate(y) {
+                    if (!y || !y.left) return;
+                    
+                    const x = y.left;
+                    y.left = x.right;
+                    
+                    if (x.right !== this.nil) {
+                        x.right.parent = y;
+                    }
+                    
+                    x.parent = y.parent;
+                    
+                    if (y.parent === null) {
+                        this.root = x;
+                    } else if (y === y.parent.right) {
+                        y.parent.right = x;
+                    } else {
+                        y.parent.left = x;
+                    }
+                    
+                    x.right = y;
+                    y.parent = x;
+                }
+
+                // 可视化插入位置
+                visualizeInsertPosition(newNode) {
+                    if (!this.root) {
+                        this.visualizationContainer.innerHTML = `
+                            <div class="flex justify-center items-center h-64">
+                                <div class="text-center">
+                                    <p class="mb-4">将插入根节点 ${newNode.value}</p>
+                                </div>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    this.visualize();
+                }
+
+                // 高亮节点
+                highlightNode(node, highlight) {
+                    if (!node || node === this.nil) return;
+                    
+                    const nodeElement = this.visualizationContainer.querySelector(`[data-node-id="${node.id}"]`);
+                    if (nodeElement) {
+                        if (highlight) {
+                            nodeElement.classList.add('rb-node-highlight');
+                        } else {
+                            nodeElement.classList.remove('rb-node-highlight');
+                        }
+                    }
+                }
+
+                // 可视化树结构 - 改进了多次插入的显示问题
+                visualize() {
+                    if (!this.root) {
+                        this.visualizationContainer.innerHTML = `
+                            <div class="flex justify-center items-center h-64">
+                                <div class="text-center text-gray-500">
+                                    <i class="fa fa-tree text-4xl mb-3 text-datastructure/50"></i>
+                                    <p>树为空，插入第一个节点开始演示</p>
+                                </div>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    // 创建树容器
+                    const treeHtml = document.createElement('div');
+                    treeHtml.className = 'flex justify-center';
+                    treeHtml.appendChild(this.buildTreeHtml(this.root));
+                    
+                    // 清空并重新添加树结构，确保所有节点都被正确渲染
+                    this.visualizationContainer.innerHTML = '';
+                    this.visualizationContainer.appendChild(treeHtml);
+                }
+
+                // 递归构建树的HTML - 修复了节点关系和显示问题
+                buildTreeHtml(node, level = 0) {
+                    if (node === this.nil) {
+                        const nilContainer = document.createElement('div');
+                        nilContainer.className = 'flex flex-col items-center';
+                        
+                        const nilNode = document.createElement('div');
+                        nilNode.className = 'rb-node rb-node-black mt-8';
+                        nilNode.textContent = 'NIL';
+                        nilNode.style.width = '80px';
+                        nilNode.style.height = '30px';
+                        nilNode.dataset.nodeId = node.id;
+                        
+                        nilContainer.appendChild(nilNode);
+                        return nilContainer;
+                    }
+                    
+                    const nodeContainer = document.createElement('div');
+                    nodeContainer.className = 'flex flex-col items-center';
+                    
+                    // 创建节点元素
+                    const nodeElement = document.createElement('div');
+                    nodeElement.className = `rb-node ${node.color === 'red' ? 'rb-node-red' : 'rb-node-black'}`;
+                    nodeElement.dataset.nodeId = node.id;  // 使用唯一ID标识节点
+                    nodeElement.dataset.value = node.value;
+                    nodeElement.textContent = node.value;
+                    nodeContainer.appendChild(nodeElement);
+                    
+                    // 如果有子节点，创建连接线和子节点容器
+                    if (node.left !== this.nil || node.right !== this.nil) {
+                        const childrenContainer = document.createElement('div');
+                        childrenContainer.className = 'flex mt-4 space-x-8';
+                        
+                        // 左子树
+                        const leftContainer = document.createElement('div');
+                        leftContainer.className = 'flex flex-col items-center';
+                        
+                        if (node.left !== this.nil) {
+                            const leftLine = document.createElement('div');
+                            leftLine.className = 'rb-connection h-8';
+                            leftContainer.appendChild(leftLine);
+                            leftContainer.appendChild(this.buildTreeHtml(node.left, level + 1));
+                        } else {
+                            leftContainer.appendChild(this.buildTreeHtml(node.left, level + 1));
+                        }
+                        
+                        // 右子树
+                        const rightContainer = document.createElement('div');
+                        rightContainer.className = 'flex flex-col items-center';
+                        
+                        if (node.right !== this.nil) {
+                            const rightLine = document.createElement('div');
+                            rightLine.className = 'rb-connection h-8';
+                            rightContainer.appendChild(rightLine);
+                            rightContainer.appendChild(this.buildTreeHtml(node.right, level + 1));
+                        } else {
+                            rightContainer.appendChild(this.buildTreeHtml(node.right, level + 1));
+                        }
+                        
+                        childrenContainer.appendChild(leftContainer);
+                        childrenContainer.appendChild(rightContainer);
+                        nodeContainer.appendChild(childrenContainer);
+                    }
+                    
+                    return nodeContainer;
+                }
+            }
+
+            // 初始化演示
+            const treeVisualization = document.getElementById('tree-visualization');
+            const operationSteps = document.getElementById('operation-steps');
+            const insertStatus = document.getElementById('insert-status');
+            const insertProgressBar = document.getElementById('insert-progress-bar');
+            const insertValueInput = document.getElementById('insert-value');
+            const insertRunButton = document.getElementById('insert-run');
+            const treeResetButton = document.getElementById('tree-reset');
+            const animationSpeedSlider = document.getElementById('animation-speed');
+            
+            const rbTreeDemo = new RBTreeDemo(treeVisualization, operationSteps, insertStatus, insertProgressBar);
+            
+            // 事件监听
+            insertRunButton.addEventListener('click', () => {
+                const value = parseInt(insertValueInput.value);
+                if (isNaN(value) || value < 1 || value > 100) {
+                    alert('请输入1-100之间的整数');
+                    return;
+                }
+                rbTreeDemo.insertAndAnimate(value);
+            });
+            
+            treeResetButton.addEventListener('click', () => {
+                rbTreeDemo.reset();
+            });
+            
+            animationSpeedSlider.addEventListener('input', () => {
+                rbTreeDemo.setSpeed(parseInt(animationSpeedSlider.value));
+            });
+            
+            // 允许按Enter键插入
+            insertValueInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    insertRunButton.click();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
