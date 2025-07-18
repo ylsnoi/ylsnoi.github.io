@@ -1,0 +1,522 @@
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>姚老师信奥网 - CSP初赛理论知识</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6', // 主色调：蓝色
+                        secondary: '#10B981', // 辅助色：绿色
+                        theory: '#6366F1', // 理论知识：靛蓝色
+                        practice: '#F59E0B', // 实践应用：琥珀色
+                        history: '#EC4899', // 历年真题：粉色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .subcategory-bg {
+                @apply bg-gradient-to-r from-secondary/5 to-secondary/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-6 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-book text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">CSP初赛</a>
+                <a href="#" class="nav-item">CSP复赛</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索CSP知识点、真题..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索CSP知识点、真题..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 搜索结果区域 -->
+        <div id="search-results" class="hidden mb-8 bg-white rounded-lg p-5 card-shadow">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-primary">搜索结果</h2>
+                <button id="close-search" class="text-gray-500 hover:text-primary">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div id="search-results-content" class="space-y-4">
+                <!-- 搜索结果将在这里动态生成 -->
+                <p class="text-gray-500 italic">请输入关键词进行搜索</p>
+            </div>
+        </div>
+
+        <!-- 介绍卡片 -->
+        <div class="bg-white rounded-lg p-6 mb-8 card-shadow">
+            <h2 class="text-2xl font-bold text-primary mb-4">CSP初赛理论知识</h2>
+            <p class="text-gray-700 mb-6">
+                CSP（软件能力认证）初赛主要考察计算机基础知识、程序设计基础、数据结构与算法以及相关数学知识。本页面汇总了初赛所需的核心知识点和练习资源，帮助你系统备考，高效提升。
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="#computer-basics" class="bg-theory/10 hover:bg-theory/20 text-theory px-4 py-2 rounded-md transition-all flex items-center hover-scale">
+                    <i class="fa fa-desktop mr-2"></i> 计算机基础
+                </a>
+                <a href="#programming" class="bg-theory/10 hover:bg-theory/20 text-theory px-4 py-2 rounded-md transition-all flex items-center hover-scale">
+                    <i class="fa fa-code mr-2"></i> 程序设计与算法
+                </a>
+                <a href="#math-knowledge" class="bg-theory/10 hover:bg-theory/20 text-theory px-4 py-2 rounded-md transition-all flex items-center hover-scale">
+                    <i class="fa fa-calculator mr-2"></i> 数学知识
+                </a>
+                <a href="#exercises" class="bg-practice/10 hover:bg-practice/20 text-practice px-4 py-2 rounded-md transition-all flex items-center hover-scale">
+                    <i class="fa fa-pencil mr-2"></i> 练习题与真题
+                </a>
+            </div>
+        </div>
+
+        <!-- 内容分类部分 -->
+        <div class="space-y-8">
+            <!-- 计算机基础知识 -->
+            <section id="computer-basics" class="topic-card">
+                <div class="category-bg p-3 rounded-lg mb-4">
+                    <h3 class="topic-header">
+                        <i class="fa fa-desktop mr-2"></i> 计算机基础知识
+                    </h3>
+                </div>
+                
+                <p class="text-gray-700 mb-6">
+                    计算机基础知识是CSP初赛的重要组成部分，包括计算机系统构成、数据的表示与存储、操作系统基本概念、计算机网络基础以及信息安全等内容。这些知识是理解计算机工作原理和程序运行机制的基础。
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="subtopic-item" data-category="computer" data-subcategory="系统组成" data-name="硬件组成">
+                        <span class="font-medium">硬件组成</span>
+                        <p class="text-gray-600 text-sm mt-1">CPU、内存、外存、输入输出设备等</p>
+                    </div>
+                    <div class="subtopic-item" data-category="computer" data-subcategory="系统组成" data-name="软件系统">
+                        <span class="font-medium">软件系统</span>
+                        <p class="text-gray-600 text-sm mt-1">系统软件、应用软件及其区别</p>
+                    </div>
+                    <div class="subtopic-item" data-category="computer" data-subcategory="数据表示" data-name="数制转换">
+                        <span class="font-medium">数制转换</span>
+                        <p class="text-gray-600 text-sm mt-1">二、八、十、十六进制相互转换</p>
+                    </div>
+                    <div class="subtopic-item" data-category="computer" data-subcategory="数据表示" data-name="编码方式">
+                        <span class="font-medium">编码方式</span>
+                        <p class="text-gray-600 text-sm mt-1">原码、反码、补码及字符编码</p>
+                    </div>
+                    <div class="subtopic-item" data-category="computer" data-subcategory="操作系统" data-name="基本概念">
+                        <span class="font-medium">操作系统</span>
+                        <p class="text-gray-600 text-sm mt-1">进程管理、内存管理、文件系统</p>
+                    </div>
+                    <div class="subtopic-item" data-category="computer" data-subcategory="网络基础" data-name="网络概念">
+                        <span class="font-medium">计算机网络</span>
+                        <p class="text-gray-600 text-sm mt-1">网络协议、IP地址、域名系统</p>
+                    </div>
+                    <div class="subtopic-item" data-category="computer" data-subcategory="信息安全" data-name="安全基础">
+                        <span class="font-medium">信息安全</span>
+                        <p class="text-gray-600 text-sm mt-1">病毒防护、加密技术基础</p>
+                    </div>
+                    <div class="subtopic-item" data-category="computer" data-subcategory="发展历史" data-name="重要事件">
+                        <span class="font-medium">发展历史</span>
+                        <p class="text-gray-600 text-sm mt-1">计算机发展历程与重要人物</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 程序设计与算法基础 -->
+            <section id="programming" class="topic-card">
+                <div class="category-bg p-3 rounded-lg mb-4">
+                    <h3 class="topic-header">
+                        <i class="fa fa-code mr-2"></i> 程序设计与算法基础
+                    </h3>
+                </div>
+                
+                <p class="text-gray-700 mb-6">
+                    程序设计与算法是CSP初赛的核心内容，包括程序的基本结构、数据类型、控制语句、函数与递归等程序设计基础知识，以及常用数据结构（数组、字符串、栈、队列、树、图等）和经典算法（排序、搜索、贪心、动态规划等）。
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="subtopic-item" data-category="programming" data-subcategory="基础语法" data-name="语法结构">
+                        <span class="font-medium">基本语法</span>
+                        <p class="text-gray-600 text-sm mt-1">变量、常量、运算符、表达式</p>
+                    </div>
+                    <div class="subtopic-item" data-category="programming" data-subcategory="基础语法" data-name="控制结构">
+                        <span class="font-medium">控制结构</span>
+                        <p class="text-gray-600 text-sm mt-1">分支语句、循环语句、跳转语句</p>
+                    </div>
+                    <div class="subtopic-item" data-category="programming" data-subcategory="基础语法" data-name="函数递归">
+                        <span class="font-medium">函数与递归</span>
+                        <p class="text-gray-600 text-sm mt-1">函数定义、参数传递、递归思想</p>
+                    </div>
+                    <div class="subtopic-item" data-category="programming" data-subcategory="数据结构" data-name="线性结构">
+                        <span class="font-medium">线性结构</span>
+                        <p class="text-gray-600 text-sm mt-1">数组、字符串、栈、队列</p>
+                    </div>
+                    <div class="subtopic-item" data-category="programming" data-subcategory="数据结构" data-name="非线性结构">
+                        <span class="font-medium">非线性结构</span>
+                        <p class="text-gray-600 text-sm mt-1">树、图的基本概念与遍历</p>
+                    </div>
+                    <div class="subtopic-item" data-category="programming" data-subcategory="算法基础" data-name="排序算法">
+                        <span class="font-medium">排序算法</span>
+                        <p class="text-gray-600 text-sm mt-1">冒泡、选择、插入、快速、归并排序</p>
+                    </div>
+                    <div class="subtopic-item" data-category="programming" data-subcategory="算法基础" data-name="搜索算法">
+                        <span class="font-medium">搜索算法</span>
+                        <p class="text-gray-600 text-sm mt-1">顺序搜索、二分搜索、深度/广度优先搜索</p>
+                    </div>
+                    <div class="subtopic-item" data-category="programming" data-subcategory="算法基础" data-name="常用算法">
+                        <span class="font-medium">常用算法</span>
+                        <p class="text-gray-600 text-sm mt-1">贪心算法、动态规划基础</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 数学知识 -->
+            <section id="math-knowledge" class="topic-card">
+                <div class="category-bg p-3 rounded-lg mb-4">
+                    <h3 class="topic-header">
+                        <i class="fa fa-calculator mr-2"></i> 数学知识
+                    </h3>
+                </div>
+                
+                <p class="text-gray-700 mb-6">
+                    数学是信息学的基础，CSP初赛涉及的数学知识包括数论基础（质数、约数、同余等）、组合数学（排列组合、容斥原理等）、离散数学（集合、逻辑、图论等）以及概率统计基础知识。这些知识对于理解算法原理和解决复杂问题至关重要。
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="subtopic-item" data-category="math" data-subcategory="数论基础" data-name="数论概念">
+                        <span class="font-medium">数论基础</span>
+                        <p class="text-gray-600 text-sm mt-1">质数、合数、约数、倍数、同余</p>
+                    </div>
+                    <div class="subtopic-item" data-category="math" data-subcategory="数论基础" data-name="数论算法">
+                        <span class="font-medium">数论算法</span>
+                        <p class="text-gray-600 text-sm mt-1">辗转相除法、素数判定、分解质因数</p>
+                    </div>
+                    <div class="subtopic-item" data-category="math" data-subcategory="组合数学" data-name="排列组合">
+                        <span class="font-medium">排列组合</span>
+                        <p class="text-gray-600 text-sm mt-1">基本计数原理、排列数、组合数</p>
+                    </div>
+                    <div class="subtopic-item" data-category="math" data-subcategory="组合数学" data-name="组合方法">
+                        <span class="font-medium">组合方法</span>
+                        <p class="text-gray-600 text-sm mt-1">容斥原理、鸽巢原理、卡特兰数</p>
+                    </div>
+                    <div class="subtopic-item" data-category="math" data-subcategory="离散数学" data-name="集合逻辑">
+                        <span class="font-medium">集合与逻辑</span>
+                        <p class="text-gray-600 text-sm mt-1">集合运算、逻辑命题、布尔代数</p>
+                    </div>
+                    <div class="subtopic-item" data-category="math" data-subcategory="离散数学" data-name="图论基础">
+                        <span class="font-medium">图论基础</span>
+                        <p class="text-gray-600 text-sm mt-1">图的基本概念、路径、连通性</p>
+                    </div>
+                    <div class="subtopic-item" data-category="math" data-subcategory="其他数学" data-name="概率统计">
+                        <span class="font-medium">概率统计</span>
+                        <p class="text-gray-600 text-sm mt-1">基本概率、期望值、简单统计</p>
+                    </div>
+                    <div class="subtopic-item" data-category="math" data-subcategory="其他数学" data-name="计算复杂度">
+                        <span class="font-medium">复杂度分析</span>
+                        <p class="text-gray-600 text-sm mt-1">时间复杂度、空间复杂度计算</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 练习题与真题 -->
+            <section id="exercises" class="topic-card">
+                <div class="category-bg p-3 rounded-lg mb-4">
+                    <h3 class="topic-header">
+                        <i class="fa fa-pencil mr-2"></i> 练习题与真题
+                    </h3>
+                </div>
+                
+                <p class="text-gray-700 mb-6">
+                    实践是掌握知识的关键。本部分提供了按知识点分类的练习题、历年CSP-J/S初赛真题以及模拟测试题，帮助你巩固所学知识，熟悉考试题型，提高解题能力和应试技巧。
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="subtopic-header">知识点练习</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="subtopic-item" data-category="exercises" data-subcategory="知识点练习" data-name="计算机基础">
+                                <span class="font-medium">计算机基础</span>
+                                <p class="text-gray-600 text-sm mt-1">硬件、软件、网络相关练习</p>
+                            </div>
+                            <div class="subtopic-item" data-category="exercises" data-subcategory="知识点练习" data-name="数制转换">
+                                <span class="font-medium">数制与编码</span>
+                                <p class="text-gray-600 text-sm mt-1">各类数制转换与编码练习</p>
+                            </div>
+                            <div class="subtopic-item" data-category="exercises" data-subcategory="知识点练习" data-name="程序阅读">
+                                <span class="font-medium">程序阅读</span>
+                                <p class="text-gray-600 text-sm mt-1">代码理解与输出预测</p>
+                            </div>
+                            <div class="subtopic-item" data-category="exercises" data-subcategory="知识点练习" data-name="算法分析">
+                                <span class="font-medium">算法分析</span>
+                                <p class="text-gray-600 text-sm mt-1">算法效率与正确性分析</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="subtopic-header">历年真题</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="subtopic-item" data-category="exercises" data-subcategory="历年真题" data-name="CSP-J">
+                                <span class="font-medium">CSP-J 真题</span>
+                                <p class="text-gray-600 text-sm mt-1">入门级历年真题及解析</p>
+                            </div>
+                            <div class="subtopic-item" data-category="exercises" data-subcategory="历年真题" data-name="CSP-S">
+                                <span class="font-medium">CSP-S 真题</span>
+                                <p class="text-gray-600 text-sm mt-1">提高级历年真题及解析</p>
+                            </div>
+                            <div class="subtopic-item" data-category="exercises" data-subcategory="模拟测试" data-name="模拟题">
+                                <span class="font-medium">模拟测试题</span>
+                                <p class="text-gray-600 text-sm mt-1">按最新大纲编写的模拟题</p>
+                            </div>
+                            <div class="subtopic-item" data-category="exercises" data-subcategory="模拟测试" data-name="错题集">
+                                <span class="font-medium">高频错题集</span>
+                                <p class="text-gray-600 text-sm mt-1">历年考生易错题汇总</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white border-t border-gray-200 mt-12 py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold text-primary mb-4">姚老师信奥网</h3>
+                    <p class="text-gray-600 text-sm">
+                        专注于信息学奥赛教学，提供专业的学习资源和指导，帮助学生在竞赛中取得优异成绩。
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">快速链接</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-gray-600 hover:text-primary">首页</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">CSP初赛</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">CSP复赛</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">题库</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-primary">关于我们</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">联系我们</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center"><i class="fa fa-envelope-o mr-2 text-primary"></i> <a href="mailto:contact@yaoteacher.com" class="text-gray-600 hover:text-primary">contact@yaoteacher.com</a></li>
+                        <li class="flex items-center"><i class="fa fa-phone mr-2 text-primary"></i> <span class="text-gray-600">400-123-4567</span></li>
+                        <li class="flex items-center"><i class="fa fa-weixin mr-2 text-primary"></i> <span class="text-gray-600">yaoteacher</span></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">关注我们</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-primary"><i class="fa fa-weibo text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary"><i class="fa fa-wechat text-xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary"><i class="fa fa-qq text-xl"></i></a>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-4">
+                        关注我们获取最新资讯和学习资源
+                    </p>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 mt-8 pt-6 text-center text-gray-500 text-sm">
+                <p>© 2025 姚老师信奥网 版权所有</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 搜索功能
+        const searchInput = document.getElementById('search-input');
+        const mobileSearchInput = document.getElementById('mobile-search-input');
+        const searchButton = document.getElementById('search-button');
+        const mobileSearchButton = document.getElementById('mobile-search-button');
+        const searchResults = document.getElementById('search-results');
+        const searchResultsContent = document.getElementById('search-results-content');
+        const closeSearch = document.getElementById('close-search');
+        
+        // 扩展搜索数据
+        const searchData = [
+            { category: 'computer', name: '数制转换', description: '二进制、八进制、十进制、十六进制之间的转换方法' },
+            { category: 'computer', name: '计算机硬件', description: '计算机的基本硬件组成和功能' },
+            { category: 'computer', name: '操作系统', description: '操作系统的基本概念和功能' },
+            { category: 'programming', name: '排序算法', description: '各种排序算法的原理和时间复杂度分析' },
+            { category: 'programming', name: '递归算法', description: '递归的基本思想和应用场景' },
+            { category: 'programming', name: '数据结构', description: '数组、链表、栈、队列、树、图等数据结构' },
+            { category: 'math', name: '数论基础', description: '质数、约数、同余等数论基本概念' },
+            { category: 'math', name: '排列组合', description: '基本计数原理、排列数与组合数计算' },
+            { category: 'exercises', name: 'CSP-J 真题', description: 'CSP-J入门级历年初赛真题及解析' },
+            { category: 'exercises', name: 'CSP-S 真题', description: 'CSP-S提高级历年初赛真题及解析' }
+        ];
+        
+        function performSearch(query) {
+            if (!query.trim()) {
+                searchResultsContent.innerHTML = '<p class="text-gray-500 italic">请输入关键词进行搜索</p>';
+                return;
+            }
+            
+            const results = searchData.filter(item => 
+                item.name.toLowerCase().includes(query.toLowerCase()) || 
+                item.description.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            if (results.length === 0) {
+                searchResultsContent.innerHTML = '<p class="text-gray-500 italic">没有找到相关结果</p>';
+            } else {
+                searchResultsContent.innerHTML = results.map(result => `
+                    <div class="bg-white p-3 rounded-md border border-gray-100 hover:border-primary/50 transition-all">
+                        <h4 class="font-medium text-primary">${result.name}</h4>
+                        <p class="text-gray-600 text-sm mt-1">${result.description}</p>
+                        <div class="mt-2 text-xs text-gray-500">
+                            <span class="px-2 py-0.5 rounded-full bg-theory/10 text-theory">${result.category}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            searchResults.classList.remove('hidden');
+            // 平滑滚动到搜索结果
+            searchResults.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        searchButton.addEventListener('click', () => performSearch(searchInput.value));
+        mobileSearchButton.addEventListener('click', () => performSearch(mobileSearchInput.value));
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') performSearch(searchInput.value);
+        });
+        mobileSearchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') performSearch(mobileSearchInput.value);
+        });
+        closeSearch.addEventListener('click', () => {
+            searchResults.classList.add('hidden');
+        });
+        
+        // 子主题点击事件
+        document.querySelectorAll('.subtopic-item').forEach(item => {
+            item.addEventListener('click', (event) => {
+                const category = item.dataset.category;
+                const subcategory = item.dataset.subcategory;
+                const name = item.dataset.name;
+                
+                // 这里可以添加点击后的具体操作，例如跳转到详情页
+                // alert(`你点击了：${category} > ${subcategory} > ${name}`);
+            });
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.classList.add('shadow-md');
+                header.classList.remove('shadow-sm');
+            } else {
+                header.classList.remove('shadow-md');
+                header.classList.add('shadow-sm');
+            }
+        });
+        
+        // 内容区块动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-4');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.topic-card').forEach(card => {
+            card.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-4');
+            observer.observe(card);
+        });
+    </script>
+
+    </body></html>
