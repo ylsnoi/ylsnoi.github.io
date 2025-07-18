@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>回溯算法 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：鲜明的蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        syntax: '#FF9800', // 语法部分：橙色
+                        algorithm: '#2ECC71', // 算法部分：绿色
+                        datastructure: '#9C27B0', // 数据结构部分：深紫色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                        backtrack: '#E91E63', // 回溯主题色：粉红色
+                        execution: '#FFEB3B', // 执行高亮：黄色
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .subcategory-bg {
+                @apply bg-gradient-to-r from-secondary/5 to-secondary/10;
+            }
+            .backtrack-bg {
+                @apply bg-gradient-to-r from-backtrack/5 to-backtrack/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .backtrack-header {
+                @apply font-bold text-backtrack mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-backtrack bg-backtrack/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-backtrack text-white text-center mr-2 text-xs;
+            }
+            .backtrack-call {
+                @apply border-2 border-gray-300 rounded-md p-2 mb-1 bg-gray-50 transition-all duration-500;
+            }
+            .backtrack-call-active {
+                @apply border-backtrack bg-backtrack/10 transform scale-[1.02];
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-gray-100 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-backtrack h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .code-line {
+                @apply transition-all duration-300;
+            }
+            .code-line-highlight {
+                @apply bg-execution/30 text-gray-900 font-medium;
+            }
+            .stack-frame {
+                @apply border border-gray-300 rounded-md p-3 mb-2 bg-white;
+            }
+            .stack-frame-active {
+                @apply border-backtrack bg-backtrack/10;
+            }
+            .solution-item {
+                @apply border border-gray-200 rounded-md p-2 my-1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">算法基础</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">搜索算法</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-backtrack font-medium">回溯算法</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="backtrack-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-backtrack mb-2">回溯算法</h1>
+                    <p class="text-gray-700">
+                        回溯算法是一种通过探索所有可能的候选解来找出所有解的算法。当探索到某一步发现当前解不可能是有效解时，
+                        就退回上一步重新选择，这种走不通就退回再走的技术称为回溯法，适用于解决组合优化问题和排列问题，是信息学奥赛中的重要算法。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-backtrack hover:bg-backtrack/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#problems" class="bg-white border border-backtrack text-backtrack hover:bg-backtrack/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看题目
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 回溯算法概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-backtrack mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 回溯算法概述
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">什么是回溯算法？</h3>
+                    <p class="text-gray-700">
+                        回溯算法是一种系统地搜索问题解的方法，它尝试分步解决问题。在解决过程中，当发现当前步骤不能得到有效解时，
+                        就"回溯"到上一步，尝试其他选择。回溯算法通常使用递归实现，适合解决组合、排列、子集、切割、棋盘等类型的问题。
+                    </p>
+                    <div class="bg-gray-50 p-4 rounded-lg mt-3">
+                        <h4 class="font-semibold mb-2">回溯算法的核心思想：</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>试探性地构建解的每一步</li>
+                            <li>在每一步检查是否满足约束条件</li>
+                            <li>如果不满足，撤销上一步的选择（回溯）并尝试其他选择</li>
+                            <li>如果满足，则继续构建下一步</li>
+                            <li>直到找到解或尝试完所有可能</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">回溯算法的基本结构</h3>
+                    <p class="text-gray-700 mb-3">
+                        回溯算法通常可以用以下递归框架实现：
+                    </p>
+                    <pre class="code-block"><code class="language-cpp">void backtrack(参数列表) {
+    if (终止条件) {
+        收集结果;
+        return;
+    }
+    
+    for (选择范围内的所有可能选项) {
+        做出选择;
+        if (选择满足约束条件) {
+            backtrack(更新后的参数);  // 递归
+        }
+        撤销选择;  // 回溯
+    }
+}</code></pre>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-backtrack">选择</h4>
+                            <p class="text-sm text-gray-700">
+                                对当前状态做出选择，通常是从候选集合中选择一个元素加入当前解。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-backtrack">约束条件</h4>
+                            <p class="text-sm text-gray-700">
+                                判断当前选择是否合法，是否能够通向有效解，用于剪枝优化。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-backtrack">递归</h4>
+                            <p class="text-sm text-gray-700">
+                                在当前选择的基础上，继续探索下一步可能的选择。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <h4 class="font-semibold text-backtrack">撤销选择</h4>
+                            <p class="text-sm text-gray-700">
+                                完成递归后，撤销当前选择，回到上一步状态，尝试其他可能的选择。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 回溯算法动画演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-backtrack mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> 回溯算法过程演示
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 回溯动画 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">全排列问题回溯过程演示</h3>
+                    <p class="text-gray-700 mb-4">
+                        下面的动画展示了使用回溯算法求解[1,2,3]全排列的完整过程，包括选择、递归、剪枝和回溯四个主要步骤。
+                    </p>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">元素个数:</label>
+                                <input type="number" id="element-count" value="3" min="2" max="5"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-backtrack">
+                                <p class="text-xs text-gray-500 mt-1">建议值: 2-5，值越大演示越复杂</p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">动画速度:</label>
+                                <input type="range" id="animation-speed" min="500" max="3000" step="100" value="1000"
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-backtrack">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>快</span>
+                                    <span>慢</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-wrap gap-2">
+                                <button id="backtrack-run" class="bg-backtrack hover:bg-backtrack/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行动画
+                                </button>
+                                <button id="backtrack-step" class="bg-secondary hover:bg-secondary/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-step-forward mr-2"></i> 单步执行
+                                </button>
+                                <button id="backtrack-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="backtrack-status" class="animation-status mt-4">
+                                状态: 等待开始
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h4 class="font-semibold text-sm mb-2">递归调用栈</h4>
+                                <div id="recursion-stack" class="border border-gray-200 rounded-lg p-2 max-h-40 overflow-y-auto">
+                                    <div class="text-center text-gray-500 text-sm py-4">
+                                        调用栈将在这里显示
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 h-80 overflow-y-auto" id="backtrack-execution">
+                                <div class="text-center text-gray-500 py-12">
+                                    <i class="fa fa-arrow-down mb-2"></i>
+                                    <p>点击"运行动画"或"单步执行"开始演示</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-1">
+                            <div>
+                                <h4 class="font-semibold text-sm mb-2">当前解空间</h4>
+                                <div id="solution-space" class="bg-white border border-gray-200 rounded-lg p-4 h-40 overflow-y-auto mb-4">
+                                    <div class="text-center text-gray-500 py-6">
+                                        求解过程将在这里显示
+                                    </div>
+                                </div>
+                                
+                                <h4 class="font-semibold text-sm mb-2">所有解</h4>
+                                <div id="all-solutions" class="bg-white border border-gray-200 rounded-lg p-4 h-36 overflow-y-auto">
+                                    <div class="text-center text-gray-500 py-4 text-sm">
+                                        找到的解将在这里显示
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h4 class="font-semibold text-sm mb-2">回溯算法代码</h4>
+                        <div class="bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto font-mono text-sm" id="backtrack-code">
+                            <div class="code-line" id="code-1">#include &lt;iostream&gt;</div>
+                            <div class="code-line" id="code-2">#include &lt;vector&gt;</div>
+                            <div class="code-line" id="code-3">using namespace std;</div>
+                            <div class="code-line" id="code-4">&nbsp;</div>
+                            <div class="code-line" id="code-5">vector&lt;vector&lt;int&gt;&gt; result; // 存储所有结果</div>
+                            <div class="code-line" id="code-6">vector&lt;int&gt; path; // 存储当前路径</div>
+                            <div class="code-line" id="code-7">&nbsp;</div>
+                            <div class="code-line" id="code-8">void backtrack(vector&lt;int&gt;& nums, vector&lt;bool&gt;& used) {</div>
+                            <div class="code-line" id="code-9">&nbsp;&nbsp;// 终止条件：路径长度等于元素个数</div>
+                            <div class="code-line" id="code-10">&nbsp;&nbsp;if (path.size() == nums.size()) {</div>
+                            <div class="code-line" id="code-11">&nbsp;&nbsp;&nbsp;&nbsp;result.push_back(path); // 收集结果</div>
+                            <div class="code-line" id="code-12">&nbsp;&nbsp;&nbsp;&nbsp;return;</div>
+                            <div class="code-line" id="code-13">&nbsp;&nbsp;}</div>
+                            <div class="code-line" id="code-14">&nbsp;</div>
+                            <div class="code-line" id="code-15">&nbsp;&nbsp;// 遍历所有可能的选择</div>
+                            <div class="code-line" id="code-16">&nbsp;&nbsp;for (int i = 0; i < nums.size(); i++) {</div>
+                            <div class="code-line" id="code-17">&nbsp;&nbsp;&nbsp;&nbsp;if (used[i]) continue; // 跳过已使用的元素</div>
+                            <div class="code-line" id="code-18">&nbsp;</div>
+                            <div class="code-line" id="code-19">&nbsp;&nbsp;&nbsp;&nbsp;// 做出选择</div>
+                            <div class="code-line" id="code-20">&nbsp;&nbsp;&nbsp;&nbsp;used[i] = true;</div>
+                            <div class="code-line" id="code-21">&nbsp;&nbsp;&nbsp;&nbsp;path.push_back(nums[i]);</div>
+                            <div class="code-line" id="code-22">&nbsp;</div>
+                            <div class="code-line" id="code-23">&nbsp;&nbsp;&nbsp;&nbsp;// 递归</div>
+                            <div class="code-line" id="code-24">&nbsp;&nbsp;&nbsp;&nbsp;backtrack(nums, used);</div>
+                            <div class="code-line" id="code-25">&nbsp;</div>
+                            <div class="code-line" id="code-26">&nbsp;&nbsp;&nbsp;&nbsp;// 撤销选择（回溯）</div>
+                            <div class="code-line" id="code-27">&nbsp;&nbsp;&nbsp;&nbsp;path.pop_back();</div>
+                            <div class="code-line" id="code-28">&nbsp;&nbsp;&nbsp;&nbsp;used[i] = false;</div>
+                            <div class="code-line" id="code-29">&nbsp;&nbsp;}</div>
+                            <div class="code-line" id="code-30">}</div>
+                            <div class="code-line" id="code-31">&nbsp;</div>
+                            <div class="code-line" id="code-32">vector&lt;vector&lt;int&gt;&gt; permute(vector&lt;int&gt;& nums) {</div>
+                            <div class="code-line" id="code-33">&nbsp;&nbsp;vector&lt;bool&gt; used(nums.size(), false);</div>
+                            <div class="code-line" id="code-34">&nbsp;&nbsp;backtrack(nums, used);</div>
+                            <div class="code-line" id="code-35">&nbsp;&nbsp;return result;</div>
+                            <div class="code-line" id="code-36">}</div>
+                            <div class="code-line" id="code-37">&nbsp;</div>
+                            <div class="code-line" id="code-38">int main() {</div>
+                            <div class="code-line" id="code-39">&nbsp;&nbsp;vector&lt;int&gt; nums = {1, 2, 3};</div>
+                            <div class="code-line" id="code-40">&nbsp;&nbsp;vector&lt;vector&lt;int&gt;&gt; solutions = permute(nums);</div>
+                            <div class="code-line" id="code-41">&nbsp;</div>
+                            <div class="code-line" id="code-42">&nbsp;&nbsp;// 输出结果</div>
+                            <div class="code-line" id="code-43">&nbsp;&nbsp;for (auto &sol : solutions) {</div>
+                            <div class="code-line" id="code-44">&nbsp;&nbsp;&nbsp;&nbsp;for (int num : sol) {</div>
+                            <div class="code-line" id="code-45">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout << num << " ";</div>
+                            <div class="code-line" id="code-46">&nbsp;&nbsp;&nbsp;&nbsp;}</div>
+                            <div class="code-line" id="code-47">&nbsp;&nbsp;&nbsp;&nbsp;cout << endl;</div>
+                            <div class="code-line" id="code-48">&nbsp;&nbsp;}</div>
+                            <div class="code-line" id="code-49">&nbsp;&nbsp;return 0;</div>
+                            <div class="code-line" id="code-50">}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 回溯算法典型应用 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-backtrack mb-6 flex items-center">
+                <i class="fa fa-code-fork mr-2"></i> 回溯算法典型应用
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 排列问题 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">1. 排列问题</h3>
+                    <p class="text-gray-700 mb-3">
+                        排列问题是回溯算法的经典应用，如生成1~n的全排列、求字符串的所有排列等。
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<vector<int>> result;
+vector<int> path;
+
+// 生成nums的全排列
+void backtrack(vector<int>& nums, vector<bool>& used) {
+    // 终止条件：路径长度等于元素个数
+    if (path.size() == nums.size()) {
+        result.push_back(path);
+        return;
+    }
+    
+    for (int i = 0; i < nums.size(); i++) {
+        if (used[i]) continue;  // 已使用的元素不再使用
+        
+        // 做出选择
+        used[i] = true;
+        path.push_back(nums[i]);
+        
+        // 递归
+        backtrack(nums, used);
+        
+        // 回溯
+        path.pop_back();
+        used[i] = false;
+    }
+}
+
+vector<vector<int>> permute(vector<int>& nums) {
+    vector<bool> used(nums.size(), false);
+    backtrack(nums, used);
+    return result;
+}
+
+int main() {
+    vector<int> nums = {1, 2, 3};
+    vector<vector<int>> permutations = permute(nums);
+    
+    cout << "全排列结果：" << endl;
+    for (auto& p : permutations) {
+        for (int num : p) {
+            cout << num << " ";
+        }
+        cout << endl;
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 组合问题 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">2. 组合问题</h3>
+                    <p class="text-gray-700 mb-3">
+                        组合问题要求从n个元素中选取k个元素，不考虑顺序，如从1~n中选取k个数的所有组合。
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<vector<int>> result;
+vector<int> path;
+
+// 从1~n中选k个数的组合
+void backtrack(int n, int k, int startIndex) {
+    // 终止条件：已选够k个数
+    if (path.size() == k) {
+        result.push_back(path);
+        return;
+    }
+    
+    // 从startIndex开始，避免重复组合
+    for (int i = startIndex; i <= n; i++) {
+        // 剪枝优化：如果剩余元素不足以选够k个，提前退出
+        if (path.size() + (n - i + 1) < k) {
+            break;
+        }
+        
+        // 做出选择
+        path.push_back(i);
+        
+        // 递归，下一次从i+1开始
+        backtrack(n, k, i + 1);
+        
+        // 回溯
+        path.pop_back();
+    }
+}
+
+vector<vector<int>> combine(int n, int k) {
+    backtrack(n, k, 1);
+    return result;
+}
+
+int main() {
+    int n = 5, k = 2;
+    vector<vector<int>> combinations = combine(n, k);
+    
+    cout << "从" << n << "中选" << k << "个数的组合：" << endl;
+    for (auto& c : combinations) {
+        for (int num : c) {
+            cout << num << " ";
+        }
+        cout << endl;
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 子集问题 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">3. 子集问题</h3>
+                    <p class="text-gray-700 mb-3">
+                        子集问题要求找出集合的所有可能子集，如求一个数组的所有子集。
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+vector<vector<int>> result;
+vector<int> path;
+
+// 求nums的所有子集
+void backtrack(vector<int>& nums, int startIndex) {
+    // 每个路径都是一个子集，直接收集
+    result.push_back(path);
+    
+    // 终止条件：startIndex超出数组范围
+    if (startIndex >= nums.size()) {
+        return;
+    }
+    
+    // 从startIndex开始选择，避免重复子集
+    for (int i = startIndex; i < nums.size(); i++) {
+        // 剪枝：跳过重复元素
+        if (i > startIndex && nums[i] == nums[i-1]) {
+            continue;
+        }
+        
+        // 做出选择
+        path.push_back(nums[i]);
+        
+        // 递归
+        backtrack(nums, i + 1);
+        
+        // 回溯
+        path.pop_back();
+    }
+}
+
+vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+    sort(nums.begin(), nums.end());  // 排序，便于去重
+    backtrack(nums, 0);
+    return result;
+}
+
+int main() {
+    vector<int> nums = {1, 2, 2};
+    vector<vector<int>> subsets = subsetsWithDup(nums);
+    
+    cout << "所有子集：" << endl;
+    for (auto& s : subsets) {
+        cout << "[";
+        for (int i = 0; i < s.size(); i++) {
+            if (i > 0) cout << ", ";
+            cout << s[i];
+        }
+        cout << "]" << endl;
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- N皇后问题 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">4. N皇后问题</h3>
+                    <p class="text-gray-700 mb-3">
+                        N皇后问题是经典的回溯算法应用，要求在N×N的棋盘上放置N个皇后，使它们不能互相攻击。
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+vector<vector<string>> result;
+
+// 检查当前位置是否可以放置皇后
+bool isValid(int row, int col, vector<string>& chessboard, int n) {
+    // 检查列
+    for (int i = 0; i < row; i++) {
+        if (chessboard[i][col] == 'Q') {
+            return false;
+        }
+    }
+    
+    // 检查左上对角线
+    for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+        if (chessboard[i][j] == 'Q') {
+            return false;
+        }
+    }
+    
+    // 检查右上对角线
+    for (int i = row - 1, j = col + 1; i >= 0 && j < n; i--, j++) {
+        if (chessboard[i][j] == 'Q') {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+// 回溯函数：放置第row行的皇后
+void backtrack(int row, int n, vector<string>& chessboard) {
+    // 终止条件：所有行都放置了皇后
+    if (row == n) {
+        result.push_back(chessboard);
+        return;
+    }
+    
+    // 尝试在当前行的每一列放置皇后
+    for (int col = 0; col < n; col++) {
+        if (isValid(row, col, chessboard, n)) {
+            // 放置皇后
+            chessboard[row][col] = 'Q';
+            
+            // 递归放置下一行
+            backtrack(row + 1, n, chessboard);
+            
+            // 回溯，撤销放置
+            chessboard[row][col] = '.';
+        }
+    }
+}
+
+vector<vector<string>> solveNQueens(int n) {
+    vector<string> chessboard(n, string(n, '.'));
+    backtrack(0, n, chessboard);
+    return result;
+}
+
+int main() {
+    int n = 4;
+    vector<vector<string>> solutions = solveNQueens(n);
+    
+    cout << n << "皇后问题的解：" << endl;
+    for (int i = 0; i < solutions.size(); i++) {
+        cout << "解 " << i + 1 << ":" << endl;
+        for (string& row : solutions[i]) {
+            cout << row << endl;
+        }
+        cout << endl;
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 回溯算法优化技巧 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-backtrack mb-6 flex items-center">
+                <i class="fa fa-rocket mr-2"></i> 回溯算法优化技巧
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-3">剪枝优化</h3>
+                        <p class="text-gray-700 mb-3">
+                            剪枝是提高回溯算法效率的关键，通过提前判断某些路径不可能得到有效解，从而避免不必要的搜索。
+                        </p>
+                        <pre class="code-block text-xs"><code class="language-cpp">// 组合问题中的剪枝示例
+void backtrack(int n, int k, int startIndex) {
+    if (path.size() == k) {
+        result.push_back(path);
+        return;
+    }
+    
+    // 剪枝：如果剩余元素不足以选够k个，提前退出
+    // i的上限从n优化为 n - (k - path.size()) + 1
+    for (int i = startIndex; i <= n - (k - path.size()) + 1; i++) {
+        path.push_back(i);
+        backtrack(n, k, i + 1);
+        path.pop_back();
+    }
+}</code></pre>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-3">去重技巧</h3>
+                        <p class="text-gray-700 mb-3">
+                            当处理包含重复元素的问题时，需要通过排序和条件判断来避免生成重复的解。
+                        </p>
+                        <pre class="code-block text-xs"><code class="language-cpp">// 子集问题中的去重示例
+void backtrack(vector<int>& nums, int startIndex) {
+    result.push_back(path);
+    if (startIndex >= nums.size()) return;
+    
+    for (int i = startIndex; i < nums.size(); i++) {
+        // 去重：跳过重复元素
+        if (i > startIndex && nums[i] == nums[i-1]) {
+            continue;
+        }
+        
+        path.push_back(nums[i]);
+        backtrack(nums, i + 1);
+        path.pop_back();
+    }
+}
+
+// 调用前先排序
+sort(nums.begin(), nums.end());</code></pre>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-3">状态压缩</h3>
+                        <p class="text-gray-700 mb-3">
+                            使用位运算等技巧压缩状态表示，减少内存占用并提高判断效率，特别适用于N皇后等问题。
+                        </p>
+                        <pre class="code-block text-xs"><code class="language-cpp">// N皇后问题的位运算优化
+void backtrack(int row, int n, int col, int diag1, int diag2) {
+    if (row == n) {
+        result++;
+        return;
+    }
+    
+    // 计算当前行可以放置皇后的位置
+    int available = ((1 << n) - 1) & (~(col | diag1 | diag2));
+    
+    while (available) {
+        // 取出最低位的1
+        int pos = available & -available;
+        // 清除最低位的1
+        available &= available - 1;
+        // 递归下一行
+        backtrack(row + 1, n, col | pos, (diag1 | pos) << 1, (diag2 | pos) >> 1);
+    }
+}</code></pre>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-lg mb-3">搜索顺序优化</h3>
+                        <p class="text-gray-700 mb-3">
+                            调整搜索顺序，优先搜索可能更快到达解或更快剪枝的路径，减少无效搜索。
+                        </p>
+                        <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                            <li>在组合问题中，优先选择分支较少的元素</li>
+                            <li>在满足约束条件的前提下，按一定策略排序候选元素</li>
+                            <li>对于有明确目标的问题，优先搜索可能接近目标的路径</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 推荐题目 -->
+        <section id="problems" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-backtrack mb-6 flex items-center">
+                <i class="fa fa-trophy mr-2"></i> 推荐练习题目 (洛谷)
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 模板题 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="inline-block w-8 h-8 rounded-full bg-green-500 text-white text-center leading-8 mr-2 text-sm">1</span>
+                        模板题
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <a href="https://www.luogu.com.cn/problem/P1706" target="_blank" class="subtopic-item flex flex-col h-full">
+                            <div class="font-medium mb-1">P1706 全排列问题</div>
+                            <div class="text-sm text-gray-600 flex-grow">
+                                输出自然数1到n所有不重复的排列，按照字典序从小到大输出。
+                            </div>
+                            <div class="mt-2 text-xs text-gray-500">难度：普及-</div>
+                        </a>
+                        
+                        <a href="https://www.luogu.com.cn/problem/P1157" target="_blank" class="subtopic-item flex flex-col h-full">
+                            <div class="font-medium mb-1">P1157 组合的输出</div>
+                            <div class="text-sm text-gray-600 flex-grow">
+                                从1到n中选择r个元素，按字典序输出所有组合。
+                            </div>
+                            <div class="mt-2 text-xs text-gray-500">难度：普及-</div>
+                        </a>
+                        
+                        <a href="https://www.luogu.com.cn/problem/P2089" target="_blank" class="subtopic-item flex flex-col h-full">
+                            <div class="font-medium mb-1">P2089 烤鸡</div>
+                            <div class="text-sm text-gray-600 flex-grow">
+                                有n种调料，每种调料可以放1-3克，求总重量为m的所有可能配方。
+                            </div>
+                            <div class="mt-2 text-xs text-gray-500">难度：普及-</div>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 入门题 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="inline-block w-8 h-8 rounded-full bg-blue-500 text-white text-center leading-8 mr-2 text-sm">2</span>
+                        入门题
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <a href="https://www.luogu.com.cn/problem/P1036" target="_blank" class="subtopic-item flex flex-col h-full">
+                            <div class="font-medium mb-1">P1036 选数</div>
+                            <div class="text-sm text-gray-600 flex-grow">
+                                从n个整数中任选k个相加，求其和为素数的方案数。
+                            </div>
+                            <div class="mt-2 text-xs text-gray-500">难度：普及/提高-</div>
+                        </a>
+                        
+                        <a href="https://www.luogu.com.cn/problem/P1464" target="_blank" class="subtopic-item flex flex-col h-full">
+                            <div class="font-medium mb-1">P1464 Function</div>
+                            <div class="text-sm text-gray-600 flex-grow">
+                                实现一个带有记忆化的递归函数，计算特定条件下的函数值。
+                            </div>
+                            <div class="mt-2 text-xs text-gray-500">难度：普及+/提高</div>
+                        </a>
+                        
+                        <a href="https://www.luogu.com.cn/problem/P1164" target="_blank" class="subtopic-item flex flex-col h-full">
+                            <div class="font-medium mb-1">P1164 小A点菜</div>
+                            <div class="text-sm text-gray-600 flex-grow">
+                                小A有m元钱和n种菜，每种菜价格不同，求刚好花完m元的方案数。
+                            </div>
+                            <div class="mt-2 text-xs text-gray-500">难度：普及-</div>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 进阶题 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="inline-block w-8 h-8 rounded-full bg-red-500 text-white text-center leading-8 mr-2 text-sm">3</span>
+                        进阶题
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <a href="https://www.luogu.com.cn/problem/P1219" target="_blank" class="subtopic-item flex flex-col h-full">
+                            <div class="font-medium mb-1">P1219 八皇后</div>
+                            <div class="text-sm text-gray-600 flex-grow">
+                                按照国际象棋规则，在8×8的棋盘上放置8个皇后，求所有可能的摆放方案。
+                            </div>
+                            <div class="mt-2 text-xs text-gray-500">难度：普及/提高-</div>
+                        </a>
+                        
+                        <a href="https://www.luogu.com.cn/problem/P1074" target="_blank" class="subtopic-item flex flex-col h-full">
+                            <div class="font-medium mb-1">P1074 靶形数独</div>
+                            <div class="text-sm text-gray-600 flex-grow">
+                                求解特殊的数独问题，并计算得分最高的方案。
+                            </div>
+                            <div class="mt-2 text-xs text-gray-500">难度：提高+/省选-</div>
+                        </a>
+                        
+                        <a href="https://www.luogu.com.cn/problem/P2831" target="_blank" class="subtopic-item flex flex-col h-full">
+                            <div class="font-medium mb-1">P2831 愤怒的小鸟</div>
+                            <div class="text-sm text-gray-600 flex-grow">
+                                用最少的抛物线消灭平面上的所有小猪，需要优化的回溯算法。
+                            </div>
+                            <div class="mt-2 text-xs text-gray-500">难度：提高+/省选-</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            
+            // 回溯算法动画演示
+            const backtrackRunBtn = document.getElementById('backtrack-run');
+            const backtrackStepBtn = document.getElementById('backtrack-step');
+            const backtrackResetBtn = document.getElementById('backtrack-reset');
+            const backtrackStatus = document.getElementById('backtrack-status');
+            const elementCountInput = document.getElementById('element-count');
+            const animationSpeedInput = document.getElementById('animation-speed');
+            const recursionStack = document.getElementById('recursion-stack');
+            const backtrackExecution = document.getElementById('backtrack-execution');
+            const solutionSpace = document.getElementById('solution-space');
+            const allSolutions = document.getElementById('all-solutions');
+            
+            // 代码行元素
+            const codeLines = [];
+            for (let i = 1; i <= 50; i++) {
+                codeLines.push(document.getElementById(`code-${i}`));
+            }
+            
+            // 动画状态变量
+            let animationRunning = false;
+            let animationInterval = null;
+            let currentStep = 0;
+            let elements = [1, 2, 3];
+            let steps = [];
+            let solutions = [];
+            
+            // 生成回溯步骤
+            function generateSteps(n) {
+                elements = Array.from({length: n}, (_, i) => i + 1);
+                steps = [];
+                solutions = [];
+                
+                // 重置显示
+                updateSolutionSpace([]);
+                updateAllSolutions([]);
+                updateRecursionStack([]);
+                
+                // 模拟回溯过程生成步骤
+                const path = [];
+                const used = new Array(n).fill(false);
+                
+                // 递归生成步骤
+                function simulateBacktrack(depth) {
+                    // 记录进入函数
+                    steps.push({
+                        type: 'enter',
+                        depth: depth,
+                        path: [...path],
+                        used: [...used],
+                        codeLine: 8  // backtrack函数开始行
+                    });
+                    
+                    // 检查终止条件
+                    steps.push({
+                        type: 'check_terminate',
+                        depth: depth,
+                        path: [...path],
+                        used: [...used],
+                        codeLine: 10  // if (path.size() == nums.size())
+                    });
+                    
+                    if (path.length === elements.length) {
+                        // 记录找到解
+                        steps.push({
+                            type: 'found_solution',
+                            depth: depth,
+                            path: [...path],
+                            used: [...used],
+                            codeLine: 11  // result.push_back(path)
+                        });
+                        solutions.push([...path]);
+                        
+                        // 记录返回
+                        steps.push({
+                            type: 'return',
+                            depth: depth,
+                            path: [...path],
+                            used: [...used],
+                            codeLine: 12  // return
+                        });
+                        return;
+                    }
+                    
+                    // 记录循环开始
+                    steps.push({
+                        type: 'loop_start',
+                        depth: depth,
+                        path: [...path],
+                        used: [...used],
+                        codeLine: 16  // for循环开始
+                    });
+                    
+                    for (let i = 0; i < elements.length; i++) {
+                        // 记录检查是否使用
+                        steps.push({
+                            type: 'check_used',
+                            depth: depth,
+                            path: [...path],
+                            used: [...used],
+                            index: i,
+                            codeLine: 17  // if (used[i]) continue
+                        });
+                        
+                        if (used[i]) {
+                            // 记录跳过已使用元素
+                            steps.push({
+                                type: 'skip_used',
+                                depth: depth,
+                                path: [...path],
+                                used: [...used],
+                                index: i,
+                                codeLine: 17  // if (used[i]) continue
+                            });
+                            continue;
+                        }
+                        
+                        // 记录做出选择
+                        steps.push({
+                            type: 'select',
+                            depth: depth,
+                            path: [...path],
+                            used: [...used],
+                            index: i,
+                            value: elements[i],
+                            codeLine: 20  // used[i] = true
+                        });
+                        
+                        // 更新状态
+                        used[i] = true;
+                        path.push(elements[i]);
+                        
+                        steps.push({
+                            type: 'add_path',
+                            depth: depth,
+                            path: [...path],
+                            used: [...used],
+                            index: i,
+                            value: elements[i],
+                            codeLine: 21  // path.push_back(nums[i])
+                        });
+                        
+                        // 记录递归调用
+                        steps.push({
+                            type: 'recurse',
+                            depth: depth,
+                            path: [...path],
+                            used: [...used],
+                            codeLine: 24  // backtrack(nums, used)
+                        });
+                        
+                        // 递归
+                        simulateBacktrack(depth + 1);
+                        
+                        // 记录回溯-移除路径
+                        steps.push({
+                            type: 'backtrack_remove',
+                            depth: depth,
+                            path: [...path],
+                            used: [...used],
+                            index: i,
+                            value: elements[i],
+                            codeLine: 27  // path.pop_back()
+                        });
+                        
+                        // 回溯
+                        path.pop_back();
+                        
+                        // 记录回溯-标记未使用
+                        steps.push({
+                            type: 'backtrack_unuse',
+                            depth: depth,
+                            path: [...path],
+                            used: [...used],
+                            index: i,
+                            value: elements[i],
+                            codeLine: 28  // used[i] = false
+                        });
+                        
+                        used[i] = false;
+                    }
+                    
+                    // 记录循环结束
+                    steps.push({
+                        type: 'loop_end',
+                        depth: depth,
+                        path: [...path],
+                        used: [...used],
+                        codeLine: 29  // for循环结束
+                    });
+                    
+                    // 记录返回
+                    steps.push({
+                        type: 'return',
+                        depth: depth,
+                        path: [...path],
+                        used: [...used],
+                        codeLine: 30  // 函数结束
+                    });
+                }
+                
+                // 开始模拟
+                simulateBacktrack(0);
+                return steps;
+            }
+            
+            // 更新代码高亮
+            function highlightCodeLine(lineIndex) {
+                // 移除所有高亮
+                codeLines.forEach(line => {
+                    if (line) line.classList.remove('code-line-highlight');
+                });
+                
+                // 高亮当前行
+                if (codeLines[lineIndex - 1]) {
+                    codeLines[lineIndex - 1].classList.add('code-line-highlight');
+                }
+            }
+            
+            // 更新递归调用栈显示
+            function updateRecursionStack(currentDepth) {
+                recursionStack.innerHTML = '';
+                if (currentDepth === 0) {
+                    recursionStack.innerHTML = '<div class="text-center text-gray-500 text-sm py-4">调用栈将在这里显示</div>';
+                    return;
+                }
+                
+                for (let i = 0; i < currentDepth; i++) {
+                    const frame = document.createElement('div');
+                    frame.className = `stack-frame ${i === currentDepth - 1 ? 'stack-frame-active' : ''}`;
+                    frame.innerHTML = `backtrack() 深度: ${i + 1}`;
+                    recursionStack.appendChild(frame);
+                }
+                
+                // 滚动到底部
+                recursionStack.scrollTop = recursionStack.scrollHeight;
+            }
+            
+            // 更新执行过程显示
+            function updateExecutionStep(step) {
+                const stepElement = document.createElement('div');
+                stepElement.className = 'p-2 border-b border-gray-100 last:border-0';
+                
+                let actionText = '';
+                switch (step.type) {
+                    case 'enter':
+                        actionText = `进入递归函数，深度: ${step.depth + 1}`;
+                        break;
+                    case 'check_terminate':
+                        actionText = `检查终止条件: 当前路径长度 ${step.path.length}，目标长度 ${elements.length}`;
+                        break;
+                    case 'found_solution':
+                        actionText = `找到一个解: [${step.path.join(', ')}]`;
+                        break;
+                    case 'loop_start':
+                        actionText = `开始遍历所有可能选择`;
+                        break;
+                    case 'check_used':
+                        actionText = `检查元素 ${elements[step.index]} 是否已使用: ${step.used[step.index] ? '是' : '否'}`;
+                        break;
+                    case 'skip_used':
+                        actionText = `跳过已使用的元素 ${elements[step.index]}`;
+                        break;
+                    case 'select':
+                        actionText = `选择元素 ${elements[step.index]}，标记为已使用`;
+                        break;
+                    case 'add_path':
+                        actionText = `将元素 ${elements[step.index]} 加入当前路径`;
+                        break;
+                    case 'recurse':
+                        actionText = `递归调用，探索下一层`;
+                        break;
+                    case 'backtrack_remove':
+                        actionText = `回溯: 从路径中移除元素 ${elements[step.index]}`;
+                        break;
+                    case 'backtrack_unuse':
+                        actionText = `回溯: 将元素 ${elements[step.index]} 标记为未使用`;
+                        break;
+                    case 'loop_end':
+                        actionText = `遍历结束，所有选择已尝试`;
+                        break;
+                    case 'return':
+                        actionText = `返回上一层递归，深度: ${step.depth}`;
+                        break;
+                }
+                
+                stepElement.innerHTML = `
+                    <div class="flex items-start">
+                        <span class="inline-block w-5 h-5 rounded-full bg-backtrack/20 text-backtrack text-xs text-center leading-5 mr-2 mt-0.5">
+                            ${currentStep + 1}
+                        </span>
+                        <span>${actionText}</span>
+                    </div>
+                `;
+                
+                backtrackExecution.appendChild(stepElement);
+                backtrackExecution.scrollTop = backtrackExecution.scrollHeight;
+            }
+            
+            // 更新当前解空间
+            function updateSolutionSpace(path) {
+                solutionSpace.innerHTML = '';
+                if (path.length === 0) {
+                    solutionSpace.innerHTML = '<div class="text-center text-gray-500 py-6">求解过程将在这里显示</div>';
+                    return;
+                }
+                
+                const pathElement = document.createElement('div');
+                pathElement.className = 'flex flex-wrap gap-2 justify-center';
+                
+                path.forEach((num, index) => {
+                    const numElement = document.createElement('div');
+                    numElement.className = 'w-8 h-8 rounded-full bg-backtrack text-white flex items-center justify-center';
+                    numElement.textContent = num;
+                    pathElement.appendChild(numElement);
+                });
+                
+                // 剩余位置显示为空白
+                for (let i = path.length; i < elements.length; i++) {
+                    const emptyElement = document.createElement('div');
+                    emptyElement.className = 'w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-400';
+                    emptyElement.textContent = '?';
+                    pathElement.appendChild(emptyElement);
+                }
+                
+                solutionSpace.appendChild(pathElement);
+            }
+            
+            // 更新所有解
+            function updateAllSolutions(solutions) {
+                allSolutions.innerHTML = '';
+                if (solutions.length === 0) {
+                    allSolutions.innerHTML = '<div class="text-center text-gray-500 py-4 text-sm">找到的解将在这里显示</div>';
+                    return;
+                }
+                
+                solutions.forEach((sol, index) => {
+                    const solElement = document.createElement('div');
+                    solElement.className = 'solution-item';
+                    solElement.textContent = `${index + 1}. [${sol.join(', ')}]`;
+                    allSolutions.appendChild(solElement);
+                });
+            }
+            
+            // 执行一步动画
+            function executeStep() {
+                if (currentStep >= steps.length) {
+                    stopAnimation();
+                    backtrackStatus.textContent = '状态: 回溯完成，已找到所有解';
+                    return;
+                }
+                
+                const step = steps[currentStep];
+                
+                // 更新状态显示
+                backtrackStatus.textContent = `状态: 步骤 ${currentStep + 1}/${steps.length}`;
+                
+                // 高亮当前代码行
+                highlightCodeLine(step.codeLine);
+                
+                // 更新递归栈
+                updateRecursionStack(step.depth + 1);
+                
+                // 更新执行过程
+                updateExecutionStep(step);
+                
+                // 更新解空间
+                updateSolutionSpace(step.path);
+                
+                // 更新所有解
+                updateAllSolutions(solutions);
+                
+                currentStep++;
+            }
+            
+            // 开始动画
+            function startAnimation() {
+                if (animationRunning) return;
+                
+                animationRunning = true;
+                backtrackRunBtn.innerHTML = '<i class="fa fa-pause mr-2"></i> 暂停动画';
+                
+                // 立即执行一步
+                executeStep();
+                
+                // 设置定时器执行后续步骤
+                const speed = 3500 - animationSpeedInput.value; // 反转速度值
+                animationInterval = setInterval(executeStep, speed);
+            }
+            
+            // 停止动画
+            function stopAnimation() {
+                if (!animationRunning) return;
+                
+                animationRunning = false;
+                clearInterval(animationInterval);
+                backtrackRunBtn.innerHTML = '<i class="fa fa-play mr-2"></i> 继续动画';
+            }
+            
+            // 重置动画
+            function resetAnimation() {
+                stopAnimation();
+                currentStep = 0;
+                
+                // 清空显示
+                backtrackExecution.innerHTML = `
+                    <div class="text-center text-gray-500 py-12">
+                        <i class="fa fa-arrow-down mb-2"></i>
+                        <p>点击"运行动画"或"单步执行"开始演示</p>
+                    </div>
+                `;
+                
+                // 重置代码高亮
+                highlightCodeLine(-1);
+                
+                // 生成新的步骤
+                const n = parseInt(elementCountInput.value);
+                generateSteps(n);
+                
+                // 更新状态
+                backtrackStatus.textContent = '状态: 已重置，等待开始';
+                backtrackRunBtn.innerHTML = '<i class="fa fa-play mr-2"></i> 运行动画';
+            }
+            
+            // 事件监听
+            backtrackRunBtn.addEventListener('click', function() {
+                if (animationRunning) {
+                    stopAnimation();
+                } else {
+                    if (steps.length === 0) {
+                        // 首次运行，生成步骤
+                        const n = parseInt(elementCountInput.value);
+                        generateSteps(n);
+                    }
+                    startAnimation();
+                }
+            });
+            
+            backtrackStepBtn.addEventListener('click', function() {
+                stopAnimation();
+                if (steps.length === 0) {
+                    // 首次运行，生成步骤
+                    const n = parseInt(elementCountInput.value);
+                    generateSteps(n);
+                }
+                executeStep();
+            });
+            
+            backtrackResetBtn.addEventListener('click', resetAnimation);
+            
+            elementCountInput.addEventListener('change', function() {
+                // 限制输入范围
+                let n = parseInt(this.value);
+                if (n < 2) n = 2;
+                if (n > 5) n = 5;
+                this.value = n;
+                
+                resetAnimation();
+            });
+            
+            // 初始化
+            resetAnimation();
+        });
+    </script>
+</body>
+</html>
