@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSP初赛 - 计算机历史与理论基础</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-darkdark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#36CFC9',
+                        history: '#722ED1',
+                        theory: '#F53F3F',
+                        practice: '#FF7D00',
+                        darkbg: '#F8FAFC',
+                        cardbg: '#FFFFFF',
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .timeline-item {
+                @apply relative pl-8 pb-8 border-l-2 border-gray-200 last:border-transparent last:pb-0;
+            }
+            .timeline-dot {
+                @apply absolute left-[-8px] w-4 h-4 rounded-full bg-gray-300 transition-all duration-300;
+            }
+            .timeline-dot-active {
+                @apply bg-history scale-150 z-10;
+            }
+            .timeline-content {
+                @apply opacity-70 transition-opacity duration-300;
+            }
+            .timeline-content-active {
+                @apply opacity-100;
+            }
+            .person-card {
+                @apply bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100;
+            }
+            .theory-card {
+                @apply bg-white rounded-lg p-5 shadow-sm hover:shadow-md transition-all duration-300;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="text-2xl font-bold text-primary tracking-tight">CSP初赛指南</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#history" class="text-gray-700 hover:text-primary transition-colors duration-200">发展历史</a>
+                <a href="#computers" class="text-gray-700 hover:text-primary transition-colors duration-200">计算机历程</a>
+                <a href="#people" class="text-gray-700 hover:text-primary transition-colors duration-200">重要人物</a>
+                <a href="#theory" class="text-gray-700 hover:text-primary transition-colors duration-200">理论基础</a>
+                <a href="#skills" class="text-gray-700 hover:text-primary transition-colors duration-200">解题技巧</a>
+                <a href="#examples" class="text-gray-700 hover:text-primary transition-colors duration-200">例题解析</a>
+            </div>
+            <div class="md:hidden">
+                <button class="text-gray-700">
+                    <i class="fa fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">CSP初赛</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-primary font-medium">计算机历史与理论</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-primary mb-2">CSP初赛必备知识</h1>
+                    <p class="text-gray-700">
+                        计算机发展历史、重要人物与理论基础，专为信息学奥赛（NOIP/CSP）初赛设计
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#history" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-history mr-2"></i> 开始学习
+                        </a>
+                        <a href="#examples" class="bg-white border border-primary text-primary hover:bg-primary/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-lightbulb-o mr-2"></i> 查看例题
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 计算机发展历史 -->
+        <section id="history" class="mb-12">
+            <div class="bg-white rounded-lg p-6 shadow-sm mb-6">
+                <h2 class="text-2xl font-bold text-history mb-6 flex items-center">
+                    <i class="fa fa-history mr-2"></i> 计算机发展历史（与信息学奥赛相关）
+                </h2>
+                
+                <div class="mb-6">
+                    <p class="text-gray-700 mb-4">
+                        了解计算机发展历史，特别是与编程和算法相关的重要里程碑，是CSP初赛的基础考点。
+                        以下是时间线动态演示，点击时间点可查看详细内容：
+                    </p>
+                    
+                    <div class="animation-controls flex flex-wrap gap-2 my-6">
+                        <button id="timeline-play" class="bg-history hover:bg-history/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-play mr-2"></i> 播放时间线
+                        </button>
+                        <button id="timeline-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-refresh mr-2"></i> 重置
+                        </button>
+                        <div class="ml-auto">
+                            <label class="text-sm text-gray-600 mr-2">速度：</label>
+                            <input type="range" id="timeline-speed" min="1" max="10" value="5" 
+                                class="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-history">
+                        </div>
+                    </div>
+                    
+                    <div class="relative pl-8">
+                        <!-- 1936: 图灵机 -->
+                        <div class="timeline-item" data-year="1936">
+                            <div class="timeline-dot" data-year="1936"></div>
+                            <div class="timeline-content" data-year="1936">
+                                <h3 class="text-xl font-semibold mb-2">1936年：图灵机理论提出</h3>
+                                <p class="text-gray-700">
+                                    艾伦·图灵发表《论可计算数及其在判定问题中的应用》，提出"图灵机"模型，奠定了计算机科学的理论基础。
+                                    图灵机是现代计算机的理论原型，也是算法与可计算性理论的基础。
+                                </p>
+                                <p class="text-sm text-gray-500 mt-2">
+                                    <strong>CSP考点</strong>：可计算性理论基础，算法的本质
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- 1946: 第一台电子计算机 -->
+                        <div class="timeline-item" data-year="1946">
+                            <div class="timeline-dot" data-year="1946"></div>
+                            <div class="timeline-content" data-year="1946">
+                                <h3 class="text-xl font-semibold mb-2">1946年：ENIAC诞生</h3>
+                                <p class="text-gray-700">
+                                    世界上第一台通用电子数字计算机ENIAC在美国宾夕法尼亚大学诞生，占地约170平方米，重达30吨，
+                                    使用了约18000个电子管，每秒钟可进行5000次加法运算。
+                                </p>
+                                <p class="text-sm text-gray-500 mt-2">
+                                    <strong>CSP考点</strong>：计算机发展的重要里程碑
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- 1950s: 编程语言发展 -->
+                        <div class="timeline-item" data-year="1950s">
+                            <div class="timeline-dot" data-year="1950s"></div>
+                            <div class="timeline-content" data-year="1950s">
+                                <h3 class="text-xl font-semibold mb-2">1950年代：高级编程语言出现</h3>
+                                <p class="text-gray-700">
+                                    1954年，FORTRAN语言诞生；1958年，ALGOL语言和LISP语言出现。这些语言为计算机编程提供了更接近人类思维的方式，
+                                    奠定了现代编程语言的基础。1972年，C语言诞生，成为信息学奥赛早期使用的主要语言。
+                                </p>
+                                <p class="text-sm text-gray-500 mt-2">
+                                    <strong>CSP考点</strong>：编程语言发展历程，C/C++语言的地位
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- 1965: 摩尔定律 -->
+                        <div class="timeline-item" data-year="1965">
+                            <div class="timeline-dot" data-year="1965"></div>
+                            <div class="timeline-content" data-year="1965">
+                                <h3 class="text-xl font-semibold mb-2">1965年：摩尔定律提出</h3>
+                                <p class="text-gray-700">
+                                    戈登·摩尔提出：集成电路上可容纳的晶体管数目，约每隔18-24个月便会增加一倍，性能也将提升一倍。
+                                    这一定律深刻影响了计算机硬件的发展，也推动了算法效率研究的重要性。
+                                </p>
+                                <p class="text-sm text-gray-500 mt-2">
+                                    <strong>CSP考点</strong>：计算机性能发展规律，算法复杂度分析的意义
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- 1970s: 算法与数据结构 -->
+                        <div class="timeline-item" data-year="1970s">
+                            <div class="timeline-dot" data-year="1970s"></div>
+                            <div class="timeline-content" data-year="1970s">
+                                <h3 class="text-xl font-semibold mb-2">1970年代：算法与数据结构体系建立</h3>
+                                <p class="text-gray-700">
+                                    这一时期，计算机科学家们系统地整理和发展了各种算法和数据结构。1976年，《算法导论》的前身问世；
+                                    各种排序算法、图算法、动态规划等方法得到深入研究，形成了现代算法理论的基础。
+                                </p>
+                                <p class="text-sm text-gray-500 mt-2">
+                                    <strong>CSP考点</strong>：经典算法的发展背景，算法复杂度分析方法
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- 1984: 第一届IOI -->
+                        <div class="timeline-item" data-year="1984">
+                            <div class="timeline-dot" data-year="1984"></div>
+                            <div class="timeline-content" data-year="1984">
+                                <h3 class="text-xl font-semibold mb-2">1984年：第一届国际信息学奥林匹克(IOI)举办</h3>
+                                <p class="text-gray-700">
+                                    第一届IOI在保加利亚举行，标志着信息学竞赛的正式确立。中国从1989年开始参加IOI，
+                                    并逐渐成为信息学奥赛的强国。CSP（软件能力认证）是中国计算机学会推出的面向社会的软件能力认证，
+                                    是NOIP的延续。
+                                </p>
+                                <p class="text-sm text-gray-500 mt-2">
+                                    <strong>CSP考点</strong>：信息学竞赛的发展历史
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- 2000s: 互联网与编程普及 -->
+                        <div class="timeline-item" data-year="2000s">
+                            <div class="timeline-dot" data-year="2000s"></div>
+                            <div class="timeline-content" data-year="2000s">
+                                <h3 class="text-xl font-semibold mb-2">2000年代：互联网普及与编程教育发展</h3>
+                                <p class="text-gray-700">
+                                    随着互联网的普及，编程教育得到快速发展。C++成为信息学奥赛的主要编程语言，各种在线判题系统(Online Judge)出现，
+                                    为编程学习者提供了便捷的练习平台。2019年，NOIP升级为CSP认证，进一步规范了信息学能力评价体系。
+                                </p>
+                                <p class="text-sm text-gray-500 mt-2">
+                                    <strong>CSP考点</strong>：信息学竞赛的现状与发展
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 计算机发展历程 -->
+        <section id="computers" class="mb-12">
+            <div class="bg-white rounded-lg p-6 shadow-sm mb-6">
+                <h2 class="text-2xl font-bold text-history mb-6 flex items-center">
+                    <i class="fa fa-microchip mr-2"></i> 计算机发展历程（与信息学奥赛相关）
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-gray-50 p-5 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3 text-primary">计算机 generations</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-medium">第一代计算机（1946-1958）</h4>
+                                <p class="text-sm text-gray-700">电子管时代，代表机型ENIAC，编程使用机器语言</p>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">第二代计算机（1958-1964）</h4>
+                                <p class="text-sm text-gray-700">晶体管时代，出现汇编语言和高级语言雏形</p>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">第三代计算机（1964-1971）</h4>
+                                <p class="text-sm text-gray-700">集成电路时代，操作系统开始普及</p>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">第四代计算机（1971-至今）</h4>
+                                <p class="text-sm text-gray-700">大规模集成电路时代，个人计算机普及，C/C++等高级语言成熟</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-5 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-3 text-primary">计算工具演进</h3>
+                        <canvas id="computerEvolutionChart" width="400" height="300"></canvas>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3 text-primary">与信息学奥赛相关的重要技术发展</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="border border-gray-200 rounded p-3 bg-white">
+                            <h4 class="font-medium mb-2">编程语言发展</h4>
+                            <p class="text-sm text-gray-700">从机器语言到汇编语言，再到C/C++等高级语言，为算法实现提供了便利</p>
+                        </div>
+                        <div class="border border-gray-200 rounded p-3 bg-white">
+                            <h4 class="font-medium mb-2">算法理论体系</h4>
+                            <p class="text-sm text-gray-700">排序算法、图论算法、动态规划等理论的完善，构成了奥赛的核心内容</p>
+                        </div>
+                        <div class="border border-gray-200 rounded p-3 bg-white">
+                            <h4 class="font-medium mb-2">计算机性能提升</h4>
+                            <p class="text-sm text-gray-700">硬件性能的指数级提升，使得复杂算法的实现和运行成为可能</p>
+                        </div>
+                        <div class="border border-gray-200 rounded p-3 bg-white">
+                            <h4 class="font-medium mb-2">存储技术发展</h4>
+                            <p class="text-sm text-gray-700">从磁带、软盘到固态硬盘，存储容量和速度的提升影响着数据处理策略</p>
+                        </div>
+                        <div class="border border-gray-200 rounded p-3 bg-white">
+                            <h4 class="font-medium mb-2">网络技术普及</h4>
+                            <p class="text-sm text-gray-700">促进了在线判题系统的发展，改变了信息学竞赛的训练和组织方式</p>
+                        </div>
+                        <div class="border border-gray-200 rounded p-3 bg-white">
+                            <h4 class="font-medium mb-2">并行计算技术</h4>
+                            <p class="text-sm text-gray-700">多核处理器的发展，影响着算法的并行化设计思路</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 重要人物 -->
+        <section id="people" class="mb-12">
+            <div class="bg-white rounded-lg p-6 shadow-sm mb-6">
+                <h2 class="text-2xl font-bold text-history mb-6 flex items-center">
+                    <i class="fa fa-user-circle mr-2"></i> 信息学领域重要人物
+                </h2>
+                
+                <p class="text-gray-700 mb-6">
+                    以下人物对计算机科学和信息学发展做出了重大贡献，他们的理论和发明是CSP初赛的重要考点：
+                </p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- 图灵 -->
+                    <div class="person-card hover-scale">
+                        <div class="flex items-start">
+                            <div class="w-16 h-16 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                                <img src="https://picsum.photos/id/1005/200/200" alt="艾伦·图灵" class="w-full h-full object-cover">
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <h3 class="font-bold text-lg">艾伦·图灵 (1912-1954)</h3>
+                                <p class="text-sm text-gray-600 mb-2">英国数学家、逻辑学家</p>
+                                <p class="text-sm text-gray-700">
+                                    计算机科学之父，提出图灵机模型，奠定了可计算性理论基础。图灵测试的提出者，
+                                    二战期间破解德国Enigma密码做出重要贡献。
+                                </p>
+                                <p class="text-xs text-primary mt-2">
+                                    <strong>CSP考点</strong>：图灵机、可计算性理论
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 冯·诺依曼 -->
+                    <div class="person-card hover-scale">
+                        <div class="flex items-start">
+                            <div class="w-16 h-16 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                                <img src="https://picsum.photos/id/1012/200/200" alt="冯·诺依曼" class="w-full h-full object-cover">
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <h3 class="font-bold text-lg">冯·诺依曼 (1903-1957)</h3>
+                                <p class="text-sm text-gray-600 mb-2">美籍匈牙利数学家</p>
+                                <p class="text-sm text-gray-700">
+                                    提出"冯·诺依曼体系结构"，确立了现代计算机的基本结构：运算器、控制器、存储器、输入设备和输出设备，
+                                    程序和数据以同等地位存储在存储器中。
+                                </p>
+                                <p class="text-xs text-primary mt-2">
+                                    <strong>CSP考点</strong>：计算机基本结构、存储程序原理
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 高德纳 -->
+                    <div class="person-card hover-scale">
+                        <div class="flex items-start">
+                            <div class="w-16 h-16 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                                <img src="https://picsum.photos/id/1025/200/200" alt="高德纳" class="w-full h-full object-cover">
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <h3 class="font-bold text-lg">高德纳 (1938- )</h3>
+                                <p class="text-sm text-gray-600 mb-2">美国计算机科学家</p>
+                                <p class="text-sm text-gray-700">
+                                    算法分析的先驱，《计算机程序设计艺术》的作者，提出了Knuth-Morris-Pratt字符串搜索算法，
+                                    创造了TeX排版系统。他提出的大O记号成为算法复杂度分析的标准。
+                                </p>
+                                <p class="text-xs text-primary mt-2">
+                                    <strong>CSP考点</strong>：算法复杂度分析、KMP算法
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 丹尼斯·里奇 -->
+                    <div class="person-card hover-scale">
+                        <div class="flex items-start">
+                            <div class="w-16 h-16 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                                <img src="https://picsum.photos/id/1074/200/200" alt="丹尼斯·里奇" class="w-full h-full object-cover">
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <h3 class="font-bold text-lg">丹尼斯·里奇 (1941-2011)</h3>
+                                <p class="text-sm text-gray-600 mb-2">美国计算机科学家</p>
+                                <p class="text-sm text-gray-700">
+                                    C语言的创造者，Unix操作系统的共同开发者。C语言成为信息学奥赛的主要编程语言，
+                                    对后来的编程语言如C++、Java等产生了深远影响。
+                                </p>
+                                <p class="text-xs text-primary mt-2">
+                                    <strong>CSP考点</strong>：C/C++语言发展历史
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 姚期智 -->
+                    <div class="person-card hover-scale">
+                        <div class="flex items-start">
+                            <div class="w-16 h-16 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                                <img src="https://picsum.photos/id/1062/200/200" alt="姚期智" class="w-full h-full object-cover">
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <h3 class="font-bold text-lg">姚期智 (1946- )</h3>
+                                <p class="text-sm text-gray-600 mb-2">华裔计算机科学家</p>
+                                <p class="text-sm text-gray-700">
+                                    首位获得图灵奖的华人，在计算理论领域有突出贡献，包括伪随机数生成、密码学、通信复杂性等。
+                                    创办"姚班"，推动中国计算机教育发展，对信息学奥赛也有重要影响。
+                                </p>
+                                <p class="text-xs text-primary mt-2">
+                                    <strong>CSP考点</strong>：计算理论基础
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 唐纳德·克努特 -->
+                    <div class="person-card hover-scale">
+                        <div class="flex items-start">
+                            <div class="w-16 h-16 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                                <img src="https://picsum.photos/id/1027/200/200" alt="Edsger Dijkstra" class="w-full h-full object-cover">
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <h3 class="font-bold text-lg">艾兹格·迪杰斯特拉 (1930-2002)</h3>
+                                <p class="text-sm text-gray-600 mb-2">荷兰计算机科学家</p>
+                                <p class="text-sm text-gray-700">
+                                    提出了最短路径算法（迪杰斯特拉算法），对结构化程序设计有重要贡献，
+                                    推动了程序设计从"技巧性"向"科学性"的转变。
+                                </p>
+                                <p class="text-xs text-primary mt-2">
+                                    <strong>CSP考点</strong>：最短路径算法、结构化程序设计
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 理论基础知识 -->
+        <section id="theory" class="mb-12">
+            <div class="bg-white rounded-lg p-6 shadow-sm mb-6">
+                <h2 class="text-2xl font-bold text-theory mb-6 flex items-center">
+                    <i class="fa fa-book mr-2"></i> CSP初赛理论基础知识
+                </h2>
+                
+                <div class="space-y-6">
+                    <!-- 计算机基本结构 -->
+                    <div class="theory-card">
+                        <h3 class="text-xl font-semibold mb-4 text-theory">1. 计算机基本结构</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-2">冯·诺依曼体系结构</h4>
+                                <ul class="list-disc pl-5 text-gray-700 space-y-1">
+                                    <li>运算器：执行算术和逻辑运算</li>
+                                    <li>控制器：控制计算机各部件协调工作</li>
+                                    <li>存储器：存储程序和数据（内存、外存）</li>
+                                    <li>输入设备：向计算机输入信息（键盘、鼠标等）</li>
+                                    <li>输出设备：输出计算机处理结果（显示器、打印机等）</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-2">存储器层次结构</h4>
+                                <ul class="list-disc pl-5 text-gray-700 space-y-1">
+                                    <li>寄存器：速度最快，容量最小，位于CPU内部</li>
+                                    <li>Cache（高速缓存）：介于CPU和内存之间</li>
+                                    <li>内存（RAM）：程序运行时的主要存储空间</li>
+                                    <li>外存：硬盘、SSD等，用于长期存储</li>
+                                    <li>速度：寄存器 > Cache > 内存 > 外存</li>
+                                    <li>容量：寄存器 < Cache < 内存 < 外存</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 数据表示与编码 -->
+                    <div class="theory-card">
+                        <h3 class="text-xl font-semibold mb-4 text-theory">2. 数据表示与编码</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-2">数制转换</h4>
+                                <ul class="list-disc pl-5 text-gray-700 space-y-1">
+                                    <li>二进制：由0和1组成，计算机内部数据表示方式</li>
+                                    <li>八进制：由0-7组成，每一位对应3位二进制</li>
+                                    <li>十六进制：由0-9和A-F组成，每一位对应4位二进制</li>
+                                    <li>十进制与二进制转换：除2取余法、乘2取整法</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-2">信息单位</h4>
+                                <ul class="list-disc pl-5 text-gray-700 space-y-1">
+                                    <li>位（bit）：表示一个二进制位，是最小单位</li>
+                                    <li>字节（Byte）：1字节 = 8位</li>
+                                    <li>KB：1KB = 1024字节</li>
+                                    <li>MB：1MB = 1024KB</li>
+                                    <li>GB：1GB = 1024MB</li>
+                                    <li>TB：1TB = 1024GB</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 算法与数据结构基础 -->
+                    <div class="theory-card">
+                        <h3 class="text-xl font-semibold mb-4 text-theory">3. 算法与数据结构基础</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-medium mb-2">算法基本概念</h4>
+                                <ul class="list-disc pl-5 text-gray-700 space-y-1">
+                                    <li>算法的五个特性：输入、输出、有穷性、确定性、可行性</li>
+                                    <li>算法复杂度：时间复杂度和空间复杂度</li>
+                                    <li>时间复杂度表示：大O记号（O(1), O(log n), O(n), O(n log n), O(n²)等）</li>
+                                    <li>常见排序算法及其复杂度：冒泡排序(O(n²))、快速排序(O(n log n))等</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-2">基本数据结构</h4>
+                                <ul class="list-disc pl-5 text-gray-700 space-y-1">
+                                    <li>线性结构：数组、链表、栈、队列</li>
+                                    <li>树形结构：二叉树、堆、线段树</li>
+                                    <li>图结构：有向图、无向图、加权图</li>
+                                    <li>哈希表：通过哈希函数实现快速查找</li>
+                                    <li>每种数据结构的特点和适用场景</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 计算机网络基础 -->
+                    <div class="theory-card">
+                        <h3 class="text-xl font-semibold mb-4 text-theory">4. 计算机网络基础</h3>
+                        <ul class="list-disc pl-5 text-gray-700 space-y-1">
+                            <li>IP地址：32位（IPv4）或128位（IPv6），用于标识网络中的设备</li>
+                            <li>HTTP协议：超文本传输协议，用于网页传输</li>
+                            <li>URL：统一资源定位符，用于标识互联网上的资源</li>
+                            <li>局域网（LAN）和广域网（WAN）的基本概念</li>
+                            <li>常用网络服务：DNS、FTP、Email等的基本功能</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 解题技巧 -->
+        <section id="skills" class="mb-12">
+            <div class="bg-white rounded-lg p-6 shadow-sm mb-6">
+                <h2 class="text-2xl font-bold text-practice mb-6 flex items-center">
+                    <i class="fa fa-lightbulb-o mr-2"></i> CSP初赛解题技巧
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-5 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4 text-practice">1. 计算机基础知识题</h3>
+                        <ul class="list-disc pl-5 text-gray-700 space-y-2">
+                            <li><strong>记忆重点</strong>：冯·诺依曼体系、数制转换、存储单位换算、ASCII编码</li>
+                            <li><strong>技巧</strong>：利用单位换算关系（1KB=1024B等）快速计算</li>
+                            <li><strong>注意</strong>：区分位(bit)和字节(Byte)，1字节=8位</li>
+                            <li><strong>举例</strong>：将十进制数转换为二进制时，可先转换为十六进制再转换为二进制</li>
+                            <li><strong>陷阱</strong>：注意题目中的"大约"估算和精确计算的区别</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-5 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4 text-practice">2. 算法与数据结构题</h3>
+                        <ul class="list-disc pl-5 text-gray-700 space-y-2">
+                            <li><strong>复杂度分析</strong>：记住常见算法的时间复杂度，注意嵌套循环的层数</li>
+                            <li><strong>排序问题</strong>：模拟排序过程，特别是冒泡、选择、插入排序的步骤</li>
+                            <li><strong>递归问题</strong>：画出递归调用树，逐步分析每一步的返回值</li>
+                            <li><strong>图论问题</strong>：熟悉DFS、BFS的遍历顺序，最短路径算法的基本思想</li>
+                            <li><strong>技巧</strong>：对于复杂问题，可先用小规模数据模拟，寻找规律</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-5 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4 text-practice">3. 程序阅读题</h3>
+                        <ul class="list-disc pl-5 text-gray-700 space-y-2">
+                            <li><strong>逐行分析</strong>：跟踪变量值的变化，记录关键变量在每一步的值</li>
+                            <li><strong>函数调用</strong>：注意函数参数传递方式，特别是递归函数的调用过程</li>
+                            <li><strong>循环结构</strong>：明确循环的开始条件、结束条件和步长</li>
+                            <li><strong>条件判断</strong>：理清分支结构的执行路径</li>
+                            <li><strong>技巧</strong>：使用表格记录变量值的变化，特别是循环和递归中</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-5 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4 text-practice">4. 综合题解题策略</h3>
+                        <ul class="list-disc pl-5 text-gray-700 space-y-2">
+                            <li><strong>时间分配</strong>：合理分配时间，先易后难，确保简单题不丢分</li>
+                            <li><strong>排除法</strong>：对于选择题，先排除明显错误的选项</li>
+                            <li><strong>验证法</strong>：对于计算类题目，用不同方法验证结果</li>
+                            <li><strong>注意细节</strong>：留意题目中的边界条件、数据范围等细节</li>
+                            <li><strong>心态调整</strong>：遇到难题不慌张，先标记跳过，完成其他题目后再回头做</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 例题解析 -->
+        <section id="examples" class="mb-12">
+            <div class="bg-white rounded-lg p-6 shadow-sm mb-6">
+                <h2 class="text-2xl font-bold text-practice mb-6 flex items-center">
+                    <i class="fa fa-code-fork mr-2"></i> CSP初赛例题解析
+                </h2>
+                
+                <div class="space-y-8">
+                    <!-- 例题1：数制转换 -->
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">例题1：数制转换</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <p class="text-gray-800"><strong>题目</strong>：二进制数10110101对应的十进制数是多少？</p>
+                        </div>
+                        
+                        <div class="pl-4 border-l-4 border-primary">
+                            <h4 class="font-medium mb-2">解析：</h4>
+                            <p class="text-gray-700 mb-2">二进制转十进制的方法是"按权展开求和"：</p>
+                            <p class="text-gray-700 mb-2">10110101 = 1×2⁷ + 0×2⁶ + 1×2⁵ + 1×2⁴ + 0×2³ + 1×2² + 0×2¹ + 1×2⁰</p>
+                            <p class="text-gray-700 mb-2">= 128 + 0 + 32 + 16 + 0 + 4 + 0 + 1 = 181</p>
+                            <p class="text-gray-700"><strong>答案：181</strong></p>
+                        </div>
+                    </div>
+                    
+                    <!-- 例题2：算法复杂度 -->
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">例题2：算法复杂度分析</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <p class="text-gray-800"><strong>题目</strong>：以下代码的时间复杂度是多少？</p>
+                            <pre class="code-block mt-2"><code class="language-cpp">for (int i = 1; i <= n; i *= 2) {
+    for (int j = 1; j <= i; j++) {
+        cout << "Hello";
+    }
+}</code></pre>
+                        </div>
+                        
+                        <div class="pl-4 border-l-4 border-primary">
+                            <h4 class="font-medium mb-2">解析：</h4>
+                            <p class="text-gray-700 mb-2">外层循环变量i的取值为1, 2, 4, 8, ..., 直到i > n，共执行log₂n次。</p>
+                            <p class="text-gray-700 mb-2">内层循环对于每个i，执行i次。</p>
+                            <p class="text-gray-700 mb-2">总执行次数为：1 + 2 + 4 + 8 + ... + 2^log₂n = 2n - 1</p>
+                            <p class="text-gray-700"><strong>答案：O(n)</strong></p>
+                        </div>
+                    </div>
+                    
+                    <!-- 例题3：程序阅读 -->
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">例题3：程序阅读题</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <p class="text-gray-800"><strong>题目</strong>：以下程序的输出结果是什么？</p>
+                            <pre class="code-block mt-2"><code class="language-cpp">#include <iostream>
+using namespace std;
+
+int f(int n) {
+    if (n == 1) return 1;
+    return f(n-1) * n;
+}
+
+int main() {
+    cout << f(5) << endl;
+    return 0;
+}</code></pre>
+                        </div>
+                        
+                        <div class="pl-4 border-l-4 border-primary">
+                            <h4 class="font-medium mb-2">解析：</h4>
+                            <p class="text-gray-700 mb-2">该程序定义了一个递归函数f(n)，用于计算n的阶乘：</p>
+                            <ul class="list-disc pl-5 text-gray-700 mb-2">
+                                <li>f(5) = f(4) × 5</li>
+                                <li>f(4) = f(3) × 4</li>
+                                <li>f(3) = f(2) × 3</li>
+                                <li>f(2) = f(1) × 2</li>
+                                <li>f(1) = 1（基本情况）</li>
+                            </ul>
+                            <p class="text-gray-700 mb-2">因此，f(5) = 5 × 4 × 3 × 2 × 1 = 120</p>
+                            <p class="text-gray-700"><strong>答案：120</strong></p>
+                        </div>
+                    </div>
+                    
+                    <!-- 例题4：计算机基础 -->
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">例题4：计算机基础知识</h3>
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <p class="text-gray-800"><strong>题目</strong>：在计算机中，1MB等于多少字节？</p>
+                            <p class="text-gray-800 mt-2">A. 1000字节</p>
+                            <p class="text-gray-800">B. 1024字节</p>
+                            <p class="text-gray-800">C. 1000×1000字节</p>
+                            <p class="text-gray-800">D. 1024×1024字节</p>
+                        </div>
+                        
+                        <div class="pl-4 border-l-4 border-primary">
+                            <h4 class="font-medium mb-2">解析：</h4>
+                            <p class="text-gray-700 mb-2">计算机存储单位采用二进制：</p>
+                            <p class="text-gray-700 mb-2">1KB = 1024字节</p>
+                            <p class="text-gray-700 mb-2">1MB = 1024KB = 1024×1024字节</p>
+                            <p class="text-gray-700"><strong>答案：D</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-4">CSP初赛指南</h3>
+                    <p class="text-gray-400 text-sm">
+                        专注于信息学奥赛（CSP/NOIP）初赛知识点讲解与练习，助力信息学爱好者提升成绩。
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-3">相关链接</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="https://www.noi.cn/" class="hover:text-white transition-colors">全国青少年信息学奥林匹克竞赛</a></li>
+                        <li><a href="https://www.luogu.com.cn/" class="hover:text-white transition-colors">洛谷在线判题系统</a></li>
+                        <li><a href="https://www.acwing.com/" class="hover:text-white transition-colors">AcWing信息学奥赛</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-center text-gray-500 text-sm">
+                © 2023 CSP初赛指南 | 信息学奥赛学习资源
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化代码高亮
+        hljs.highlightAll();
+        
+        // 时间线动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const timelineDots = document.querySelectorAll('.timeline-dot');
+            const timelineContents = document.querySelectorAll('.timeline-content');
+            const playButton = document.getElementById('timeline-play');
+            const resetButton = document.getElementById('timeline-reset');
+            const speedControl = document.getElementById('timeline-speed');
+            let isPlaying = false;
+            let currentIndex = 0;
+            let animationInterval;
+            
+            // 计算速度（毫秒）
+            function getSpeed() {
+                return 3000 - (speedControl.value - 1) * 250;
+            }
+            
+            // 显示指定索引的时间点
+            function showTimelineItem(index) {
+                // 重置所有项
+                timelineDots.forEach(dot => dot.classList.remove('timeline-dot-active'));
+                timelineContents.forEach(content => content.classList.remove('timeline-content-active'));
+                
+                // 激活当前项
+                if (index < timelineDots.length) {
+                    timelineDots[index].classList.add('timeline-dot-active');
+                    timelineContents[index].classList.add('timeline-content-active');
+                }
+            }
+            
+            // 播放时间线
+            function playTimeline() {
+                if (isPlaying) {
+                    // 暂停
+                    clearInterval(animationInterval);
+                    playButton.innerHTML = '<i class="fa fa-play mr-2"></i> 播放时间线';
+                    isPlaying = false;
+                    return;
+                }
+                
+                // 开始播放
+                isPlaying = true;
+                playButton.innerHTML = '<i class="fa fa-pause mr-2"></i> 暂停';
+                
+                animationInterval = setInterval(() => {
+                    showTimelineItem(currentIndex);
+                    currentIndex++;
+                    
+                    if (currentIndex > timelineDots.length) {
+                        clearInterval(animationInterval);
+                        playButton.innerHTML = '<i class="fa fa-play mr-2"></i> 播放时间线';
+                        isPlaying = false;
+                        currentIndex = 0;
+                    }
+                }, getSpeed());
+            }
+            
+            // 重置时间线
+            function resetTimeline() {
+                clearInterval(animationInterval);
+                isPlaying = false;
+                currentIndex = 0;
+                showTimelineItem(-1); // 隐藏所有
+                playButton.innerHTML = '<i class="fa fa-play mr-2"></i> 播放时间线';
+            }
+            
+            // 点击时间点直接跳转
+            timelineDots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    clearInterval(animationInterval);
+                    isPlaying = false;
+                    playButton.innerHTML = '<i class="fa fa-play mr-2"></i> 播放时间线';
+                    currentIndex = index;
+                    showTimelineItem(index);
+                });
+            });
+            
+            // 事件监听
+            playButton.addEventListener('click', playTimeline);
+            resetButton.addEventListener('click', resetTimeline);
+            speedControl.addEventListener('input', () => {
+                if (isPlaying) {
+                    clearInterval(animationInterval);
+                    animationInterval = setInterval(() => {
+                        showTimelineItem(currentIndex);
+                        currentIndex++;
+                        
+                        if (currentIndex > timelineDots.length) {
+                            clearInterval(animationInterval);
+                            playButton.innerHTML = '<i class="fa fa-play mr-2"></i> 播放时间线';
+                            isPlaying = false;
+                            currentIndex = 0;
+                        }
+                    }, getSpeed());
+                }
+            });
+            
+            // 计算机发展图表
+            const ctx = document.getElementById('computerEvolutionChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['1940s', '1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s', '2020s'],
+                    datasets: [{
+                        label: '计算能力 (相对值)',
+                        data: [1, 5, 20, 100, 500, 5000, 50000, 500000, 2000000],
+                        borderColor: '#165DFF',
+                        backgroundColor: 'rgba(22, 93, 255, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        logarithmic: true
+                    }, {
+                        label: '存储容量 (相对值)',
+                        data: [1, 3, 10, 100, 1000, 10000, 1000000, 100000000, 1000000000],
+                        borderColor: '#722ED1',
+                        backgroundColor: 'rgba(114, 46, 209, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        logarithmic: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            type: 'logarithmic',
+                            title: {
+                                display: true,
+                                text: '相对值 (对数刻度)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

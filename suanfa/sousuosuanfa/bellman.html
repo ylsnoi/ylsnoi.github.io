@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bellman-Ford最短路算法 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/css/font/font-awesomecss/font-awesomemin.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：鲜明的蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        syntax: '#FF9800', // 语法部分：橙色
+                        algorithm: '#2ECC71', // 算法部分：绿色
+                        datastructure: '#9C27B0', // 数据结构部分：深紫色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                        bellman: '#E91E63', // Bellman-Ford主题色：粉红色
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .subcategory-bg {
+                @apply bg-gradient-to-r from-secondary/5 to-secondary/10;
+            }
+            .bellman-bg {
+                @apply bg-gradient-to-r from-bellman/5 to-bellman/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .bellman-header {
+                @apply font-bold text-bellman mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-bellman bg-bellman/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-bellman text-white text-center mr-2 text-xs;
+            }
+            .graph-node {
+                @apply w-12 h-12 rounded-full flex items-center justify-center font-medium border-2 transition-all duration-300;
+            }
+            .graph-node-normal {
+                @apply bg-white border-gray-300 text-gray-700;
+            }
+            .graph-node-source {
+                @apply bg-bellman text-white border-bellman;
+            }
+            .graph-node-updated {
+                @apply bg-green-500 text-white border-green-500 scale-110;
+            }
+            .graph-node-current {
+                @apply bg-blue-500 text-white border-blue-500 scale-110;
+            }
+            .graph-edge {
+                @apply stroke-gray-300 stroke-2 transition-all duration-500;
+            }
+            .graph-edge-active {
+                @apply stroke-bellman stroke-3;
+            }
+            .graph-container {
+                @apply bg-white border border-gray-200 rounded-lg p-4 min-h-[400px] my-4;
+                position: relative;
+            }
+            .distance-label {
+                @apply absolute bg-gray-100 px-2 py-1 rounded text-xs font-mono;
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-gray-100 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-bellman h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .code-line-highlight {
+                @apply bg-bellman/20 px-1 rounded;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">算法基础</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">图论算法</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-bellman font-medium">Bellman-Ford最短路算法</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="bellman-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-bellman mb-2">Bellman-Ford最短路算法</h1>
+                    <p class="text-gray-700">
+                        Bellman-Ford算法是一种能够处理含负权边的单源最短路径算法，还能检测图中是否存在负权回路。
+                        本页面将深入讲解其原理、实现和应用，专为NOIP竞赛学生设计。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-bellman hover:bg-bellman/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#problems" class="bg-white border border-bellman text-bellman hover:bg-bellman/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看题目
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bellman-Ford算法概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-bellman mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> Bellman-Ford算法概述
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">什么是Bellman-Ford算法？</h3>
+                    <p class="text-gray-700">
+                        Bellman-Ford算法是一种用于计算从单个源点到其他所有顶点的最短路径的算法，由理查德·贝尔曼（Richard Bellman）和莱斯特·福特（Lester Ford）提出。
+                        与Dijkstra算法不同，它可以处理包含负权边的图，并且能够检测出图中是否存在可以从源点到达的负权回路。
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">算法核心思想</h3>
+                    <p class="text-gray-700">
+                        Bellman-Ford算法基于"松弛"（Relaxation）操作：对于图中的每条边(u, v)，如果从源点到u的距离加上边(u, v)的权值小于当前从源点到v的距离，
+                        则更新从源点到v的距离。通过对所有边进行V-1次松弛操作（V是顶点数量），可以保证得到所有可达顶点的最短路径。
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">负权回路检测</h3>
+                    <p class="text-gray-700">
+                        如果在完成V-1次松弛操作后，仍然可以进行松弛，说明图中存在从源点可达的负权回路。因为负权回路可以无限次绕圈来减小路径长度，所以不存在最短路径。
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">算法复杂度</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-gray-700">
+                            设图中顶点数为V，边数为E，则：
+                        </p>
+                        <ul class="list-disc pl-6 mt-2 space-y-1">
+                            <li>时间复杂度：O(VE)，对每条边进行V-1次松弛操作</li>
+                            <li>空间复杂度：O(V)，需要存储源点到各顶点的距离</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bellman-Ford动画演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-bellman mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> Bellman-Ford动画演示
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 算法执行过程动画 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">Bellman-Ford算法执行过程</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了Bellman-Ford算法计算最短路径的完整过程，包括：
+                            </p>
+                            <ul class="list-disc pl-6 mb-4 space-y-1">
+                                <li>初始化距离数组</li>
+                                <li>多轮松弛操作过程</li>
+                                <li>最短路径确定</li>
+                                <li>负权回路检测（如果存在）</li>
+                            </ul>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">选择示例图:</label>
+                                <select id="graph-selector" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-bellman">
+                                    <option value="normal">标准图（无负权回路）</option>
+                                    <option value="negative">含负权边图</option>
+                                    <option value="negative-cycle">含负权回路图</option>
+                                </select>
+                            </div>
+                            
+                            <div class="animation-controls">
+                                <button id="bellman-run" class="bg-bellman hover:bg-bellman/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行动画
+                                </button>
+                                <button id="bellman-pause" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md transition-all flex items-center hidden">
+                                    <i class="fa fa-pause mr-2"></i> 暂停
+                                </button>
+                                <button id="bellman-step" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-step-forward mr-2"></i> 单步执行
+                                </button>
+                                <button id="bellman-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                                <div class="w-full">
+                                    <label class="block text-xs text-gray-600 mb-1">动画速度</label>
+                                    <input type="range" id="animation-speed" min="1" max="10" value="5" 
+                                        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                                </div>
+                            </div>
+                            
+                            <div class="animation-progress">
+                                <div id="bellman-progress" class="animation-progress-bar" style="width: 0%"></div>
+                            </div>
+                            
+                            <div class="animation-step bg-blue-50 text-blue-800 p-3 rounded-lg mb-4">
+                                <h4 class="font-medium mb-1">当前步骤说明</h4>
+                                <p id="bellman-step-info" class="text-sm">点击"运行动画"或"单步执行"开始演示</p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="mb-4">
+                                <h4 class="font-medium mb-2">距离数组</h4>
+                                <div id="distance-array" class="bg-gray-800 text-white p-3 rounded-lg font-mono text-sm">
+                                    <div>dist[0] = ∞</div>
+                                    <div>dist[1] = 0  <span class="text-bellman">(源点)</span></div>
+                                    <div>dist[2] = ∞</div>
+                                    <div>dist[3] = ∞</div>
+                                    <div>dist[4] = ∞</div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 min-h-[300px]" id="graph-container">
+                                <!-- 图将通过JS动态生成 -->
+                                <div class="text-center text-gray-500 py-12">
+                                    <i class="fa fa-arrow-down mb-2"></i>
+                                    <p>点击"运行动画"或"单步执行"开始演示</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 代码执行可视化 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">代码执行过程可视化</h3>
+                    <p class="text-gray-700 mb-4">
+                        下面展示了Bellman-Ford算法的代码实现，并会高亮显示当前执行的代码行：
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp" id="bellman-code">// Bellman-Ford算法实现
+// 返回值：如果存在负权回路返回false，否则返回true
+bool bellmanFord(int start) {
+    // 初始化距离数组，源点距离为0，其他为无穷大
+    <span class="code-line" data-line="1">for (int i = 1; i <= n; i++) {</span>
+        <span class="code-line" data-line="2">    dist[i] = INF;</span>
+    <span class="code-line" data-line="3">}</span>
+    <span class="code-line" data-line="4">dist[start] = 0;</span>
+    
+    // 进行n-1次松弛操作
+    <span class="code-line" data-line="5">for (int i = 1; i <= n - 1; i++) {</span>
+        <span class="code-line" data-line="6">    bool updated = false;</span>  // 标记本轮是否有更新
+        
+        // 遍历所有边
+        <span class="code-line" data-line="7">    for (int j = 0; j < m; j++) {</span>
+            <span class="code-line" data-line="8">        int u = edges[j].u;</span>  // 边的起点
+            <span class="code-line" data-line="9">        int v = edges[j].v;</span>  // 边的终点
+            <span class="code-line" data-line="10">        int w = edges[j].w;</span> // 边的权值
+            
+            // 松弛操作：如果通过u到v的路径更短，则更新
+            <span class="code-line" data-line="11">        if (dist[u] != INF && dist[v] > dist[u] + w) {</span>
+                <span class="code-line" data-line="12">            dist[v] = dist[u] + w;</span>
+                <span class="code-line" data-line="13">            updated = true;</span>
+            <span class="code-line" data-line="14">        }</span>
+        <span class="code-line" data-line="15">    }</span>
+        
+        // 如果本轮没有更新，提前退出
+        <span class="code-line" data-line="16">    if (!updated) break;</span>
+    <span class="code-line" data-line="17">}</span>
+    
+    // 检测负权回路
+    <span class="code-line" data-line="18">for (int j = 0; j < m; j++) {</span>
+        <span class="code-line" data-line="19">    int u = edges[j].u;</span>
+        <span class="code-line" data-line="20">    int v = edges[j].v;</span>
+        <span class="code-line" data-line="21">    int w = edges[j].w;</span>
+        
+        // 如果还能松弛，说明存在负权回路
+        <span class="code-line" data-line="22">    if (dist[u] != INF && dist[v] > dist[u] + w) {</span>
+            <span class="code-line" data-line="23">        return false;</span>  // 存在负权回路
+        <span class="code-line" data-line="24">    }</span>
+    <span class="code-line" data-line="25">}</span>
+    
+    <span class="code-line" data-line="26">return true;</span>  // 不存在负权回路
+}</code></pre>
+
+                    <div class="mt-4 bg-gray-50 p-3 rounded-lg">
+                        <h4 class="font-medium mb-2">当前操作说明</h4>
+                        <p id="code-explanation" class="text-gray-700 text-sm">
+                            准备开始执行算法，将展示每一步的具体操作
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bellman-Ford代码示例 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-bellman mb-6 flex items-center">
+                <i class="fa fa-code mr-2"></i> Bellman-Ford代码示例 (C++)
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 基础实现 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">1. 基础实现</h3>
+                    <p class="text-gray-700 mb-3">
+                        标准的Bellman-Ford算法实现，包含最短路径计算和负权回路检测：
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;climits&gt;
+using namespace std;
+
+const int MAXN = 1005;    // 最大顶点数
+const int MAXM = 10005;   // 最大边数
+const int INF = INT_MAX;  // 表示无穷大
+
+// 边的结构体
+struct Edge {
+    int u, v, w;  // 起点、终点、权值
+};
+
+int n, m;               // 顶点数、边数
+Edge edges[MAXM];       // 边的数组
+int dist[MAXN];         // 源点到各顶点的最短距离
+
+// Bellman-Ford算法
+// start: 源点
+// 返回值: 是否存在从源点可达的负权回路
+bool bellmanFord(int start) {
+    // 初始化距离数组
+    for (int i = 1; i <= n; i++) {
+        dist[i] = INF;
+    }
+    dist[start] = 0;
+    
+    // 进行n-1次松弛操作
+    for (int i = 1; i <= n - 1; i++) {
+        bool updated = false;  // 标记是否有更新
+        
+        // 遍历所有边
+        for (int j = 0; j < m; j++) {
+            int u = edges[j].u;
+            int v = edges[j].v;
+            int w = edges[j].w;
+            
+            // 松弛操作
+            if (dist[u] != INF && dist[v] > dist[u] + w) {
+                dist[v] = dist[u] + w;
+                updated = true;
+            }
+        }
+        
+        // 如果没有更新，可以提前退出
+        if (!updated) break;
+    }
+    
+    // 检测负权回路
+    for (int j = 0; j < m; j++) {
+        int u = edges[j].u;
+        int v = edges[j].v;
+        int w = edges[j].w;
+        
+        // 如果还能松弛，说明存在负权回路
+        if (dist[u] != INF && dist[v] > dist[u] + w) {
+            return false;  // 存在负权回路
+        }
+    }
+    
+    return true;  // 不存在负权回路
+}
+
+int main() {
+    cin >> n >> m;
+    
+    // 读取边
+    for (int i = 0; i < m; i++) {
+        cin >> edges[i].u >> edges[i].v >> edges[i].w;
+    }
+    
+    int start;
+    cin >> start;
+    
+    // 执行Bellman-Ford算法
+    bool hasNegativeCycle = !bellmanFord(start);
+    
+    if (hasNegativeCycle) {
+        cout << "图中存在从源点可达的负权回路" << endl;
+    } else {
+        // 输出最短距离
+        for (int i = 1; i <= n; i++) {
+            if (dist[i] == INF) {
+                cout << "从" << start << "到" << i << "不可达" << endl;
+            } else {
+                cout << "从" << start << "到" << i << "的最短距离为: " << dist[i] << endl;
+            }
+        }
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 队列优化（SPFA） -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">2. 队列优化（SPFA算法）</h3>
+                    <p class="text-gray-700 mb-3">
+                        Bellman-Ford算法的效率可以通过队列进行优化，只对发生距离更新的顶点的出边进行松弛操作，这就是SPFA（Shortest Path Faster Algorithm）算法：
+                    </p>
+                    
+                    <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;climits&gt;
+using namespace std;
+
+const int MAXN = 1005;    // 最大顶点数
+const int MAXM = 10005;   // 最大边数
+const int INF = INT_MAX;  // 表示无穷大
+
+vector&lt;pair&lt;int, int&gt;&gt; adj[MAXN];  // 邻接表：adj[u]存储(u, v, w)的v和w
+int dist[MAXN];                     // 源点到各顶点的最短距离
+int cnt[MAXN];                      // 记录顶点入队次数，用于检测负权回路
+bool inQueue[MAXN];                 // 标记顶点是否在队列中
+
+// SPFA算法（Bellman-Ford的队列优化）
+// start: 源点
+// 返回值: 是否存在从源点可达的负权回路
+bool spfa(int start, int n) {
+    // 初始化
+    for (int i = 1; i <= n; i++) {
+        dist[i] = INF;
+        inQueue[i] = false;
+        cnt[i] = 0;
+    }
+    dist[start] = 0;
+    
+    queue&lt;int&gt; q;
+    q.push(start);
+    inQueue[start] = true;
+    cnt[start]++;
+    
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        inQueue[u] = false;
+        
+        // 遍历u的所有出边
+        for (auto &edge : adj[u]) {
+            int v = edge.first;
+            int w = edge.second;
+            
+            // 松弛操作
+            if (dist[u] != INF && dist[v] > dist[u] + w) {
+                dist[v] = dist[u] + w;
+                
+                // 如果v不在队列中，则加入队列
+                if (!inQueue[v]) {
+                    q.push(v);
+                    inQueue[v] = true;
+                    cnt[v]++;
+                    
+                    // 如果入队次数超过n-1，说明存在负权回路
+                    if (cnt[v] >= n) {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    
+    return true;  // 不存在负权回路
+}
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    
+    // 读取边
+    for (int i = 0; i < m; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        adj[u].push_back({v, w});
+    }
+    
+    int start;
+    cin >> start;
+    
+    // 执行SPFA算法
+    bool hasNegativeCycle = !spfa(start, n);
+    
+    if (hasNegativeCycle) {
+        cout << "图中存在从源点可达的负权回路" << endl;
+    } else {
+        // 输出最短距离
+        for (int i = 1; i <= n; i++) {
+            if (dist[i] == INF) {
+                cout << "从" << start << "到" << i << "不可达" << endl;
+            } else {
+                cout << "从" << start << "到" << i << "的最短距离为: " << dist[i] << endl;
+            }
+        }
+    }
+    
+    return 0;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bellman-Ford算法应用 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-bellman mb-6 flex items-center">
+                <i class="fa fa-lightbulb-o mr-2"></i> Bellman-Ford算法应用
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">Bellman-Ford算法的典型应用场景</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-bellman mb-2">含负权边的图</h4>
+                            <p class="text-gray-700">
+                                当图中存在负权边但没有负权回路时，可用于计算单源最短路径，这是Dijkstra算法无法处理的情况。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-bellman mb-2">负权回路检测</h4>
+                            <p class="text-gray-700">
+                                能够检测图中是否存在从源点可达的负权回路，这在许多实际问题中非常重要，如检测金融交易中的套利机会。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-bellman mb-2">差分约束系统</h4>
+                            <p class="text-gray-700">
+                                可以用来求解差分约束系统，通过构建相应的图模型，将约束条件转化为边，然后使用Bellman-Ford算法求解。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-bellman mb-2">距离向量路由算法</h4>
+                            <p class="text-gray-700">
+                                在计算机网络中，距离向量路由算法（如RIP）的核心思想与Bellman-Ford算法相似，用于计算网络中节点之间的最短路径。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">算法使用注意事项</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>时间复杂度</strong>：标准Bellman-Ford算法时间复杂度较高(O(VE))，在稠密图上性能较差，可考虑使用SPFA优化</li>
+                        <li><strong>负权回路处理</strong>：检测到负权回路后，应根据实际问题需求进行处理，因为此时最短路径不存在</li>
+                        <li><strong>提前终止</strong>：如果在某次迭代中没有任何距离更新，可以提前终止算法，提高效率</li>
+                        <li><strong>与Dijkstra的选择</strong>：没有负权边时，优先选择Dijkstra算法；有负权边但无负权回路时，选择Bellman-Ford或SPFA</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 洛谷推荐题目 -->
+        <section id="problems" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-bellman mb-6 flex items-center">
+                <i class="fa fa-puzzle-piece mr-2"></i> 洛谷推荐题目
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">模板题</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-lg mb-2">P3385 【模板】负环判断</h4>
+                        <p class="text-gray-700 mb-3">
+                            给定一个 n 个点的有向图，请求出图中是否存在从顶点 1 出发能到达的负环。
+                            负环的定义是：一条边权之和为负数的回路。
+                        </p>
+                        <div class="flex space-x-3 mt-3">
+                            <a href="https://www.luogu.com.cn/problem/P3385" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                <i class="fa fa-external-link mr-2"></i> 题目链接
+                            </a>
+                            <a href="#" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                <i class="fa fa-code mr-2"></i> 题解代码
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">入门题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1257 平面上的最短线段</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                平面上有 n 个点，任意两点可以连成一条线段。线段的长度是这两点之间的距离。
+                                现要求你找到一条线段，其长度是所有线段中最短的。
+                                虽然这题可以用暴力解决，但可以转化为图论问题用最短路径算法解决。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1257" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1144 最短路计数</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                给出一个 N 个顶点 M 条边的无向无权图，顶点编号为 1 到 N。
+                                问从顶点 1 开始，到其他每个点的最短路有几条。
+                                可以用SPFA算法结合计数思想解决。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1144" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">进阶题</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P5960 【模板】差分约束算法</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                给出一组包含 m 个不等式，有 n 个未知数的形如：
+                                x_j - x_i ≤ c_k 的不等式组，求任意一组满足这个不等式组的解。
+                                这是Bellman-Ford算法的重要应用场景。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P5960" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P2136 拉近距离</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                在一场赛车比赛中，有 N 个处于不同位置的加油站，每个加油站都可以加油。
+                                赛道上的每一段都有消耗油量的限制。
+                                给定起点和终点，问最少要加多少次油才能从起点到达终点。
+                                可以转化为含负权边的图，用SPFA算法求解。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P2136" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            
+            // 图的数据定义
+            const graphs = {
+                normal: {
+                    nodes: 5,
+                    edges: [
+                        {u: 1, v: 2, w: 2},
+                        {u: 1, v: 3, w: 4},
+                        {u: 2, v: 3, w: 1},
+                        {u: 2, v: 4, w: 7},
+                        {u: 3, v: 5, w: 3},
+                        {u: 4, v: 5, w: 1}
+                    ]
+                },
+                negative: {
+                    nodes: 5,
+                    edges: [
+                        {u: 1, v: 2, w: 2},
+                        {u: 1, v: 3, w: 4},
+                        {u: 2, v: 3, w: -1},  // 负权边
+                        {u: 2, v: 4, w: 7},
+                        {u: 3, v: 5, w: 3},
+                        {u: 4, v: 5, w: 1}
+                    ]
+                },
+                'negative-cycle': {
+                    nodes: 5,
+                    edges: [
+                        {u: 1, v: 2, w: 2},
+                        {u: 2, v: 3, w: -1},
+                        {u: 3, v: 2, w: -1},  // 形成负权回路 2-3-2，总权值-2
+                        {u: 2, v: 4, w: 7},
+                        {u: 3, v: 5, w: 3},
+                        {u: 4, v: 5, w: 1}
+                    ]
+                }
+            };
+            
+            // 动画状态
+            const animationState = {
+                running: false,
+                paused: false,
+                currentStep: 0,
+                totalSteps: 0,
+                speed: 5,  // 1-10，值越大越快
+                graphType: 'normal',
+                graph: null,
+                dist: [],
+                edgesProcessed: 0,
+                iteration: 0,
+                hasNegativeCycle: false
+            };
+            
+            // 步骤定义
+            let steps = [];
+            
+            // DOM元素
+            const elements = {
+                graphContainer: document.getElementById('graph-container'),
+                distanceArray: document.getElementById('distance-array'),
+                bellmanRun: document.getElementById('bellman-run'),
+                bellmanPause: document.getElementById('bellman-pause'),
+                bellmanStep: document.getElementById('bellman-step'),
+                bellmanReset: document.getElementById('bellman-reset'),
+                bellmanProgress: document.getElementById('bellman-progress'),
+                bellmanStepInfo: document.getElementById('bellman-step-info'),
+                graphSelector: document.getElementById('graph-selector'),
+                animationSpeed: document.getElementById('animation-speed'),
+                codeExplanation: document.getElementById('code-explanation'),
+                codeLines: document.querySelectorAll('.code-line')
+            };
+            
+            // 初始化
+            function init() {
+                resetAnimation();
+                elements.graphSelector.addEventListener('change', function() {
+                    animationState.graphType = this.value;
+                    resetAnimation();
+                });
+                
+                elements.animationSpeed.addEventListener('input', function() {
+                    animationState.speed = parseInt(this.value);
+                });
+                
+                elements.bellmanRun.addEventListener('click', startAnimation);
+                elements.bellmanPause.addEventListener('click', pauseAnimation);
+                elements.bellmanStep.addEventListener('click', stepAnimation);
+                elements.bellmanReset.addEventListener('click', resetAnimation);
+            }
+            
+            // 重置动画
+            function resetAnimation() {
+                animationState.running = false;
+                animationState.paused = false;
+                animationState.currentStep = 0;
+                animationState.edgesProcessed = 0;
+                animationState.iteration = 0;
+                animationState.hasNegativeCycle = false;
+                animationState.graph = graphs[animationState.graphType];
+                
+                // 初始化距离数组
+                animationState.dist = new Array(animationState.graph.nodes + 1).fill('∞');
+                animationState.dist[1] = 0;  // 源点为1
+                
+                // 更新距离数组显示
+                updateDistanceArray();
+                
+                // 生成步骤
+                generateSteps();
+                
+                // 绘制图
+                drawGraph();
+                
+                // 更新UI状态
+                elements.bellmanRun.classList.remove('hidden');
+                elements.bellmanPause.classList.add('hidden');
+                elements.bellmanProgress.style.width = '0%';
+                elements.bellmanStepInfo.textContent = '点击"运行动画"或"单步执行"开始演示';
+                elements.codeExplanation.textContent = '准备开始执行算法，将展示每一步的具体操作';
+                
+                // 重置代码高亮
+                elements.codeLines.forEach(line => {
+                    line.classList.remove('code-line-highlight');
+                });
+            }
+            
+            // 生成步骤
+            function generateSteps() {
+                steps = [];
+                const graph = animationState.graph;
+                const n = graph.nodes;
+                const m = graph.edges.length;
+                
+                // 步骤1: 初始化距离数组
+                steps.push({
+                    type: 'init',
+                    explanation: '初始化距离数组，源点(1)距离为0，其他顶点距离为无穷大',
+                    codeLine: 1
+                });
+                
+                // 步骤2-4: 初始化循环
+                steps.push({
+                    type: 'code',
+                    explanation: '开始进行n-1轮松弛操作，n为顶点数',
+                    codeLine: 5
+                });
+                
+                steps.push({
+                    type: 'code',
+                    explanation: '初始化updated标志，用于检测本轮是否有更新',
+                    codeLine: 6
+                });
+                
+                // 生成n-1轮松弛步骤
+                for (let i = 1; i <= n - 1; i++) {
+                    steps.push({
+                        type: 'iteration',
+                        iteration: i,
+                        explanation: `第${i}轮松弛操作开始`,
+                        codeLine: 7
+                    });
+                    
+                    // 每条边的处理步骤
+                    for (let j = 0; j < m; j++) {
+                        const edge = graph.edges[j];
+                        const u = edge.u;
+                        const v = edge.v;
+                        const w = edge.w;
+                        
+                        steps.push({
+                            type: 'process-edge',
+                            edge: j,
+                            u: u,
+                            v: v,
+                            w: w,
+                            iteration: i,
+                            explanation: `处理边 (${u}, ${v})，权值为${w}`,
+                            codeLine: 8
+                        });
+                        
+                        // 检查是否可以松弛
+                        const canRelax = animationState.dist[u] !== '∞' && 
+                                       (animationState.dist[v] === '∞' || 
+                                        (typeof animationState.dist[u] === 'number' && 
+                                         typeof animationState.dist[v] === 'number' && 
+                                         animationState.dist[v] > animationState.dist[u] + w));
+                        
+                        if (canRelax) {
+                            const oldDist = animationState.dist[v];
+                            const newDist = animationState.dist[u] + w;
+                            
+                            steps.push({
+                                type: 'relax',
+                                edge: j,
+                                u: u,
+                                v: v,
+                                w: w,
+                                oldDist: oldDist,
+                                newDist: newDist,
+                                iteration: i,
+                                explanation: `对边 (${u}, ${v}) 进行松弛操作：dist[${v}] 从 ${oldDist} 更新为 ${newDist}`,
+                                codeLine: 11
+                            });
+                            
+                            // 更新距离（仅用于步骤生成，不影响实际动画状态）
+                            animationState.dist[v] = newDist;
+                        } else {
+                            steps.push({
+                                type: 'no-relax',
+                                edge: j,
+                                u: u,
+                                v: v,
+                                w: w,
+                                iteration: i,
+                                explanation: `边 (${u}, ${v}) 无法进行松弛操作，dist[${v}] 保持不变`,
+                                codeLine: 11
+                            });
+                        }
+                    }
+                    
+                    steps.push({
+                        type: 'end-iteration',
+                        iteration: i,
+                        explanation: `第${i}轮松弛操作结束`,
+                        codeLine: 16
+                    });
+                }
+                
+                // 负权回路检测步骤
+                steps.push({
+                    type: 'code',
+                    explanation: '开始检测负权回路',
+                    codeLine: 18
+                });
+                
+                // 每条边的检测步骤
+                for (let j = 0; j < m; j++) {
+                    const edge = graph.edges[j];
+                    const u = edge.u;
+                    const v = edge.v;
+                    const w = edge.w;
+                    
+                    steps.push({
+                        type: 'check-cycle',
+                        edge: j,
+                        u: u,
+                        v: v,
+                        w: w,
+                        explanation: `检测边 (${u}, ${v}) 是否可以松弛，判断是否存在负权回路`,
+                        codeLine: 22
+                    });
+                    
+                    // 检查是否可以松弛（用于检测负权回路）
+                    const canRelax = animationState.dist[u] !== '∞' && 
+                                   (animationState.dist[v] === '∞' || 
+                                    (typeof animationState.dist[u] === 'number' && 
+                                     typeof animationState.dist[v] === 'number' && 
+                                     animationState.dist[v] > animationState.dist[u] + w));
+                    
+                    if (canRelax && animationState.graphType === 'negative-cycle') {
+                        steps.push({
+                            type: 'found-cycle',
+                            edge: j,
+                            u: u,
+                            v: v,
+                            w: w,
+                            explanation: `检测到可以松弛的边 (${u}, ${v})，说明存在负权回路`,
+                            codeLine: 23
+                        });
+                        animationState.hasNegativeCycle = true;
+                        break;  // 找到一个即可
+                    }
+                }
+                
+                // 算法结束步骤
+                if (animationState.hasNegativeCycle) {
+                    steps.push({
+                        type: 'cycle-result',
+                        explanation: '算法结束，图中存在从源点可达的负权回路',
+                        codeLine: 23
+                    });
+                } else {
+                    steps.push({
+                        type: 'normal-result',
+                        explanation: '算法结束，未发现负权回路，已计算出源点到所有顶点的最短路径',
+                        codeLine: 26
+                    });
+                }
+                
+                animationState.totalSteps = steps.length;
+            }
+            
+            // 绘制图
+            function drawGraph(highlightedEdge = -1, currentNode = -1, updatedNode = -1) {
+                const graph = animationState.graph;
+                const n = graph.nodes;
+                
+                // 清空容器
+                elements.graphContainer.innerHTML = '';
+                
+                // 定义节点位置（简单布局）
+                const positions = {
+                    1: {x: 100, y: 100},
+                    2: {x: 250, y: 50},
+                    3: {x: 250, y: 150},
+                    4: {x: 400, y: 50},
+                    5: {x: 400, y: 150}
+                };
+                
+                // 创建SVG元素
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('width', '100%');
+                svg.setAttribute('height', '100%');
+                svg.setAttribute('viewBox', '50 20 500 200');
+                elements.graphContainer.appendChild(svg);
+                
+                // 绘制边
+                graph.edges.forEach((edge, index) => {
+                    const u = edge.u;
+                    const v = edge.v;
+                    const w = edge.w;
+                    const posU = positions[u];
+                    const posV = positions[v];
+                    
+                    // 计算箭头位置和角度
+                    const dx = posV.x - posU.x;
+                    const dy = posV.y - posU.y;
+                    const len = Math.sqrt(dx * dx + dy * dy);
+                    const unitDx = dx / len;
+                    const unitDy = dy / len;
+                    
+                    // 边的终点稍微提前，给箭头留出空间
+                    const endX = posV.x - unitDx * 20;
+                    const endY = posV.y - unitDy * 20;
+                    
+                    // 创建边
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', posU.x);
+                    line.setAttribute('y1', posU.y);
+                    line.setAttribute('x2', endX);
+                    line.setAttribute('y2', endY);
+                    line.setAttribute('class', highlightedEdge === index ? 'graph-edge graph-edge-active' : 'graph-edge');
+                    svg.appendChild(line);
+                    
+                    // 创建箭头
+                    const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                    const arrowSize = 6;
+                    const angle = Math.PI / 6; // 30度
+                    
+                    const arrowX1 = posV.x - unitDx * 20;
+                    const arrowY1 = posV.y - unitDy * 20;
+                    
+                    const arrowX2 = arrowX1 - arrowSize * (unitDx * Math.cos(angle) - unitDy * Math.sin(angle));
+                    const arrowY2 = arrowY1 - arrowSize * (unitDx * Math.sin(angle) + unitDy * Math.cos(angle));
+                    
+                    const arrowX3 = arrowX1 - arrowSize * (unitDx * Math.cos(angle) + unitDy * Math.sin(angle));
+                    const arrowY3 = arrowY1 - arrowSize * (-unitDx * Math.sin(angle) + unitDy * Math.cos(angle));
+                    
+                    arrow.setAttribute('points', `${arrowX1},${arrowY1} ${arrowX2},${arrowY2} ${arrowX3},${arrowY3}`);
+                    arrow.setAttribute('fill', highlightedEdge === index ? '#E91E63' : '#CBD5E1');
+                    svg.appendChild(arrow);
+                    
+                    // 显示边的权值
+                    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    const textX = (posU.x + endX) / 2 + 10;
+                    const textY = (posU.y + endY) / 2 - 5;
+                    text.setAttribute('x', textX);
+                    text.setAttribute('y', textY);
+                    text.setAttribute('font-size', '12');
+                    text.setAttribute('fill', highlightedEdge === index ? '#E91E63' : '#64748B');
+                    text.textContent = w;
+                    svg.appendChild(text);
+                });
+                
+                // 绘制节点
+                for (let i = 1; i <= n; i++) {
+                    const pos = positions[i];
+                    const node = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    node.setAttribute('cx', pos.x);
+                    node.setAttribute('cy', pos.y);
+                    node.setAttribute('r', '20');
+                    
+                    // 设置节点样式
+                    if (i === 1) {
+                        node.setAttribute('class', 'graph-node graph-node-source');
+                    } else if (i === updatedNode) {
+                        node.setAttribute('class', 'graph-node graph-node-updated');
+                    } else if (i === currentNode) {
+                        node.setAttribute('class', 'graph-node graph-node-current');
+                    } else {
+                        node.setAttribute('class', 'graph-node graph-node-normal');
+                    }
+                    
+                    svg.appendChild(node);
+                    
+                    // 节点标签
+                    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    label.setAttribute('x', pos.x);
+                    label.setAttribute('y', pos.y + 5);
+                    label.setAttribute('text-anchor', 'middle');
+                    label.setAttribute('dominant-baseline', 'middle');
+                    label.setAttribute('font-size', '14');
+                    label.setAttribute('fill', i === 1 ? 'white' : '#475569');
+                    label.textContent = i;
+                    svg.appendChild(label);
+                    
+                    // 显示距离
+                    const distLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    distLabel.setAttribute('x', pos.x);
+                    distLabel.setAttribute('y', pos.y - 30);
+                    distLabel.setAttribute('text-anchor', 'middle');
+                    distLabel.setAttribute('font-size', '12');
+                    distLabel.setAttribute('fill', '#1E293B');
+                    distLabel.textContent = `d=${animationState.dist[i]}`;
+                    svg.appendChild(distLabel);
+                }
+            }
+            
+            // 更新距离数组显示
+            function updateDistanceArray() {
+                let html = '';
+                for (let i = 1; i < animationState.dist.length; i++) {
+                    if (i === 1) {
+                        html += `<div>dist[${i}] = ${animationState.dist[i]}  <span class="text-bellman">(源点)</span></div>`;
+                    } else {
+                        html += `<div>dist[${i}] = ${animationState.dist[i]}</div>`;
+                    }
+                }
+                elements.distanceArray.innerHTML = html;
+            }
+            
+            // 执行一步动画
+            function executeStep(step) {
+                // 重置代码高亮
+                elements.codeLines.forEach(line => {
+                    line.classList.remove('code-line-highlight');
+                });
+                
+                // 高亮当前代码行
+                if (step.codeLine) {
+                    const codeLine = document.querySelector(`.code-line[data-line="${step.codeLine}"]`);
+                    if (codeLine) {
+                        codeLine.classList.add('code-line-highlight');
+                    }
+                }
+                
+                // 更新步骤说明
+                elements.bellmanStepInfo.textContent = step.explanation;
+                elements.codeExplanation.textContent = step.explanation;
+                
+                // 根据步骤类型执行相应操作
+                switch (step.type) {
+                    case 'init':
+                        drawGraph();
+                        break;
+                        
+                    case 'iteration':
+                        animationState.iteration = step.iteration;
+                        drawGraph();
+                        break;
+                        
+                    case 'process-edge':
+                        drawGraph(step.edge, step.u);
+                        break;
+                        
+                    case 'relax':
+                        animationState.dist[step.v] = step.newDist;
+                        updateDistanceArray();
+                        drawGraph(step.edge, step.u, step.v);
+                        break;
+                        
+                    case 'no-relax':
+                        drawGraph(step.edge, step.u);
+                        break;
+                        
+                    case 'end-iteration':
+                        drawGraph();
+                        break;
+                        
+                    case 'check-cycle':
+                        drawGraph(step.edge, step.u);
+                        break;
+                        
+                    case 'found-cycle':
+                        drawGraph(step.edge, step.u, step.v);
+                        break;
+                        
+                    case 'cycle-result':
+                    case 'normal-result':
+                        drawGraph();
+                        break;
+                }
+            }
+            
+            // 开始动画
+            function startAnimation() {
+                if (animationState.currentStep >= animationState.totalSteps) {
+                    resetAnimation();
+                }
+                
+                animationState.running = true;
+                animationState.paused = false;
+                elements.bellmanRun.classList.add('hidden');
+                elements.bellmanPause.classList.remove('hidden');
+                
+                runAnimationLoop();
+            }
+            
+            // 暂停动画
+            function pauseAnimation() {
+                animationState.running = false;
+                animationState.paused = true;
+                elements.bellmanRun.classList.remove('hidden');
+                elements.bellmanPause.classList.add('hidden');
+            }
+            
+            // 单步执行
+            function stepAnimation() {
+                if (animationState.currentStep < animationState.totalSteps) {
+                    executeStep(steps[animationState.currentStep]);
+                    animationState.currentStep++;
+                    updateProgress();
+                } else {
+                    elements.bellmanStepInfo.textContent = '动画已完成，点击"重置"重新开始';
+                }
+            }
+            
+            // 动画循环
+            function runAnimationLoop() {
+                if (!animationState.running) return;
+                
+                if (animationState.currentStep < animationState.totalSteps) {
+                    executeStep(steps[animationState.currentStep]);
+                    animationState.currentStep++;
+                    updateProgress();
+                    
+                    // 计算延迟时间（速度越快，延迟越小）
+                    const delay = 2000 - (animationState.speed - 1) * 180;
+                    setTimeout(runAnimationLoop, delay);
+                } else {
+                    // 动画结束
+                    animationState.running = false;
+                    elements.bellmanRun.classList.remove('hidden');
+                    elements.bellmanPause.classList.add('hidden');
+                    elements.bellmanStepInfo.textContent = '动画已完成，点击"重置"重新开始';
+                }
+            }
+            
+            // 更新进度条
+            function updateProgress() {
+                const progress = (animationState.currentStep / animationState.totalSteps) * 100;
+                elements.bellmanProgress.style.width = `${progress}%`;
+            }
+            
+            // 启动初始化
+            init();
+        });
+    </script>
+</body>
+</html>

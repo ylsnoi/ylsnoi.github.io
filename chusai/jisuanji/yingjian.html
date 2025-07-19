@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算机硬件组成 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0',
+                        secondary: '#6C63FF',
+                        hardware: '#2196F3', // 硬件主题色：蓝色
+                        cpu: '#FF5722',      // CPU相关：橙色
+                        memory: '#4CAF50',   // 内存相关：绿色
+                        storage: '#9C27B0',  // 存储相关：紫色
+                        io: '#FFC107',       // 输入输出：黄色
+                        darkbg: '#F8FAFC',
+                        cardbg: '#FFFFFF',
+                        hoverbg: '#F0F2F5',
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .hardware-bg {
+                @apply bg-gradient-to-r from-hardware/5 to-hardware/10;
+            }
+            .cpu-bg {
+                @apply bg-gradient-to-r from-cpu/5 to-cpu/10;
+            }
+            .memory-bg {
+                @apply bg-gradient-to-r from-memory/5 to-memory/10;
+            }
+            .storage-bg {
+                @apply bg-gradient-to-r from-storage/5 to-storage/10;
+            }
+            .io-bg {
+                @apply bg-gradient-to-r from-io/5 to-io/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .hardware-header {
+                @apply font-bold text-hardware mb-3;
+            }
+            .cpu-header {
+                @apply font-bold text-cpu mb-3;
+            }
+            .memory-header {
+                @apply font-bold text-memory mb-3;
+            }
+            .storage-header {
+                @apply font-bold text-storage mb-3;
+            }
+            .io-header {
+                @apply font-bold text-io mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-hardware bg-hardware/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-hardware text-white text-center mr-2 text-xs;
+            }
+            .component {
+                @apply border-2 border-gray-300 rounded-md p-3 mb-3 transition-all duration-500 cursor-pointer;
+            }
+            .component-active {
+                @apply border-hardware bg-hardware/10 transform scale-[1.02];
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .hardware-diagram {
+                @apply relative border border-gray-200 rounded-lg bg-white p-6 min-h-[400px] my-4;
+            }
+            .hardware-component {
+                @apply absolute p-3 rounded-md text-center transition-all duration-500;
+            }
+            .connection-line {
+                @apply absolute bg-gray-400 z-0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-microchip text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索硬件知识、算法..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索硬件知识、算法..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">CSP初赛</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">计算机基础知识</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-hardware font-medium">硬件组成</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="hardware-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-hardware mb-2">计算机硬件组成</h1>
+                    <p class="text-gray-700">
+                        计算机硬件是信息学奥赛的基础知识，了解CPU、内存、外存和输入输出设备的功能与工作原理，
+                        对理解程序运行机制和算法效率分析至关重要。本文将系统讲解CSP初赛常考的硬件知识。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-hardware hover:bg-hardware/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#examples" class="bg-white border border-hardware text-hardware hover:bg-hardware/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看例题
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 硬件组成组成概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-hardware mb-6 flex items-center">
+                <i class="fa fa-desktop mr-2"></i> 计算机硬件组成概述
+            </h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">基本组成部分</h3>
+                    <p class="text-gray-700">
+                        计算机硬件主要由以下几个核心部分组成，它们协同工作完成数据处理任务：
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+                        <div class="component" id="cpu-component">
+                            <div class="flex items-center justify-center mb-2">
+                                <i class="fa fa-microchip text-2xl text-cpu mr-2"></i>
+                                <h4 class="font-semibold text-cpu">中央处理器(CPU)</h4>
+                            </div>
+                            <p class="text-sm text-gray-700">负责数据运算和指令执行的核心部件</p>
+                        </div>
+                        <div class="component" id="memory-component">
+                            <div class="flex items-center justify-center mb-2">
+                                <i class="fa fa-memory text-2xl text-memory mr-2"></i>
+                                <h4 class="font-semibold text-memory">内存储器(RAM)</h4>
+                            </div>
+                            <p class="text-sm text-gray-700">临时存储数据和程序的高速存储设备</p>
+                        </div>
+                        <div class="component" id="storage-component">
+                            <div class="flex items-center justify-center mb-2">
+                                <i class="fa fa-hdd-o text-2xl text-storage mr-2"></i>
+                                <h4 class="font-semibold text-storage">外存储器</h4>
+                            </div>
+                            <p class="text-sm text-gray-700">长期存储数据的设备(硬盘、SSD等)</p>
+                        </div>
+                        <div class="component" id="io-component">
+                            <div class="flex items-center justify-center mb-2">
+                                <i class="fa fa-keyboard-o text-2xl text-io mr-2"></i>
+                                <h4 class="font-semibold text-io">输入输出设备</h4>
+                            </div>
+                            <p class="text-sm text-gray-700">负责数据输入和结果输出的设备</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 硬件联动演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-hardware mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> 硬件工作流程演示
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">程序运行时的硬件协作过程</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1">
+                            <p class="text-gray-700 mb-4">
+                                下面的动画演示了打开一个程序时，各硬件组件之间的协作过程，
+                                帮助理解数据在计算机中的流动路径。
+                            </p>
+                            
+                            <div class="flex space-x-2 mt-6">
+                                <button id="simulation-run" class="bg-hardware hover:bg-hardware/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 开始演示
+                                </button>
+                                <button id="simulation-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="simulation-status" class="animation-status mt-4">
+                                状态: 等待开始
+                            </div>
+                            
+                            <div class="mt-6 p-3 bg-white rounded-lg border border-gray-200">
+                                <h4 class="font-semibold mb-2 text-sm">演示说明:</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li>1. 程序从外存加载到内存</li>
+                                    <li>2. CPU从内存读取指令并执行</li>
+                                    <li>3. 数据在各组件间传递</li>
+                                    <li>4. 最终结果通过输出设备展示</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-2">
+                            <div class="hardware-diagram" id="hardware-simulation">
+                                <!-- 硬件组件将通过JS动态放置 -->
+                                <div class="connection-line" style="width: 100%; height: 2px; top: 50%; left: 0;"></div>
+                                <div class="connection-line" style="width: 2px; height: 100%; left: 50%; top: 0;"></div>
+                                
+                                <div class="hardware-component cpu-bg" id="sim-cpu" style="width: 180px; top: 30px; left: 50%; transform: translateX(-50%); border: 2px solid #FF5722;">
+                                    <i class="fa fa-microchip text-3xl text-cpu mb-1"></i>
+                                    <h4 class="font-bold text-cpu">中央处理器(CPU)</h4>
+                                    <p class="text-xs mt-1">运算器 + 控制器</p>
+                                </div>
+                                
+                                <div class="hardware-component memory-bg" id="sim-memory" style="width: 180px; top: 160px; left: 20%; border: 2px solid #4CAF50;">
+                                    <i class="fa fa-memory text-3xl text-memory mb-1"></i>
+                                    <h4 class="font-bold text-memory">内存(RAM)</h4>
+                                    <p class="text-xs mt-1">临时数据存储</p>
+                                </div>
+                                
+                                <div class="hardware-component storage-bg" id="sim-storage" style="width: 180px; top: 160px; left: 80%; transform: translateX(-80%); border: 2px solid #9C27B0;">
+                                    <i class="fa fa-hdd-o text-3xl text-storage mb-1"></i>
+                                    <h4 class="font-bold text-storage">外存</h4>
+                                    <p class="text-xs mt-1">长期数据存储</p>
+                                </div>
+                                
+                                <div class="hardware-component io-bg" id="sim-io" style="width: 180px; top: 290px; left: 50%; transform: translateX(-50%); border: 2px solid #FFC107;">
+                                    <i class="fa fa-desktop text-3xl text-io mb-1"></i>
+                                    <h4 class="font-bold text-io">输入输出设备</h4>
+                                    <p class="text-xs mt-1">键盘、显示器等</p>
+                                </div>
+                                
+                                <div id="data-flow" class="absolute z-10 hidden-0 left-0 w-4 h-4 bg-hardware rounded-full hidden" style="transition: all 0.5s ease;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 各硬件详细讲解 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-hardware mb-6 flex items-center">
+                <i class="fa fa-cogs mr-2"></i> 硬件组件详细解析
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- CPU -->
+                <div class="cpu-bg p-5 rounded-lg">
+                    <h3 class="text-xl font-bold text-cpu mb-4 flex items-center">
+                        <i class="fa fa-microchip mr-2"></i> 中央处理器(CPU)
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-2">
+                            <p class="text-gray-700 mb-4">
+                                CPU是计算机的核心部件，负责执行指令和处理数据，被称为"计算机的大脑"。
+                                在信息学奥赛中，了解CPU性能指标对算法效率分析有重要意义。
+                            </p>
+                            
+                            <div class="bg-white p-4 rounded-lg mb-4">
+                                <h4 class="font-semibold mb-2">主要性能指标：</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-cpu mt-1 mr-2"></i>
+                                        <span><strong>主频</strong>：CPU内核工作的时钟频率，单位为GHz，通常主频越高处理速度越快</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-cpu mt-1 mr-2"></i>
+                                        <span><strong>核心数</strong>：多核心CPU可以并行处理多个任务</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-cpu mt-1 mr-2"></i>
+                                        <span><strong>字长</strong>：CPU一次能处理的二进制位数(32位/64位)，决定了寻址能力和数据处理能力</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <p class="text-gray-700">
+                                <strong>与信奥的关联</strong>：CPU性能直接影响程序运行速度，算法的时间复杂度分析本质上是评估CPU执行指令的次数。
+                                在竞赛中，了解CPU缓存机制有助于优化程序性能。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h4 class="font-semibold mb-3 text-center">CPU结构示意图</h4>
+                            <div class="flex flex-col items-center">
+                                <div class="w-full bg-gray-100 p-2 mb-2 text-center rounded border border-gray-300">
+                                    控制器
+                                </div>
+                                <div class="w-full bg-gray-100 p-2 mb-2 text-center rounded border border-gray-300">
+                                    运算器
+                                </div>
+                                <div class="w-full bg-gray-100 p-2 mb-2 text-center rounded border border-gray-300">
+                                    寄存器
+                                </div>
+                                <div class="w-full bg-gray-100 p-2 text-center rounded border border-gray-300">
+                                    高速缓存
+                                </div>
+                                <p class="text-xs text-gray-500 mt-3 text-center">
+                                    控制器负责指令调度，运算器负责数据处理
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 内存 -->
+                <div class="memory-bg p-5 rounded-lg">
+                    <h3 class="text-xl font-bold text-memory mb-4 flex items-center">
+                        <i class="fa fa-memory mr-2"></i> 内存储器(RAM)
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-2">
+                            <p class="text-gray-700 mb-4">
+                                内存(随机存取存储器)是计算机运行时临时存储数据和程序的地方，
+                                它的速度远快于外存，但断电后数据会丢失。
+                            </p>
+                            
+                            <div class="bg-white p-4 rounded-lg mb-4">
+                                <h4 class="font-semibold mb-2">内存的特点：</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-memory mt-1 mr-2"></i>
+                                        <span><strong>高速性</strong>：读写速度远快于硬盘等外存设备</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-memory mt-1 mr-2"></i>
+                                        <span><strong>易失性</strong>：断电后存储的信息会立即丢失</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="fa fa-check-circle text-memory mt-1 mr-2"></i>
+                                        <span><strong>容量限制</strong>：容量通常为GB级别，远小于外存</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <p class="text-gray-700">
+                                <strong>与信奥的关联</strong>：程序运行时的数据、变量、数组等都存储在内存中，
+                                算法的空间复杂度分析就是评估程序所需的内存空间。在竞赛中，需要注意题目对内存使用的限制。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h4 class="font-semibold mb-3">常见内存容量单位</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center p-2 border-b border-gray-100">
+                                    <span>1字节(Byte)</span>
+                                    <span class="text-memory font-medium">= 8位(bit)</span>
+                                </div>
+                                <div class="flex justify-between items-center p-2 border-b border-gray-100">
+                                    <span>1KB(千字节)</span>
+                                    <span class="text-memory font-medium">= 1024B</span>
+                                </div>
+                                <div class="flex justify-between items-center p-2 border-b border-gray-100">
+                                    <span>1MB(兆字节)</span>
+                                    <span class="text-memory font-medium">= 1024KB</span>
+                                </div>
+                                <div class="flex justify-between items-center p-2 border-b border-gray-100">
+                                    <span>1GB(吉字节)</span>
+                                    <span class="text-memory font-medium">= 1024MB</span>
+                                </div>
+                                <div class="flex justify-between items-center p-2">
+                                    <span>1TB(太字节)</span>
+                                    <span class="text-memory font-medium">= 1024GB</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 外存 -->
+                <div class="storage-bg p-5 rounded-lg">
+                    <h3 class="text-xl font-bold text-storage mb-4 flex items-center">
+                        <i class="fa fa-hdd-o mr-2"></i> 外存储器
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-2">
+                            <p class="text-gray-700 mb-4">
+                                外存储器用于长期存储数据和程序，断电后数据不会丢失。常见的外存设备有硬盘(HDD)、固态硬盘(SSD)、U盘等。
+                            </p>
+                            
+                            <div class="bg-white p-4 rounded-lg mb-4">
+                                <h4 class="font-semibold mb-2">常见外存设备对比：</h4>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full text-sm">
+                                        <thead>
+                                            <tr class="bg-gray-50">
+                                                <th class="py-2 px-3 text-left border-b">设备类型</th>
+                                                <th class="py-2 px-3 text-left border-b">特点</th>
+                                                <th class="py-2 px-3 text-left border-b">速度</th>
+                                                <th class="py-2 px-3 text-left border-b">价格</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="py-2 px-3 border-b">机械硬盘(HDD)</td>
+                                                <td class="py-2 px-3 border-b">有机械部件</td>
+                                                <td class="py-2 px-3 border-b">较慢</td>
+                                                <td class="py-2 px-3 border-b">较低</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 px-3 border-b">固态硬盘(SSD)</td>
+                                                <td class="py-2 px-3 border-b">无机械部件</td>
+                                                <td class="py-2 px-3 border-b">很快</td>
+                                                <td class="py-2 px-3 border-b">较高</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 px-3 border-b">U盘</td>
+                                                <td class="py-2 px-3 border-b">便携，闪存式</td>
+                                                <td class="py-2 px-3 border-b">中等</td>
+                                                <td class="py-2 px-3 border-b">中等</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <p class="text-gray-700">
+                                <strong>与信奥的关联</strong>：程序文件、测试数据都存储在外存中，程序运行前需要加载到内存。
+                                在文件操作类题目中，了解外存的读写特性有助于优化程序效率。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h4 class="font-semibold mb-3">外存与内存的区别</h4>
+                            <div class="space-y-3">
+                                <div class="flex items-start">
+                                    <div class="w-1/3 text-sm font-medium">存储时长</div>
+                                    <div class="w-2/3 text-sm">
+                                        <span class="text-storage">外存</span>：长期存储<br>
+                                        <span class="text-memory">内存</span>：临时存储，断电丢失
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="w-1/3 text-sm font-medium">读写速度</div>
+                                    <div class="w-2/3 text-sm">
+                                        <span class="text-storage">外存</span>：较慢<br>
+                                        <span class="text-memory">内存</span>：很快
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="w-1/3 text-sm font-medium">容量</div>
+                                    <div class="w-2/3 text-sm">
+                                        <span class="text-storage">外存</span>：较大(GB-TB级)<br>
+                                        <span class="text-memory">内存</span>：较小(GB级)
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="w-1/3 text-sm font-medium">作用</div>
+                                    <div class="w-2/3 text-sm">
+                                        <span class="text-storage">外存</span>：存放程序和数据<br>
+                                        <span class="text-memory">内存</span>：运行中的程序和数据
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 输入输出设备 -->
+                <div class="io-bg p-5 rounded-lg">
+                    <h3 class="text-xl font-bold text-io mb-4 flex items-center">
+                        <i class="fa fa-exchange mr-2"></i> 输入输出设备
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-lg mb-3 text-io">输入设备</h4>
+                            <p class="text-gray-700 mb-3">
+                                输入设备用于将外部数据和指令传入计算机，是人与计算机交互的重要途径。
+                            </p>
+                            
+                            <div class="bg-white p-4 rounded-lg mb-4">
+                                <h5 class="font-medium mb-2">常见输入设备：</h5>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center">
+                                        <i class="fa fa-keyboard-o text-io mr-2"></i>
+                                        <span>键盘：输入文字和指令</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fa fa-mouse-pointer text-io mr-2"></i>
+                                        <span>鼠标：操作图形界面</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fa fa-scanner text-io mr-2"></i>
+                                        <span>扫描仪：输入图像信息</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fa fa-microphone text-io mr-2"></i>
+                                        <span>麦克风：输入声音信息</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold text-lg mb-3 text-io">输出设备</h4>
+                            <p class="text-gray-700 mb-3">
+                                输出设备用于将计算机处理结果以人能理解的形式展示出来。
+                            </p>
+                            
+                            <div class="bg-white p-4 rounded-lg mb-4">
+                                <h5 class="font-medium mb-2">常见输出设备：</h5>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center">
+                                        <i class="fa fa-desktop text-io mr-2"></i>
+                                        <span>显示器：输出图像和文字</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fa fa-printer text-io mr-2"></i>
+                                        <span>打印机：输出纸质文档</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fa fa-speaker text-io mr-2"></i>
+                                        <span>音箱：输出声音信息</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fa fa-usb text-io mr-2"></i>
+                                        <span>移动存储：输出数据文件</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-4 rounded-lg mt-4">
+                        <h4 class="font-semibold mb-3">与信奥的关联</h4>
+                        <p class="text-gray-700">
+                            在信息学竞赛中，输入输出设备是程序与外界交互的桥梁。C++程序通过标准输入设备(键盘)读取数据，
+                            通过标准输出设备(显示器)输出结果。文件操作则是通过外存设备进行数据的输入输出。
+                            了解I/O设备的特性有助于理解程序的输入输出机制。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 解题技巧 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-hardware mb-6 flex items-center">
+                <i class="fa fa-lightbulb-o mr-2"></i> CSP初赛硬件知识解题技巧
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">核心考点与解题方法</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-hardware mb-2">1. 硬件基本组成与功能</h4>
+                            <p class="text-gray-700 mb-2">
+                                <strong>考点</strong>：识别各硬件组件及其主要功能，理解数据在各组件间的流动过程。
+                            </p>
+                            <p class="text-gray-700">
+                                <strong>解题技巧</strong>：牢记"CPU负责运算，内存负责临时存储，外存负责长期存储，I/O设备负责交互"的核心功能划分，
+                                注意区分易失性存储(内存)和非易失性存储(外存)的特点。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-hardware mb-2">2. 存储单位换算</h4>
+                            <p class="text-gray-700 mb-2">
+                                <strong>考点</strong>：字节、KB、MB、GB、TB之间的换算关系，注意是1024进制而非1000进制。
+                            </p>
+                            <p class="text-gray-700">
+                                <strong>解题技巧</strong>：记住1KB=1024B，1MB=1024KB，以此类推。计算时可先将单位统一，
+                                再进行换算。例如：计算2GB等于多少MB，即2×1024=2048MB。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-hardware mb-2">3. 性能指标理解</h4>
+                            <p class="text-gray-700 mb-2">
+                                <strong>考点</strong>：CPU主频、核心数、内存容量、外存速度等性能指标的含义及对计算机性能的影响。
+                            </p>
+                            <p class="text-gray-700">
+                                <strong>解题技巧</strong>：理解"主频决定运算速度，核心数影响并行处理能力，内存容量影响可同时运行的程序数量，
+                                外存速度影响数据读写效率"等基本关系，能根据场景判断哪种性能指标更重要。
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg border border-gray-200">
+                            <h4 class="font-semibold text-hardware mb-2">4. 程序运行流程</h4>
+                            <p class="text-gray-700 mb-2">
+                                <strong>考点</strong>：程序从外存加载到内存，再由CPU执行的全过程，数据在各硬件间的传递路径。
+                            </p>
+                            <p class="text-gray-700">
+                                <strong>解题技巧</strong>：牢记程序运行的基本流程：外存→内存→CPU执行→输出设备。
+                                理解"程序必须加载到内存才能运行"这一核心概念。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">易错点与注意事项</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa fa-exclamation-triangle text-yellow-500 mt-1 mr-2"></i>
+                            <span>混淆存储单位的进制：计算机中存储单位采用1024进制，而非1000进制，这是初赛常考的细节。</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-exclamation-triangle text-yellow-500 mt-1 mr-2"></i>
+                            <span>分不清内存和外存的特性：内存速度快但易失，外存速度慢但持久，程序必须在内存中运行。</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-exclamation-triangle text-yellow-500 mt-1 mr-2"></i>
+                            <span>误解CPU性能：主频高不等于性能一定好，还需考虑核心数、缓存等因素，初赛一般只考察主频概念。</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-exclamation-triangle text-yellow-500 mt-1 mr-2"></i>
+                            <span>混淆位(bit)和字节(Byte)：1字节=8位，网络速度常用Mbps(兆位/秒)，而存储容量用MB(兆字节)。</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 例题解析 -->
+        <section id="examples" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-hardware mb-6 flex items-center">
+                <i class="fa fa-pencil mr-2"></i> CSP初赛硬件知识例题解析
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- 例题1 -->
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">例题1：存储单位换算</h3>
+                    <div class="bg-white p-4 rounded-lg mb-4 border border-gray-200">
+                        <p class="text-gray-800 font-medium mb-2">题目：</p>
+                        <p class="text-gray-700 mb-4">
+                            一台计算机的内存容量为8GB，它相当于多少MB？
+                        </p>
+                        <div class="grid grid-cols-4 gap-2 mb-4">
+                            <div class="p-2 border border-gray-200 rounded text-center cursor-pointer hover:border-hardware">A. 8000</div>
+                            <div class="p-2 border border-gray-200 rounded text-center cursor-pointer hover:border-hardware">B. 8192</div>
+                            <div class="p-2 border border-gray-200 rounded text-center cursor-pointer hover:border-hardware">C. 8096</div>
+                            <div class="p-2 border border-gray-200 rounded text-center cursor-pointer hover:border-hardware">D. 8294</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-4 rounded-lg">
+                        <p class="text-gray-800 font-medium mb-2">解析：</p>
+                        <p class="text-gray-700 mb-2">
+                            这是一道基础的存储单位换算题，考察对计算机存储单位的理解。
+                        </p>
+                        <p class="text-gray-700 mb-2">
+                            计算机中存储单位的换算关系为：1GB = 1024MB
+                        </p>
+                        <p class="text-gray-700">
+                            因此8GB = 8 × 1024MB = 8192MB，正确答案为 <span class="text-hardware font-medium">B</span>。
+                        </p>
+                        <p class="text-gray-600 text-sm mt-3">
+                            <strong>考点</strong>：存储单位换算，注意使用1024进制而非1000进制。
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 例题2 -->
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">例题2：硬件功能识别</h3>
+                    <div class="bg-white p-4 rounded-lg mb-4 border border-gray-200">
+                        <p class="text-gray-800 font-medium mb-2">题目：</p>
+                        <p class="text-gray-700 mb-4">
+                            在计算机系统中，下列哪个部件负责指令的执行和数据的运算？
+                        </p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+                            <div class="p-2 border border-gray-200 rounded text-center cursor-pointer hover:border-hardware">A. 内存</div>
+                            <div class="p-2 border border-gray-200 rounded text-center cursor-pointer hover:border-hardware">B. 硬盘</div>
+                            <div class="p-2 border border-gray-200 rounded text-center cursor-pointer hover:border-hardware">C. CPU</div>
+                            <div class="p-2 border border-gray-200 rounded text-center cursor-pointer hover:border-hardware">D. 显示器</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-4 rounded-lg">
+                        <p class="text-gray-800 font-medium mb-2">解析：</p>
+                        <p class="text-gray-700 mb-2">
+                            这道题考察计算机各硬件的基本功能：
+                        </p>
+                        <ul class="text-gray-700 mb-3 space-y-1 pl-5 list-disc">
+                            <li>A. 内存：负责临时存储程序和数据</li>
+                            <li>B. 硬盘：属于外存，负责长期存储数据</li>
+                            <li>C. CPU：中央处理器，负责指令执行和数据运算</li>
+                            <li>D. 显示器：输出设备，负责显示处理结果</li>
+                        </ul>
+                        <p class="text-gray-700">
+                            因此正确答案为 <span class="text-hardware font-medium">C</span>。
+                        </p>
+                        <p class="text-gray-600 text-sm mt-3">
+                            <strong>考点</strong>：各硬件组件的核心功能，这是CSP初赛的高频考点。
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 例题3 -->
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">例题3：程序运行流程</h3>
+                    <div class="bg-white p-4 rounded-lg mb-4 border border-gray-200">
+                        <p class="text-gray-800 font-medium mb-2">题目：</p>
+                        <p class="text-gray-700 mb-4">
+                            当用户双击桌面上的一个程序图标启动程序时，程序会首先从哪里被加载到哪里运行？
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                            <div class="p-2 border border-gray-200 rounded text-center cursor-pointer hover:border-hardware">A. 从CPU加载到内存</div>
+                            <div class="p-2 border border-gray-200 rounded text-center cursor-pointer hover:border-hardware">B. 从外存加载到内存</div>
+                            <div class="p-2 border border-gray-200 rounded text-center cursor-pointer hover:border-hardware">C. 从内存加载到CPU</div>
+                            <div class="p-2 border border-gray-200 rounded text-center cursor-pointer hover:border-hardware">D. 从外存加载到CPU</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-4 rounded-lg">
+                        <p class="text-gray-800 font-medium mb-2">解析：</p>
+                        <p class="text-gray-700 mb-2">
+                            这道题考察程序运行的基本流程：
+                        </p>
+                        <p class="text-gray-700 mb-2">
+                            程序文件平时存储在硬盘等外存设备中，当用户启动程序时，操作系统会将程序从外存读取并加载到内存中，
+                            然后CPU从内存中读取指令并执行。
+                        </p>
+                        <p class="text-gray-700">
+                            因此正确答案为 <span class="text-hardware font-medium">B</span>。
+                        </p>
+                        <p class="text-gray-600 text-sm mt-3">
+                            <strong>考点</strong>：程序运行时在各硬件间的流动过程，理解"程序必须加载到内存才能运行"的概念。
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 例题4 -->
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">例题4：硬件特性判断</h3>
+                    <div class="bg-white p-4 rounded-lg mb-4 border border-gray-200">
+                        <p class="text-gray-800 font-medium mb-2">题目：</p>
+                        <p class="text-gray-700 mb-4">
+                            下列关于计算机内存的说法，正确的是：
+                        </p>
+                        <div class="grid grid-cols-1 gap-3 mb-4">
+                            <div class="p-2 border border-gray-200 rounded text-left cursor-pointer hover:border-hardware">A. 内存断电后数据不会丢失</div>
+                            <div class="p-2 border border-gray-200 rounded text-left cursor-pointer hover:border-hardware">B. 内存的读写速度比硬盘慢</div>
+                            <div class="p-2 border border-gray-200 rounded text-left cursor-pointer hover:border-hardware">C. 程序必须加载到内存才能运行</div>
+                            <div class="p-2 border border-gray-200 rounded text-left cursor-pointer hover:border-hardware">D. 内存容量通常比硬盘大</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-4 rounded-lg">
+                        <p class="text-gray-800 font-medium mb-2">解析：</p>
+                        <p class="text-gray-700 mb-2">
+                            这道题考察内存的基本特性：
+                        </p>
+                        <ul class="text-gray-700 mb-3 space-y-2 pl-5 list-disc">
+                            <li>A. 错误：内存是易失性存储，断电后数据会丢失</li>
+                            <li>B. 错误：内存的读写速度远快于硬盘</li>
+                            <li>C. 正确：程序必须加载到内存才能被CPU执行</li>
+                            <li>D. 错误：内存容量通常远小于硬盘容量</li>
+                        </ul>
+                        <p class="text-gray-700">
+                            因此正确答案为 <span class="text-hardware font-medium">C</span>。
+                        </p>
+                        <p class="text-gray-600 text-sm mt-3">
+                            <strong>考点</strong>：内存与外存的特性对比，重点区分易失性、速度和容量等特性。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化高亮显示
+        document.addEventListener('DOMContentLoaded', function() {
+            // 硬件组件点击效果
+            const components = document.querySelectorAll('.component');
+            components.forEach(component => {
+                component.addEventListener('click', function() {
+                    components.forEach(c => c.classList.remove('component-active'));
+                    this.classList.add('component-active');
+                });
+            });
+            
+            // 硬件工作流程模拟
+            const runBtn = document.getElementById('simulation-run');
+            const resetBtn = document.getElementById('simulation-reset');
+            const statusEl = document.getElementById('simulation-status');
+            const dataFlow = document.getElementById('data-flow');
+            const simCpu = document.getElementById('sim-cpu');
+            const simMemory = document.getElementById('sim-memory');
+            const simStorage = document.getElementById('sim-storage');
+            const simIo = document.getElementById('sim-io');
+            
+            // 获取元素位置信息的函数
+            function getPosition(el) {
+                const rect = el.getBoundingClientRect();
+                const diagramRect = document.getElementById('hardware-simulation').getBoundingClientRect();
+                return {
+                    x: rect.left + rect.width/2 - diagramRect.left,
+                    y: rect.top + rect.height/2 - diagramRect.top
+                };
+            }
+            
+            // 移动数据点的函数
+            function moveDataTo(el, callback) {
+                const pos = getPosition(el);
+                dataFlow.style.left = `${pos.x}px`;
+                dataFlow.style.top = `${pos.y}px`;
+                dataFlow.style.display = 'block';
+                
+                if (callback) {
+                    setTimeout(callback, 800);
+                }
+            }
+            
+            // 运行模拟
+            let isRunning = false;
+            runBtn.addEventListener('click', function() {
+                if (isRunning) return;
+                isRunning = true;
+                
+                // 步骤1：从外存开始
+                statusEl.textContent = "状态: 程序存储在外存中";
+                moveDataTo(simStorage, function() {
+                    // 步骤2：加载到内存
+                    statusEl.textContent = "状态: 程序从外存加载到内存";
+                    moveDataTo(simMemory, function() {
+                        // 步骤3：CPU处理
+                        statusEl.textContent = "状态: CPU从内存读取并执行程序";
+                        moveDataTo(simCpu, function() {
+                            // 步骤4：输出结果
+                            statusEl.textContent = "状态: 处理结果输出到IO设备";
+                            moveDataTo(simIo, function() {
+                                statusEl.textContent = "状态: 演示完成";
+                                isRunning = false;
+                            });
+                        });
+                    });
+                });
+            });
+            
+            // 重置模拟
+            resetBtn.addEventListener('click', function() {
+                isRunning = false;
+                dataFlow.style.display = 'none';
+                statusEl.textContent = "状态: 已重置";
+            });
+            
+            // 高亮代码块
+            hljs.highlightAll();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算机网络 - CSP初赛知识点</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6', // 网络主题色：蓝色
+                        secondary: '#10B981', // 辅助色：绿色
+                        protocol: '#6366F1', // 协议相关：靛蓝色
+                        ipaddr: '#F59E0B', // IP地址相关：琥珀色
+                        domain: '#EC4899', // 域名相关：粉色
+                        darkbg: '#F8FAFC',
+                        cardbg: '#FFFFFF',
+                        hoverbg: '#F0F2F5',
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .protocol-header {
+                @apply font-bold text-protocol mb-3;
+            }
+            .ip-header {
+                @apply font-bold text-ipaddr mb-3;
+            }
+            .domain-header {
+                @apply font-bold text-domain mb-3;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-primary bg-primary/5;
+            }
+            .packet {
+                @apply border-2 border-primary rounded-md p-3 mb-4 bg-primary/5 relative transition-all duration-500 w-full max-w-md mx-auto;
+            }
+            .packet-header {
+                @apply font-semibold text-primary mb-2 pb-1 border-b border-primary/30;
+            }
+            .packet-field {
+                @apply flex justify-between py-1 border-b border-dashed border-gray-200;
+            }
+            .packet-field-label {
+                @apply text-gray-600 text-sm;
+            }
+            .packet-field-value {
+                @apply font-medium;
+            }
+            .network-node {
+                @apply w-16 h-16 rounded-full bg-white border-2 border-primary flex items-center justify-center font-medium mx-auto transition-all duration-300;
+            }
+            .network-node-active {
+                @apply bg-primary text-white scale-110;
+            }
+            .network-link {
+                @apply border-t-2 border-dashed border-gray-300 flex-1 my-8 mx-2;
+            }
+            .network-path {
+                @apply flex items-center my-8;
+            }
+            .ip-part {
+                @apply inline-block w-10 h-10 rounded bg-gray-100 text-center leading-10 font-medium border border-gray-300 mx-1 transition-all duration-300;
+            }
+            .ip-part-active {
+                @apply bg-ipaddr text-white border-ipaddr;
+            }
+            .dns-step {
+                @apply flex items-center justify-between my-6;
+            }
+            .dns-server {
+                @apply bg-domain/10 border border-domain/30 rounded-lg p-3 w-40 text-center;
+            }
+            .dns-query {
+                @apply text-sm bg-gray-100 px-3 py-1 rounded-full transform transition-all duration-1000;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-globe text-primary text-3xl"></i>
+                <h1 class="text-2xl font-bold text-primary tracking-tight">CSP初赛知识点</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200">首页</a>
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200">计算机基础</a>
+                <a href="#" class="text-primary font-medium">计算机网络</a>
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200">数据结构</a>
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200">算法</a>
+            </div>
+            <div class="flex items-center">
+                <button class="md:hidden text-gray-700">
+                    <i class="fa fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">CSP初赛</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-primary font-medium">计算机网络</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-primary mb-2">计算机网络基础</h1>
+                    <p class="text-gray-700">
+                        本文介绍CSP初赛中常考的计算机网络知识，包括网络协议、IP地址和域名系统等核心内容，
+                        帮助信息学奥赛选手掌握相关知识点和解题技巧。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#protocols" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-exchange mr-2"></i> 网络协议
+                        </a>
+                        <a href="#ip" class="bg-white border border-primary text-primary hover:bg-primary/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-server mr-2"></i> IP地址
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 网络协议 -->
+        <section id="protocols" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-protocol mb-6 flex items-center">
+                <i class="fa fa-exchange mr-2"></i> 网络协议
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="protocol-header text-xl">什么是网络协议？</h3>
+                    <p class="text-gray-700">
+                        网络协议是计算机网络中进行数据交换而建立的规则、标准或约定的集合。
+                        如同人与人之间交流需要共同的语言，计算机之间的通信也需要遵循共同的协议。
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="protocol-header text-xl">CSP初赛常考协议</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-primary mb-2">HTTP/HTTPS</h4>
+                            <p class="text-gray-700 text-sm">
+                                超文本传输协议，用于在Web浏览器和服务器之间传输数据。
+                                HTTPS是HTTP的加密版本，提供更安全的通信。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-primary mb-2">TCP/UDP</h4>
+                            <p class="text-gray-700 text-sm">
+                                传输层协议。TCP提供可靠的、面向连接的服务；
+                                UDP提供不可靠的、无连接的服务，速度更快。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-primary mb-2">IP</h4>
+                            <p class="text-gray-700 text-sm">
+                                网际协议，负责将数据包从源地址传输到目的地址，
+                                是TCP/IP协议族的核心。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-primary mb-2">DNS</h4>
+                            <p class="text-gray-700 text-sm">
+                                域名系统，负责将域名转换为对应的IP地址，
+                                使得用户可以通过易记的域名访问互联网。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- TCP协议演示 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="protocol-header text-lg mb-3">TCP三次握手演示</h3>
+                    <p class="text-gray-700 mb-4">
+                        TCP协议通过"三次握手"建立连接，这是CSP初赛的重要考点：
+                    </p>
+                    
+                    <div class="network-path">
+                        <div id="client-node" class="network-node">客户端</div>
+                        <div class="network-link"></div>
+                        <div id="server-node" class="network-node">服务器</div>
+                    </div>
+                    
+                    <div id="handshake-messages" class="my-6 text-center">
+                        <div id="step-1" class="hidden">
+                            <div class="dns-query inline-block" style="transform: translateX(0%);">
+                                客户端 → 服务器: SYN（请求建立连接）
+                            </div>
+                        </div>
+                        <div id="step-2" class="hidden mt-4">
+                            <div class="dns-query inline-block" style="transform: translateX(0%);">
+                                服务器 → 客户端: SYN+ACK（同意建立连接）
+                            </div>
+                        </div>
+                        <div id="step-3" class="hidden mt-4">
+                            <div class="dns-query inline-block" style="transform: translateX(0%);">
+                                客户端 → 服务器: ACK（确认连接建立）
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center space-x-3 mt-6">
+                        <button id="start-handshake" class="bg-protocol hover:bg-protocol/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-play mr-2"></i> 开始演示
+                        </button>
+                        <button id="reset-handshake" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-refresh mr-2"></i> 重置
+                        </button>
+                    </div>
+                    
+                    <div id="handshake-info" class="mt-4 p-3 bg-gray-100 rounded-lg text-sm">
+                        三次握手是TCP建立连接的过程，确保双方都能正确收发数据。
+                    </div>
+                </div>
+                
+                <!-- 协议分层模型 -->
+                <div>
+                    <h3 class="protocol-header text-xl">TCP/IP协议分层模型</h3>
+                    <p class="text-gray-700 mb-4">
+                        TCP/IP协议栈分为4层，从下到上依次为：
+                    </p>
+                    
+                    <div class="relative border-2 border-gray-200 rounded-lg overflow-hidden max-w-2xl mx-auto">
+                        <div class="bg-primary text-white p-3 text-center font-semibold">应用层 (HTTP, DNS, FTP等)</div>
+                        <div class="bg-primary/80 text-white p-3 text-center font-semibold border-t border-white/20">传输层 (TCP, UDP)</div>
+                        <div class="bg-primary/60 text-white p-3 text-center font-semibold border-t border-white/20">网络层 (IP, ICMP)</div>
+                        <div class="bg-primary/40 text-white p-3 text-center font-semibold border-t border-white/20">网络接口层 (以太网等)</div>
+                    </div>
+                    
+                    <p class="text-gray-700 mt-4 text-sm">
+                        <strong>考点提示：</strong> CSP初赛常考各层对应的协议，以及数据在各层之间的封装过程。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- IP地址 -->
+        <section id="ip" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-ipaddr mb-6 flex items-center">
+                <i class="fa fa-server mr-2"></i> IP地址
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="ip-header text-xl">IP地址的概念</h3>
+                    <p class="text-gray-700">
+                        IP地址是互联网协议地址，用于标识网络中的设备。IPv4地址由32位二进制数组成，
+                        通常表示为4个0-255的十进制数，中间用点分隔（点分十进制）。
+                    </p>
+                    
+                    <div class="mt-4 flex justify-center">
+                        <div class="ip-demo flex">
+                            <div class="ip-part" data-part="1">192</div>
+                            <div class="inline-block text-xl font-bold mx-1">.</div>
+                            <div class="ip-part" data-part="2">168</div>
+                            <div class="inline-block text-xl font-bold mx-1">.</div>
+                            <div class="ip-part" data-part="3">1</div>
+                            <div class="inline-block text-xl font-bold mx-1">.</div>
+                            <div class="ip-part" data-part="4">100</div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button id="show-ip-binary" class="bg-ipaddr hover:bg-ipaddr/90 text-white px-4 py-2 rounded-md transition-all text-sm">
+                            显示二进制形式
+                        </button>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="ip-header text-xl">IP地址分类（IPv4）</h3>
+                    <p class="text-gray-700 mb-4">
+                        IPv4地址分为5类，CSP初赛重点考察A、B、C三类：
+                    </p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="py-3 px-4 border-b text-left">类别</th>
+                                    <th class="py-3 px-4 border-b text-left">网络位</th>
+                                    <th class="py-3 px-4 border-b text-left">主机位</th>
+                                    <th class="py-3 px-4 border-b text-left">地址范围</th>
+                                    <th class="py-3 px-4 border-b text-left">用途</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-3 px-4 border-b font-medium">A类</td>
+                                    <td class="py-3 px-4 border-b">前8位</td>
+                                    <td class="py-3 px-4 border-b">后24位</td>
+                                    <td class="py-3 px-4 border-b">1.0.0.0-126.255.255.255</td>
+                                    <td class="py-3 px-4 border-b">大型网络</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-3 px-4 border-b font-medium">B类</td>
+                                    <td class="py-3 px-4 border-b">前16位</td>
+                                    <td class="py-3 px-4 border-b">后16位</td>
+                                    <td class="py-3 px-4 border-b">128.0.0.0-191.255.255.255</td>
+                                    <td class="py-3 px-4 border-b">中型网络</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 border-b font-medium">C类</td>
+                                    <td class="py-3 px-4 border-b">前24位</td>
+                                    <td class="py-3 px-4 border-b">后8位</td>
+                                    <td class="py-3 px-4 border-b">192.0.0.0-223.255.255.255</td>
+                                    <td class="py-3 px-4 border-b">小型网络</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- 子网掩码演示 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="ip-header text-lg mb-3">子网掩码与网络地址计算</h3>
+                    <p class="text-gray-700 mb-4">
+                        子网掩码用于区分IP地址中的网络部分和主机部分，与IP地址进行"与"运算可得到网络地址：
+                    </p>
+                    
+                    <div class="space-y-4 max-w-2xl mx-auto">
+                        <div>
+                            <div class="text-sm font-medium mb-1">IP地址:</div>
+                            <div class="packet-field">
+                                <span class="packet-field-label">十进制</span>
+                                <span class="packet-field-value">192.168.1.100</span>
+                            </div>
+                            <div class="packet-field">
+                                <span class="packet-field-label">二进制</span>
+                                <span class="packet-field-value">11000000.10101000.00000001.01100100</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="text-sm font-medium mb-1">子网掩码:</div>
+                            <div class="packet-field">
+                                <span class="packet-field-label">十进制</span>
+                                <span class="packet-field-value">255.255.255.0</span>
+                            </div>
+                            <div class="packet-field">
+                                <span class="packet-field-label">二进制</span>
+                                <span class="packet-field-value">11111111.11111111.11111111.00000000</span>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-gray-200 pt-2">
+                            <div class="text-sm font-medium mb-1">网络地址 (IP & 子网掩码):</div>
+                            <div class="packet-field">
+                                <span class="packet-field-label">二进制</span>
+                                <span class="packet-field-value">11000000.10101000.00000001.00000000</span>
+                            </div>
+                            <div class="packet-field">
+                                <span class="packet-field-label">十进制</span>
+                                <span class="packet-field-value font-semibold text-primary">192.168.1.0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-center">
+                        <button id="calculate-network" class="bg-ipaddr hover:bg-ipaddr/90 text-white px-4 py-2 rounded-md transition-all text-sm">
+                            演示计算过程
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 域名系统 -->
+        <section id="dns" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-domain mb-6 flex items-center">
+                <i class="fa fa-globe mr-2"></i> 域名系统 (DNS)
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="domain-header text-xl">DNS的作用</h3>
+                    <p class="text-gray-700">
+                        域名系统(DNS)是互联网的一项核心服务，它作为将域名和IP地址相互映射的一个分布式数据库，
+                        能够使人更方便地访问互联网，而不用记住能够被机器直接读取的IP地址。
+                    </p>
+                </div>
+                
+                <!-- DNS解析过程演示 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="domain-header text-lg mb-3">DNS解析过程演示</h3>
+                    <p class="text-gray-700 mb-4">
+                        当你在浏览器中输入域名(如www.luogu.com)时，DNS解析过程如下：
+                    </p>
+                    
+                    <div id="dns-resolution">
+                        <div class="dns-step">
+                            <div class="network-node">本地主机</div>
+                            <div class="network-link"></div>
+                            <div class="dns-server">本地DNS服务器</div>
+                            <div class="network-link"></div>
+                            <div class="dns-server">根域名服务器</div>
+                            <div class="network-link"></div>
+                            <div class="dns-server">.com服务器</div>
+                            <div class="network-link"></div>
+                            <div class="dns-server">luogu.com服务器</div>
+                        </div>
+                        
+                        <div id="dns-messages" class="my-8">
+                            <div id="dns-step-1" class="hidden">
+                                <div class="dns-query inline-block" style="transform: translateX(0%);">
+                                    本地主机 → 本地DNS服务器: 解析www.luogu.com
+                                </div>
+                            </div>
+                            <div id="dns-step-2" class="hidden mt-4">
+                                <div class="dns-query inline-block" style="transform: translateX(15%);">
+                                    本地DNS服务器 → 根服务器: 解析www.luogu.com
+                                </div>
+                            </div>
+                            <div id="dns-step-3" class="hidden mt-4">
+                                <div class="dns-query inline-block" style="transform: translateX(85%);">
+                                    根服务器 → 本地DNS服务器: 请查询.com服务器
+                                </div>
+                            </div>
+                            <div id="dns-step-4" class="hidden mt-4">
+                                <div class="dns-query inline-block" style="transform: translateX(30%);">
+                                    本地DNS服务器 → .com服务器: 解析www.luogu.com
+                                </div>
+                            </div>
+                            <div id="dns-step-5" class="hidden mt-4">
+                                <div class="dns-query inline-block" style="transform: translateX(70%);">
+                                    .com服务器 → 本地DNS服务器: 请查询luogu.com服务器
+                                </div>
+                            </div>
+                            <div id="dns-step-6" class="hidden mt-4">
+                                <div class="dns-query inline-block" style="transform: translateX(45%);">
+                                    本地DNS服务器 → luogu.com服务器: 解析www.luogu.com
+                                </div>
+                            </div>
+                            <div id="dns-step-7" class="hidden mt-4">
+                                <div class="dns-query inline-block" style="transform: translateX(55%);">
+                                    luogu.com服务器 → 本地DNS服务器: www.luogu.com = 111.230.184.xxx
+                                </div>
+                            </div>
+                            <div id="dns-step-8" class="hidden mt-4">
+                                <div class="dns-query inline-block" style="transform: translateX(0%);">
+                                    本地DNS服务器 → 本地主机: www.luogu.com = 111.230.184.xxx
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center space-x-3 mt-6">
+                        <button id="start-dns" class="bg-domain hover:bg-domain/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-play mr-2"></i> 开始演示
+                        </button>
+                        <button id="step-dns" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-step-forward mr-2"></i> 单步演示
+                        </button>
+                        <button id="reset-dns" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-refresh mr-2"></i> 重置
+                        </button>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="domain-header text-xl">域名结构</h3>
+                    <p class="text-gray-700 mb-4">
+                        域名采用层次结构，从右到左级别逐渐降低，各级之间用点分隔：
+                    </p>
+                    
+                    <div class="flex flex-wrap justify-center items-center py-4 my-4 bg-gray-50 rounded-lg">
+                        <div class="px-4 py-2 bg-domain/20 rounded-l-lg border border-domain/30">www</div>
+                        <div class="px-4 py-2 bg-domain/20 border-t border-b border-domain/30">luogu</div>
+                        <div class="px-4 py-2 bg-domain/20 rounded-r-lg border border-domain/30">com</div>
+                        <div class="ml-4 text-gray-500">
+                            <span class="text-xs">主机名</span> → <span class="text-xs">二级域名</span> → <span class="text-xs">顶级域名</span>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-700 text-sm">
+                        <strong>常见顶级域名：</strong> .com（商业）、.org（组织）、.net（网络）、.cn（中国国家顶级域名）等。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 解题技巧 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-secondary mb-6 flex items-center">
+                <i class="fa fa-lightbulb-o mr-2"></i> 解题技巧
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold mb-3">IP地址计算技巧</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>判断IP地址类别时，只需看第一个字节：
+                            <ul class="list-circle pl-6 mt-1">
+                                <li>A类：1-126</li>
+                                <li>B类：128-191</li>
+                                <li>C类：192-223</li>
+                            </ul>
+                        </li>
+                        <li>计算网络地址时，将IP地址和子网掩码转换为二进制后逐位进行"与"运算</li>
+                        <li>记住特殊IP地址：网络地址（主机位全0）、广播地址（主机位全1）、回环地址（127.x.x.x）</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold mb-3">协议识别技巧</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>区分TCP和UDP：TCP可靠但速度较慢，用于HTTP、FTP等；UDP速度快但不可靠，用于视频流、游戏等</li>
+                        <li>记住常用协议端口号：HTTP(80)、HTTPS(443)、FTP(21)、DNS(53)，这些是CSP常考点</li>
+                        <li>理解TCP三次握手和四次挥手的基本过程，不需要死握手指建立连接，挥手指断开连接</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="text-lg font-semibold mb-3">DNS相关考点</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>DNS的主要功能是域名与IP地址的相互转换</li>
+                        <li>理解DNS的层次结构和解析过程</li>
+                        <li>区分不同级别的域名，特别是国家顶级域名（如.cn、.us）</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 例题解析 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-primary mb-6 flex items-center">
+                <i class="fa fa-pencil mr-2"></i> 例题解析
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- 例题1 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题1：IP地址类别判断</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <p class="mb-2"><strong>题目：</strong>以下IP地址中，属于B类地址的是（ ）</p>
+                        <div class="pl-4 space-y-1">
+                            <p>A. 10.10.10.1</p>
+                            <p>B. 130.25.36.18</p>
+                            <p>C. 192.168.1.1</p>
+                            <p>D. 224.0.0.1</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">解析：</h4>
+                        <p class="text-gray-700 mb-2">
+                            根据IP地址分类规则，B类地址的第一个字节范围是128-191：
+                        </p>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>A选项第一个字节是10，属于A类地址</li>
+                            <li>B选项第一个字节是130，在128-191范围内，属于B类地址</li>
+                            <li>C选项第一个字节是192，属于C类地址</li>
+                            <li>D选项第一个字节是224，属于D类地址（多播地址）</li>
+                        </ul>
+                        <p class="mt-2 font-medium">答案：B</p>
+                    </div>
+                </div>
+                
+                <!-- 例题2 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题2：网络地址计算</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <p class="mb-2"><strong>题目：</strong>IP地址为192.168.5.139，子网掩码为255.255.255.224，其网络地址是（ ）</p>
+                        <div class="pl-4 space-y-1">
+                            <p>A. 192.168.5.128</p>
+                            <p>B. 192.168.5.160</p>
+                            <p>C. 192.168.5.0</p>
+                            <p>D. 192.168.5.224</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">解析：</h4>
+                        <p class="text-gray-700 mb-2">
+                            计算网络地址需要将IP地址和子网掩码进行"与"运算：
+                        </p>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li>IP地址：192.168.5.139 → 二进制为 11000000.10101000.00000101.10001011</li>
+                            <li>子网掩码：255.255.255.224 → 二进制为 11111111.11111111.11111111.11100000</li>
+                            <li>与运算结果：11000000.10101000.00000101.10000000 → 十进制为192.168.5.128</li>
+                        </ul>
+                        <p class="mt-2 font-medium">答案：A</p>
+                    </div>
+                </div>
+                
+                <!-- 例题3 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题3：网络协议识别</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <p class="mb-2"><strong>题目：</strong>下列协议中，不属于应用层协议的是（ ）</p>
+                        <div class="pl-4 space-y-1">
+                            <p>A. HTTP</p>
+                            <p>B. TCP</p>
+                            <p>C. FTP</p>
+                            <p>D. DNS</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">解析：</h4>
+                        <p class="text-gray-700 mb-2">
+                            根据TCP/IP协议分层模型：
+                        </p>
+                        <ul class="list-disc pl-6 space-y-1">
+                            <li>HTTP（超文本传输协议）属于应用层</li>
+                            <li>TCP（传输控制协议）属于传输层</li>
+                            <li>FTP（文件传输协议）属于应用层</li>
+                            <li>DNS（域名系统）属于应用层</li>
+                        </ul>
+                        <p class="mt-2 font-medium">答案：B</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white border-t border-gray-200 py-6">
+        <div class="container mx-auto px-4 text-center text-gray-600 text-sm">
+            <p>© 2023 CSP初赛知识点讲解 - 计算机网络篇</p>
+            <p class="mt-2">专注于信息学奥赛基础知识学习</p>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            
+            // TCP三次握手演示
+            const clientNode = document.getElementById('client-node');
+            const serverNode = document.getElementById('server-node');
+            const step1 = document.getElementById('step-1');
+            const step2 = document.getElementById('step-2');
+            const step3 = document.getElementById('step-3');
+            const handshakeInfo = document.getElementById('handshake-info');
+            
+            document.getElementById('start-handshake').addEventListener('click', function() {
+                resetHandshake();
+                
+                setTimeout(() => {
+                    clientNode.classList.add('network-node-active');
+                    step1.classList.remove('hidden');
+                    handshakeInfo.textContent = "第一步：客户端向服务器发送SYN报文，请求建立连接";
+                }, 500);
+                
+                setTimeout(() => {
+                    clientNode.classList.remove('network-node-active');
+                    serverNode.classList.add('network-node-active');
+                    step2.classList.remove('hidden');
+                    handshakeInfo.textContent = "第二步：服务器收到请求，发送SYN+ACK报文，同意建立连接";
+                }, 2000);
+                
+                setTimeout(() => {
+                    serverNode.classList.remove('network-node-active');
+                    clientNode.classList.add('network-node-active');
+                    step3.classList.remove('hidden');
+                    handshakeInfo.textContent = "第三步：客户端发送ACK报文，确认连接建立，此时TCP连接建立完成";
+                }, 3500);
+                
+                setTimeout(() => {
+                    clientNode.classList.remove('network-node-active');
+                    serverNode.classList.remove('network-node-active');
+                    handshakeInfo.textContent = "三次握手完成，TCP连接已建立，可以开始传输数据";
+                }, 5000);
+            });
+            
+            document.getElementById('reset-handshake').addEventListener('click', resetHandshake);
+            
+            function resetHandshake() {
+                clientNode.classList.remove('network-node-active');
+                serverNode.classList.remove('network-node-active');
+                step1.classList.add('hidden');
+                step2.classList.add('hidden');
+                step3.classList.add('hidden');
+                handshakeInfo.textContent = "三次握手是TCP建立连接的过程，确保双方都能正确收发数据。";
+            }
+            
+            // IP地址二进制转换演示
+            const ipParts = document.querySelectorAll('.ip-part');
+            const ipBinaryMap = {
+                1: { decimal: '192', binary: '11000000' },
+                2: { decimal: '168', binary: '10101000' },
+                3: { decimal: '1', binary: '00000001' },
+                4: { decimal: '100', binary: '01100100' }
+            };
+            let showingBinary = false;
+            
+            document.getElementById('show-ip-binary').addEventListener('click', function() {
+                showingBinary = !showingBinary;
+                
+                ipParts.forEach(part => {
+                    const id = part.getAttribute('data-part');
+                    if (showingBinary) {
+                        part.textContent = ipBinaryMap[id].binary;
+                        part.classList.add('ip-part-active');
+                    } else {
+                        part.textContent = ipBinaryMap[id].decimal;
+                        part.classList.remove('ip-part-active');
+                    }
+                });
+                
+                this.textContent = showingBinary ? '显示十进制形式' : '显示二进制形式';
+            });
+            
+            // 网络地址计算演示
+            let calculating = false;
+            document.getElementById('calculate-network').addEventListener('click', function() {
+                if (calculating) return;
+                calculating = true;
+                
+                const fields = document.querySelectorAll('.packet-field-value');
+                const originalValues = Array.from(fields).map(field => field.textContent);
+                
+                // 高亮二进制计算过程
+                fields[1].classList.add('text-ipaddr', 'font-bold');
+                fields[3].classList.add('text-ipaddr', 'font-bold');
+                
+                setTimeout(() => {
+                    fields[4].classList.add('text-ipaddr', 'font-bold');
+                }, 1000);
+                
+                setTimeout(() => {
+                    fields[5].classList.add('text-primary', 'font-bold');
+                    this.textContent = '重新演示';
+                    calculating = false;
+                }, 2000);
+            });
+            
+            // DNS解析演示
+            const dnsSteps = [
+                document.getElementById('dns-step-1'),
+                document.getElementById('dns-step-2'),
+                document.getElementById('dns-step-3'),
+                document.getElementById('dns-step-4'),
+                document.getElementById('dns-step-5'),
+                document.getElementById('dns-step-6'),
+                document.getElementById('dns-step-7'),
+                document.getElementById('dns-step-8')
+            ];
+            const dnsNodes = document.querySelectorAll('.dns-server, .network-node');
+            let currentDnsStep = 0;
+            let dnsPlaying = false;
+            
+            function resetDns() {
+                dnsSteps.forEach(step => step.classList.add('hidden'));
+                dnsNodes.forEach(node => node.classList.remove('network-node-active'));
+                currentDnsStep = 0;
+                dnsPlaying = false;
+                document.getElementById('start-dns').classList.remove('hidden');
+                document.getElementById('step-dns').classList.remove('hidden');
+            }
+            
+            function highlightDnsNode(index) {
+                dnsNodes.forEach(node => node.classList.remove('network-node-active'));
+                if (index >= 0 && index < dnsNodes.length) {
+                    dnsNodes[index].classList.add('network-node-active');
+                }
+            }
+            
+            function showDnsStep(step) {
+                if (step >= dnsSteps.length) {
+                    dnsPlaying = false;
+                    document.getElementById('start-dns').classList.remove('hidden');
+                    return;
+                }
+                
+                dnsSteps.forEach((s, i) => {
+                    if (i === step) {
+                        s.classList.remove('hidden');
+                    }
+                });
+                
+                // 高亮对应的节点
+                switch(step) {
+                    case 0: highlightDnsNode(0); break; // 本地主机
+                    case 1: highlightDnsNode(1); break; // 本地DNS
+                    case 2: highlightDnsNode(2); break; // 根服务器
+                    case 3: highlightDnsNode(1); break; // 本地DNS
+                    case 4: highlightDnsNode(3); break; // .com服务器
+                    case 5: highlightDnsNode(1); break; // 本地DNS
+                    case 6: highlightDnsNode(4); break; // luogu.com服务器
+                    case 7: highlightDnsNode(0); break; // 本地主机
+                }
+                
+                currentDnsStep = step;
+                
+                if (dnsPlaying) {
+                    setTimeout(() => showDnsStep(step + 1), 1500);
+                }
+            }
+            
+            document.getElementById('start-dns').addEventListener('click', function() {
+                resetDns();
+                dnsPlaying = true;
+                this.classList.add('hidden');
+                document.getElementById('step-dns').classList.add('hidden');
+                showDnsStep(0);
+            });
+            
+            document.getElementById('step-dns').addEventListener('click', function() {
+                if (currentDnsStep < dnsSteps.length) {
+                    showDnsStep(currentDnsStep);
+                    currentDnsStep++;
+                }
+            });
+            
+            document.getElementById('reset-dns').addEventListener('click', resetDns);
+        });
+    </script>
+</body>
+</html>

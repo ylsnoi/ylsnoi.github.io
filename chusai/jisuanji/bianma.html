@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编码方式 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0',
+                        secondary: '#6C63FF',
+                        syntax: '#FF9800',
+                        algorithm: '#2ECC71',
+                        datastructure: '#9C27B0',
+                        darkbg: '#F8FAFC',
+                        cardbg: '#FFFFFF',
+                        hoverbg: '#F0F2F5',
+                        coding: '#3498DB', // 编码主题色：蓝色
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .coding-bg {
+                @apply bg-gradient-to-r from-coding/5 to-coding/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .coding-header {
+                @apply font-bold text-coding mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .bit-cell {
+                @apply inline-block w-8 h-8 border-2 text-center leading-8 font-mono font-bold;
+            }
+            .bit-cell-sign {
+                @apply bg-gray-200 border-gray-400;
+            }
+            .bit-cell-data {
+                @apply bg-gray-50 border-gray-300;
+            }
+            .bit-cell-highlight {
+                @apply bg-yellow-100 border-yellow-500;
+            }
+            .binary-container {
+                @apply my-4 p-4 bg-gray-50 rounded-lg;
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-blue-50 text-blue-800 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-coding h-2.5 rounded-full transition-all duration-300;
+            }
+            .example-card {
+                @apply bg-gray-50 p-4 rounded-lg border border-gray-100;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">CSP初赛</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">计算机基础知识</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-coding font-medium">编码方式</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="coding-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-coding mb-2">原码、反码、补码及字符编码</h1>
+                    <p class="text-gray-700">
+                        深入讲解计算机中数据的表示方法，包括原码、反码、补码的转换规则以及常见的字符编码方式，为CSP初赛做好准备。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-coding hover:bg-coding/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#examples" class="bg-white border border-coding text-coding hover:bg-coding/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看例题
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 编码方式概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-coding mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 机器数与编码方式
+            </h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">机器数与真值</h3>
+                    <p class="text-gray-700 mb-3">
+                        计算机中用二进制表示的数称为<strong>机器数</strong>，它包含符号位和数值位两部分：
+                    </p>
+                    <ul class="list-disc pl-6 mt-2 space-y-2">
+                        <li>符号位：通常用最高位表示，0表示正数，1表示负数</li>
+                        <li>数值位：表示数的大小</li>
+                        <li><strong>真值</strong>：带符号的机器数所表示的实际数值</li>
+                    </ul>
+                    <div class="mt-4 example-card">
+                        <p class="text-sm"><strong>示例</strong>：8位机器数10000010，最高位1表示负数，其真值为-2</p>
+                    </div>
+                </div>
+
+                <!-- 原码 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">1. 原码</h3>
+                    <p class="text-gray-700 mb-3">
+                        原码是最简单的机器数表示法，其规则为：
+                    </p>
+                    <ul class="list-disc pl-6 mt-2 space-y-2">
+                        <li>符号位：正数为0，负数为1</li>
+                        <li>数值位：该数的绝对值的二进制表示</li>
+                    </ul>
+                    
+                    <div class="binary-container">
+                        <h4 class="font-medium mb-2">原码表示示例（8位）：</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="mb-2">+5的原码：</p>
+                                <div>
+                                    <span class="bit-cell bit-cell-sign">0</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="mb-2">-5的原码：</p>
+                                <div>
+                                    <span class="bit-cell bit-cell-sign">1</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3 example-card">
+                        <p class="text-sm"><strong>特点</strong>：原码表示直观，但进行加减法运算时需要额外处理符号位，增加了硬件复杂度。</p>
+                    </div>
+                </div>
+
+                <!-- 反码 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">2. 反码</h3>
+                    <p class="text-gray-700 mb-3">
+                        反码是原码向补码过渡的编码方式，其规则为：
+                    </p>
+                    <ul class="list-disc pl-6 mt-2 space-y-2">
+                        <li>正数的反码与原码相同</li>
+                        <li>负数的反码：符号位不变，数值位按位取反（0变1，1变0）</li>
+                    </ul>
+                    
+                    <div class="binary-container">
+                        <h4 class="font-medium mb-2">反码表示示例（8位）：</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="mb-2">+5的反码：</p>
+                                <div>
+                                    <span class="bit-cell bit-cell-sign">0</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">与原码相同</p>
+                            </div>
+                            <div>
+                                <p class="mb-2">-5的反码：</p>
+                                <div>
+                                    <span class="bit-cell bit-cell-sign">1</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">符号位不变，数值位取反</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 补码 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">3. 补码</h3>
+                    <p class="text-gray-700 mb-3">
+                        补码是计算机中最常用的编码方式，解决了原码和反码的运算问题，其规则为：
+                    </p>
+                    <ul class="list-disc pl-6 mt-2 space-y-2">
+                        <li>正数的补码与原码相同</li>
+                        <li>负数的补码：其反码加1（末位加1，有进位则进位）</li>
+                    </ul>
+                    
+                    <div class="binary-container">
+                        <h4 class="font-medium mb-2">补码表示示例（8位）：</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="mb-2">+5的补码：</p>
+                                <div>
+                                    <span class="bit-cell bit-cell-sign">0</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">与原码、反码相同</p>
+                            </div>
+                            <div>
+                                <p class="mb-2">-5的补码：</p>
+                                <div>
+                                    <span class="bit-cell bit-cell-sign">1</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                    <span class="bit-cell bit-cell-data">0</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                    <span class="bit-cell bit-cell-data">1</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">反码加1得到</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3 example-card">
+                        <p class="text-sm"><strong>补码优势</strong>：可以将减法运算转化为加法运算，符号位可以直接参与运算，简化了计算机硬件设计。</p>
+                    </div>
+                </div>
+
+                <!-- 字符编码 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">4. 字符编码</h3>
+                    <p class="text-gray-700 mb-3">
+                        字符编码用于将字符转换为计算机可以识别的二进制数，CSP初赛常考的编码方式有：
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-coding mb-2">ASCII编码</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-sm">
+                                <li>美国信息交换标准代码</li>
+                                <li>使用7位二进制表示，共128个字符</li>
+                                <li>包括大小写字母、数字、标点符号和控制字符</li>
+                                <li>数字'0'的ASCII码是48（0x30）</li>
+                                <li>大写字母'A'的ASCII码是65（0x41）</li>
+                                <li>小写字母'a'的ASCII码是97（0x61）</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-coding mb-2">Unicode编码</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-sm">
+                                <li>统一码，为世界上所有字符制定了唯一编码</li>
+                                <li>UTF-8是Unicode的一种实现方式，可变长度</li>
+                                <li>汉字通常用3个字节表示</li>
+                                <li>兼容ASCII编码（0-127范围相同）</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 编码转换动画演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-coding mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> 编码转换动画演示
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 补码转换演示 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">负数的补码转换过程</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了将一个负整数转换为补码的完整过程：
+                                原码 → 反码 → 补码。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">输入一个负整数 (范围: -127 ~ -1):</label>
+                                <input type="number" id="negative-number" min="-127" max="-1" value="-5" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coding">
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button id="convert-run" class="bg-coding hover:bg-coding/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行转换
+                                </button>
+                                <button id="convert-step" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-step-forward mr-2"></i> 单步转换
+                                </button>
+                                <button id="convert-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="convert-status" class="animation-status hidden mt-4">
+                                状态: 等待开始
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="space-y-6">
+                                <!-- 原码显示 -->
+                                <div>
+                                    <h4 class="font-medium mb-2">1. 原码</h4>
+                                    <div id="original-code" class="flex justify-center">
+                                        <span class="bit-cell bit-cell-sign">1</span>
+                                        <span class="bit-cell bit-cell-data">0</span>
+                                        <span class="bit-cell bit-cell-data">0</span>
+                                        <span class="bit-cell bit-cell-data">0</span>
+                                        <span class="bit-cell bit-cell-data">0</span>
+                                        <span class="bit-cell bit-cell-data">1</span>
+                                        <span class="bit-cell bit-cell-data">0</span>
+                                        <span class="bit-cell bit-cell-data">1</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 反码显示 -->
+                                <div>
+                                    <h4 class="font-medium mb-2">2. 反码 (原码数值位取反)</h4>
+                                    <div id="inverse-code" class="flex justify-center">
+                                        <span class="bit-cell bit-cell-sign">1</span>
+                                        <span class="bit-cell bit-cell-data">1</span>
+                                        <span class="bit-cell bit-cell-data">1</span>
+                                        <span class="bit-cell bit-cell-data">1</span>
+                                        <span class="bit-cell bit-cell-data">1</span>
+                                        <span class="bit-cell bit-cell-data">0</span>
+                                        <span class="bit-cell bit-cell-data">1</span>
+                                        <span class="bit-cell bit-cell-data">0</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- 补码显示 -->
+                                <div>
+                                    <h4 class="font-medium mb-2">3. 补码 (反码 + 1)</h4>
+                                    <div id="complement-code" class="flex justify-center">
+                                        <span class="bit-cell bit-cell-sign">1</span>
+                                        <span class="bit-cell bit-cell-data">1</span>
+                                        <span class="bit-cell bit-cell-data">1</span>
+                                        <span class="bit-cell bit-cell-data">1</span>
+                                        <span class="bit-cell bit-cell-data">1</span>
+                                        <span class="bit-cell bit-cell-data">0</span>
+                                        <span class="bit-cell bit-cell-data">1</span>
+                                        <span class="bit-cell bit-cell-data">1</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ASCII编码查询 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">ASCII编码查询</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                查看字符对应的ASCII码值（十进制和十六进制）。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">输入单个字符:</label>
+                                <input type="text" id="ascii-char" maxlength="1" value="A" 
+                                    class="w-20 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coding">
+                                
+                                <button id="ascii查询" class="ml-2 bg-coding hover:bg-coding/90 text-white px-4 py-2 rounded-md transition-all">
+                                    查询
+                                </button>
+                            </div>
+                            
+                            <div class="mt-4 bg-white p-3 rounded-lg border border-gray-200">
+                                <p class="text-sm mb-1"><strong>十进制值:</strong> <span id="ascii-dec">65</span></p>
+                                <p class="text-sm"><strong>十六进制值:</strong> <span id="ascii-hex">0x41</span></p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium mb-3">常见ASCII码值</h4>
+                            <div class="grid grid-cols-3 gap-2 text-sm">
+                                <div class="bg-white p-2 rounded border border-gray-100">
+                                    <p>'0' - '9': 48 - 57</p>
+                                </div>
+                                <div class="bg-white p-2 rounded border border-gray-100">
+                                    <p>'A' - 'Z': 65 - 90</p>
+                                </div>
+                                <div class="bg-white p-2 rounded border border-gray-100">
+                                    <p>'a' - 'z': 97 - 122</p>
+                                </div>
+                                <div class="bg-white p-2 rounded border border-gray-100">
+                                    <p>空格: 32</p>
+                                </div>
+                                <div class="bg-white p-2 rounded border border-gray-100">
+                                    <p>换行符: 10</p>
+                                </div>
+                                <div class="bg-white p-2 rounded border border-gray-100">
+                                    <p>回车符: 13</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 解题技巧 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-coding mb-6 flex items-center">
+                <i class="fa fa-lightbulb-o mr-2"></i> CSP初赛解题技巧
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">原码、反码、补码计算技巧</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>快速转换法</strong>：负数补码 = 绝对值原码按位取反 + 1</li>
+                        <li><strong>补码转原码</strong>：对补码再求一次补码即可得到原码</li>
+                        <li><strong>8位整数范围</strong>：
+                            <ul class="list-circle pl-6 mt-1">
+                                <li>原码：-127 ~ +127</li>
+                                <li>反码：-127 ~ +127</li>
+                                <li>补码：-128 ~ +127（注意-128的特殊性）</li>
+                            </ul>
+                        </li>
+                        <li><strong>简便计算</strong>：计算补码时，从右向左找到第一个1，该位不变，左边所有位取反，右边（包括该位）不变</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">ASCII编码解题要点</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>大小写转换</strong>：大写字母ASCII码值 + 32 = 对应小写字母</li>
+                        <li><strong>字符比较</strong>：在程序中，字符比较实际是比较它们的ASCII码值</li>
+                        <li><strong>数字字符转换</strong>：数字字符'0'-'9'减去48（或'0'）可得对应整数</li>
+                        <li><strong>常见考点</strong>：记住几个关键值（'0'=48, 'A'=65, 'a'=97）</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">解题步骤</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <ol class="list-decimal pl-6 space-y-2">
+                            <li>明确题目考查的是哪种编码方式</li>
+                            <li>确定数值的位数（通常是8位，CSP初赛常见）</li>
+                            <li>对于负数，严格按照转换规则逐步计算</li>
+                            <li>检查结果是否符合该编码方式的数值范围</li>
+                            <li>字符编码题先确定使用的编码标准（ASCII或Unicode）</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 例题解析 -->
+        <section id="examples" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-coding mb-6 flex items-center">
+                <i class="fa fa-puzzle-piece mr-2"></i> CSP初赛例题解析
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- 例题1 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题1：补码计算</h3>
+                    <div class="example-card mb-4">
+                        <p class="mb-2"><strong>题目</strong>：在8位二进制补码中，-128的补码表示为？</p>
+                        <p class="text-gray-600 text-sm">A. 10000000</p>
+                        <p class="text-gray-600 text-sm">B. 11111111</p>
+                        <p class="text-gray-600 text-sm">C. 00000000</p>
+                        <p class="text-gray-600 text-sm">D. 11111110</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-medium mb-2">解析</h4>
+                        <p class="mb-2">在8位二进制补码中：</p>
+                        <ul class="list-disc pl-6 space-y-1 mb-3">
+                            <li>范围是-128到+127</li>
+                            <li>-128是一个特殊值，没有对应的原码和反码</li>
+                            <li>其补码规定为10000000</li>
+                        </ul>
+                        <p><strong>答案：A</strong></p>
+                    </div>
+                </div>
+                
+                <!-- 例题2 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题2：ASCII码计算</h3>
+                    <div class="example-card mb-4">
+                        <p class="mb-2"><strong>题目</strong>：已知字符'A'的ASCII码值为65，则字符'C'的ASCII码值的十六进制表示为？</p>
+                        <p class="text-gray-600 text-sm">A. 0x41</p>
+                        <p class="text-gray-600 text-sm">B. 0x42</p>
+                        <p class="text-gray-600 text-sm">C. 0x43</p>
+                        <p class="text-gray-600 text-sm">D. 0x44</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-medium mb-2">解析</h4>
+                        <p class="mb-2">字符在ASCII表中按顺序排列：</p>
+                        <ul class="list-disc pl-6 space-y-1 mb-3">
+                            <li>'A'的ASCII码是65（0x41）</li>
+                            <li>'B'的ASCII码是66（0x42）</li>
+                            <li>'C'的ASCII码是67（0x43）</li>
+                            <li>十六进制43对应十进制67</li>
+                        </ul>
+                        <p><strong>答案：C</strong></p>
+                    </div>
+                </div>
+                
+                <!-- 例题3 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题3：编码转换</h3>
+                    <div class="example-card mb-4">
+                        <p class="mb-2"><strong>题目</strong>：8位二进制数10010101作为补码时，对应的十进制数是多少？</p>
+                        <p class="text-gray-600 text-sm">A. -107</p>
+                        <p class="text-gray-600 text-sm">B. -109</p>
+                        <p class="text-gray-600 text-sm">C. 149</p>
+                        <p class="text-gray-600 text-sm">D. -149</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-medium mb-2">解析</h4>
+                        <p class="mb-2">补码转十进制步骤：</p>
+                        <ol class="list-decimal pl-6 space-y-1 mb-3">
+                            <li>最高位为1，说明是负数</li>
+                            <li>对补码求补码得到原码：11101011</li>
+                            <li>数值位1101011对应的十进制是107</li>
+                            <li>所以该补码表示的十进制数是-107</li>
+                        </ol>
+                        <p><strong>答案：A</strong></p>
+                    </div>
+                </div>
+                
+                <!-- 例题4 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题4：编码应用</h3>
+                    <div class="example-card mb-4">
+                        <p class="mb-2"><strong>题目</strong>：以下程序段的输出结果是？</p>
+                        <pre class="code-block text-xs"><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    char c1 = 'A', c2 = 'a';
+    cout << (int)c1 << " " << (int)c2 << " " << (c2 - c1);
+    return 0;
+}</code></pre>
+                        <p class="text-gray-600 text-sm">A. 65 97 32</p>
+                        <p class="text-gray-600 text-sm">B. 65 97 -32</p>
+                        <p class="text-gray-600 text-sm">C. A a 32</p>
+                        <p class="text-gray-600 text-sm">D. 65 97 0</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-medium mb-2">解析</h4>
+                        <p class="mb-2">程序分析：</p>
+                        <ul class="list-disc pl-6 space-y-1 mb-3">
+                            <li>'A'的ASCII码是65，'a'的ASCII码是97</li>
+                            <li>(int)c1将字符转换为对应的ASCII码值</li>
+                            <li>c2 - c1 = 97 - 65 = 32</li>
+                            <li>所以输出结果是65 97 32</li>
+                        </ul>
+                        <p><strong>答案：A</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            
+            // 编码转换演示功能
+            const negativeNumberInput = document.getElementById('negative-number');
+            const convertRunBtn = document.getElementById('convert-run');
+            const convertStepBtn = document.getElementById('convert-step');
+            const convertResetBtn = document.getElementById('convert-reset');
+            const convertStatus = document.getElementById('convert-status');
+            const originalCode = document.getElementById('original-code');
+            const inverseCode = document.getElementById('inverse-code');
+            const complementCode = document.getElementById('complement-code');
+            
+            // ASCII查询功能
+            const asciiCharInput = document.getElementById('ascii-char');
+            const asciiQueryBtn = document.getElementById('ascii查询');
+            const asciiDecSpan = document.getElementById('ascii-dec');
+            const asciiHexSpan = document.getElementById('ascii-hex');
+            
+            // 初始化ASCII查询
+            updateAsciiInfo('A');
+            
+            // 更新ASCII信息
+            function updateAsciiInfo(char) {
+                if (!char) return;
+                const code = char.charCodeAt(0);
+                asciiDecSpan.textContent = code;
+                asciiHexSpan.textContent = '0x' + code.toString(16).toUpperCase();
+            }
+            
+            // ASCII查询按钮事件
+            asciiQueryBtn.addEventListener('click', function() {
+                const char = asciiCharInput.value || ' ';
+                updateAsciiInfo(char);
+            });
+            
+            // 输入字符变化时更新
+            asciiCharInput.addEventListener('input', function() {
+                const char = this.value || ' ';
+                updateAsciiInfo(char);
+            });
+            
+            // 生成指定位数的二进制字符串
+            function toBinary(n, bits) {
+                let binary = Math.abs(n).toString(2);
+                // 补0到指定位数
+                while (binary.length < bits) {
+                    binary = '0' + binary;
+                }
+                return binary;
+            }
+            
+            // 重置编码显示
+            function resetCodeDisplay() {
+                // 清除所有高亮
+                document.querySelectorAll('.bit-cell-highlight').forEach(cell => {
+                    cell.classList.remove('bit-cell-highlight');
+                });
+                
+                // 隐藏状态信息
+                convertStatus.classList.add('hidden');
+            }
+            
+            // 更新编码显示
+            function updateCodeDisplay(number) {
+                resetCodeDisplay();
+                
+                const absNumber = Math.abs(number);
+                const binary = toBinary(absNumber, 7); // 7位数值位
+                
+                // 更新原码
+                let originalCells = originalCode.querySelectorAll('.bit-cell');
+                originalCells[0].textContent = '1'; // 符号位为1（负数）
+                for (let i = 0; i < 7; i++) {
+                    originalCells[i + 1].textContent = binary[i];
+                }
+                
+                // 更新反码（数值位取反）
+                let inverseCells = inverseCode.querySelectorAll('.bit-cell');
+                inverseCells[0].textContent = '1'; // 符号位不变
+                for (let i = 0; i < 7; i++) {
+                    inverseCells[i + 1].textContent = binary[i] === '0' ? '1' : '0';
+                }
+                
+                // 计算补码（反码+1）
+                let inverseBinary = '';
+                for (let i = 0; i < 7; i++) {
+                    inverseBinary += binary[i] === '0' ? '1' : '0';
+                }
+                let complementBinary = (parseInt(inverseBinary, 2) + 1).toString(2);
+                // 补0到7位
+                while (complementBinary.length < 7) {
+                    complementBinary = '0' + complementBinary;
+                }
+                
+                // 更新补码显示
+                let complementCells = complementCode.querySelectorAll('.bit-cell');
+                complementCells[0].textContent = '1'; // 符号位不变
+                for (let i = 0; i < 7; i++) {
+                    // 从右向左取，因为二进制字符串可能长度不足
+                    const pos = complementBinary.length - 7 + i;
+                    complementCells[i + 1].textContent = pos >= 0 ? complementBinary[pos] : '0';
+                }
+            }
+            
+            // 单步转换动画
+            function stepConvertAnimation() {
+                const number = parseInt(negativeNumberInput.value);
+                if (isNaN(number) || number >= 0) return;
+                
+                resetCodeDisplay();
+                convertStatus.classList.remove('hidden');
+                convertStatus.textContent = '状态: 显示原码';
+                
+                // 高亮原码
+                originalCode.querySelectorAll('.bit-cell').forEach(cell => {
+                    cell.classList.add('bit-cell-highlight');
+                });
+                
+                // 延迟显示反码
+                setTimeout(() => {
+                    resetCodeDisplay();
+                    convertStatus.textContent = '状态: 计算反码（数值位取反）';
+                    inverseCode.querySelectorAll('.bit-cell').forEach(cell => {
+                        cell.classList.add('bit-cell-highlight');
+                    });
+                    
+                    // 延迟显示补码
+                    setTimeout(() => {
+                        resetCodeDisplay();
+                        convertStatus.textContent = '状态: 计算补码（反码+1）';
+                        complementCode.querySelectorAll('.bit-cell').forEach(cell => {
+                            cell.classList.add('bit-cell-highlight');
+                        });
+                    }, 1000);
+                }, 1000);
+            }
+            
+            // 运行转换动画
+            convertRunBtn.addEventListener('click', function() {
+                const number = parseInt(negativeNumberInput.value);
+                if (isNaN(number) || number >= 0) return;
+                
+                updateCodeDisplay(number);
+                stepConvertAnimation();
+            });
+            
+            // 单步转换
+            convertStepBtn.addEventListener('click', function() {
+                const number = parseInt(negativeNumberInput.value);
+                if (isNaN(number) || number >= 0) return;
+                
+                updateCodeDisplay(number);
+                stepConvertAnimation();
+            });
+            
+            // 重置
+            convertResetBtn.addEventListener('click', function() {
+                negativeNumberInput.value = '-5';
+                updateCodeDisplay(-5);
+                resetCodeDisplay();
+            });
+            
+            // 初始化显示
+            updateCodeDisplay(-5);
+        });
+    </script>
+</body>
+</html>

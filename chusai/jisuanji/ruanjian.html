@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>软件系统 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0',
+                        secondary: '#6C63FF',
+                        syntax: '#FF9800',
+                        algorithm: '#2ECC71',
+                        datastructure: '#9C27B0',
+                        darkbg: '#F8FAFC',
+                        cardbg: '#FFFFFF',
+                        hoverbg: '#F0F2F5',
+                        software: '#3F51B5',
+                        execution: '#FFEB3B',
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .software-bg {
+                @apply bg-gradient-to-r from-software/5 to-software/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .software-header {
+                @apply font-bold text-software mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-software bg-software/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-software text-white text-center mr-2 text-xs;
+            }
+            .software-component {
+                @apply border-2 border-gray-300 rounded-md p-3 mb-3 bg-gray-50 transition-all duration-500;
+            }
+            .software-component-active {
+                @apply border-software bg-software/10 transform scale-[1.02];
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-gray-100 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-software h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .code-line {
+                @apply transition-all duration-300;
+            }
+            .code-line-highlight {
+                @apply bg-execution/30 text-gray-900 font-medium;
+            }
+            .trivia-item {
+                @apply border-l-4 border-syntax bg-syntax/5 p-3 rounded-r-md my-4;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">计算机基础</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">软件系统</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-software font-medium">系统软件与应用软件</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="software-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-software mb-2">软件系统</h1>
+                    <p class="text-gray-700">
+                        软件系统是计算机系统的重要组成部分，分为系统软件和应用软件两大类。理解它们的特点与区别是CSP初赛的基础考点，
+                        本页面将系统讲解相关知识，帮助信奥选手掌握核心概念。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-software hover:bg-software/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#examples" class="bg-white border border-software text-software hover:bg-software/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看例题
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 软件系统概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-software mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 软件系统基础概念
+            </h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">什么是软件系统？</h3>
+                    <p class="text-gray-700">
+                        软件系统是指由计算机程序、数据及其相关文档组成的集合，是计算机系统中与硬件相互依存的部分。
+                        它使计算机硬件能够按照预定的方式工作，实现特定的功能。
+                    </p>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg mt-4">
+                        <h4 class="font-semibold mb-2">计算机系统的基本构成：</h4>
+                        <div class="flex flex-col md:flex-row gap-4">
+                            <div class="flex-1 border border-gray-200 rounded-lg p-3 text-center">
+                                <div class="text-primary text-2xl mb-2"><i class="fa fa-microchip"></i></div>
+                                <h5 class="font-medium">硬件系统</h5>
+                                <p class="text-sm text-gray-600 mt-1">物理设备的总称，如CPU、内存、硬盘等</p>
+                            </div>
+                            <div class="flex-1 border border-gray-200 rounded-lg p-3 text-center">
+                                <div class="text-software text-2xl mb-2"><i class="fa fa-code"></i></div>
+                                <h5 class="font-medium">软件系统</h5>
+                                <p class="text-sm text-gray-600 mt-1">程序、数据及文档的集合</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-5 rounded-lg">
+                        <h3 class="text-xl font-semibold text-software mb-3 flex items-center">
+                            <i class="fa fa-cogs mr-2"></i>系统软件
+                        </h3>
+                        <p class="text-gray-700 mb-3">
+                            系统软件是管理、控制和维护计算机硬件与软件资源的程序，为用户和应用软件提供服务和运行环境。
+                        </p>
+                        
+                        <h4 class="font-semibold mb-2">主要类型：</h4>
+                        <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                            <li><span class="font-medium">操作系统</span>：如Windows、Linux、macOS</li>
+                            <li><span class="font-medium">语言处理程序</span>：编译器、解释器（如g++、Python解释器）</li>
+                            <li><span class="font-medium">数据库管理系统</span>：如MySQL、SQLite</li>
+                            <li><span class="font-medium">系统工具软件</span>：如调试器、诊断程序</li>
+                            <li><span class="font-medium">设备驱动程序</span>：如显卡驱动、打印机驱动</li>
+                        </ul>
+                        
+                        <div class="trivia-item mt-4">
+                            <p class="text-sm"><i class="fa fa-lightbulb-o text-syntax mr-2"></i><strong>信奥关联</strong>：C++程序的编译需要g++等语言处理程序，这是系统软件的重要组成部分。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-5 rounded-lg">
+                        <h3 class="text-xl font-semibold text-software mb-3 flex items-center">
+                            <i class="fa fa-puzzle-piece mr-2"></i>应用软件
+                        </h3>
+                        <p class="text-gray-700 mb-3">
+                            应用软件是为解决特定领域的具体问题而设计的软件，运行在系统软件之上，满足用户的具体需求。
+                        </p>
+                        
+                        <h4 class="font-semibold mb-2">常见类型：</h4>
+                        <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                            <li><span class="font-medium">办公软件</span>：如Word、Excel、PowerPoint</li>
+                            <li><span class="font-medium">图形图像软件</span>：如Photoshop、GIMP</li>
+                            <li><span class="font-medium">编程工具</span>：如Dev-C++、Code::Blocks、VS Code</li>
+                            <li><span class="font-medium">科学计算软件</span>：如MATLAB、Octave</li>
+                            <li><span class="font-medium">竞赛相关软件</span>：如评测系统、代码编辑器</li>
+                        </ul>
+                        
+                        <div class="trivia-item mt-4">
+                            <p class="text-sm"><i class="fa fa-lightbulb-o text-syntax mr-2"></i><strong>信奥关联</strong>：信奥选手常用的Code::Blocks、Dev-C++等IDE属于应用软件，用于编写和调试程序。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-3">系统软件与应用软件的核心区别</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border border-gray-200">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="py-3 px-4 border-b text-left">比较维度</th>
+                                    <th class="py-3 px-4 border-b text-left">系统软件</th>
+                                    <th class="py-3 px-4 border-b text-left">应用软件</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-3 px-4 border-b font-medium">服务对象</td>
+                                    <td class="py-3 px-4 border-b">为计算机系统本身和应用软件服务</td>
+                                    <td class="py-3 px-4 border-b">为用户的具体应用需求服务</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-3 px-4 border-b font-medium">与硬件关系</td>
+                                    <td class="py-3 px-4 border-b">直接与硬件交互，管理硬件资源</td>
+                                    <td class="py-3 px-4 border-b">不直接与硬件交互，通过系统软件间接使用硬件</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 border-b font-medium">通用性</td>
+                                    <td class="py-3 px-4 border-b">通用性强，适用于各种场景</td>
+                                    <td class="py-3 px-4 border-b">专用性强，针对特定问题</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-3 px-4 border-b font-medium">安装必要性</td>
+                                    <td class="py-3 px-4 border-b">必须安装，否则计算机无法正常工作</td>
+                                    <td class="py-3 px-4 border-b">根据用户需求选择性安装</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 border-b font-medium">启动方式</td>
+                                    <td class="py-3 px-4 border-b">通常随计算机启动而运行</td>
+                                    <td class="py-3 px-4 border-b">由用户根据需要手动启动</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 软件系统层次结构演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-software mb-6 flex items-center">
+                <i class="fa fa-sitemap mr-2"></i> 软件系统层次结构演示
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-4">计算机系统层次结构动态演示</h3>
+                    
+                    <div class="flex flex-col lg:flex-row gap-6">
+                        <div class="lg:w-1/3">
+                            <p class="text-gray-700 mb-4">
+                                下图展示了从硬件到应用软件的层次结构，点击"运行演示"按钮可以查看信息在各层之间的传递过程。
+                                了解这种层次关系有助于理解系统软件在计算机中的核心作用。
+                            </p>
+                            
+                            <div class="animation-controls">
+                                <button id="hierarchy-run" class="bg-software hover:bg-software/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行演示
+                                </button>
+                                <button id="hierarchy-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="hierarchy-status" class="animation-status hidden">
+                                状态: 等待开始
+                            </div>
+                            
+                            <div class="mt-4 p-3 bg-white rounded-lg border border-gray-200">
+                                <h4 class="font-medium text-sm mb-2">CSP初赛考点提示：</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li>• 能够区分给定软件属于系统软件还是应用软件</li>
+                                    <li>• 理解操作系统在计算机系统中的核心地位</li>
+                                    <li>• 了解编译器、解释器等语言处理程序的作用</li>
+                                    <li>• 掌握系统软件与应用软件的层次关系</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:w-2/3">
+                            <div class="bg-white p-6 rounded-lg border border-gray-200">
+                                <div class="flex flex-col items-center gap-4" id="hierarchy-container">
+                                    <!-- 层次结构将通过JS动态演示 -->
+                                    <div class="software-component w-full text-center" id="layer-application">
+                                        <h4 class="font-semibold">应用软件层</h4>
+                                        <p class="text-sm text-gray-600 mt-1">Code::Blocks、浏览器、办公软件等</p>
+                                    </div>
+                                    <div class="software-component w-full text-center" id="layer-system">
+                                        <h4 class="font-semibold">系统软件层</h4>
+                                        <p class="text-sm text-gray-600 mt-1">操作系统、编译器、驱动程序等</p>
+                                    </div>
+                                    <div class="software-component w-full text-center" id="layer-hardware">
+                                        <h4 class="font-semibold">硬件层</h4>
+                                        <p class="text-sm text-gray-600 mt-1">CPU、内存、硬盘、输入输出设备等</p>
+                                    </div>
+                                    
+                                    <div class="my-4 w-full flex justify-center">
+                                        <div class="w-1/2 text-center" id="data-flow">
+                                            <i class="fa fa-exchange text-gray-400 text-2xl"></i>
+                                            <p class="text-sm text-gray-500 mt-1">数据/指令流向</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">C++程序的编译与运行过程</h3>
+                    <p class="text-gray-700 mb-4">
+                        在信息学奥赛中，C++程序的处理过程涉及多种系统软件，理解这一过程有助于掌握软件系统的协作方式：
+                    </p>
+                    
+                    <div class="relative">
+                        <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-300"></div>
+                        
+                        <div class="relative pl-12 pb-6" id="compile-step-1">
+                            <div class="absolute left-0 w-8 h-8 rounded-full bg-software flex items-center justify-center text-white">1</div>
+                            <h4 class="font-semibold">编写源代码</h4>
+                            <p class="text-gray-700 mt-1">使用Code::Blocks等<strong>应用软件</strong>编写C++源代码（.cpp文件）</p>
+                        </div>
+                        
+                        <div class="relative pl-12 pb-6" id="compile-step-2">
+                            <div class="absolute left-0 w-8 h-8 rounded-full bg-software flex items-center justify-center text-white">2</div>
+                            <h4 class="font-semibold">编译过程</h4>
+                            <p class="text-gray-700 mt-1">使用g++等<strong>系统软件（编译器）</strong>将源代码转换为机器语言</p>
+                        </div>
+                        
+                        <div class="relative pl-12 pb-6" id="compile-step-3">
+                            <div class="absolute left-0 w-8 h-8 rounded-full bg-software flex items-center justify-center text-white">3</div>
+                            <h4 class="font-semibold">链接过程</h4>
+                            <p class="text-gray-700 mt-1">通过<strong>系统软件（链接器）</strong>将编译后的目标文件与库文件组合</p>
+                        </div>
+                        
+                        <div class="relative pl-12 pb-6" id="compile-step-4">
+                            <div class="absolute left-0 w-8 h-8 rounded-full bg-software flex items-center justify-center text-white">4</div>
+                            <h4 class="font-semibold">运行程序</h4>
+                            <p class="text-gray-700 mt-1">在<strong>操作系统（系统软件）</strong>的管理下，CPU执行程序指令</p>
+                        </div>
+                        
+                        <div class="relative pl-12" id="compile-step-5">
+                            <div class="absolute left-0 w-8 h-8 rounded-full bg-software flex items-center justify-center text-white">5</div>
+                            <h4 class="font-semibold">输出结果</h4>
+                            <p class="text-gray-700 mt-1">通过操作系统与硬件交互，将结果显示在屏幕等输出设备上</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 解题技巧 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-software mb-6 flex items-center">
+                <i class="fa fa-lightbulb-o mr-2"></i> CSP初赛解题技巧
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-4">系统软件与应用软件辨析技巧</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div>
+                                <h4 class="font-medium">功能判断法</h4>
+                                <p class="text-gray-700 text-sm mt-1">
+                                    系统软件主要用于管理和支持计算机系统运行，而应用软件主要用于解决特定应用问题。
+                                    例如：操作系统管理硬件资源，属于系统软件；而文字处理软件用于文档编辑，属于应用软件。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div>
+                                <h4 class="font-medium">依存关系法</h4>
+                                <p class="text-gray-700 text-sm mt-1">
+                                    应用软件必须依赖系统软件才能运行，而系统软件可以直接在硬件上运行。
+                                    例如：游戏软件（应用软件）必须在Windows（系统软件）上运行。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div>
+                                <h4 class="font-medium">常见类别记忆法</h4>
+                                <p class="text-gray-700 text-sm mt-1">
+                                    牢记几类典型的系统软件：操作系统、编译器、解释器、数据库管理系统、设备驱动程序。
+                                    其他大多数为应用软件。
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">4</div>
+                            <div>
+                                <h4 class="font-medium">特殊案例辨析</h4>
+                                <p class="text-gray-700 text-sm mt-1">
+                                    某些软件兼具系统软件和应用软件的特点，如数据库管理系统（DBMS）属于系统软件，
+                                    但基于DBMS开发的财务系统则属于应用软件。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-4">易错点与常见误区</h3>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-start">
+                            <div class="text-syntax mr-3 mt-1"><i class="fa fa-exclamation-circle"></i></div>
+                            <div>
+                                <p class="font-medium">误区1：将编程工具误认为系统软件</p>
+                                <p class="text-gray-700 text-sm mt-1">Code::Blocks、VS Code等编程工具是应用软件，而它们使用的编译器（如g++）才是系统软件。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="text-syntax mr-3 mt-1"><i class="fa fa-exclamation-circle"></i></div>
+                            <div>
+                                <p class="font-medium">误区2：认为操作系统是硬件的一部分</p>
+                                <p class="text-gray-700 text-sm mt-1">操作系统是最核心的系统软件，它管理硬件资源，但本身是软件，不是硬件。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="text-syntax mr-3 mt-1"><i class="fa fa-exclamation-circle"></i></div>
+                            <div>
+                                <p class="font-medium">误区3：混淆语言处理程序的类型</p>
+                                <p class="text-gray-700 text-sm mt-1">编译器和解释器都属于系统软件，用于将高级语言转换为机器语言，区别在于转换时机不同。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="text-syntax mr-3 mt-1"><i class="fa fa-exclamation-circle"></i></div>
+                            <div>
+                                <p class="font-medium">误区4：认为驱动程序是应用软件</p>
+                                <p class="text-gray-700 text-sm mt-1">设备驱动程序属于系统软件，它是操作系统与硬件设备之间的桥梁。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 例题解析 -->
+        <section id="examples" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-software mb-6 flex items-center">
+                <i class="fa fa-question-circle mr-2"></i> CSP初赛例题解析
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- 例题1 -->
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-semibold text-lg">例题1：软件分类判断</h3>
+                        <span class="bg-syntax/10 text-syntax text-xs px-2 py-1 rounded">CSP-J 2021 选择题</span>
+                    </div>
+                    
+                    <div class="mb-4 p-4 bg-white rounded-lg border border-gray-200">
+                        <p class="font-medium mb-2">题目：下列哪个软件属于系统软件？</p>
+                        <div class="space-y-2 pl-4">
+                            <div class="flex items-center"><span class="mr-2">A.</span> Microsoft Word</div>
+                            <div class="flex items-center"><span class="mr-2">B.</span> Windows 10</div>
+                            <div class="flex items-center"><span class="mr-2">C.</span> Photoshop</div>
+                            <div class="flex items-center"><span class="mr-2">D.</span> 英雄联盟</div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-2">解题步骤：</h4>
+                        <ol class="list-decimal pl-5 space-y-2 text-gray-700">
+                            <li>根据系统软件的定义，系统软件是管理计算机硬件和软件资源的软件</li>
+                            <li>分析选项：
+                                <ul class="list-disc pl-5 mt-1">
+                                    <li>A选项是文字处理软件，属于应用软件</li>
+                                    <li>B选项是操作系统，属于典型的系统软件</li>
+                                    <li>C选项是图像处理软件，属于应用软件</li>
+                                    <li>D选项是游戏软件，属于应用软件</li>
+                                </ul>
+                            </li>
+                            <li>得出结论：正确答案为B</li>
+                        </ol>
+                        
+                        <div class="mt-4 p-3 bg-software/5 rounded-lg">
+                            <h4 class="font-medium text-sm mb-1">考点分析：</h4>
+                            <p class="text-sm text-gray-700">
+                                本题直接考查系统软件与应用软件的区分，属于基础题。解题关键是牢记操作系统是最核心的系统软件，
+                                而日常使用的大多数软件都属于应用软件。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 例题2 -->
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-semibold text-lg">例题2：软件层次关系</h3>
+                        <span class="bg-syntax/10 text-syntax text-xs px-2 py-1 rounded">CSP-S 2020 选择题</span>
+                    </div>
+                    
+                    <div class="mb-4 p-4 bg-white rounded-lg border border-gray-200">
+                        <p class="font-medium mb-2">题目：关于计算机软件系统，下列说法正确的是？</p>
+                        <div class="space-y-2 pl-4">
+                            <div class="flex items-start">
+                                <span class="mr-2">A.</span>
+                                <span>应用软件运行在系统软件之上，不需要操作系统支持</span>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="mr-2">B.</span>
+                                <span>编译器属于系统软件，用于将高级语言转换为机器语言</span>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="mr-2">C.</span>
+                                <span>数据库管理系统属于应用软件</span>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="mr-2">D.</span>
+                                <span>系统软件必须通过应用软件才能发挥作用</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-2">解题步骤：</h4>
+                        <ol class="list-decimal pl-5 space-y-2 text-gray-700">
+                            <li>分析每个选项的正确性：
+                                <ul class="list-disc pl-5 mt-1">
+                                    <li>A选项错误：应用软件必须在操作系统支持下才能运行</li>
+                                    <li>B选项正确：编译器属于系统软件中的语言处理程序</li>
+                                    <li>C选项错误：数据库管理系统属于系统软件</li>
+                                    <li>D选项错误：系统软件可以直接在硬件上运行，不需要通过应用软件</li>
+                                </ul>
+                            </li>
+                            <li>得出结论：正确答案为B</li>
+                        </ol>
+                        
+                        <div class="mt-4 p-3 bg-software/5 rounded-lg">
+                            <h4 class="font-medium text-sm mb-1">考点分析：</h4>
+                            <p class="text-sm text-gray-700">
+                                本题考查对软件系统层次关系和各类软件属性的理解。对于信息学竞赛选手，特别需要了解编译器等
+                                语言处理程序的属性，因为这与程序开发直接相关。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 例题3 -->
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-semibold text-lg">例题3：软件功能判断</h3>
+                        <span class="bg-syntax/10 text-syntax text-xs px-2 py-1 rounded">模拟题</span>
+                    </div>
+                    
+                    <div class="mb-4 p-4 bg-white rounded-lg border border-gray-200">
+                        <p class="font-medium mb-2">题目：在C++程序开发过程中，下列哪个工具不属于系统软件？</p>
+                        <div class="space-y-2 pl-4">
+                            <div class="flex items-center"><span class="mr-2">A.</span> GCC编译器</div>
+                            <div class="flex items-center"><span class="mr-2">B.</span> Linux操作系统</div>
+                            <div class="flex items-center"><span class="mr-2">C.</span> Code::Blocks</div>
+                            <div class="flex items-center"><span class="mr-2">D.</span> GDB调试器</div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium mb-2">解题步骤：</h4>
+                        <ol class="list-decimal pl-5 space-y-2 text-gray-700">
+                            <li>回忆系统软件的定义和常见类型</li>
+                            <li>分析每个选项：
+                                <ul class="list-disc pl-5 mt-1">
+                                    <li>A选项：GCC编译器属于语言处理程序，是系统软件</li>
+                                    <li>B选项：Linux是操作系统，属于系统软件</li>
+                                    <li>C选项：Code::Blocks是集成开发环境，属于应用软件</li>
+                                    <li>D选项：GDB调试器属于系统工具软件，是系统软件</li>
+                                </ul>
+                            </li>
+                            <li>得出结论：正确答案为C</li>
+                        </ol>
+                        
+                        <div class="mt-4 p-3 bg-software/5 rounded-lg">
+                            <h4 class="font-medium text-sm mb-1">考点分析：</h4>
+                            <p class="text-sm text-gray-700">
+                                本题针对编程相关软件的分类进行考查，这是信息学竞赛的特色考点。需要区分开发工具本身（应用软件）
+                                和它们所使用的系统软件（编译器、调试器等）。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 练习题 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-software mb-6 flex items-center">
+                <i class="fa fa-pencil mr-2"></i> 练习题
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">练习题1</h3>
+                    <p class="mb-3">下列关于操作系统的说法，错误的是：</p>
+                    <div class="space-y-2 pl-4 mb-4">
+                        <div class="flex items-start">
+                            <span class="mr-2">A.</span>
+                            <span>操作系统是最基本的系统软件</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="mr-2">B.</span>
+                            <span>操作系统负责管理计算机的硬件资源</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="mr-2">C.</span>
+                            <span>操作系统属于应用软件的一种</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="mr-2">D.</span>
+                            <span>操作系统为应用软件提供运行环境</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-2 rounded text-center">
+                        <button class="text-software hover:underline text-sm" onclick="alert('正确答案：C')">查看答案</button>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">练习题2</h3>
+                    <p class="mb-3">在信息学竞赛中使用的C++编译器属于：</p>
+                    <div class="space-y-2 pl-4 mb-4">
+                        <div class="flex items-start">
+                            <span class="mr-2">A.</span>
+                            <span>系统软件</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="mr-2">B.</span>
+                            <span>应用软件</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="mr-2">C.</span>
+                            <span>计算机硬件</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="mr-2">D.</span>
+                            <span>以上都不是</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-2 rounded text-center">
+                        <button class="text-software hover:underline text-sm" onclick="alert('正确答案：A')">查看答案</button>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">练习题3</h3>
+                    <p class="mb-3">下列软件中，全部属于系统软件的是：</p>
+                    <div class="space-y-2 pl-4 mb-4">
+                        <div class="flex items-start">
+                            <span class="mr-2">A.</span>
+                            <span>Windows、Python解释器、Photoshop</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="mr-2">B.</span>
+                            <span>Linux、MySQL、g++编译器</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="mr-2">C.</span>
+                            <span>Word、C++编译器、Windows</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="mr-2">D.</span>
+                            <span>Excel、Linux、SQL Server</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-2 rounded text-center">
+                        <button class="text-software hover:underline text-sm" onclick="alert('正确答案：B')">查看答案</button>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">练习题4</h3>
+                    <p class="mb-3">关于系统软件和应用软件的关系，下列说法正确的是：</p>
+                    <div class="space-y-2 pl-4 mb-4">
+                        <div class="flex items-start">
+                            <span class="mr-2">A.</span>
+                            <span>系统软件依赖应用软件才能运行</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="mr-2">B.</span>
+                            <span>应用软件可以直接在硬件上运行</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="mr-2">C.</span>
+                            <span>系统软件为应用软件提供支持和服务</span>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="mr-2">D.</span>
+                            <span>系统软件和应用软件是相互独立的，没有关联</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-2 rounded text-center">
+                        <button class="text-software hover:underline text-sm" onclick="alert('正确答案：C')">查看答案</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            
+            // 层次结构演示
+            const hierarchyRunBtn = document.getElementById('hierarchy-run');
+            const hierarchyResetBtn = document.getElementById('hierarchy-reset');
+            const hierarchyStatus = document.getElementById('hierarchy-status');
+            const layerApplication = document.getElementById('layer-application');
+            const layerSystem = document.getElementById('layer-system');
+            const layerHardware = document.getElementById('layer-hardware');
+            const dataFlow = document.getElementById('data-flow');
+            
+            let isAnimating = false;
+            
+            hierarchyRunBtn.addEventListener('click', function() {
+                if (isAnimating) return;
+                isAnimating = true;
+                hierarchyStatus.classList.remove('hidden');
+                hierarchyStatus.textContent = '状态: 开始演示';
+                
+                // 重置所有层状态
+                resetLayers();
+                
+                // 演示流程
+                setTimeout(() => {
+                    hierarchyStatus.textContent = '状态: 应用软件发出指令';
+                    layerApplication.classList.add('software-component-active');
+                    dataFlow.innerHTML = '<i class="fa fa-arrow-down text-software text-2xl"></i><p class="text-sm text-gray-500 mt-1">指令向下传递</p>';
+                }, 1000);
+                
+                setTimeout(() => {
+                    hierarchyStatus.textContent = '状态: 系统软件处理指令';
+                    layerApplication.classList.remove('software-component-active');
+                    layerSystem.classList.add('software-component-active');
+                }, 2500);
+                
+                setTimeout(() => {
+                    hierarchyStatus.textContent = '状态: 硬件执行操作';
+                    layerSystem.classList.remove('software-component-active');
+                    layerHardware.classList.add('software-component-active');
+                    dataFlow.innerHTML = '<i class="fa fa-arrow-up text-software text-2xl"></i><p class="text-sm text-gray-500 mt-1">结果向上返回</p>';
+                }, 4000);
+                
+                setTimeout(() => {
+                    hierarchyStatus.textContent = '状态: 系统软件处理结果';
+                    layerHardware.classList.remove('software-component-active');
+                    layerSystem.classList.add('software-component-active');
+                }, 5500);
+                
+                setTimeout(() => {
+                    hierarchyStatus.textContent = '状态: 应用软件显示结果';
+                    layerSystem.classList.remove('software-component-active');
+                    layerApplication.classList.add('software-component-active');
+                    dataFlow.innerHTML = '<i class="fa fa-check-circle text-software text-2xl"></i><p class="text-sm text-gray-500 mt-1">完成</p>';
+                }, 7000);
+                
+                setTimeout(() => {
+                    hierarchyStatus.textContent = '状态: 演示结束';
+                    isAnimating = false;
+                }, 8500);
+            });
+            
+            hierarchyResetBtn.addEventListener('click', function() {
+                resetLayers();
+                hierarchyStatus.textContent = '状态: 已重置';
+                isAnimating = false;
+            });
+            
+            function resetLayers() {
+                layerApplication.classList.remove('software-component-active');
+                layerSystem.classList.remove('software-component-active');
+                layerHardware.classList.remove('software-component-active');
+                dataFlow.innerHTML = '<i class="fa fa-exchange text-gray-400 text-2xl"></i><p class="text-sm text-gray-500 mt-1">数据/指令流向</p>';
+            }
+        });
+    </script>
+</body>
+</html>
