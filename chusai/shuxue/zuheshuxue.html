@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组合数学方法 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：鲜明的蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        combinatorics: '#E91E63', // 组合数学主题色：粉色
+                        inclusion: '#FF9800', // 容斥原理：橙色
+                        pigeonhole: '#2ECC71', // 鸽巢原理：绿色
+                        catalan: '#9C27B0', // 卡特兰数：深紫色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .comb-bg {
+                @apply bg-gradient-to-r from-combinatorics/5 to-combinatorics/10;
+            }
+            .inclusion-bg {
+                @apply bg-gradient-to-r from-inclusion/5 to-inclusion/10;
+            }
+            .pigeonhole-bg {
+                @apply bg-gradient-to-r from-pigeonhole/5 to-pigeonhole/10;
+            }
+            .catalan-bg {
+                @apply bg-gradient-to-r from-catalan/5 to-catalan/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-combinatorics bg-combinatorics/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-combinatorics text-white text-center mr-2 text-xs;
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-step {
+                @apply bg-gray-100 p-3 rounded-lg mb-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-combinatorics h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .set-circle {
+                @apply rounded-full border-2 flex items-center justify-center transition-all duration-500;
+            }
+            .set-a {
+                @apply border-inclusion bg-inclusion/10;
+            }
+            .set-b {
+                @apply border-blue-500 bg-blue-50;
+            }
+            .set-intersection {
+                @apply border-purple-500 bg-purple-50;
+            }
+            .pigeonhole {
+                @apply border-2 border-pigeonhole bg-pigeonhole/10 rounded-md h-16 flex items-center justify-center transition-all duration-500;
+            }
+            .pigeon {
+                @apply w-6 h-6 rounded-full bg-pigeonhole text-white flex items-center justify-center text-xs transition-all duration-500;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">CSP初赛</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">数学基础</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-combinatorics font-medium">组合数学方法</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="comb-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-combinatorics mb-2">组合数学方法</h1>
+                    <p class="text-gray-700">
+                        组合数学是CSP初赛的重要内容，包括容斥原理、鸽巢原理和卡特兰数等核心概念。
+                        本页面将系统讲解这些方法的原理、应用和解题技巧，助力竞赛准备。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#inclusion" class="bg-combinatorics hover:bg-combinatorics/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 开始学习
+                        </a>
+                        <a href="#examples" class="bg-white border border-combinatorics text-combinatorics hover:bg-combinatorics/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看例题
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 容斥原理 -->
+        <section id="inclusion" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-inclusion mb-6 flex items-center">
+                <i class="fa fa-calculator mr-2"></i> 容斥原理
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">基本概念</h3>
+                    <p class="text-gray-700 mb-4">
+                        容斥原理（Inclusion-Exclusion Principle）是一种用于计算多个集合的并集的方法。
+                        它通过包含所有单个集合，排除所有两个集合的交集，包含所有三个集合的交集，
+                        以此类推，来得到正确的结果。
+                    </p>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">两个集合的容斥原理</h4>
+                        <p class="text-gray-700 mb-2">对于任意两个集合A和B，它们的并集元素个数为：</p>
+                        <div class="bg-white p-3 rounded text-center font-mono">
+                            |A ∪ B| = |A| + |B| - |A ∩ B|
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg mt-4">
+                        <h4 class="font-semibold mb-2">三个集合的容斥原理</h4>
+                        <p class="text-gray-700 mb-2">对于任意三个集合A、B和C，它们的并集元素个数为：</p>
+                        <div class="bg-white p-3 rounded text-center font-mono">
+                            |A ∪ B ∪ C| = |A| + |B| + |C| - |A ∩ B| - |A ∩ C| - |B ∩ C| + |A ∩ B ∩ C|
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg mt-4">
+                        <h4 class="font-semibold mb-2">n个集合的容斥原理</h4>
+                        <p class="text-gray-700 mb-2">对于n个集合A₁, A₂, ..., Aₙ，它们的并集元素个数为：</p>
+                        <div class="bg-white p-3 rounded text-center font-mono overflow-x-auto">
+                            |A₁ ∪ A₂ ∪ ... ∪ Aₙ| = Σ|Aᵢ| - Σ|Aᵢ ∩ Aⱼ| + Σ|Aᵢ ∩ Aⱼ ∩ Aₖ| - ... + (-1)ⁿ⁺¹|A₁ ∩ A₂ ∩ ... ∩ Aₙ|
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 容斥原理动画演示 -->
+                <div class="inclusion-bg p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">容斥原理动画演示</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了两个集合A和B的容斥原理计算过程：
+                            </p>
+                            
+                            <div class="animation-controls">
+                                <button id="inclusion-run" class="bg-inclusion hover:bg-inclusion/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行动画
+                                </button>
+                                <button id="inclusion-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div class="animation-progress mt-4">
+                                <div id="inclusion-progress" class="animation-progress-bar" style="width: 0%"></div>
+                            </div>
+                            
+                            <div class="animation-step bg-blue-50 text-blue-800 p-3 rounded-lg mb-4 mt-4">
+                                <h4 class="font-medium mb-1">当前步骤说明</h4>
+                                <p id="inclusion-step-info" class="text-sm">点击"运行动画"开始演示</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-center items-center min-h-[200px]">
+                            <div id="inclusion-demo" class="relative w-full max-w-md h-40">
+                                <!-- 集合A -->
+                                <div class="set-circle set-a absolute w-32 h-32 left-1/4 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                    <span>A</span>
+                                </div>
+                                <!-- 集合B -->
+                                <div class="set-circle set-b absolute w-32 h-32 right-1/4 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                    <span>B</span>
+                                </div>
+                                <!-- 全集 -->
+                                <div class="absolute border-2 border-gray-300 w-full h-full rounded-lg"></div>
+                                <!-- 计数标签 -->
+                                <div id="count-a" class="absolute left-0 top-0 text-sm">|A| = 0</div>
+                                <div id="count-b" class="absolute right-0 top-0 text-sm">|B| = 0</div>
+                                <div id="count-intersection" class="absolute left-1/2 top-0 transform -translate-x-1/2 text-sm">|A∩B| = 0</div>
+                                <div id="count-union" class="absolute left-1/2 bottom-0 transform -translate-x-1/2 text-sm font-semibold">|A∪B| = 0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 容斥原理解题技巧 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">解题技巧</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li><strong>明确集合定义</strong>：首先要准确定义问题中的各个集合，明确每个集合包含哪些元素</li>
+                            <li><strong>确定计算目标</strong>：明确需要计算的是并集、交集还是其他组合形式</li>
+                            <li><strong>处理复杂情况</strong>：对于多个集合的情况，可以先从简单的2-3个集合开始，逐步扩展</li>
+                            <li><strong>利用补集思想</strong>：有时计算补集（不属于任何集合的元素）比直接计算并集更简单</li>
+                            <li><strong>注意重复计算</strong>：容斥原理的核心是"包含"与"排除"的交替，要注意符号的变化</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 鸽巢原理 -->
+        <section id="pigeonhole" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-pigeonhole mb-6 flex items-center">
+                <i class="fa fa-cubes mr-2"></i> 鸽巢原理
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">基本概念</h3>
+                    <p class="text-gray-700 mb-4">
+                        鸽巢原理（Pigeonhole Principle）也称为抽屉原理，是组合数学中的一个基本原理。
+                        它的基本形式是：如果有n个鸽巢和n+1只鸽子，那么至少有一个鸽巢里会有两只或更多的鸽子。
+                    </p>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">鸽巢原理的一般形式</h4>
+                        <p class="text-gray-700 mb-2">
+                            如果将m个物品放入n个容器中，那么至少有一个容器中包含至少⌈m/n⌉个物品，
+                            其中⌈x⌉表示不小于x的最小整数（向上取整）。
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- 鸽巢原理动画演示 -->
+                <div class="pigeonhole-bg p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">鸽巢原理动画演示</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了鸽巢原理的基本形式：将n+1只鸽子放入n个鸽巢中，至少有一个鸽巢中有2只鸽子。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">选择鸽巢数量:</label>
+                                <input type="range" id="pigeonhole-count" min="2" max="5" value="3" 
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-pigeonhole">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>2个鸽巢</span>
+                                    <span id="pigeonhole-count-value">3个鸽巢</span>
+                                    <span>5个鸽巢</span>
+                                </div>
+                            </div>
+                            
+                            <div class="animation-controls">
+                                <button id="pigeonhole-run" class="bg-pigeonhole hover:bg-pigeonhole/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行动画
+                                </button>
+                                <button id="pigeonhole-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div class="animation-step bg-blue-50 text-blue-800 p-3 rounded-lg mb-4 mt-4">
+                                <h4 class="font-medium mb-1">当前步骤说明</h4>
+                                <p id="pigeonhole-step-info" class="text-sm">点击"运行动画"开始演示</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-center">
+                            <div id="pigeonhole-demo" class="flex gap-4 w-full justify-center my-4">
+                                <!-- 鸽巢将通过JavaScript动态生成 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 鸽巢原理解题技巧 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">解题技巧</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li><strong>确定"鸽"和"巢"</strong>：关键是明确问题中的"鸽子"（要分配的物品）和"鸽巢"（容器）分别是什么</li>
+                            <li><strong>计算临界值</strong>：计算刚好不满足条件的最大数量，加1就是满足条件的最小数量</li>
+                            <li><strong>构造鸽巢</strong>：对于复杂问题，需要创造性地构造合适的"鸽巢"，这是解题的关键</li>
+                            <li><strong>应用扩展形式</strong>：熟练掌握鸽巢原理的扩展形式，处理"至少有k个物品在同一容器"的问题</li>
+                            <li><strong>结合其他原理</strong>：鸽巢原理常与其他组合数学方法结合使用，如计数原理、容斥原理等</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 卡特兰数 -->
+        <section id="catalan" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-catalan mb-6 flex items-center">
+                <i class="fa fa-sort-numeric-asc mr-2"></i> 卡特兰数
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">基本概念</h3>
+                    <p class="text-gray-700 mb-4">
+                        卡特兰数（Catalan numbers）是组合数学中一个重要的数列，在信息学竞赛中经常出现。
+                        它以比利时数学家欧仁·查理·卡特兰（Eugène Charles Catalan）的名字命名。
+                    </p>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">卡特兰数的定义</h4>
+                        <p class="text-gray-700 mb-2">卡特兰数的递归定义为：</p>
+                        <div class="bg-white p-3 rounded text-center font-mono mb-4">
+                            C₀ = 1<br>
+                            Cₙ₊₁ = Σ Cᵢ·Cₙ₋ᵢ (i = 0, 1, ..., n)
+                        </div>
+                        
+                        <p class="text-gray-700 mb-2">卡特兰数的闭合公式（通项公式）为：</p>
+                        <div class="bg-white p-3 rounded text-center font-mono">
+                            Cₙ = (1/(n+1)) · C(2n, n)
+                        </div>
+                        <p class="text-gray-600 text-sm text-center mt-2">其中C(2n, n)是组合数，表示从2n个元素中选取n个的组合数</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg mt-4">
+                        <h4 class="font-semibold mb-2">前几个卡特兰数</h4>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white border border-gray-200">
+                                <thead>
+                                    <tr class="bg-gray-50">
+                                        <th class="py-2 px-4 border-b text-left">n</th>
+                                        <th class="py-2 px-4 border-b text-left">Cₙ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b">0</td><td class="py-2 px-4 border-b">1</td></tr>
+                                    <tr><td class="py-2 px-4 border-b">1</td><td class="py-2 px-4 border-b">1</td></tr>
+                                    <tr><td class="py-2 px-4 border-b">2</td><td class="py-2 px-4 border-b">2</td></tr>
+                                    <tr><td class="py-2 px-4 border-b">3</td><td class="py-2 px-4 border-b">5</td></tr>
+                                    <tr><td class="py-2 px-4 border-b">4</td><td class="py-2 px-4 border-b">14</td></tr>
+                                    <tr><td class="py-2 px-4 border-b">5</td><td class="py-2 px-4 border-b">42</td></tr>
+                                    <tr><td class="py-2 px-4 border-b">6</td><td class="py-2 px-4 border-b">132</td></tr>
+                                    <tr><td class="py-2 px-4 border-b">7</td><td class="py-2 px-4 border-b">429</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 卡特兰数的应用 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">典型应用场景</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-catalan mb-2">括号匹配问题</h4>
+                            <p class="text-gray-700">
+                                n对括号的合法匹配方式数为第n个卡特兰数。
+                                例如，3对括号有5种合法匹配方式。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-catalan mb-2">二叉树构造</h4>
+                            <p class="text-gray-700">
+                                有n个节点的不同结构的二叉树的数量为第n个卡特兰数。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-catalan mb-2">路径问题</h4>
+                            <p class="text-gray-700">
+                                在n×n的网格中，从左下角到右上角，不穿过对角线的路径数为第n个卡特兰数。
+                            </p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-catalan mb-2">出栈序列</h4>
+                            <p class="text-gray-700">
+                                一个有n个元素的栈的不同出栈序列数为第n个卡特兰数。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 卡特兰数计算代码 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">卡特兰数计算（C++）</h3>
+                    <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+// 方法1：递归计算卡特兰数
+long long catalanRecursive(int n) {
+    if (n <= 1)
+        return 1;
+    
+    long long result = 0;
+    for (int i = 0; i < n; i++) {
+        result += catalanRecursive(i) * catalanRecursive(n - i - 1);
+    }
+    return result;
+}
+
+// 方法2：使用动态规划计算卡特兰数
+long long catalanDP(int n) {
+    long long* catalan = new long long[n + 1];
+    catalan[0] = catalan[1] = 1;
+    
+    for (int i = 2; i <= n; i++) {
+        catalan[i] = 0;
+        for (int j = 0; j < i; j++) {
+            catalan[i] += catalan[j] * catalan[i - j - 1];
+        }
+    }
+    
+    long long result = catalan[n];
+    delete[] catalan;
+    return result;
+}
+
+// 方法3：使用组合公式计算卡特兰数
+long long combination(int n, int k) {
+    if (k > n - k)
+        k = n - k;
+    
+    long long result = 1;
+    for (int i = 0; i < k; i++) {
+        result *= (n - i);
+        result /= (i + 1);
+    }
+    return result;
+}
+
+long long catalanCombinatorial(int n) {
+    long long c = combination(2 * n, n);
+    return c / (n + 1);
+}
+
+int main() {
+    int n;
+    cin >> n;
+    
+    cout << "递归方法: " << catalanRecursive(n) << endl;
+    cout << "动态规划: " << catalanDP(n) << endl;
+    cout << "组合公式: " << catalanCombinatorial(n) << endl;
+    
+    return 0;
+}</code></pre>
+                </div>
+                
+                <!-- 卡特兰数解题技巧 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">解题技巧</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li><strong>识别问题类型</strong>：熟悉卡特兰数的典型应用场景，能够快速识别出可以用卡特兰数解决的问题</li>
+                            <li><strong>选择合适计算方法</strong>：小规模数据可用递归，中等规模用动态规划，大规模需用组合公式并注意溢出问题</li>
+                            <li><strong>预处理打表</strong>：在竞赛中，可预先计算出可能用到的卡特兰数，避免重复计算</li>
+                            <li><strong>注意数据范围</strong>：卡特兰数增长很快，第20个卡特兰数已超过6.5亿，需注意使用合适的数据类型（如long long）</li>
+                            <li><strong>变形应用</strong>：掌握卡特兰数的变形形式，解决更复杂的组合问题</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 例题解析 -->
+        <section id="examples" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-combinatorics mb-6 flex items-center">
+                <i class="fa fa-pencil mr-2"></i> 例题解析
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- 容斥原理例题 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-inclusion mb-4">容斥原理例题</h3>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <h4 class="font-semibold mb-2">例题1：计数问题</h4>
+                        <p class="text-gray-700 mb-3">
+                            求1到1000之间不能被5、6、8整除的数有多少个？
+                        </p>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-medium text-primary mb-2">解题步骤：</h5>
+                            <ol class="list-decimal pl-6 space-y-2">
+                                <li>设全集U = {1, 2, ..., 1000}，则|U| = 1000</li>
+                                <li>设A为能被5整除的数的集合，B为能被6整除的数的集合，C为能被8整除的数的集合</li>
+                                <li>计算各集合大小：
+                                    <ul class="list-disc pl-6 mt-1">
+                                        <li>|A| = ⌊1000/5⌋ = 200</li>
+                                        <li>|B| = ⌊1000/6⌋ = 166</li>
+                                        <li>|C| = ⌊1000/8⌋ = 125</li>
+                                    </ul>
+                                </li>
+                                <li>计算两两交集大小：
+                                    <ul class="list-disc pl-6 mt-1">
+                                        <li>|A∩B| = ⌊1000/lcm(5,6)⌋ = ⌊1000/30⌋ = 33</li>
+                                        <li>|A∩C| = ⌊1000/lcm(5,8)⌋ = ⌊1000/40⌋ = 25</li>
+                                        <li>|B∩C| = ⌊1000/lcm(6,8)⌋ = ⌊1000/24⌋ = 41</li>
+                                    </ul>
+                                </li>
+                                <li>计算三者交集大小：
+                                    <ul class="list-disc pl-6 mt-1">
+                                        <li>|A∩B∩C| = ⌊1000/lcm(5,6,8)⌋ = ⌊1000/120⌋ = 8</li>
+                                    </ul>
+                                </li>
+                                <li>应用容斥原理计算|A∪B∪C|：
+                                    <div class="bg-gray-50 p-2 rounded my-1 font-mono text-sm">
+                                        |A∪B∪C| = 200 + 166 + 125 - 33 - 25 - 41 + 8 = 400
+                                    </div>
+                                </li>
+                                <li>不能被5、6、8整除的数的个数为：
+                                    <div class="bg-gray-50 p-2 rounded my-1 font-mono text-sm">
+                                        |U| - |A∪B∪C| = 1000 - 400 = 600
+                                    </div>
+                                </li>
+                            </ol>
+                            <p class="mt-3 font-medium">答案：600</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 鸽巢原理例题 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-pigeonhole mb-4">鸽巢原理例题</h3>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <h4 class="font-semibold mb-2">例题2：证明题</h4>
+                        <p class="text-gray-700 mb-3">
+                            证明：在任意5个整数中，至少有3个整数的和能被3整除。
+                        </p>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-medium text-primary mb-2">解题步骤：</h5>
+                            <ol class="list-decimal pl-6 space-y-2">
+                                <li>任何整数除以3的余数只可能是0、1、2三种情况</li>
+                                <li>将这三种余数看作3个"鸽巢"，5个整数看作5只"鸽子"</li>
+                                <li>考虑两种情况：
+                                    <ul class="list-disc pl-6 mt-1">
+                                        <li><strong>情况1</strong>：有至少3个整数的余数相同。此时这3个整数的和除以3的余数为0+0+0=0、1+1+1=3（余0）或2+2+2=6（余0），因此能被3整除。</li>
+                                        <li><strong>情况2</strong>：每种余数的整数个数都不超过2个。由于总共有5个整数和3种余数，根据鸽巢原理，每种余数至少有一个整数（否则最多有2×2=4个整数）。此时，取每种余数的整数各1个，它们的和为0+1+2=3，能被3整除。</li>
+                                    </ul>
+                                </li>
+                                <li>综上，无论哪种情况，都至少有3个整数的和能被3整除。</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 卡特兰数例题 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-catalan mb-4">卡特兰数例题</h3>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <h4 class="font-semibold mb-2">例题3：编程题</h4>
+                        <p class="text-gray-700 mb-3">
+                            由1到n的n个数字组成的栈序列，经过入栈和出栈操作后，能得到多少种不同的出栈序列？
+                            例如，n=3时，有5种不同的出栈序列。
+                        </p>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <h5 class="font-medium text-primary mb-2">解题思路：</h5>
+                            <p class="mb-2">
+                                这是一个典型的卡特兰数问题。第n个卡特兰数正好表示n个元素的栈所能得到的不同出栈序列的数量。
+                            </p>
+                            
+                            <h5 class="font-medium text-primary mb-2 mt-3">代码实现：</h5>
+                            <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
+using namespace std;
+
+// 计算组合数C(n,k)
+long long comb(int n, int k) {
+    if (k > n - k) k = n - k;
+    long long res = 1;
+    for (int i = 0; i < k; ++i) {
+        res = res * (n - i) / (i + 1);
+    }
+    return res;
+}
+
+// 计算第n个卡特兰数
+long long catalan(int n) {
+    return comb(2 * n, n) / (n + 1);
+}
+
+int main() {
+    int n;
+    cin >> n;
+    cout << catalan(n) << endl;
+    return 0;
+}</code></pre>
+
+                            <h5 class="font-medium text-primary mb-2 mt-3">示例：</h5>
+                            <ul class="list-disc pl-6">
+                                <li>输入：3 → 输出：5</li>
+                                <li>输入：4 → 输出：14</li>
+                                <li>输入：5 → 输出：42</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        hljs.highlightAll();
+        
+        // 容斥原理动画
+        let inclusionStep = 0;
+        const inclusionSteps = [
+            "初始状态：两个集合A和B",
+            "计算集合A的元素数量：|A| = 5",
+            "计算集合B的元素数量：|B| = 4",
+            "计算A和B的交集元素数量：|A∩B| = 2",
+            "应用容斥原理：|A∪B| = |A| + |B| - |A∩B| = 5 + 4 - 2 = 7"
+        ];
+        
+        document.getElementById('inclusion-run').addEventListener('click', function() {
+            const demo = document.getElementById('inclusion-demo');
+            const countA = document.getElementById('count-a');
+            const countB = document.getElementById('count-b');
+            const countIntersection = document.getElementById('count-intersection');
+            const countUnion = document.getElementById('count-union');
+            const stepInfo = document.getElementById('inclusion-step-info');
+            const progressBar = document.getElementById('inclusion-progress');
+            
+            // 重置动画
+            if (inclusionStep >= inclusionSteps.length) {
+                inclusionStep = 0;
+                resetInclusionDemo();
+            }
+            
+            // 执行当前步骤
+            inclusionStep++;
+            stepInfo.textContent = inclusionSteps[inclusionStep - 1];
+            progressBar.style.width = (inclusionStep / inclusionSteps.length) * 100 + '%';
+            
+            // 根据步骤更新演示
+            if (inclusionStep === 2) {
+                countA.textContent = "|A| = 5";
+                // 添加A集合的元素
+                addElementsToSet(demo.querySelector('.set-a'), 5, 'inclusion');
+            } else if (inclusionStep === 3) {
+                countB.textContent = "|B| = 4";
+                // 添加B集合的元素
+                addElementsToSet(demo.querySelector('.set-b'), 4, 'blue');
+            } else if (inclusionStep === 4) {
+                countIntersection.textContent = "|A∩B| = 2";
+                // 标记交集元素
+                markIntersectionElements(demo);
+            } else if (inclusionStep === 5) {
+                countUnion.textContent = "|A∪B| = 7";
+            }
+        });
+        
+        document.getElementById('inclusion-reset').addEventListener('click', function() {
+            resetInclusionDemo();
+        });
+        
+        function resetInclusionDemo() {
+            inclusionStep = 0;
+            document.getElementById('inclusion-step-info').textContent = "点击\"运行动画\"开始演示";
+            document.getElementById('inclusion-progress').style.width = "0%";
+            document.getElementById('count-a').textContent = "|A| = 0";
+            document.getElementById('count-b').textContent = "|B| = 0";
+            document.getElementById('count-intersection').textContent = "|A∩B| = 0";
+            document.getElementById('count-union').textContent = "|A∪B| = 0";
+            
+            // 清除所有元素
+            const elements = document.querySelectorAll('.set-element');
+            elements.forEach(el => el.remove());
+        }
+        
+        function addElementsToSet(setEl, count, color) {
+            const setRect = setEl.getBoundingClientRect();
+            const demoRect = document.getElementById('inclusion-demo').getBoundingClientRect();
+            
+            for (let i = 0; i < count; i++) {
+                const element = document.createElement('div');
+                element.className = `set-element absolute w-4 h-4 rounded-full bg-${color}-500 text-white text-xs flex items-center justify-center`;
+                element.textContent = i + 1;
+                
+                // 随机位置，但确保在集合内
+                const x = Math.random() * (setRect.width - 20) + 10;
+                const y = Math.random() * (setRect.height - 20) + 10;
+                
+                element.style.left = (setRect.left - demoRect.left + x) + 'px';
+                element.style.top = (setRect.top - demoRect.top + y) + 'px';
+                
+                document.getElementById('inclusion-demo').appendChild(element);
+            }
+        }
+        
+        function markIntersectionElements(demo) {
+            const elements = demo.querySelectorAll('.set-element');
+            // 标记前2个元素为交集
+            for (let i = 0; i < 2 && i < elements.length; i++) {
+                elements[i].classList.remove('bg-inclusion-500', 'bg-blue-500');
+                elements[i].classList.add('bg-purple-500');
+            }
+        }
+        
+        // 鸽巢原理动画
+        let pigeonholeCount = 3;
+        let pigeonholeStep = 0;
+        
+        // 更新鸽巢数量显示
+        document.getElementById('pigeonhole-count').addEventListener('input', function() {
+            pigeonholeCount = parseInt(this.value);
+            document.getElementById('pigeonhole-count-value').textContent = `${pigeonholeCount}个鸽巢`;
+            resetPigeonholeDemo();
+        });
+        
+        document.getElementById('pigeonhole-run').addEventListener('click', function() {
+            const demo = document.getElementById('pigeonhole-demo');
+            const stepInfo = document.getElementById('pigeonhole-step-info');
+            
+            // 重置动画
+            if (pigeonholeStep >= pigeonholeCount + 1) {
+                resetPigeonholeDemo();
+            }
+            
+            // 执行当前步骤
+            pigeonholeStep++;
+            
+            if (pigeonholeStep <= pigeonholeCount) {
+                stepInfo.textContent = `将第${pigeonholeStep}只鸽子放入第${pigeonholeStep}个鸽巢`;
+                addPigeonToHole(demo, pigeonholeStep - 1, pigeonholeStep);
+            } else {
+                stepInfo.textContent = `第${pigeonholeCount + 1}只鸽子只能放入已有的鸽巢，因此至少有一个鸽巢中有2只鸽子`;
+                addPigeonToHole(demo, 0, pigeonholeCount + 1);
+                // 高亮显示有2只鸽子的鸽巢
+                demo.children[0].classList.add('bg-pigeonhole/20');
+            }
+        });
+        
+        document.getElementById('pigeonhole-reset').addEventListener('click', function() {
+            resetPigeonholeDemo();
+        });
+        
+        function resetPigeonholeDemo() {
+            pigeonholeStep = 0;
+            document.getElementById('pigeonhole-step-info').textContent = "点击\"运行动画\"开始演示";
+            
+            // 重新创建鸽巢
+            const demo = document.getElementById('pigeonhole-demo');
+            demo.innerHTML = '';
+            
+            for (let i = 0; i < pigeonholeCount; i++) {
+                const hole = document.createElement('div');
+                hole.className = 'pigeonhole w-20';
+                hole.innerHTML = `<span>鸽巢${i + 1}</span>`;
+                hole.setAttribute('data-pigeons', '0');
+                demo.appendChild(hole);
+            }
+        }
+        
+        function addPigeonToHole(demo, holeIndex, pigeonNumber) {
+            const hole = demo.children[holeIndex];
+            const pigeonCount = parseInt(hole.getAttribute('data-pigeons')) + 1;
+            hole.setAttribute('data-pigeons', pigeonCount);
+            
+            const pigeon = document.createElement('div');
+            pigeon.className = 'pigeon';
+            pigeon.textContent = pigeonNumber;
+            
+            // 定位鸽子
+            const offset = (pigeonCount - 1) * 10;
+            pigeon.style.position = 'relative';
+            pigeon.style.left = `${offset}px`;
+            
+            hole.appendChild(pigeon);
+        }
+        
+        // 页面加载时初始化演示
+        window.addEventListener('load', function() {
+            resetInclusionDemo();
+            resetPigeonholeDemo();
+        });
+    </script>
+</body>
+</html>

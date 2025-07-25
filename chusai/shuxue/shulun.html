@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数论基础 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：鲜明的蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        numbertheory: '#E91E63', // 数论主题色：粉色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .numbertheory-bg {
+                @apply bg-gradient-to-r from-numbertheory/5 to-numbertheory/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .numbertheory-header {
+                @apply font-bold text-numbertheory mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-numbertheory bg-numbertheory/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-numbertheory text-white text-center mr-2 text-xs;
+            }
+            .factor-item {
+                @apply inline-block bg-primary/10 text-primary border border-primary/30 rounded-full px-3 py-1 m-1 text-sm transition-all duration-300 hover:bg-primary/20;
+            }
+            .prime-item {
+                @apply inline-block bg-green-100 text-green-700 border border-green-300 rounded-full px-3 py-1 m-1 text-sm;
+            }
+            .composite-item {
+                @apply inline-block bg-red-100 text-red-700 border border-red-300 rounded-full px-3 py-1 m-1 text-sm;
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-numbertheory h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .example-card {
+                @apply bg-gray-50 p-4 rounded-lg mb-4;
+            }
+            .theorem-box {
+                @apply bg-primary/5 border-l-4 border-primary p-4 rounded-r-lg my-4;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-calculator text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索数论、算法..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索数论、算法..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">CSP初赛</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">数学基础</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-numbertheory font-medium">数论基础</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="numbertheory-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-numbertheory mb-2">数论基础</h1>
+                    <p class="text-gray-700">
+                        数论是信息学奥赛的重要基础，包括质数、合数、约数、倍数和同余等核心概念。
+                        本页面专注于CSP初赛所需的数论基础知识，包含动态演示和解题技巧。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concepts" class="bg-numbertheory hover:bg-numbertheory/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#examples" class="bg-white border border-numbertheory text-numbertheory hover:bg-numbertheory/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看例题
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 数论基本概念 -->
+        <section id="concepts" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-numbertheory mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 数论基本概念
+            </h2>
+            
+            <!-- 质数与合数 -->
+            <div class="space-y-6 mb-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3 text-numbertheory">1. 质数与合数</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-green-600 mb-2">质数（素数）</h4>
+                            <p class="text-gray-700 mb-3">
+                                质数是大于1的自然数，除了1和它本身外，不能被其他自然数整除。
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                <strong>示例：</strong> 2, 3, 5, 7, 11, 13, 17, 19...
+                            </p>
+                            <p class="text-sm text-gray-600 mt-2">
+                                <strong>注意：</strong> 1不是质数，2是唯一的偶质数
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-600 mb-2">合数</h4>
+                            <p class="text-gray-700 mb-3">
+                                合数是大于1的自然数，除了1和它本身外，还能被其他自然数整除。
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                <strong>示例：</strong> 4, 6, 8, 9, 10, 12, 14, 15...
+                            </p>
+                            <p class="text-sm text-gray-600 mt-2">
+                                <strong>注意：</strong> 1既不是质数也不是合数
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- 质数判断动画演示 -->
+                    <div class="bg-white border border-gray-200 rounded-lg p-4 mb-6">
+                        <h4 class="font-semibold mb-3">质数判断演示</h4>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div>
+                                <p class="text-gray-700 mb-4">
+                                    下面的动画演示了判断一个数是否为质数的过程：检查从2到√n的所有整数是否能整除n。
+                                </p>
+                                
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">输入一个整数n:</label>
+                                    <input type="range" id="prime-check-n" min="2" max="100" value="17" 
+                                        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-numbertheory">
+                                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                        <span>2</span>
+                                        <span id="prime-check-n-value">17</span>
+                                        <span>100</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex space-x-2">
+                                    <button id="prime-check-run" class="bg-numbertheory hover:bg-numbertheory/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                        <i class="fa fa-play mr-2"></i> 运行判断
+                                    </button>
+                                    <button id="prime-check-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                        <i class="fa fa-refresh mr-2"></i> 重置
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 min-h-[180px]" id="prime-check-process">
+                                    <div class="text-center text-gray-500 py-6">
+                                        <p>点击"运行判断"查看过程</p>
+                                    </div>
+                                </div>
+                                <div id="prime-check-result" class="mt-3 text-center font-medium hidden"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 质数筛法简介 -->
+                    <div>
+                        <h4 class="font-semibold mb-3">质数筛法（CSP初赛重点）</h4>
+                        <div class="example-card">
+                            <h5 class="font-medium text-primary mb-2">埃拉托斯特尼筛法（Sieve of Eratosthenes）</h5>
+                            <p class="text-gray-700 text-sm mb-3">
+                                一种高效查找n以内所有质数的算法，基本思想是：
+                            </p>
+                            <ol class="list-decimal pl-5 text-sm space-y-1 mb-3">
+                                <li>创建一个从2到n的序列</li>
+                                <li>取序列中的最小数p，这个数是质数</li>
+                                <li>将序列中所有p的倍数移除</li>
+                                <li>重复步骤2和3，直到序列为空</li>
+                            </ol>
+                            
+                            <div class="flex space-x-2 mb-4">
+                                <button id="sieve-run" class="bg-primary hover:bg-primary/90 text-white px-3 py-1 rounded-md transition-all flex items-center text-sm">
+                                    <i class="fa fa-play mr-1"></i> 演示筛法
+                                </button>
+                                <button id="sieve-reset" class="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded-md transition-all flex items-center text-sm">
+                                    <i class="fa fa-refresh mr-1"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="sieve-container" class="flex flex-wrap justify-center gap-2 my-3 min-h-[80px]">
+                                <!-- 筛法演示将在这里动态生成 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 约数与倍数 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3 text-numbertheory">2. 约数与倍数</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-primary mb-2">约数（因数）</h4>
+                            <p class="text-gray-700 mb-3">
+                                如果整数a除以整数b(b≠0) 的商正好是整数而没有余数，称b是a的约数。
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                <strong>示例：</strong> 6的约数有1, 2, 3, 6
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-secondary mb-2">倍数</h4>
+                            <p class="text-gray-700 mb-3">
+                                如果整数a能被整数b(b≠0)整除，称a是b的倍数。
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                <strong>示例：</strong> 3的倍数有3, 6, 9, 12, 15...
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- 最大公约数与最小公倍数 -->
+                    <div class="mb-6">
+                        <h4 class="font-semibold mb-3">最大公约数(GCD)与最小公倍数(LCM)</h4>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h5 class="font-medium text-primary mb-2">最大公约数(GCD)</h5>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    指两个或多个整数共有约数中最大的一个。
+                                </p>
+                                <p class="text-sm text-gray-600 mb-2">
+                                    <strong>示例：</strong> 12和18的最大公约数是6
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                    <strong>记法：</strong> gcd(12, 18) = 6
+                                </p>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h5 class="font-medium text-secondary mb-2">最小公倍数(LCM)</h5>
+                                <p class="text-gray-700 text-sm mb-3">
+                                    指两个或多个整数公有的倍数中最小的一个。
+                                </p>
+                                <p class="text-sm text-gray-600 mb-2">
+                                    <strong>示例：</strong> 12和18的最小公倍数是36
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                    <strong>记法：</strong> lcm(12, 18) = 36
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- GCD计算演示 -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                            <h5 class="font-semibold mb-3">欧几里得算法求最大公约数</h5>
+                            <p class="text-gray-700 text-sm mb-4">
+                                欧几里得算法（辗转相除法）是求最大公约数的高效算法，公式为：
+                            </p>
+                            <div class="bg-gray-100 p-2 rounded text-center mb-4">
+                                <p class="font-mono">gcd(a, b) = gcd(b, a mod b)</p>
+                                <p class="text-xs text-gray-600 mt-1">当b=0时，gcd(a, 0) = a</p>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <div class="mb-3">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">输入整数a:</label>
+                                        <input type="number" id="gcd-a" value="48" min="1" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">输入整数b:</label>
+                                        <input type="number" id="gcd-b" value="30" min="1" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary">
+                                    </div>
+                                    <button id="gcd-calculate" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-all">
+                                        计算GCD
+                                    </button>
+                                </div>
+                                
+                                <div>
+                                    <h6 class="font-medium text-sm mb-2">计算过程：</h6>
+                                    <div id="gcd-process" class="bg-gray-50 p-3 rounded-lg min-h-[120px] text-sm">
+                                        <p class="text-gray-500">点击"计算GCD"查看过程</p>
+                                    </div>
+                                    <div id="gcd-result" class="mt-2 font-medium text-center hidden"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 约数个数与和 -->
+                    <div>
+                        <div class="theorem-box">
+                            <h5 class="font-medium mb-2">约数个数定理</h5>
+                            <p class="text-sm text-gray-700">
+                                若正整数n的质因数分解为：n = p₁^a₁ × p₂^a₂ × ... × pₖ^aₖ，则n的正约数个数为：
+                            </p>
+                            <p class="text-center font-mono my-2">(a₁+1) × (a₂+1) × ... × (aₖ+1)</p>
+                        </div>
+                        
+                        <div class="theorem-box">
+                            <h5 class="font-medium mb-2">约数和定理</h5>
+                            <p class="text-sm text-gray-700">
+                                若正整数n的质因数分解为：n = p₁^a₁ × p₂^a₂ × ... × pₖ^aₖ，则n的所有正约数之和为：
+                            </p>
+                            <p class="text-center font-mono my-2">
+                                (1+p₁+p₁²+...+p₁^a₁) × ... × (1+pₖ+pₖ²+...+pₖ^aₖ)
+                            </p>
+                        </div>
+                        
+                        <!-- 约数分解演示 -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 mt-4">
+                            <h5 class="font-semibold mb-3">约数分解演示</h5>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <div class="mb-3">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">输入整数n:</label>
+                                        <input type="number" id="factor-n" value="12" min="1" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary">
+                                    </div>
+                                    <button id="factor-calculate" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-all">
+                                        分解约数
+                                    </button>
+                                </div>
+                                
+                                <div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <h6 class="font-medium text-sm mb-2">质因数分解：</h6>
+                                            <div id="prime-factorization" class="bg-gray-50 p-3 rounded-lg min-h-[60px] text-sm">
+                                                <p class="text-gray-500">点击"分解约数"查看结果</p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h6 class="font-medium text-sm mb-2">约数个数：</h6>
+                                            <div id="divisor-count" class="bg-gray-50 p-3 rounded-lg min-h-[60px] text-sm">
+                                                <p class="text-gray-500">点击"分解约数"查看结果</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <h6 class="font-medium text-sm mb-2">所有约数：</h6>
+                                        <div id="divisors" class="bg-gray-50 p-3 rounded-lg min-h-[60px] flex flex-wrap">
+                                            <p class="text-gray-500">点击"分解约数"查看结果</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 同余 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3 text-numbertheory">3. 同余</h3>
+                    
+                    <p class="text-gray-700 mb-4">
+                        若两个整数a、b除以同一个正整数m，得到的余数相同，则称a与b对模m同余，记作：
+                    </p>
+                    <div class="bg-gray-100 p-3 rounded-lg text-center mb-6">
+                        <p class="text-lg font-mono">a ≡ b (mod m)</p>
+                    </div>
+                    
+                    <!-- 同余性质 -->
+                    <div class="example-card mb-6">
+                        <h4 class="font-semibold mb-3">同余的基本性质</h4>
+                        <ul class="list-disc pl-6 space-y-2 text-gray-700">
+                            <li><strong>自反性：</strong> a ≡ a (mod m)</li>
+                            <li><strong>对称性：</strong> 若a ≡ b (mod m)，则b ≡ a (mod m)</li>
+                            <li><strong>传递性：</strong> 若a ≡ b (mod m)且b ≡ c (mod m)，则a ≡ c (mod m)</li>
+                            <li><strong>同余式相加：</strong> 若a ≡ b (mod m)且c ≡ d (mod m)，则a+c ≡ b+d (mod m)</li>
+                            <li><strong>同余式相乘：</strong> 若a ≡ b (mod m)且c ≡ d (mod m)，则ac ≡ bd (mod m)</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 同余计算演示 -->
+                    <div class="bg-white border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold mb-3">同余计算演示</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <div class="mb-3">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">输入整数a:</label>
+                                    <input type="number" id="congruence-a" value="17" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">输入整数b:</label>
+                                    <input type="number" id="congruence-b" value="5" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">输入模数m:</label>
+                                    <input type="number" id="congruence-m" value="6" min="1" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-primary">
+                                </div>
+                                <button id="congruence-check" class="bg-numbertheory hover:bg-numbertheory/90 text-white px-4 py-2 rounded-md transition-all">
+                                    检查同余
+                                </button>
+                            </div>
+                            
+                            <div>
+                                <h6 class="font-medium text-sm mb-2">计算过程：</h6>
+                                <div id="congruence-process" class="bg-gray-50 p-3 rounded-lg min-h-[160px] text-sm">
+                                    <p class="text-gray-500">点击"检查同余"查看过程</p>
+                                </div>
+                                <div id="congruence-result" class="mt-2 font-medium text-center hidden"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 解题技巧 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-numbertheory mb-6 flex items-center">
+                <i class="fa fa-lightbulb-o mr-2"></i> 数论解题技巧
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="example-card">
+                    <h3 class="font-semibold text-lg mb-3">质数相关技巧</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>质数判断优化：</strong> 只需检查到√n，且可以先判断是否能被2整除，再只检查奇数</li>
+                        <li><strong>筛法应用：</strong> 对于n≤10^6的情况，埃氏筛法效率很高；更大范围可考虑欧拉筛</li>
+                        <li><strong>质数分布：</strong> 在CSP初赛中，要记住100以内的质数，了解质数定理（n附近质数密度约为1/ln n）</li>
+                        <li><strong>质因数分解：</strong> 利用短除法，从小的质数开始试除</li>
+                    </ul>
+                </div>
+                
+                <div class="example-card">
+                    <h3 class="font-semibold text-lg mb-3">约数与倍数技巧</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>GCD与LCM关系：</strong> 对任意正整数a、b，有a×b = gcd(a,b)×lcm(a,b)</li>
+                        <li><strong>最大公约数性质：</strong> gcd(a,b) = gcd(a,b-a)，这是辗转相除法的基础</li>
+                        <li><strong>约数枚举：</strong> 枚举到√n即可，找到一个约数d，同时得到n/d</li>
+                        <li><strong>多个数的GCD：</strong> gcd(a,b,c) = gcd(gcd(a,b),c)，可推广到更多数</li>
+                    </ul>
+                </div>
+                
+                <div class="example-card">
+                    <h3 class="font-semibold text-lg mb-3">同余问题技巧</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>模运算性质：</strong> (a+b) mod m = [(a mod m)+(b mod m)] mod m</li>
+                        <li><strong>模运算性质：</strong> (a×b) mod m = [(a mod m)×(b mod m)] mod m</li>
+                        <li><strong>处理负数：</strong> 若a为负数，a mod m = (m + a % m) % m</li>
+                        <li><strong>同余方程：</strong> 对于ax ≡ b (mod m)，当gcd(a,m)整除b时才有解</li>
+                    </ul>
+                </div>
+                
+                <div class="example-card">
+                    <h3 class="font-semibold text-lg mb-3">CSP初赛常见数论考点</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-3 rounded border border-gray-100">
+                            <h4 class="font-medium text-primary mb-2">选择题考点</h4>
+                            <ul class="list-disc pl-5 text-sm space-y-1">
+                                <li>质数与合数的判断</li>
+                                <li>最大公约数与最小公倍数计算</li>
+                                <li>约数个数的计算</li>
+                                <li>简单同余问题</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-gray-100">
+                            <h4 class="font-medium text-primary mb-2">问题求解考点</h4>
+                            <ul class="list-disc pl-5 text-sm space-y-1">
+                                <li>质因数分解应用</li>
+                                <li>约数和问题</li>
+                                <li>同余方程求解</li>
+                                <li>数论结合排列组合</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 例题解析 -->
+        <section id="examples" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-numbertheory mb-6 flex items-center">
+                <i class="fa fa-puzzle-piece mr-2"></i> 数论例题解析
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- 例题1 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题1：质数判断</h3>
+                    <div class="example-card">
+                        <p class="text-gray-700 mb-3">
+                            <strong>题目：</strong> 下列哪个数是质数？（ ）
+                        </p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+                            <div class="border border-gray-200 rounded p-3 text-center cursor-pointer hover:border-primary transition-colors" id="prime-option-1">121</div>
+                            <div class="border border-gray-200 rounded p-3 text-center cursor-pointer hover:border-primary transition-colors" id="prime-option-2">143</div>
+                            <div class="border border-gray-200 rounded p-3 text-center cursor-pointer hover:border-primary transition-colors" id="prime-option-3">167</div>
+                            <div class="border border-gray-200 rounded p-3 text-center cursor-pointer hover:border-primary transition-colors" id="prime-option-4">187</div>
+                        </div>
+                        <div id="prime-explanation" class="hidden bg-gray-50 p-4 rounded-lg text-sm">
+                            <h4 class="font-medium mb-2">解析：</h4>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>121 = 11×11，不是质数</li>
+                                <li>143 = 11×13，不是质数</li>
+                                <li>167：检查到√167≈12.9，尝试2到13的质数都不能整除，是质数</li>
+                                <li>187 = 11×17，不是质数</li>
+                            </ul>
+                            <p class="mt-2"><strong>答案：</strong>167</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 例题2 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题2：最大公约数</h3>
+                    <div class="example-card">
+                        <p class="text-gray-700 mb-3">
+                            <strong>题目：</strong> 计算gcd(240, 180)的值是多少？
+                        </p>
+                        <button id="gcd-example-solve" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-all mb-4">
+                            查看解析
+                        </button>
+                        <div id="gcd-example-explanation" class="hidden bg-gray-50 p-4 rounded-lg text-sm">
+                            <h4 class="font-medium mb-2">解析：使用辗转相除法</h4>
+                            <ul class="list-decimal pl-5 space-y-1">
+                                <li>gcd(240, 180) = gcd(180, 240 mod 180) = gcd(180, 60)</li>
+                                <li>gcd(180, 60) = gcd(60, 180 mod 60) = gcd(60, 0)</li>
+                                <li>gcd(60, 0) = 60</li>
+                            </ul>
+                            <p class="mt-2"><strong>答案：</strong>60</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 例题3 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题3：约数个数</h3>
+                    <div class="example-card">
+                        <p class="text-gray-700 mb-3">
+                            <strong>题目：</strong> 数字360有多少个正约数？
+                        </p>
+                        <button id="divisor-count-example-solve" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-all mb-4">
+                            查看解析
+                        </button>
+                        <div id="divisor-count-example-explanation" class="hidden bg-gray-50 p-4 rounded-lg text-sm">
+                            <h4 class="font-medium mb-2">解析：</h4>
+                            <p>首先对360进行质因数分解：</p>
+                            <p class="text-center font-mono my-1">360 = 2³ × 3² × 5¹</p>
+                            <p>根据约数个数定理，约数个数为：</p>
+                            <p class="text-center font-mono my-1">(3+1) × (2+1) × (1+1) = 4 × 3 × 2 = 24</p>
+                            <p class="mt-2"><strong>答案：</strong>24</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 例题4 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题4：同余问题</h3>
+                    <div class="example-card">
+                        <p class="text-gray-700 mb-3">
+                            <strong>题目：</strong> 今天是星期一，再过100^100天是星期几？
+                        </p>
+                        <button id="congruence-example-solve" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-all mb-4">
+                            查看解析
+                        </button>
+                        <div id="congruence-example-explanation" class="hidden bg-gray-50 p-4 rounded-lg text-sm">
+                            <h4 class="font-medium mb-2">解析：利用同余性质</h4>
+                            <p>问题等价于计算100^100 mod 7，因为一周有7天</p>
+                            <ul class="list-decimal pl-5 space-y-1 mt-2">
+                                <li>100 mod 7 = 2（因为7×14=98，100-98=2）</li>
+                                <li>所以100^100 mod 7 = 2^100 mod 7</li>
+                                <li>计算2的幂次模7的周期：2^1=2 mod7，2^2=4 mod7，2^3=1 mod7，周期为3</li>
+                                <li>100 mod 3 = 1，所以2^100 mod7 = 2^1 mod7 = 2</li>
+                                <li>星期一加2天是星期三</li>
+                            </ul>
+                            <p class="mt-2"><strong>答案：</strong>星期三</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 洛谷推荐题目 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">洛谷推荐练习</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1217 [USACO1.5] 回文质数 Prime Palindromes</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                因为151既是一个质数又是一个回文数(从左到右和从右到左是看一样的)，所以 151 是回文质数。
+                                写一个程序来找出范围[a,b](5 <= a < b <= 100,000,000)间的所有回文质数。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1217" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1029 [NOIP2001 普及组] 最大公约数和最小公倍数问题</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                输入两个正整数 x0,y0，求出满足下列条件的 P, Q 的个数：
+                                1. P,Q 是正整数
+                                2. P, Q 以 x0 为最大公约数，以 y0 为最小公倍数。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1029" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1414 又是毕业季I</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                为了把毕业晚会办得更好，老师想要挑出默契程度最大的k个人参与毕业晚会彩排。
+                                可是如何挑呢？老师列出全班同学的号数1，2，……，n，并且相信k个人的默契程度便是他们的最大公约数。
+                                这可难为了他，请你帮帮忙吧！
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1414" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P2613 【模板】有理数取余</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                给出一个有理数 c = a/b，求 c mod 19260817 的值。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P2613" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            
+            // 质数判断演示
+            const primeCheckN = document.getElementById('prime-check-n');
+            const primeCheckNValue = document.getElementById('prime-check-n-value');
+            const primeCheckRun = document.getElementById('prime-check-run');
+            const primeCheckReset = document.getElementById('prime-check-reset');
+            const primeCheckProcess = document.getElementById('prime-check-process');
+            const primeCheckResult = document.getElementById('prime-check-result');
+            
+            primeCheckN.addEventListener('input', function() {
+                primeCheckNValue.textContent = this.value;
+            });
+            
+            primeCheckRun.addEventListener('click', function() {
+                const n = parseInt(primeCheckN.value);
+                let isPrime = true;
+                let processHtml = '';
+                
+                primeCheckProcess.innerHTML = '<p class="text-center">正在判断...</p>';
+                primeCheckResult.classList.add('hidden');
+                
+                setTimeout(() => {
+                    if (n <= 1) {
+                        isPrime = false;
+                        processHtml = `<p>${n} ≤ 1，不是质数</p>`;
+                    } else if (n === 2) {
+                        isPrime = true;
+                        processHtml = `<p>2是质数</p>`;
+                    } else if (n % 2 === 0) {
+                        isPrime = false;
+                        processHtml = `<p>${n}是偶数且大于2，能被2整除，不是质数</p>`;
+                    } else {
+                        processHtml = `<p>检查是否有除1和${n}之外的约数：</p><ul>`;
+                        const sqrtN = Math.sqrt(n);
+                        
+                        for (let i = 3; i <= sqrtN; i += 2) {
+                            if (n % i === 0) {
+                                isPrime = false;
+                                processHtml += `<li>${n} ÷ ${i} = ${n/i}，能被${i}整除，不是质数</li>`;
+                                break;
+                            } else {
+                                processHtml += `<li>${n} ÷ ${i} = ${(n/i).toFixed(2)}，不能被${i}整除</li>`;
+                            }
+                        }
+                        
+                        if (isPrime) {
+                            processHtml += `<li>检查完所有可能的约数，没有找到能整除${n}的数</li>`;
+                        }
+                        processHtml += `</ul>`;
+                    }
+                    
+                    primeCheckProcess.innerHTML = processHtml;
+                    primeCheckResult.textContent = isPrime ? `${n}是质数` : `${n}不是质数`;
+                    primeCheckResult.className = isPrime ? 'mt-3 text-center font-medium text-green-600' : 'mt-3 text-center font-medium text-red-600';
+                    primeCheckResult.classList.remove('hidden');
+                }, 500);
+            });
+            
+            primeCheckReset.addEventListener('click', function() {
+                primeCheckProcess.innerHTML = '<div class="text-center text-gray-500 py-6"><p>点击"运行判断"查看过程</p></div>';
+                primeCheckResult.classList.add('hidden');
+            });
+            
+            // 埃氏筛法演示
+            const sieveRun = document.getElementById('sieve-run');
+            const sieveReset = document.getElementById('sieve-reset');
+            const sieveContainer = document.getElementById('sieve-container');
+            let sieveNumbers = [];
+            
+            function initSieve() {
+                sieveContainer.innerHTML = '';
+                sieveNumbers = [];
+                // 生成2-30的数字
+                for (let i = 2; i <= 30; i++) {
+                    sieveNumbers.push({value: i, isPrime: true});
+                    const div = document.createElement('div');
+                    div.className = 'w-8 h-8 flex items-center justify-center border border-gray-300 rounded';
+                    div.textContent = i;
+                    div.id = `sieve-num-${i}`;
+                    sieveContainer.appendChild(div);
+                }
+            }
+            
+            initSieve();
+            
+            sieveReset.addEventListener('click', initSieve);
+            
+            sieveRun.addEventListener('click', function() {
+                initSieve();
+                let currentPrimeIndex = 0;
+                
+                function markMultiples() {
+                    if (currentPrimeIndex >= sieveNumbers.length) return;
+                    
+                    // 找到下一个质数
+                    while (currentPrimeIndex < sieveNumbers.length && !sieveNumbers[currentPrimeIndex].isPrime) {
+                        currentPrimeIndex++;
+                    }
+                    
+                    if (currentPrimeIndex >= sieveNumbers.length) return;
+                    
+                    const prime = sieveNumbers[currentPrimeIndex].value;
+                    const primeElement = document.getElementById(`sieve-num-${prime}`);
+                    primeElement.className = 'w-8 h-8 flex items-center justify-center border border-green-500 bg-green-100 rounded font-medium';
+                    
+                    // 标记倍数
+                    let delay = 500;
+                    for (let i = currentPrimeIndex + 1; i < sieveNumbers.length; i++) {
+                        const num = sieveNumbers[i].value;
+                        if (num % prime === 0) {
+                            sieveNumbers[i].isPrime = false;
+                            setTimeout(() => {
+                                const element = document.getElementById(`sieve-num-${num}`);
+                                element.className = 'w-8 h-8 flex items-center justify-center border border-red-300 bg-red-100 rounded';
+                            }, delay);
+                            delay += 300;
+                        }
+                    }
+                    
+                    // 处理下一个质数
+                    currentPrimeIndex++;
+                    setTimeout(markMultiples, delay + 500);
+                }
+                
+                markMultiples();
+            });
+            
+            // GCD计算演示
+            const gcdA = document.getElementById('gcd-a');
+            const gcdB = document.getElementById('gcd-b');
+            const gcdCalculate = document.getElementById('gcd-calculate');
+            const gcdProcess = document.getElementById('gcd-process');
+            const gcdResult = document.getElementById('gcd-result');
+            
+            gcdCalculate.addEventListener('click', function() {
+                let a = parseInt(gcdA.value);
+                let b = parseInt(gcdB.value);
+                let processHtml = '';
+                
+                if (isNaN(a) || isNaN(b) || a <= 0 || b <= 0) {
+                    gcdProcess.innerHTML = '<p class="text-red-500">请输入正整数</p>';
+                    return;
+                }
+                
+                processHtml = `<p>计算 gcd(${a}, ${b})</p><ul>`;
+                
+                while (b !== 0) {
+                    const remainder = a % b;
+                    processHtml += `<li>gcd(${a}, ${b}) = gcd(${b}, ${remainder})</li>`;
+                    const temp = b;
+                    b = remainder;
+                    a = temp;
+                }
+                
+                processHtml += `</ul><p>当b=0时，gcd(${a}, 0) = ${a}</p>`;
+                gcdProcess.innerHTML = processHtml;
+                gcdResult.textContent = `gcd(${parseInt(gcdA.value)}, ${parseInt(gcdB.value)}) = ${a}`;
+                gcdResult.className = 'mt-2 font-medium text-center text-primary';
+                gcdResult.classList.remove('hidden');
+            });
+            
+            // 约数分解演示
+            const factorN = document.getElementById('factor-n');
+            const factorCalculate = document.getElementById('factor-calculate');
+            const primeFactorization = document.getElementById('prime-factorization');
+            const divisorCount = document.getElementById('divisor-count');
+            const divisors = document.getElementById('divisors');
+            
+            factorCalculate.addEventListener('click', function() {
+                const n = parseInt(factorN.value);
+                
+                if (isNaN(n) || n <= 0) {
+                    primeFactorization.innerHTML = '<p class="text-red-500">请输入正整数</p>';
+                    divisorCount.innerHTML = '<p class="text-red-500">请输入正整数</p>';
+                    divisors.innerHTML = '<p class="text-red-500">请输入正整数</p>';
+                    return;
+                }
+                
+                // 质因数分解
+                let temp = n;
+                const factors = {};
+                
+                for (let i = 2; i * i <= temp; i++) {
+                    while (temp % i === 0) {
+                        factors[i] = (factors[i] || 0) + 1;
+                        temp /= i;
+                    }
+                }
+                
+                if (temp > 1) {
+                    factors[temp] = 1;
+                }
+                
+                // 显示质因数分解
+                let factorizationHtml = '';
+                const factorEntries = Object.entries(factors);
+                
+                if (factorEntries.length === 0) {
+                    factorizationHtml = `<p>${n} = 1</p>`;
+                } else {
+                    factorizationHtml = `<p>${n} = `;
+                    factorEntries.forEach(([p, exp], index) => {
+                        factorizationHtml += `${p}^${exp}`;
+                        if (index < factorEntries.length - 1) {
+                            factorizationHtml += ' × ';
+                        }
+                    });
+                    factorizationHtml += `</p>`;
+                }
+                
+                primeFactorization.innerHTML = factorizationHtml;
+                
+                // 计算约数个数
+                let count = 1;
+                for (const [p, exp] of factorEntries) {
+                    count *= (exp + 1);
+                }
+                
+                divisorCount.innerHTML = `<p>约数个数：${count}</p>`;
+                
+                // 生成所有约数
+                let divisorList = [1];
+                for (const [p, exp] of factorEntries) {
+                    const tempDivisors = [];
+                    for (const d of divisorList) {
+                        let current = d;
+                        for (let e = 1; e <= exp; e++) {
+                            current *= p;
+                            tempDivisors.push(current);
+                        }
+                    }
+                    divisorList = divisorList.concat(tempDivisors);
+                }
+                
+                // 去重并排序
+                divisorList = [...new Set(divisorList)].sort((a, b) => a - b);
+                
+                // 显示约数
+                divisors.innerHTML = '';
+                divisorList.forEach(d => {
+                    const div = document.createElement('div');
+                    div.className = 'factor-item';
+                    div.textContent = d;
+                    divisors.appendChild(div);
+                });
+            });
+            
+            // 同余检查演示
+            const congruenceA = document.getElementById('congruence-a');
+            const congruenceB = document.getElementById('congruence-b');
+            const congruenceM = document.getElementById('congruence-m');
+            const congruenceCheck = document.getElementById('congruence-check');
+            const congruenceProcess = document.getElementById('congruence-process');
+            const congruenceResult = document.getElementById('congruence-result');
+            
+            congruenceCheck.addEventListener('click', function() {
+                const a = parseInt(congruenceA.value);
+                const b = parseInt(congruenceB.value);
+                const m = parseInt(congruenceM.value);
+                
+                if (isNaN(a) || isNaN(b) || isNaN(m) || m <= 0) {
+                    congruenceProcess.innerHTML = '<p class="text-red-500">请输入有效整数，模数必须为正整数</p>';
+                    return;
+                }
+                
+                // 计算余数
+                const remainderA = ((a % m) + m) % m; // 处理负数
+                const remainderB = ((b % m) + m) % m;
+                const isCongruent = remainderA === remainderB;
+                
+                // 显示过程
+                let processHtml = `<p>检查 ${a} ≡ ${b} (mod ${m}) 是否成立</p>`;
+                processHtml += `<p>${a} mod ${m} = ${remainderA}</p>`;
+                processHtml += `<p>${b} mod ${m} = ${remainderB}</p>`;
+                
+                congruenceProcess.innerHTML = processHtml;
+                congruenceResult.textContent = isCongruent ? 
+                    `${a} ≡ ${b} (mod ${m}) 成立` : 
+                    `${a} ≡ ${b} (mod ${m}) 不成立`;
+                congruenceResult.className = isCongruent ? 
+                    'mt-2 font-medium text-center text-green-600' : 
+                    'mt-2 font-medium text-center text-red-600';
+                congruenceResult.classList.remove('hidden');
+            });
+            
+            // 例题1交互
+            const primeOptions = [
+                document.getElementById('prime-option-1'),
+                document.getElementById('prime-option-2'),
+                document.getElementById('prime-option-3'),
+                document.getElementById('prime-option-4')
+            ];
+            const primeExplanation = document.getElementById('prime-explanation');
+            
+            primeOptions.forEach((option, index) => {
+                option.addEventListener('click', function() {
+                    primeOptions.forEach(opt => {
+                        opt.className = 'border border-gray-200 rounded p-3 text-center cursor-pointer hover:border-primary transition-colors';
+                    });
+                    
+                    this.className = index === 2 ? 
+                        'border border-green-500 bg-green-50 rounded p-3 text-center cursor-pointer transition-colors' : 
+                        'border border-red-500 bg-red-50 rounded p-3 text-center cursor-pointer transition-colors';
+                    
+                    primeExplanation.classList.remove('hidden');
+                });
+            });
+            
+            // 例题2交互
+            const gcdExampleSolve = document.getElementById('gcd-example-solve');
+            const gcdExampleExplanation = document.getElementById('gcd-example-explanation');
+            
+            gcdExampleSolve.addEventListener('click', function() {
+                gcdExampleExplanation.classList.toggle('hidden');
+            });
+            
+            // 例题3交互
+            const divisorCountExampleSolve = document.getElementById('divisor-count-example-solve');
+            const divisorCountExampleExplanation = document.getElementById('divisor-count-example-explanation');
+            
+            divisorCountExampleSolve.addEventListener('click', function() {
+                divisorCountExampleExplanation.classList.toggle('hidden');
+            });
+            
+            // 例题4交互
+            const congruenceExampleSolve = document.getElementById('congruence-example-solve');
+            const congruenceExampleExplanation = document.getElementById('congruence-example-explanation');
+            
+            congruenceExampleSolve.addEventListener('click', function() {
+                congruenceExampleExplanation.classList.toggle('hidden');
+            });
+        });
+    </script>
+</body>
+</html>

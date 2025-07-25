@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数论算法 - CSP初赛专题 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6', // 主色调：蓝色
+                        secondary: '#10B981', // 辅助色：绿色
+                        numbertheory: '#8B5CF6', // 数论主题色：紫色
+                        syntax: '#F59E0B', // 语法部分：橙色
+                        algorithm: '#2563EB', // 算法部分：深蓝色
+                        datastructure: '#EC4899', // 数据结构部分：粉色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .numbertheory-bg {
+                @apply bg-gradient-to-r from-numbertheory/5 to-numbertheory/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .numbertheory-header {
+                @apply font-bold text-numbertheory mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-numbertheory bg-numbertheory/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-numbertheory text-white text-center mr-2 text-xs;
+            }
+            .algorithm-step {
+                @apply border-2 border-gray-200 rounded-md p-3 mb-3 bg-gray-50 transition-all duration-500;
+            }
+            .algorithm-step-active {
+                @apply border-numbertheory bg-numbertheory/10 transform scale-[1.01];
+            }
+            .math-expression {
+                @apply text-center my-4 text-lg font-medium;
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-numbertheory h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .factor-item {
+                @apply inline-block bg-numbertheory/10 text-numbertheory px-3 py-1 rounded-full text-sm mr-2 mb-2;
+            }
+            .prime-highlight {
+                @apply bg-secondary/10 text-secondary font-medium;
+            }
+            .problem-card {
+                @apply border border-gray-200 rounded-lg p-4 hover:border-numbertheory/50 transition-all duration-300;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-calculator text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索数论、算法..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索数论、算法..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">CSP初赛</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">算法基础</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-numbertheory font-medium">数论算法</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="numbertheory-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-numbertheory mb-2">数论算法</h1>
+                    <p class="text-gray-700">
+                        数论是信息学奥赛的重要组成部分，本页面将讲解CSP初赛常考的数论算法：
+                        辗转相除法、素数判定和分解质因数，帮助你掌握核心知识点和解题技巧。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concepts" class="bg-numbertheory hover:bg-numbertheory/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#examples" class="bg-white border border-numbertheory text-numbertheory hover:bg-numbertheory/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看例题
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 数论算法概念 -->
+        <section id="concepts" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-numbertheory mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 数论算法核心概念
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- 辗转相除法 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="inline-block w-8 h-8 rounded-full bg-numbertheory text-white text-center mr-2">1</span>
+                        辗转相除法（最大公约数）
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">定义</h4>
+                            <p class="text-gray-700">
+                                辗转相除法（Euclidean algorithm）是求两个正整数的最大公约数（GCD）的高效算法。
+                                最大公约数指两个或多个整数共有约数中最大的一个。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">原理</h4>
+                            <p class="text-gray-700 mb-2">
+                                对于两个正整数a和b（a > b），它们的最大公约数等于a除以b的余数r和b之间的最大公约数，即：
+                            </p>
+                            <div class="math-expression">
+                                gcd(a, b) = gcd(b, a % b)
+                            </div>
+                            <p class="text-gray-700">
+                                当余数r为0时，当前的b就是最大公约数。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">C++实现代码</h4>
+                            <pre class="code-block"><code class="language-cpp">// 递归实现
+int gcd(int a, int b) {
+    if (b == 0) return a;  // 基本情况：余数为0时，a为最大公约数
+    return gcd(b, a % b);  // 递归调用：gcd(a,b) = gcd(b,a%b)
+}
+
+// 迭代实现（更高效，避免栈溢出）
+int gcd_iterative(int a, int b) {
+    while (b != 0) {
+        int temp = a % b;
+        a = b;
+        b = temp;
+    }
+    return a;
+}</code></pre>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">最小公倍数（LCM）</h4>
+                            <p class="text-gray-700 mb-2">
+                                利用最大公约数可以快速计算最小公倍数：两个数的乘积等于这两个数的最大公约数与最小公倍数的乘积。
+                            </p>
+                            <div class="math-expression">
+                                lcm(a, b) = (a * b) / gcd(a, b)
+                            </div>
+                            <pre class="code-block"><code class="language-cpp">int lcm(int a, int b) {
+    return a / gcd(a, b) * b;  // 先除后乘，避免溢出
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 素数判定 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="inline-block w-8 h-8 rounded-full bg-numbertheory text-white text-center mr-2">2</span>
+                        素数判定
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">定义</h4>
+                            <p class="text-gray-700">
+                                素数（Prime number）是指在大于1的自然数中，除了1和它本身以外不再有其他因数的自然数。
+                                否则称为合数。1既不是素数也不是合数。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">判定算法</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <h5 class="font-medium">基础判定法</h5>
+                                    <p class="text-gray-700 mb-2">
+                                        检查从2到n-1之间是否有能整除n的数，如果没有则n是素数。
+                                    </p>
+                                    <pre class="code-block"><code class="language-cpp">bool is_prime_basic(int n) {
+    if (n <= 1) return false;  // 小于等于1的数不是素数
+    if (n == 2) return true;   // 2是素数
+    if (n % 2 == 0) return false;  // 偶数不是素数
+    
+    for (int i = 3; i < n; i += 2) {  // 只检查奇数
+        if (n % i == 0) return false;
+    }
+    return true;
+}</code></pre>
+                                </div>
+                                
+                                <div>
+                                    <h5 class="font-medium">优化判定法</h5>
+                                    <p class="text-gray-700 mb-2">
+                                        一个数n的因子不会超过√n，因此只需检查到√n即可。
+                                    </p>
+                                    <pre class="code-block"><code class="language-cpp">bool is_prime(int n) {
+    if (n <= 1) return false;
+    if (n == 2) return true;
+    if (n % 2 == 0) return false;
+    
+    // 只需检查到sqrt(n)
+    for (int i = 3; i * i <= n; i += 2) {
+        if (n % i == 0) return false;
+    }
+    return true;
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分解质因数 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <span class="inline-block w-8 h-8 rounded-full bg-numbertheory text-white text-center mr-2">3</span>
+                        分解质因数
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">定义</h4>
+                            <p class="text-gray-700">
+                                质因数分解是将一个正整数分解成若干个质数相乘的形式。
+                                例如：12 = 2<sup>2</sup> × 3<sup>1</sup>。
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-lg mb-2">分解算法</h4>
+                            <p class="text-gray-700 mb-2">
+                                从最小的质数开始尝试整除n，记录每个质数的指数，直到n被完全分解。
+                            </p>
+                            <pre class="code-block"><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;utility&gt;  // for pair
+
+// 返回质因数及其指数的列表
+vector&lt;pair<int, int&gt;&gt; factorize(int n) {
+    vector&lt;pair<int, int&gt;&gt; factors;
+    
+    // 处理2的情况
+    if (n % 2 == 0) {
+        int cnt = 0;
+        while (n % 2 == 0) {
+            cnt++;
+            n /= 2;
+        }
+        factors.emplace_back(2, cnt);
+    }
+    
+    // 处理奇数的情况
+    for (int i = 3; i * i <= n; i += 2) {
+        if (n % i == 0) {
+            int cnt = 0;
+            while (n % i == 0) {
+                cnt++;
+                n /= i;
+            }
+            factors.emplace_back(i, cnt);
+        }
+    }
+    
+    // 如果剩下的n是一个大于2的质数
+    if (n > 1) {
+        factors.emplace_back(n, 1);
+    }
+    
+    return factors;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 动态演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-numbertheory mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> 算法动态演示
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- 辗转相除法演示 -->
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-4">辗转相除法（求最大公约数）</h3>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                演示求两个数的最大公约数的过程，每一步显示当前的a和b的值以及计算过程。
+                            </p>
+                            
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">输入a值:</label>
+                                    <input type="number" id="gcd-a" value="84" min="1" 
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-numbertheory">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">输入b值:</label>
+                                    <input type="number" id="gcd-b" value="30" min="1" 
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-numbertheory">
+                                </div>
+                            </div>
+                            
+                            <div class="animation-controls">
+                                <button id="gcd-run" class="bg-numbertheory hover:bg-numbertheory/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行演示
+                                </button>
+                                <button id="gcd-step" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-step-forward mr-2"></i> 单步执行
+                                </button>
+                                <button id="gcd-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="gcd-result" class="mt-4 p-3 bg-gray-100 rounded-md hidden">
+                                <p class="font-medium">计算结果：</p>
+                                <p id="gcd-result-text" class="text-numbertheory font-semibold"></p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="gcd-steps">
+                                <div class="text-center text-gray-500 py-8">
+                                    <i class="fa fa-calculator mb-2"></i>
+                                    <p>点击"运行演示"或"单步执行"开始</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 素数判定演示 -->
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-4">素数判定演示</h3>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                演示判定一个数是否为素数的过程，显示每一步的检查情况。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">输入要判定的数n:</label>
+                                <input type="number" id="prime-n" value="97" min="1" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-numbertheory">
+                            </div>
+                            
+                            <div class="animation-controls">
+                                <button id="prime-run" class="bg-numbertheory hover:bg-numbertheory/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行演示
+                                </button>
+                                <button id="prime-step" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-step-forward mr-2"></i> 单步执行
+                                </button>
+                                <button id="prime-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="prime-result" class="mt-4 p-3 bg-gray-100 rounded-md hidden">
+                                <p id="prime-result-text" class="font-semibold"></p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="prime-steps">
+                                <div class="text-center text-gray-500 py-8">
+                                    <i class="fa fa-check-square-o mb-2"></i>
+                                    <p>点击"运行演示"或"单步执行"开始</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分解质因数演示 -->
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-4">分解质因数演示</h3>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                演示将一个数分解为质因数乘积的过程，显示每一步的分解情况。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">输入要分解的数n:</label>
+                                <input type="number" id="factor-n" value="120" min="2" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-numbertheory">
+                            </div>
+                            
+                            <div class="animation-controls">
+                                <button id="factor-run" class="bg-numbertheory hover:bg-numbertheory/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-play mr-2"></i> 运行演示
+                                </button>
+                                <button id="factor-step" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-step-forward mr-2"></i> 单步执行
+                                </button>
+                                <button id="factor-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="factor-result" class="mt-4 p-3 bg-gray-100 rounded-md hidden">
+                                <p class="font-medium">分解结果：</p>
+                                <p id="factor-result-text" class="text-numbertheory font-semibold"></p>
+                                <div id="factor-visualization" class="mt-2 flex flex-wrap"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="factor-steps">
+                                <div class="text-center text-gray-500 py-8">
+                                    <i class="fa fa-puzzle-piece mb-2"></i>
+                                    <p>点击"运行演示"或"单步执行"开始</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 解题技巧 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-numbertheory mb-6 flex items-center">
+                <i class="fa fa-lightbulb-o mr-2"></i> 解题技巧与注意事项
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">辗转相除法应用技巧</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>计算多个数的最大公约数时，可依次两两计算：gcd(a,b,c) = gcd(gcd(a,b),c)</li>
+                        <li>利用gcd求lcm时，先做除法再做乘法，避免整数溢出：lcm(a,b) = a / gcd(a,b) * b</li>
+                        <li>若需要频繁计算gcd，优先使用迭代版本，避免递归深度过大导致栈溢出</li>
+                        <li>判断两个数是否互质：若gcd(a,b) = 1，则a和b互质</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">素数判定优化技巧</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>小于等于1的数一定不是素数，2是唯一的偶素数</li>
+                        <li>对于大数判定，先检查是否为偶数，再只检查奇数除数</li>
+                        <li>除数只需检查到√n，因为如果n有一个大于√n的因子，那么它一定有一个小于√n的对应因子</li>
+                        <li>对于多次判定素数的场景，可以预处理素数表（筛法）</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">质因数分解技巧</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>分解时从最小的质数开始，先处理2，再处理奇数</li>
+                        <li>每找到一个质因数，就将其所有幂次都提取出来</li>
+                        <li>分解完成后若剩余的n大于1，则它本身也是一个质因数</li>
+                        <li>利用质因数分解可以快速求约数个数：将每个质因数的指数加1后相乘</li>
+                        <li>利用质因数分解可以求最大公约数和最小公倍数：
+                            <ul class="list-circle pl-6 mt-1">
+                                <li>gcd：取各质因数的最小指数</li>
+                                <li>lcm：取各质因数的最大指数</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">CSP初赛常见考点</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>计算最大公约数和最小公倍数</li>
+                        <li>判断一个数是否为素数</li>
+                        <li>质因数分解及应用（如求约数个数）</li>
+                        <li>数论相关的选择题和填空题</li>
+                        <li>利用数论知识优化算法效率</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 例题解析 -->
+        <section id="examples" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-numbertheory mb-6 flex items-center">
+                <i class="fa fa-pencil mr-2"></i> 数论算法例题解析
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- 例题1 -->
+                <div class="problem-card">
+                    <h3 class="font-semibold text-lg mb-3">例题1：最大公约数计算</h3>
+                    <div class="bg-gray-50 p-3 rounded-md mb-4">
+                        <p class="text-gray-700">
+                            【问题】计算48和18的最大公约数，并写出计算过程。
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <h4 class="font-medium">解答步骤：</h4>
+                        <div class="pl-4 border-l-2 border-numbertheory/30">
+                            <p>使用辗转相除法：</p>
+                            <p class="my-1">gcd(48, 18) = gcd(18, 48 % 18) = gcd(18, 12)</p>
+                            <p class="my-1">gcd(18, 12) = gcd(12, 18 % 12) = gcd(12, 6)</p>
+                            <p class="my-1">gcd(12, 6) = gcd(6, 12 % 6) = gcd(6, 0)</p>
+                            <p class="my-1">当余数为0时，当前的除数6就是最大公约数</p>
+                            <p class="font-medium mt-2">答案：6</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 例题2 -->
+                <div class="problem-card">
+                    <h3 class="font-semibold text-lg mb-3">例题2：素数判定</h3>
+                    <div class="bg-gray-50 p-3 rounded-md mb-4">
+                        <p class="text-gray-700">
+                            【问题】判断101是否为素数，并说明理由。
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <h4 class="font-medium">解答步骤：</h4>
+                        <div class="pl-4 border-l-2 border-numbertheory/30">
+                            <p>1. 101大于1</p>
+                            <p>2. 101是奇数，不能被2整除</p>
+                            <p>3. 计算√101 ≈ 10.05，因此只需检查到10</p>
+                            <p>4. 检查3到10之间的奇数：3、5、7、9</p>
+                            <p>   - 101 ÷ 3 = 33余2，不能整除</p>
+                            <p>   - 101 ÷ 5 = 20余1，不能整除</p>
+                            <p>   - 101 ÷ 7 = 14余3，不能整除</p>
+                            <p>   - 101 ÷ 9 = 11余2，不能整除</p>
+                            <p>5. 没有找到能整除101的数，因此101是素数</p>
+                            <p class="font-medium mt-2">答案：101是素数</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 例题3 -->
+                <div class="problem-card">
+                    <h3 class="font-semibold text-lg mb-3">例题3：质因数分解</h3>
+                    <div class="bg-gray-50 p-3 rounded-md mb-4">
+                        <p class="text-gray-700">
+                            【问题】将252分解为质因数的乘积形式。
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <h4 class="font-medium">解答步骤：</h4>
+                        <div class="pl-4 border-l-2 border-numbertheory/30">
+                            <p>1. 252是偶数，除以2：252 = 2 × 126</p>
+                            <p>2. 126是偶数，除以2：252 = 2² × 63</p>
+                            <p>3. 63能被3整除：252 = 2² × 3 × 21</p>
+                            <p>4. 21能被3整除：252 = 2² × 3² × 7</p>
+                            <p>5. 7是素数，分解完成</p>
+                            <p class="font-medium mt-2">答案：252 = 2² × 3² × 7</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 例题4 -->
+                <div class="problem-card">
+                    <h3 class="font-semibold text-lg mb-3">例题4：综合应用</h3>
+                    <div class="bg-gray-50 p-3 rounded-md mb-4">
+                        <p class="text-gray-700">
+                            【问题】已知两个数的最大公约数是6，最小公倍数是36，求这两个数。
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <h4 class="font-medium">解答步骤：</h4>
+                        <div class="pl-4 border-l-2 border-numbertheory/30">
+                            <p>1. 设这两个数为a和b，已知gcd(a,b)=6，lcm(a,b)=36</p>
+                            <p>2. 根据公式：a × b = gcd(a,b) × lcm(a,b) = 6 × 36 = 216</p>
+                            <p>3. 设a = 6m，b = 6n，其中m和n互质（gcd(m,n)=1）</p>
+                            <p>4. 则：6m × 6n = 216 → 36mn = 216 → mn = 6</p>
+                            <p>5. 寻找互质的m和n，使mn=6：</p>
+                            <p>   - m=1，n=6（gcd(1,6)=1，符合条件）</p>
+                            <p>   - m=2，n=3（gcd(2,3)=1，符合条件）</p>
+                            <p>6. 因此，这两个数为：</p>
+                            <p>   - 6×1=6 和 6×6=36</p>
+                            <p>   - 6×2=12 和 6×3=18</p>
+                            <p class="font-medium mt-2">答案：6和36，或12和18</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 洛谷推荐题目 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">洛谷推荐练习题目</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1029 最大公约数和最小公倍数问题</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                输入两个正整数x0,y0，求出满足下列条件的P,Q的个数：
+                                1. P,Q是正整数
+                                2. P和Q的最大公约数是x0
+                                3. P和Q的最小公倍数是y0
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1029" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P3383 线性筛素数</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                如题，给定一个范围N，你需要处理M个查询，
+                                每个查询给定一个数X，判断它是否为质数。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P3383" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P1075 质因数分解</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                已知正整数n是两个不同的质数的乘积，试求出两者中较大的那个质数。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P1075" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">P2613 整数分解</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                给出一个正整数n，求将n写成若干个连续正整数之和的方案数。
+                            </p>
+                            <a href="https://www.luogu.com.cn/problem/P2613" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <i class="fa fa-external-link mr-1"></i> 查看题目
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white border-t border-gray-200 py-6">
+        <div class="container mx-auto px-4">
+            <div class="text-center text-gray-600 text-sm">
+                <p>© 2023 姚老师信奥网 - 专注于信息学奥赛培训</p>
+                <p class="mt-2">数论算法专题页面 - CSP初赛备考资料</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化代码高亮
+        hljs.highlightAll();
+        
+        // 辗转相除法演示逻辑
+        let gcdStepIndex = 0;
+        let gcdStepsData = [];
+        
+        document.getElementById('gcd-run').addEventListener('click', function() {
+            runGcdDemo(true);
+        });
+        
+        document.getElementById('gcd-step').addEventListener('click', function() {
+            runGcdDemo(false);
+        });
+        
+        document.getElementById('gcd-reset').addEventListener('click', function() {
+            resetGcdDemo();
+        });
+        
+        function resetGcdDemo() {
+            gcdStepIndex = 0;
+            gcdStepsData = [];
+            document.getElementById('gcd-steps').innerHTML = `
+                <div class="text-center text-gray-500 py-8">
+                    <i class="fa fa-calculator mb-2"></i>
+                    <p>点击"运行演示"或"单步执行"开始</p>
+                </div>
+            `;
+            document.getElementById('gcd-result').classList.add('hidden');
+        }
+        
+        function runGcdDemo(autoRun) {
+            const a = parseInt(document.getElementById('gcd-a').value);
+            const b = parseInt(document.getElementById('gcd-b').value);
+            
+            if (isNaN(a) || isNaN(b) || a < 1 || b < 1) {
+                alert('请输入有效的正整数');
+                return;
+            }
+            
+            if (gcdStepsData.length === 0) {
+                // 生成步骤数据
+                let x = a, y = b;
+                while (y !== 0) {
+                    const remainder = x % y;
+                    gcdStepsData.push({
+                        a: x,
+                        b: y,
+                        remainder: remainder,
+                        step: `gcd(${x}, ${y}) = gcd(${y}, ${remainder})`
+                    });
+                    x = y;
+                    y = remainder;
+                }
+                gcdStepsData.push({
+                    a: x,
+                    b: y,
+                    remainder: 0,
+                    step: `当余数为0时，最大公约数是 ${x}`
+                });
+            }
+            
+            const stepsContainer = document.getElementById('gcd-steps');
+            stepsContainer.innerHTML = '';
+            
+            // 显示到当前步骤
+            for (let i = 0; i <= gcdStepIndex; i++) {
+                const step = gcdStepsData[i];
+                const stepElement = document.createElement('div');
+                stepElement.className = i === gcdStepIndex ? 'algorithm-step algorithm-step-active' : 'algorithm-step';
+                stepElement.innerHTML = `<p>${step.step}</p>`;
+                stepsContainer.appendChild(stepElement);
+            }
+            
+            // 检查是否完成
+            if (gcdStepIndex === gcdStepsData.length - 1) {
+                // 显示结果
+                document.getElementById('gcd-result-text').textContent = `gcd(${a}, ${b}) = ${gcdStepsData[gcdStepsData.length - 1].a}`;
+                document.getElementById('gcd-result').classList.remove('hidden');
+                return;
+            }
+            
+            // 继续下一步
+            gcdStepIndex++;
+            
+            // 如果是自动运行，继续执行
+            if (autoRun) {
+                setTimeout(() => runGcdDemo(true), 1000);
+            }
+        }
+        
+        // 素数判定演示逻辑
+        let primeStepIndex = 0;
+        let primeStepsData = [];
+        
+        document.getElementById('prime-run').addEventListener('click', function() {
+            runPrimeDemo(true);
+        });
+        
+        document.getElementById('prime-step').addEventListener('click', function() {
+            runPrimeDemo(false);
+        });
+        
+        document.getElementById('prime-reset').addEventListener('click', function() {
+            resetPrimeDemo();
+        });
+        
+        function resetPrimeDemo() {
+            primeStepIndex = 0;
+            primeStepsData = [];
+            document.getElementById('prime-steps').innerHTML = `
+                <div class="text-center text-gray-500 py-8">
+                    <i class="fa fa-check-square-o mb-2"></i>
+                    <p>点击"运行演示"或"单步执行"开始</p>
+                </div>
+            `;
+            document.getElementById('prime-result').classList.add('hidden');
+        }
+        
+        function runPrimeDemo(autoRun) {
+            const n = parseInt(document.getElementById('prime-n').value);
+            
+            if (isNaN(n) || n < 1) {
+                alert('请输入有效的正整数');
+                return;
+            }
+            
+            if (primeStepsData.length === 0) {
+                // 生成步骤数据
+                primeStepsData = [];
+                
+                if (n <= 1) {
+                    primeStepsData.push({
+                        step: `${n} ≤ 1，不是素数`,
+                        isPrime: false
+                    });
+                } else if (n === 2) {
+                    primeStepsData.push({
+                        step: `${n} 是2，是素数`,
+                        isPrime: true
+                    });
+                } else if (n % 2 === 0) {
+                    primeStepsData.push({
+                        step: `${n} 是偶数，不是素数`,
+                        isPrime: false
+                    });
+                } else {
+                    primeStepsData.push({
+                        step: `${n} 是大于2的奇数，开始检查是否有其他因子`,
+                        isPrime: null
+                    });
+                    
+                    const sqrtN = Math.sqrt(n);
+                    primeStepsData.push({
+                        step: `计算√${n} ≈ ${sqrtN.toFixed(2)}，只需检查到${Math.floor(sqrtN)}`,
+                        isPrime: null
+                    });
+                    
+                    let isPrime = true;
+                    for (let i = 3; i * i <= n; i += 2) {
+                        if (n % i === 0) {
+                            primeStepsData.push({
+                                step: `${n} ÷ ${i} = ${Math.floor(n / i)} 余 ${n % i}，能被${i}整除，不是素数`,
+                                isPrime: false
+                            });
+                            isPrime = false;
+                            break;
+                        } else {
+                            primeStepsData.push({
+                                step: `${n} ÷ ${i} = ${Math.floor(n / i)} 余 ${n % i}，不能被${i}整除`,
+                                isPrime: null
+                            });
+                        }
+                    }
+                    
+                    if (isPrime) {
+                        primeStepsData.push({
+                            step: `没有找到能整除${n}的数，${n}是素数`,
+                            isPrime: true
+                        });
+                    }
+                }
+            }
+            
+            const stepsContainer = document.getElementById('prime-steps');
+            stepsContainer.innerHTML = '';
+            
+            // 显示到当前步骤
+            for (let i = 0; i <= primeStepIndex; i++) {
+                const step = primeStepsData[i];
+                const stepElement = document.createElement('div');
+                stepElement.className = i === primeStepIndex ? 'algorithm-step algorithm-step-active' : 'algorithm-step';
+                
+                if (step.isPrime === true) {
+                    stepElement.innerHTML = `<p class="text-secondary">${step.step}</p>`;
+                } else if (step.isPrime === false) {
+                    stepElement.innerHTML = `<p class="text-red-500">${step.step}</p>`;
+                } else {
+                    stepElement.innerHTML = `<p>${step.step}</p>`;
+                }
+                
+                stepsContainer.appendChild(stepElement);
+            }
+            
+            // 检查是否完成
+            if (primeStepIndex === primeStepsData.length - 1) {
+                // 显示结果
+                const resultText = document.getElementById('prime-result-text');
+                const isPrime = primeStepsData[primeStepsData.length - 1].isPrime;
+                
+                if (isPrime) {
+                    resultText.textContent = `${n} 是素数`;
+                    resultText.className = 'font-semibold text-secondary';
+                } else {
+                    resultText.textContent = `${n} 不是素数`;
+                    resultText.className = 'font-semibold text-red-500';
+                }
+                
+                document.getElementById('prime-result').classList.remove('hidden');
+                return;
+            }
+            
+            // 继续下一步
+            primeStepIndex++;
+            
+            // 如果是自动运行，继续执行
+            if (autoRun) {
+                setTimeout(() => runPrimeDemo(true), 800);
+            }
+        }
+        
+        // 分解质因数演示逻辑
+        let factorStepIndex = 0;
+        let factorStepsData = [];
+        let factorsResult = [];
+        
+        document.getElementById('factor-run').addEventListener('click', function() {
+            runFactorDemo(true);
+        });
+        
+        document.getElementById('factor-step').addEventListener('click', function() {
+            runFactorDemo(false);
+        });
+        
+        document.getElementById('factor-reset').addEventListener('click', function() {
+            resetFactorDemo();
+        });
+        
+        function resetFactorDemo() {
+            factorStepIndex = 0;
+            factorStepsData = [];
+            factorsResult = [];
+            document.getElementById('factor-steps').innerHTML = `
+                <div class="text-center text-gray-500 py-8">
+                    <i class="fa fa-puzzle-piece mb-2"></i>
+                    <p>点击"运行演示"或"单步执行"开始</p>
+                </div>
+            `;
+            document.getElementById('factor-result').classList.add('hidden');
+            document.getElementById('factor-visualization').innerHTML = '';
+        }
+        
+        function runFactorDemo(autoRun) {
+            const n = parseInt(document.getElementById('factor-n').value);
+            
+            if (isNaN(n) || n < 2) {
+                alert('请输入大于等于2的整数');
+                return;
+            }
+            
+            if (factorStepsData.length === 0) {
+                // 生成步骤数据
+                factorStepsData = [];
+                factorsResult = [];
+                let num = n;
+                
+                factorStepsData.push({
+                    step: `开始分解 ${num}`,
+                    currentNum: num,
+                    factors: []
+                });
+                
+                // 处理2的情况
+                if (num % 2 === 0) {
+                    let count = 0;
+                    while (num % 2 === 0) {
+                        count++;
+                        const prevNum = num;
+                        num = num / 2;
+                        factorStepsData.push({
+                            step: `${prevNum} ÷ 2 = ${num}`,
+                            currentNum: num,
+                            factors: [{p: 2, e: count}]
+                        });
+                    }
+                    factorsResult.push({p: 2, e: count});
+                } else {
+                    factorStepsData.push({
+                        step: `${num} 不能被2整除`,
+                        currentNum: num,
+                        factors: []
+                    });
+                }
+                
+                // 处理奇数的情况
+                for (let i = 3; i * i <= num; i += 2) {
+                    if (num % i === 0) {
+                        let count = 0;
+                        while (num % i === 0) {
+                            count++;
+                            const prevNum = num;
+                            num = num / i;
+                            // 更新当前因子列表
+                            const currentFactors = [...factorsResult];
+                            currentFactors.push({p: i, e: count});
+                            factorStepsData.push({
+                                step: `${prevNum} ÷ ${i} = ${num}`,
+                                currentNum: num,
+                                factors: currentFactors
+                            });
+                        }
+                        factorsResult.push({p: i, e: count});
+                    }
+                }
+                
+                // 如果剩下的数是一个大于2的质数
+                if (num > 1) {
+                    factorsResult.push({p: num, e: 1});
+                    factorStepsData.push({
+                        step: `${num} 是一个质数`,
+                        currentNum: num,
+                        factors: factorsResult
+                    });
+                }
+                
+                // 生成最终结果
+                let resultStr = `${n} = `;
+                for (let i = 0; i < factorsResult.length; i++) {
+                    const f = factorsResult[i];
+                    resultStr += `${f.p}`;
+                    if (f.e > 1) {
+                        resultStr += `<sup>${f.e}</sup>`;
+                    }
+                    if (i < factorsResult.length - 1) {
+                        resultStr += ' × ';
+                    }
+                }
+                
+                factorStepsData.push({
+                    step: `分解完成: ${resultStr}`,
+                    currentNum: 1,
+                    factors: factorsResult
+                });
+            }
+            
+            const stepsContainer = document.getElementById('factor-steps');
+            stepsContainer.innerHTML = '';
+            
+            // 显示到当前步骤
+            for (let i = 0; i <= factorStepIndex; i++) {
+                const step = factorStepsData[i];
+                const stepElement = document.createElement('div');
+                stepElement.className = i === factorStepIndex ? 'algorithm-step algorithm-step-active' : 'algorithm-step';
+                
+                let factorsHtml = '';
+                if (step.factors.length > 0) {
+                    factorsHtml = '<div class="mt-1">已找到的质因数：';
+                    for (const f of step.factors) {
+                        factorsHtml += `<span class="factor-item">${f.p}<sup>${f.e}</sup></span>`;
+                    }
+                    factorsHtml += '</div>';
+                }
+                
+                stepElement.innerHTML = `<p>${step.step}</p>${factorsHtml}`;
+                stepsContainer.appendChild(stepElement);
+            }
+            
+            // 检查是否完成
+            if (factorStepIndex === factorStepsData.length - 1) {
+                // 显示结果
+                let resultText = `${n} = `;
+                for (let i = 0; i < factorsResult.length; i++) {
+                    const f = factorsResult[i];
+                    resultText += `${f.p}`;
+                    if (f.e > 1) {
+                        resultText += `<sup>${f.e}</sup>`;
+                    }
+                    if (i < factorsResult.length - 1) {
+                        resultText += ' × ';
+                    }
+                }
+                
+                document.getElementById('factor-result-text').innerHTML = resultText;
+                
+                // 可视化质因数
+                const visualization = document.getElementById('factor-visualization');
+                visualization.innerHTML = '';
+                for (const f of factorsResult) {
+                    const factorElement = document.createElement('div');
+                    factorElement.className = 'factor-item';
+                    factorElement.innerHTML = `${f.p}<sup>${f.e}</sup>`;
+                    visualization.appendChild(factorElement);
+                }
+                
+                document.getElementById('factor-result').classList.remove('hidden');
+                return;
+            }
+            
+            // 继续下一步
+            factorStepIndex++;
+            
+            // 如果是自动运行，继续执行
+            if (autoRun) {
+                setTimeout(() => runFactorDemo(true), 1000);
+            }
+        }
+    </script>
+</body>
+</html>

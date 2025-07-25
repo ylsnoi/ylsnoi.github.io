@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图论基础 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        graph: '#2563EB', // 图论主题色：深蓝色
+                        syntax: '#FF9800', // 语法部分：橙色
+                        algorithm: '#2ECC71', // 算法部分：绿色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .graph-bg {
+                @apply bg-gradient-to-r from-graph/5 to-graph/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .subtopic-header {
+                @apply font-semibold text-secondary mb-3;
+            }
+            .graph-header {
+                @apply font-bold text-graph mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-graph bg-graph/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-graph text-white text-center mr-2 text-xs;
+            }
+            /* 图论演示相关样式 */
+            .graph-node {
+                @apply absolute w-10 h-10 rounded-full bg-white border-2 border-gray-300 text-gray-700 font-medium flex items-center justify-center transition-all duration-500 z-10 cursor-move;
+            }
+            .graph-node-active {
+                @apply bg-graph text-white border-graph transform scale-110;
+            }
+            .graph-node-visited {
+                @apply bg-green-500 text-white border-green-500;
+            }
+            .graph-node-current {
+                @apply bg-yellow-500 text-white border-yellow-500 transform scale-110;
+            }
+            .graph-edge {
+                @apply absolute bg-gray-300 z-0;
+            }
+            .graph-edge-active {
+                @apply bg-graph stroke-2;
+            }
+            .graph-container {
+                @apply relative border-2 border-gray-200 rounded-lg bg-gray-50 overflow-hidden;
+                height: 400px;
+            }
+            .adjacency-matrix {
+                @apply border-collapse w-full text-center;
+            }
+            .adjacency-matrix th, .adjacency-matrix td {
+                @apply border border-gray-300 p-2;
+            }
+            .adjacency-matrix th {
+                @apply bg-gray-100;
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-graph h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">CSP初赛</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">数据结构</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-graph font-medium">图论基础</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="graph-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-graph mb-2">图论基础</h1>
+                    <p class="text-gray-700">
+                        图论是信息学竞赛中的重要内容，包括图的基本概念、路径、连通性等核心知识。
+                        本页面将系统讲解CSP初赛所需的图论基础知识，帮助你掌握相关考点。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-graph hover:bg-graph/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#problems" class="bg-white border border-graph text-graph hover:bg-graph/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 查看例题
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图论基本概念 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-graph mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 图的基本概念
+            </h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">什么是图？</h3>
+                    <p class="text-gray-700 mb-4">
+                        图(Graph)是由顶点(Vertex)和边(Edge)组成的一种数据结构，用于表示物体之间的关系。在信息学中，图是解决复杂问题的重要工具。
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-2 text-graph">图的组成</h4>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li><strong>顶点(Vertex)</strong>：图中的基本元素，通常用字母或数字表示</li>
+                                <li><strong>边(Edge)</strong>：连接两个顶点的线，表示两个顶点之间的关系</li>
+                                <li><strong>顶点的度(Degree)</strong>：与该顶点相连的边的数量</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2 text-graph">图的分类</h4>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li><strong>无向图</strong>：边没有方向，用无序对表示(u, v)</li>
+                                <li><strong>有向图</strong>：边有方向，用有序对表示&lt;u, v&gt;</li>
+                                <li><strong>加权图</strong>：边带有权重(数值)的图</li>
+                                <li><strong>无权图</strong>：边没有权重的图</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">图的存储方式</h3>
+                    <p class="text-gray-700 mb-4">在程序中，图通常有两种主要存储方式：</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2 text-graph">1. 邻接矩阵</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                使用二维数组存储图，arr[i][j]表示顶点i和顶点j之间是否有边。
+                                对于加权图，arr[i][j]存储边的权重。
+                            </p>
+                            <pre class="code-block text-xs"><code class="language-cpp">// 无向无权图的邻接矩阵表示
+const int MAXN = 100;
+int graph[MAXN][MAXN] = {0};
+
+// 添加边
+void addEdge(int u, int v) {
+    graph[u][v] = 1;  // 无向图对称
+    graph[v][u] = 1;
+}</code></pre>
+                            <div class="mt-2 text-sm text-gray-600">
+                                <p><strong>优点</strong>：查询边是否存在速度快(O(1))</p>
+                                <p><strong>缺点</strong>：空间复杂度高(O(n²))，适合稠密图</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2 text-graph">2. 邻接表</h4>
+                            <p class="text-gray-700 text-sm mb-3">
+                                使用链表或vector数组存储图，每个顶点对应一个列表，存储与它相邻的顶点。
+                            </p>
+                            <pre class="code-block text-xs"><code class="language-cpp">// 无向无权图的邻接表表示
+const int MAXN = 100;
+vector<int> graph[MAXN];
+
+// 添加边
+void addEdge(int u, int v) {
+    graph[u].push_back(v);  // 无向图双向添加
+    graph[v].push_back(u);
+}</code></pre>
+                            <div class="mt-2 text-sm text-gray-600">
+                                <p><strong>优点</strong>：空间复杂度低(O(n+e))，适合稀疏图</p>
+                                <p><strong>缺点</strong>：查询边是否存在速度慢(O(n))</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">路径与回路</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-2 text-graph">路径(Path)</h4>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>顶点序列v₀, v₁, ..., vₖ，其中每对相邻顶点都有边相连</li>
+                                <li><strong>简单路径</strong>：顶点不重复出现的路径</li>
+                                <li><strong>路径长度</strong>：路径中边的数量</li>
+                                <li><strong>最短路径</strong>：路径长度最小的路径</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2 text-graph">回路(Cycle)</h4>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>起点和终点相同的路径(v₀ = vₖ)</li>
+                                <li><strong>简单回路</strong>：除起点和终点外，其他顶点不重复</li>
+                                <li><strong>无环图</strong>：没有回路的图</li>
+                                <li><strong>欧拉图</strong>：存在经过每条边恰好一次的回路</li>
+                                <li><strong>哈密顿图</strong>：存在经过每个顶点恰好一次的回路</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">连通性</h3>
+                    <p class="text-gray-700 mb-4">连通性是图论中的核心概念，描述图中顶点之间的可达关系：</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-2 text-graph">无向图的连通性</h4>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li><strong>连通</strong>：两个顶点之间存在路径</li>
+                                <li><strong>连通图</strong>：任意两个顶点都连通的图</li>
+                                <li><strong>连通分量</strong>：图中的最大连通子图</li>
+                                <li><strong>割点</strong>：删除该顶点会增加连通分量数量的顶点</li>
+                                <li><strong>桥</strong>：删除该边会增加连通分量数量的边</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2 text-graph">有向图的连通性</h4>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li><strong>可达</strong>：从一个顶点到另一个顶点存在有向路径</li>
+                                <li><strong>强连通</strong>：两个顶点互相可达</li>
+                                <li><strong>强连通图</strong>：任意两个顶点都强连通的图</li>
+                                <li><strong>强连通分量</strong>：图中的最大强连通子图</li>
+                                <li><strong>弱连通</strong>：忽略边的方向后是连通的</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 图论动画演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-graph mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> 图论动态演示
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- 图的基本概念演示 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-4">图的基本概念可视化</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                下面展示了不同类型的图及其特性，点击按钮可切换不同的图类型。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">图类型:</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <button id="show-undefirected" class="bg-graph hover:bg-graph/90 text-white px-3 py-1 rounded-md transition-all text-sm">
+                                        无向图
+                                    </button>
+                                    <button id="show-directed" class="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded-md transition-all text-sm">
+                                        有向图
+                                    </button>
+                                    <button id="show-weighted" class="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded-md transition-all text-sm">
+                                        加权图
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div id="graph-info" class="animation-status">
+                                <p><strong>无向图</strong>：边没有方向，顶点A和B之间的边表示双向可达</p>
+                                <p>顶点的度：A(2), B(3), C(2), D(1)</p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div id="basic-graph" class="graph-container">
+                                <!-- 图将通过JavaScript动态生成 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 路径查找演示 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-4">路径查找演示</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                演示从起点到终点的路径查找过程，支持深度优先搜索(DFS)和广度优先搜索(BFS)两种算法。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">算法选择:</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <button id="use-dfs" class="bg-graph hover:bg-graph/90 text-white px-3 py-1 rounded-md transition-all text-sm">
+                                        深度优先搜索(DFS)
+                                    </button>
+                                    <button id="use-bfs" class="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded-md transition-all text-sm">
+                                        广度优先搜索(BFS)
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">选择起点和终点:</label>
+                                <div class="flex gap-4">
+                                    <div>
+                                        <label class="text-xs text-gray-500">起点</label>
+                                        <select id="start-node" class="border border-gray-300 rounded-md p-1 text-sm">
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="C">C</option>
+                                            <option value="D">D</option>
+                                            <option value="E">E</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-gray-500">终点</label>
+                                        <select id="end-node" class="border border-gray-300 rounded-md p-1 text-sm">
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="C">C</option>
+                                            <option value="D">D</option>
+                                            <option value="E" selected>E</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button id="find-path" class="bg-graph hover:bg-graph/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-search mr-2"></i> 查找路径
+                                </button>
+                                <button id="reset-path" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div class="animation-progress mt-4">
+                                <div id="path-progress" class="animation-progress-bar" style="width: 0%"></div>
+                            </div>
+                            
+                            <div class="animation-step bg-blue-50 text-blue-800 p-3 rounded-lg mt-4">
+                                <h4 class="font-medium mb-1">当前步骤说明</h4>
+                                <p id="path-step-info" class="text-sm">点击"查找路径"开始演示</p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div id="path-graph" class="graph-container">
+                                <!-- 图将通过JavaScript动态生成 -->
+                            </div>
+                            <div id="path-result" class="mt-3 p-3 bg-gray-50 rounded-lg hidden">
+                                <h4 class="font-medium mb-1">查找结果</h4>
+                                <p id="path-found" class="text-sm"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 连通分量演示 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-4">连通分量演示</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                演示图中连通分量的识别过程。连通分量是图中的最大连通子图，即子图中任意两个顶点都相互可达，且不与子图外的顶点连通。
+                            </p>
+                            
+                            <div class="flex space-x-2">
+                                <button id="find-components" class="bg-graph hover:bg-graph/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-sitemap mr-2"></i> 查找连通分量
+                                </button>
+                                <button id="reset-components" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div class="animation-status mt-4">
+                                <p id="components-info">点击"查找连通分量"开始演示</p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div id="components-graph" class="graph-container">
+                                <!-- 图将通过JavaScript动态生成 -->
+                            </div>
+                            <div id="components-result" class="mt-3 p-3 bg-gray-50 rounded-lg hidden">
+                                <h4 class="font-medium mb-1">连通分量统计</h4>
+                                <p id="components-count" class="text-sm"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 解题技巧 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-graph mb-6 flex items-center">
+                <i class="fa fa-lightbulb-o mr-2"></i> CSP初赛图论题解题技巧
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">基本概念题解题技巧</h3>
+                    <div class="space-y-4">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div>
+                                <p class="font-medium">明确图的类型</p>
+                                <p class="text-gray-700 text-sm mt-1">首先确定题目中的图是有向图还是无向图，是加权图还是无权图，这对后续分析至关重要。</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div>
+                                <p class="font-medium">理解顶点度的特性</p>
+                                <p class="text-gray-700 text-sm mt-1">无向图中所有顶点的度数之和是边数的2倍（握手定理）；有向图中入度之和等于出度之和。</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div>
+                                <p class="font-medium">掌握路径与回路的区别</p>
+                                <p class="text-gray-700 text-sm mt-1">注意简单路径与非简单路径的区别，以及欧拉图与哈密顿图的判定条件。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">连通性问题解题技巧</h3>
+                    <div class="space-y-4">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div>
+                                <p class="font-medium">区分无向图与有向图的连通性</p>
+                                <p class="text-gray-700 text-sm mt-1">无向图关注连通分量，有向图关注强连通分量和弱连通分量。</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div>
+                                <p class="font-medium">掌握连通分量的计数方法</p>
+                                <p class="text-gray-700 text-sm mt-1">可通过DFS或BFS遍历图，每开始一次新的遍历就表示发现一个新的连通分量。</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div>
+                                <p class="font-medium">理解割点与桥的特性</p>
+                                <p class="text-gray-700 text-sm mt-1">删除割点会增加连通分量数量，删除桥也会增加连通分量数量，这在图的可靠性分析中很重要。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">图的存储与遍历技巧</h3>
+                    <div class="space-y-4">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div>
+                                <p class="font-medium">选择合适的存储结构</p>
+                                <p class="text-gray-700 text-sm mt-1">稠密图适合用邻接矩阵，稀疏图适合用邻接表；需要频繁判断边是否存在时优先用邻接矩阵。</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div>
+                                <p class="font-medium">掌握DFS和BFS的应用场景</p>
+                                <p class="text-gray-700 text-sm mt-1">DFS适合检测环路、拓扑排序；BFS适合寻找最短路径（无权图）、层次遍历。</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div>
+                                <p class="font-medium">注意图遍历的时间复杂度</p>
+                                <p class="text-gray-700 text-sm mt-1">DFS和BFS的时间复杂度均为O(n+e)，其中n是顶点数，e是边数。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 例题解析 -->
+        <section id="problems" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-graph mb-6 flex items-center">
+                <i class="fa fa-puzzle-piece mr-2"></i> CSP初赛图论例题解析
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- 例题1 -->
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">例题1：基本概念题</h3>
+                    <div class="border-l-4 border-gray-300 pl-4 mb-4">
+                        <p class="italic text-gray-700">
+                            一个具有n个顶点的无向图，最少有____条边，最多有____条边。
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-medium text-graph">解题步骤：</h4>
+                            <ol class="list-decimal pl-6 space-y-2 mt-2">
+                                <li>无向图的边数范围需要考虑两种极端情况：最少边数和最多边数</li>
+                                <li>最少边数：当图是完全离散的（所有顶点都是孤立点），边数为0；但如果要求图连通，则最少边数为n-1（树结构）</li>
+                                <li>最多边数：当图是完全图时，每个顶点都与其他所有顶点相连，边数为n×(n-1)/2</li>
+                                <li>题目中没有说明图必须连通，因此最少边数为0</li>
+                            </ol>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-graph">答案总结：</h4>
+                            <p class="bg-white p-3 rounded border border-gray-200">
+                                一个具有n个顶点的无向图，最少有<strong>0</strong>条边，最多有<strong>n(n-1)/2</strong>条边。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 例题2 -->
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">例题2：路径与连通性</h3>
+                    <div class="border-l-4 border-gray-300 pl-4 mb-4">
+                        <p class="italic text-gray-700">
+                            对于一个有n个顶点的连通图，其边数至少为____，此时图的形状是____。若要保证图是连通的，至少需要____条边。
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-medium text-graph">解题步骤：</h4>
+                            <ol class="list-decimal pl-6 space-y-2 mt-2">
+                                <li>连通图是指任意两个顶点之间都有路径的图</li>
+                                <li>边数最少的连通图是树，树有n-1条边</li>
+                                <li>树的特点是：连通且无环，删除任何一条边都会使图变得不连通</li>
+                                <li>因此，要保证n个顶点的图是连通的，至少需要n-1条边</li>
+                            </ol>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-graph">答案总结：</h4>
+                            <p class="bg-white p-3 rounded border border-gray-200">
+                                对于一个有n个顶点的连通图，其边数至少为<strong>n-1</strong>，此时图的形状是<strong>树</strong>。若要保证图是连通的，至少需要<strong>n-1</strong>条边。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 例题3 -->
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">例题3：图的遍历</h3>
+                    <div class="border-l-4 border-gray-300 pl-4 mb-4">
+                        <p class="italic text-gray-700">
+                            对下图进行深度优先搜索（DFS），从顶点A开始，可能的访问顺序是？<br>
+                            （图：A与B、C相连，B与D相连，C与D相连）
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-medium text-graph">解题步骤：</h4>
+                            <ol class="list-decimal pl-6 space-y-2 mt-2">
+                                <li>DFS的特点是：访问一个顶点后，递归地深度优先访问其未访问的邻接点</li>
+                                <li>从A开始，首先访问A</li>
+                                <li>A的邻接点是B和C，假设先访问B（顺序可能不同，取决于存储顺序）</li>
+                                <li>访问B后，访问B的未访问邻接点D</li>
+                                <li>访问D后，其邻接点B和C中，C未访问，因此访问C</li>
+                                <li>所有顶点访问完毕，顺序为A→B→D→C</li>
+                                <li>如果A先访问C，则顺序可能为A→C→D→B</li>
+                            </ol>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-graph">答案总结：</h4>
+                            <p class="bg-white p-3 rounded border border-gray-200">
+                                可能的访问顺序是<strong>A→B→D→C</strong>或<strong>A→C→D→B</strong>（其他合理顺序也正确）。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 例题4 -->
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">例题4：连通分量</h3>
+                    <div class="border-l-4 border-gray-300 pl-4 mb-4">
+                        <p class="italic text-gray-700">
+                            一个无向图有8个顶点，若其中3个顶点构成一个连通分量，2个顶点构成另一个连通分量，其余顶点都是孤立点，则该图共有____个连通分量。
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-medium text-graph">解题步骤：</h4>
+                            <ol class="list-decimal pl-6 space-y-2 mt-2">
+                                <li>连通分量是图中的最大连通子图</li>
+                                <li>题目中已说明：3个顶点构成1个连通分量，2个顶点构成1个连通分量</li>
+                                <li>总共有8个顶点，剩余顶点数为8-3-2=3个</li>
+                                <li>每个孤立点都是一个连通分量（只有1个顶点），因此3个孤立点构成3个连通分量</li>
+                                <li>总连通分量数为1+1+3=5个</li>
+                            </ol>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium text-graph">答案总结：</h4>
+                            <p class="bg-white p-3 rounded border border-gray-200">
+                                该图共有<strong>5</strong>个连通分量。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        hljs.highlightAll();
+        
+        // 图论演示相关JavaScript代码
+        document.addEventListener('DOMContentLoaded', function() {
+            // 基本图演示
+            drawBasicGraph('undefirected');
+            
+            // 路径查找图初始化
+            initPathGraph();
+            
+            // 连通分量图初始化
+            initComponentsGraph();
+            
+            // 按钮事件绑定
+            document.getElementById('show-undefirected').addEventListener('click', function() {
+                setActiveButton(this);
+                drawBasicGraph('undefirected');
+                document.getElementById('graph-info').innerHTML = 
+                    '<p><strong>无向图</strong>：边没有方向，顶点A和B之间的边表示双向可达</p>' +
+                    '<p>顶点的度：A(2), B(3), C(2), D(1)</p>';
+            });
+            
+            document.getElementById('show-directed').addEventListener('click', function() {
+                setActiveButton(this);
+                drawBasicGraph('directed');
+                document.getElementById('graph-info').innerHTML = 
+                    '<p><strong>有向图</strong>：边有方向，箭头表示从起点到终点的可达性</p>' +
+                    '<p>顶点的度：A(出度1, 入度1), B(出度2, 入度1), C(出度0, 入度2), D(出度1, 入度0)</p>';
+            });
+            
+            document.getElementById('show-weighted').addEventListener('click', function() {
+                setActiveButton(this);
+                drawBasicGraph('weighted');
+                document.getElementById('graph-info').innerHTML = 
+                    '<p><strong>加权图</strong>：边带有权重，表示顶点之间关系的强度或代价</p>' +
+                    '<p>总权重：1+2+3+4=10</p>';
+            });
+            
+            // 路径查找按钮事件
+            document.getElementById('use-dfs').addEventListener('click', function() {
+                setActiveButton(this);
+                document.getElementById('use-bfs').classList.remove('bg-graph', 'text-white');
+                document.getElementById('use-bfs').classList.add('bg-white', 'border', 'border-gray-300', 'text-gray-700');
+            });
+            
+            document.getElementById('use-bfs').addEventListener('click', function() {
+                setActiveButton(this);
+                document.getElementById('use-dfs').classList.remove('bg-graph', 'text-white');
+                document.getElementById('use-dfs').classList.add('bg-white', 'border', 'border-gray-300', 'text-gray-700');
+            });
+            
+            document.getElementById('find-path').addEventListener('click', startPathFinding);
+            document.getElementById('reset-path').addEventListener('click', resetPathFinding);
+            
+            // 连通分量按钮事件
+            document.getElementById('find-components').addEventListener('click', findComponents);
+            document.getElementById('reset-components').addEventListener('click', resetComponents);
+        });
+        
+        // 设置按钮为激活状态
+        function setActiveButton(button) {
+            // 移除所有兄弟按钮的激活状态
+            Array.from(button.parentElement.children).forEach(btn => {
+                btn.classList.remove('bg-graph', 'text-white');
+                btn.classList.add('bg-white', 'border', 'border-gray-300', 'text-gray-700');
+            });
+            // 设置当前按钮为激活状态
+            button.classList.remove('bg-white', 'border', 'border-gray-300', 'text-gray-700');
+            button.classList.add('bg-graph', 'text-white');
+        }
+        
+        // 绘制基本图
+        function drawBasicGraph(type) {
+            const container = document.getElementById('basic-graph');
+            container.innerHTML = '';
+            
+            // 顶点位置
+            const nodes = {
+                A: { x: 150, y: 100 },
+                B: { x: 250, y: 180 },
+                C: { x: 50, y: 180 },
+                D: { x: 150, y: 260 }
+            };
+            
+            // 绘制边
+            if (type === 'undefirected' || type === 'weighted') {
+                drawEdge(container, nodes.A, nodes.B, type, 1);
+                drawEdge(container, nodes.A, nodes.C, type, 2);
+                drawEdge(container, nodes.B, nodes.D, type, 3);
+                drawEdge(container, nodes.B, nodes.C, type, 4);
+            } else if (type === 'directed') {
+                drawDirectedEdge(container, nodes.A, nodes.B);
+                drawDirectedEdge(container, nodes.C, nodes.A);
+                drawDirectedEdge(container, nodes.B, nodes.C);
+                drawDirectedEdge(container, nodes.B, nodes.D);
+            }
+            
+            // 绘制顶点
+            for (const [id, pos] of Object.entries(nodes)) {
+                const node = document.createElement('div');
+                node.className = 'graph-node';
+                node.style.left = `${pos.x}px`;
+                node.style.top = `${pos.y}px`;
+                node.textContent = id;
+                container.appendChild(node);
+            }
+        }
+        
+        // 绘制无向边
+        function drawEdge(container, from, to, type, weight) {
+            const edge = document.createElement('div');
+            edge.className = 'graph-edge';
+            
+            // 计算边的长度和角度
+            const dx = to.x - from.x;
+            const dy = to.y - from.y;
+            const length = Math.sqrt(dx * dx + dy * dy);
+            const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+            
+            // 设置边的位置和样式
+            edge.style.width = `${length}px`;
+            edge.style.height = '2px';
+            edge.style.left = `${from.x + 15}px`;  // 15是节点半径的一半
+            edge.style.top = `${from.y + 15}px`;
+            edge.style.transformOrigin = '0 50%';
+            edge.style.transform = `rotate(${angle}deg)`;
+            
+            container.appendChild(edge);
+            
+            // 如果是加权图，添加权重标签
+            if (type === 'weighted') {
+                const weightLabel = document.createElement('div');
+                weightLabel.className = 'absolute bg-white text-gray-700 text-xs px-1 rounded z-10';
+                weightLabel.textContent = weight;
+                weightLabel.style.left = `${(from.x + to.x) / 2}px`;
+                weightLabel.style.top = `${(from.y + to.y) / 2 - 10}px`;
+                container.appendChild(weightLabel);
+            }
+        }
+        
+        // 绘制有向边
+        function drawDirectedEdge(container, from, to) {
+            drawEdge(container, from, to, 'directed');
+            
+            // 添加箭头
+            const arrow = document.createElement('div');
+            arrow.className = 'absolute w-0 h-0 border-l-8 border-l-gray-300 border-t-4 border-t-transparent border-b-4 border-b-transparent z-10';
+            
+            // 计算箭头位置（稍微偏离终点）
+            const dx = to.x - from.x;
+            const dy = to.y - from.y;
+            const length = Math.sqrt(dx * dx + dy * dy);
+            const ratio = (length - 30) / length;  // 30是为了让箭头离终点有一段距离
+            
+            const arrowX = from.x + dx * ratio + 15;
+            const arrowY = from.y + dy * ratio + 15;
+            const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+            
+            arrow.style.left = `${arrowX}px`;
+            arrow.style.top = `${arrowY}px`;
+            arrow.style.transform = `rotate(${angle}deg)`;
+            
+            container.appendChild(arrow);
+        }
+        
+        // 初始化路径查找图
+        function initPathGraph() {
+            const container = document.getElementById('path-graph');
+            container.innerHTML = '';
+            
+            // 顶点位置
+            const nodes = {
+                A: { x: 100, y: 100 },
+                B: { x: 200, y: 100 },
+                C: { x: 100, y: 200 },
+                D: { x: 200, y: 200 },
+                E: { x: 300, y: 150 }
+            };
+            
+            // 存储节点信息，供后续使用
+            container.nodes = nodes;
+            
+            // 绘制边
+            drawEdge(container, nodes.A, nodes.B);
+            drawEdge(container, nodes.A, nodes.C);
+            drawEdge(container, nodes.B, nodes.D);
+            drawEdge(container, nodes.C, nodes.D);
+            drawEdge(container, nodes.B, nodes.E);
+            drawEdge(container, nodes.D, nodes.E);
+            
+            // 绘制顶点
+            for (const [id, pos] of Object.entries(nodes)) {
+                const node = document.createElement('div');
+                node.className = 'graph-node';
+                node.style.left = `${pos.x}px`;
+                node.style.top = `${pos.y}px`;
+                node.textContent = id;
+                node.dataset.id = id;
+                container.appendChild(node);
+            }
+            
+            // 存储图的邻接关系
+            container.graph = {
+                A: ['B', 'C'],
+                B: ['A', 'D', 'E'],
+                C: ['A', 'D'],
+                D: ['B', 'C', 'E'],
+                E: ['B', 'D']
+            };
+        }
+        
+        // 开始路径查找
+        function startPathFinding() {
+            const container = document.getElementById('path-graph');
+            const startNode = document.getElementById('start-node').value;
+            const endNode = document.getElementById('end-node').value;
+            const isDFS = document.getElementById('use-dfs').classList.contains('bg-graph');
+            
+            // 重置之前的状态
+            resetPathFinding(false);
+            
+            // 更新状态信息
+            document.getElementById('path-step-info').textContent = 
+                `开始${isDFS ? '深度优先搜索' : '广度优先搜索'}，从${startNode}到${endNode}`;
+            
+            // 执行搜索
+            if (isDFS) {
+                dfsPathFinding(container, startNode, endNode);
+            } else {
+                bfsPathFinding(container, startNode, endNode);
+            }
+        }
+        
+        // 深度优先搜索路径
+        function dfsPathFinding(container, start, end) {
+            const visited = new Set();
+            const path = [];
+            const nodes = container.querySelectorAll('.graph-node');
+            const graph = container.graph;
+            let step = 0;
+            const totalSteps = Object.keys(graph).length;
+            
+            // 递归DFS函数
+            function dfs(current) {
+                return new Promise(resolve => {
+                    step++;
+                    // 更新进度条
+                    document.getElementById('path-progress').style.width = `${(step / totalSteps) * 100}%`;
+                    
+                    // 标记当前节点为已访问
+                    visited.add(current);
+                    path.push(current);
+                    
+                    // 更新UI
+                    updateNodeStatus(current, 'current');
+                    document.getElementById('path-step-info').textContent = `访问节点${current}`;
+                    
+                    // 如果找到终点，返回成功
+                    if (current === end) {
+                        setTimeout(() => {
+                            showPathResult(path, true);
+                            resolve(true);
+                        }, 800);
+                        return;
+                    }
+                    
+                    // 遍历邻接节点
+                    const neighbors = graph[current];
+                    let found = false;
+                    
+                    setTimeout(async () => {
+                        for (const neighbor of neighbors) {
+                            if (!visited.has(neighbor)) {
+                                // 高亮当前边
+                                highlightEdge(container, current, neighbor, true);
+                                
+                                // 递归搜索
+                                found = await dfs(neighbor);
+                                if (found) {
+                                    resolve(true);
+                                    return;
+                                }
+                                
+                                // 取消边高亮
+                                highlightEdge(container, current, neighbor, false);
+                            }
+                        }
+                        
+                        // 如果没有找到，回溯
+                        updateNodeStatus(current, 'visited');
+                        path.pop();
+                        document.getElementById('path-step-info').textContent = `回溯，离开节点${current}`;
+                        
+                        setTimeout(() => {
+                            resolve(false);
+                        }, 500);
+                    }, 800);
+                });
+            }
+            
+            // 开始DFS
+            dfs(start).then(found => {
+                if (!found) {
+                    showPathResult([], false);
+                }
+            });
+        }
+        
+        // 广度优先搜索路径
+        function bfsPathFinding(container, start, end) {
+            const visited = new Set();
+            const queue = [[start]];
+            const nodes = container.querySelectorAll('.graph-node');
+            const graph = container.graph;
+            let step = 0;
+            const totalSteps = Object.keys(graph).length;
+            
+            // 标记起点为已访问
+            visited.add(start);
+            updateNodeStatus(start, 'current');
+            document.getElementById('path-step-info').textContent = `开始BFS，起点为${start}`;
+            
+            // BFS循环
+            setTimeout(async () => {
+                while (queue.length > 0) {
+                    step++;
+                    document.getElementById('path-progress').style.width = `${(step / totalSteps) * 100}%`;
+                    
+                    const currentPath = queue.shift();
+                    const currentNode = currentPath[currentPath.length - 1];
+                    
+                    // 更新当前节点状态
+                    updateNodeStatus(currentNode, 'current');
+                    document.getElementById('path-step-info').textContent = `访问节点${currentNode}`;
+                    
+                    // 如果找到终点，返回路径
+                    if (currentNode === end) {
+                        await new Promise(resolve => setTimeout(resolve, 800));
+                        showPathResult(currentPath, true);
+                        return;
+                    }
+                    
+                    // 等待一段时间
+                    await new Promise(resolve => setTimeout(resolve, 800));
+                    
+                    // 标记为已访问
+                    updateNodeStatus(currentNode, 'visited');
+                    
+                    // 遍历邻接节点
+                    const neighbors = graph[currentNode];
+                    for (const neighbor of neighbors) {
+                        if (!visited.has(neighbor)) {
+                            visited.add(neighbor);
+                            queue.push([...currentPath, neighbor]);
+                            
+                            // 高亮边
+                            highlightEdge(container, currentNode, neighbor, true);
+                            document.getElementById('path-step-info').textContent = `发现未访问节点${neighbor}，加入队列`;
+                            
+                            await new Promise(resolve => setTimeout(resolve, 500));
+                            highlightEdge(container, currentNode, neighbor, false);
+                        }
+                    }
+                }
+                
+                // 如果队列为空仍未找到终点
+                showPathResult([], false);
+            }, 800);
+        }
+        
+        // 更新节点状态
+        function updateNodeStatus(nodeId, status) {
+            const nodes = document.querySelectorAll('.graph-node');
+            nodes.forEach(node => {
+                if (node.dataset.id === nodeId) {
+                    // 移除所有状态类
+                    node.classList.remove('graph-node-active', 'graph-node-visited', 'graph-node-current');
+                    // 添加当前状态类
+                    if (status === 'active') node.classList.add('graph-node-active');
+                    else if (status === 'visited') node.classList.add('graph-node-visited');
+                    else if (status === 'current') node.classList.add('graph-node-current');
+                }
+            });
+        }
+        
+        // 高亮边
+        function highlightEdge(container, fromId, toId, highlight) {
+            const from = container.nodes[fromId];
+            const to = container.nodes[toId];
+            const edges = container.querySelectorAll('.graph-edge');
+            
+            // 计算边的位置和角度，找到对应的边
+            const dx = to.x - from.x;
+            const dy = to.y - from.y;
+            const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+            const length = Math.sqrt(dx * dx + dy * dy);
+            
+            edges.forEach(edge => {
+                if (Math.abs(parseFloat(edge.style.width) - length) < 5 &&
+                    Math.abs(parseFloat(edge.style.transform.replace(/[^0-9.-]/g, '')) - angle) < 5) {
+                    if (highlight) {
+                        edge.classList.add('graph-edge-active');
+                    } else {
+                        edge.classList.remove('graph-edge-active');
+                    }
+                }
+            });
+        }
+        
+        // 显示路径查找结果
+        function showPathResult(path, found) {
+            const resultEl = document.getElementById('path-result');
+            const foundEl = document.getElementById('path-found');
+            
+            resultEl.classList.remove('hidden');
+            
+            if (found) {
+                // 高亮最终路径
+                for (let i = 0; i < path.length - 1; i++) {
+                    highlightEdge(document.getElementById('path-graph'), path[i], path[i+1], true);
+                }
+                
+                // 标记起点和终点
+                updateNodeStatus(path[0], 'active');
+                updateNodeStatus(path[path.length - 1], 'active');
+                
+                foundEl.textContent = `找到路径：${path.join(' → ')}，长度为${path.length - 1}`;
+                document.getElementById('path-step-info').textContent = `搜索完成，找到路径`;
+            } else {
+                foundEl.textContent = `未找到从起点到终点的路径`;
+                document.getElementById('path-step-info').textContent = `搜索完成，未找到路径`;
+            }
+        }
+        
+        // 重置路径查找
+        function resetPathFinding(showMessage = true) {
+            initPathGraph();
+            document.getElementById('path-progress').style.width = '0%';
+            document.getElementById('path-result').classList.add('hidden');
+            if (showMessage) {
+                document.getElementById('path-step-info').textContent = '点击"查找路径"开始演示';
+            }
+        }
+        
+        // 初始化连通分量图
+        function initComponentsGraph() {
+            const container = document.getElementById('components-graph');
+            container.innerHTML = '';
+            
+            // 顶点位置（有意分成3个连通分量）
+            const nodes = {
+                A: { x: 100, y: 100 },
+                B: { x: 180, y: 100 },
+                C: { x: 140, y: 160 },
+                D: { x: 300, y: 100 },
+                E: { x: 360, y: 140 },
+                F: { x: 100, y: 250 },
+                G: { x: 300, y: 250 }
+            };
+            
+            // 存储节点信息
+            container.nodes = nodes;
+            
+            // 绘制边（形成3个连通分量：A-B-C, D-E, F, G）
+            drawEdge(container, nodes.A, nodes.B);
+            drawEdge(container, nodes.B, nodes.C);
+            drawEdge(container, nodes.A, nodes.C);
+            drawEdge(container, nodes.D, nodes.E);
+            
+            // 绘制顶点
+            for (const [id, pos] of Object.entries(nodes)) {
+                const node = document.createElement('div');
+                node.className = 'graph-node';
+                node.style.left = `${pos.x}px`;
+                node.style.top = `${pos.y}px`;
+                node.textContent = id;
+                node.dataset.id = id;
+                container.appendChild(node);
+            }
+            
+            // 存储图的邻接关系
+            container.graph = {
+                A: ['B', 'C'],
+                B: ['A', 'C'],
+                C: ['A', 'B'],
+                D: ['E'],
+                E: ['D'],
+                F: [],
+                G: []
+            };
+        }
+        
+        // 查找连通分量
+        function findComponents() {
+            const container = document.getElementById('components-graph');
+            const graph = container.graph;
+            const visited = new Set();
+            const components = [];
+            const allNodes = Object.keys(graph);
+            let componentIndex = 0;
+            
+            // 重置状态
+            resetComponents(false);
+            
+            // 定义不同连通分量的颜色
+            const colors = [
+                'bg-blue-500 text-white border-blue-500',
+                'bg-green-500 text-white border-green-500',
+                'bg-purple-500 text-white border-purple-500',
+                'bg-yellow-500 text-white border-yellow-500'
+            ];
+            
+            // 遍历所有节点
+            setTimeout(async () => {
+                for (const node of allNodes) {
+                    if (!visited.has(node)) {
+                        componentIndex++;
+                        const component = [];
+                        
+                        // BFS查找连通分量
+                        const queue = [node];
+                        visited.add(node);
+                        
+                        document.getElementById('components-info').textContent = 
+                            `发现新的连通分量 #${componentIndex}，从节点${node}开始搜索`;
+                        
+                        // 高亮当前起始节点
+                        updateComponentNodeStatus(node, colors[componentIndex % colors.length]);
+                        await new Promise(resolve => setTimeout(resolve, 800));
+                        
+                        while (queue.length > 0) {
+                            const current = queue.shift();
+                            component.push(current);
+                            
+                            // 遍历邻接节点
+                            for (const neighbor of graph[current]) {
+                                if (!visited.has(neighbor)) {
+                                    visited.add(neighbor);
+                                    queue.push(neighbor);
+                                    
+                                    // 高亮边和节点
+                                    highlightEdge(container, current, neighbor, true);
+                                    updateComponentNodeStatus(neighbor, colors[componentIndex % colors.length]);
+                                    
+                                    document.getElementById('components-info').textContent = 
+                                        `连通分量 #${componentIndex} 包含节点: ${component.join(', ')}`;
+                                    
+                                    await new Promise(resolve => setTimeout(resolve, 600));
+                                    highlightEdge(container, current, neighbor, false);
+                                }
+                            }
+                        }
+                        
+                        components.push(component);
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    }
+                }
+                
+                // 显示结果
+                document.getElementById('components-info').textContent = 
+                    `连通分量查找完成，共发现${components.length}个连通分量`;
+                
+                const resultEl = document.getElementById('components-result');
+                const countEl = document.getElementById('components-count');
+                
+                resultEl.classList.remove('hidden');
+                countEl.innerHTML = '';
+                
+                components.forEach((comp, idx) => {
+                    countEl.innerHTML += `连通分量 #${idx+1}：${comp.join(', ')}（共${comp.length}个节点）<br>`;
+                });
+            }, 500);
+        }
+        
+        // 更新连通分量节点状态
+        function updateComponentNodeStatus(nodeId, colorClass) {
+            const nodes = document.querySelectorAll('.graph-node');
+            nodes.forEach(node => {
+                if (node.dataset.id === nodeId) {
+                    // 移除所有状态类
+                    node.className = 'graph-node';
+                    // 添加颜色类
+                    node.classList.add(...colorClass.split(' '));
+                }
+            });
+        }
+        
+        // 重置连通分量演示
+        function resetComponents(showMessage = true) {
+            initComponentsGraph();
+            document.getElementById('components-result').classList.add('hidden');
+            if (showMessage) {
+                document.getElementById('components-info').textContent = '点击"查找连通分量"开始演示';
+            }
+        }
+    </script>
+</body>
+</html>

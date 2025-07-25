@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>复杂度分析 - 姚老师信奥网</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4A80F0', // 主色调：鲜明的蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        syntax: '#FF9800', // 语法部分：橙色
+                        algorithm: '#2ECC71', // 算法部分：绿色
+                        complexity: '#E91E63', // 复杂度主题色：粉红色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .complexity-bg {
+                @apply bg-gradient-to-r from-complexity/5 to-complexity/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .complexity-header {
+                @apply font-bold text-complexity mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-complexity bg-complexity/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-complexity text-white text-center mr-2 text-xs;
+            }
+            .complexity-item {
+                @apply p-4 rounded-lg mb-4 border border-gray-200 transition-all duration-300;
+            }
+            .complexity-item-active {
+                @apply border-complexity bg-complexity/5 transform scale-[1.01];
+            }
+            .time-unit {
+                @apply w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-500;
+            }
+            .time-unit-constant {
+                @apply bg-green-100 text-green-800 border border-green-200;
+            }
+            .time-unit-linear {
+                @apply bg-blue-100 text-blue-800 border border-blue-200;
+            }
+            .time-unit-quadratic {
+                @apply bg-yellow-100 text-yellow-800 border border-yellow-200;
+            }
+            .time-unit-exponential {
+                @apply bg-red-100 text-red-800 border border-red-200;
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+            .example-card {
+                @apply bg-gray-50 p-4 rounded-lg border border-gray-100;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">算法分析</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-complexity font-medium">复杂度分析</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="complexity-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-complexity mb-2">算法复杂度分析</h1>
+                    <p class="text-gray-700">
+                        复杂度分析是评估算法效率的重要方法，是CSP初赛的核心考点。
+                        本页面讲解时间复杂度和空间复杂度的计算方法，帮助你在竞赛中快速判断算法可行性。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#concept" class="bg-complexity hover:bg-complexity/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 学习概念
+                        </a>
+                        <a href="#examples" class="bg-white border border-complexity text-complexity hover:bg-complexity/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-code mr-2"></i> 查看例题
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 复杂度分析概述 -->
+        <section id="concept" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-complexity mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> 复杂度分析基础
+            </h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">什么是算法复杂度？</h3>
+                    <p class="text-gray-700 mb-3">
+                        算法复杂度是衡量算法执行效率的指标，主要分为两种：
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="complexity-item">
+                            <h4 class="font-semibold text-blue-600 mb-2 flex items-center">
+                                <i class="fa fa-clock-o mr-2"></i> 时间复杂度 (Time Complexity)
+                            </h4>
+                            <p class="text-gray-700 text-sm">
+                                衡量算法执行所需时间随输入规模增长的变化趋势，通常用大O符号表示。
+                            </p>
+                        </div>
+                        <div class="complexity-item">
+                            <h4 class="font-semibold text-purple-600 mb-2 flex items-center">
+                                <i class="fa fa-microchip mr-2"></i> 空间复杂度 (Space Complexity)
+                            </h4>
+                            <p class="text-gray-700 text-sm">
+                                衡量算法所需存储空间随输入规模增长的变化趋势，同样用大O符号表示。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">大O符号表示法</h3>
+                    <p class="text-gray-700 mb-3">
+                        大O符号用于描述函数的渐近行为，在复杂度分析中表示算法执行效率的上限：
+                    </p>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <p class="text-center font-mono">O(f(n))</p>
+                        <p class="text-center text-sm text-gray-600 mt-1">其中n是输入规模，f(n)是描述复杂度增长趋势的函数</p>
+                    </div>
+                    <p class="text-gray-700">
+                        大O符号的特点：
+                    </p>
+                    <ul class="list-disc pl-6 mt-2 space-y-1">
+                        <li>忽略常数因子：O(2n)简化为O(n)</li>
+                        <li>只保留最高阶项：O(n² + n)简化为O(n²)</li>
+                        <li>忽略低阶项：O(n³ + n²)简化为O(n³)</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">常见时间复杂度等级</h3>
+                    <p class="text-gray-700 mb-4">
+                        按增长速度从小到大排序：
+                    </p>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                        <div class="complexity-item text-center">
+                            <div class="font-mono font-bold text-lg">O(1)</div>
+                            <div class="text-xs text-gray-500 mt-1">常数复杂度</div>
+                        </div>
+                        <div class="complexity-item text-center">
+                            <div class="font-mono font-bold text-lg">O(log n)</div>
+                            <div class="text-xs text-gray-500 mt-1">对数复杂度</div>
+                        </div>
+                        <div class="complexity-item text-center">
+                            <div class="font-mono font-bold text-lg">O(n)</div>
+                            <div class="text-xs text-gray-500 mt-1">线性复杂度</div>
+                        </div>
+                        <div class="complexity-item text-center">
+                            <div class="font-mono font-bold text-lg">O(n log n)</div>
+                            <div class="text-xs text-gray-500 mt-1">线性对数</div>
+                        </div>
+                        <div class="complexity-item text-center">
+                            <div class="font-mono font-bold text-lg">O(n²)</div>
+                            <div class="text-xs text-gray-500 mt-1">平方复杂度</div>
+                        </div>
+                        <div class="complexity-item text-center">
+                            <div class="font-mono font-bold text-lg">O(n³)</div>
+                            <div class="text-xs text-gray-500 mt-1">立方复杂度</div>
+                        </div>
+                        <div class="complexity-item text-center">
+                            <div class="font-mono font-bold text-lg">O(2ⁿ)</div>
+                            <div class="text-xs text-gray-500 mt-1">指数复杂度</div>
+                        </div>
+                        <div class="complexity-item text-center">
+                            <div class="font-mono font-bold text-lg">O(n!)</div>
+                            <div class="text-xs text-gray-500 mt-1">阶乘复杂度</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 时间复杂度动态演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-complexity mb-6 flex items-center">
+                <i class="fa fa-play-circle mr-2"></i> 时间复杂度动态演示
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 不同复杂度对比 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">不同复杂度增长对比</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                下面的动画展示了不同复杂度随输入规模n增长时的执行步骤数量变化。
+                                拖动滑块可以改变n的值，观察各种复杂度的增长速度差异。
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">输入规模n:</label>
+                                <input type="range" id="complexity-n" min="1" max="10" value="5" 
+                                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-complexity">
+                                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                    <span>1</span>
+                                    <span id="complexity-n-value">5</span>
+                                    <span>10</span>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-2 mb-4">
+                                <div class="flex items-center">
+                                    <span class="time-unit time-unit-constant mr-2"></span>
+                                    <span class="text-sm">O(1) - 常数</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="time-unit time-unit-linear mr-2"></span>
+                                    <span class="text-sm">O(n) - 线性</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="time-unit time-unit-quadratic mr-2"></span>
+                                    <span class="text-sm">O(n²) - 平方</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="time-unit time-unit-exponential mr-2"></span>
+                                    <span class="text-sm">O(2ⁿ) - 指数</span>
+                                </div>
+                            </div>
+                            
+                            <div id="complexity-status" class="animation-status">
+                                当前n=5时的步骤数: O(1)=1, O(n)=5, O(n²)=25, O(2ⁿ)=32
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-4 min-h-[300px]" id="complexity-visualization">
+                                <div class="flex flex-wrap justify-center gap-1" id="complexity-bars">
+                                    <!-- 动态生成的复杂度对比图 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 循环复杂度演示 -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">循环结构的时间复杂度分析</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-gray-700 mb-4">
+                                选择不同的循环结构，观察其时间复杂度的计算过程：
+                            </p>
+                            
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">选择循环类型:</label>
+                                <select id="loop-type" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-complexity">
+                                    <option value="single">单重循环</option>
+                                    <option value="nested">嵌套循环</option>
+                                    <option value="logarithmic">对数循环</option>
+                                    <option value="mixed">混合循环</option>
+                                </select>
+                            </div>
+                            
+                            <div class="animation-controls">
+                                <button id="loop-analyze" class="bg-complexity hover:bg-complexity/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-calculator mr-2"></i> 分析复杂度
+                                </button>
+                                <button id="loop-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                                    <i class="fa fa-refresh mr-2"></i> 重置
+                                </button>
+                            </div>
+                            
+                            <div id="loop-analysis-result" class="mt-4 p-3 bg-white rounded-lg border border-gray-200 hidden">
+                                <h4 class="font-semibold mb-2">复杂度分析结果</h4>
+                                <div id="loop-analysis-content">
+                                    <!-- 分析结果将在这里显示 -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="bg-white border border-gray-200 rounded-lg p-4" id="loop-code-container">
+                                <pre class="code-block"><code class="language-cpp" id="loop-code">// 单重循环示例
+for (int i = 0; i < n; i++) {
+    // 常数时间操作
+    cout << i << endl;
+}</code></pre>
+                            </div>
+                            <div id="loop-visualization" class="mt-4 bg-white border border-gray-200 rounded-lg p-4 min-h-[150px]">
+                                <div class="text-center text-gray-500 py-6">
+                                    点击"分析复杂度"查看执行步骤
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 复杂度计算方法 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-complexity mb-6 flex items-center">
+                <i class="fa fa-calculator mr-2"></i> 复杂度计算方法
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- 时间复杂度计算 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">时间复杂度计算规则</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div>
+                                <strong>基本操作规则</strong>：基本操作（如赋值、比较、算术运算等）的时间复杂度为O(1)
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div>
+                                <strong>顺序结构规则</strong>：多个操作顺序执行时，总复杂度等于复杂度最高的操作的复杂度
+                                <div class="bg-gray-100 p-2 rounded mt-1 text-sm">
+                                    例如：O(f(n)) + O(g(n)) = O(max(f(n), g(n)))
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div>
+                                <strong>循环结构规则</strong>：循环的时间复杂度等于循环体的复杂度乘以循环执行的次数
+                                <div class="bg-gray-100 p-2 rounded mt-1 text-sm">
+                                    例如：for循环执行n次，循环体复杂度为O(f(n))，则总复杂度为O(n × f(n))
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">4</div>
+                            <div>
+                                <strong>分支结构规则</strong>：分支结构（if-else）的时间复杂度取各分支中复杂度最高的
+                                <div class="bg-gray-100 p-2 rounded mt-1 text-sm">
+                                    例如：if分支复杂度为O(n)，else分支复杂度为O(1)，则总复杂度为O(n)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">5</div>
+                            <div>
+                                <strong>递归结构规则</strong>：递归的时间复杂度需分析递归调用次数和每次递归的操作复杂度
+                                <div class="bg-gray-100 p-2 rounded mt-1 text-sm">
+                                    例如：递归调用T(n) = T(n/2) + O(1)，则时间复杂度为O(log n)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 空间复杂度计算 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">空间复杂度计算规则</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div>
+                                <strong>基本空间规则</strong>：基本数据类型（int、char等）占用常数空间，复杂度为O(1)
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div>
+                                <strong>数据结构规则</strong>：数组、链表等数据结构的空间复杂度取决于其元素个数
+                                <div class="bg-gray-100 p-2 rounded mt-1 text-sm">
+                                    例如：大小为n的数组，空间复杂度为O(n)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div>
+                                <strong>递归栈规则</strong>：递归调用会产生栈空间开销，空间复杂度等于递归深度
+                                <div class="bg-gray-100 p-2 rounded mt-1 text-sm">
+                                    例如：递归深度为n的递归函数，空间复杂度至少为O(n)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">4</div>
+                            <div>
+                                <strong>累计规则</strong>：总空间复杂度是所有变量和数据结构占用空间的总和，取最高阶项
+                                <div class="bg-gray-100 p-2 rounded mt-1 text-sm">
+                                    例如：同时使用O(n)的数组和O(1)的变量，总空间复杂度为O(n)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 解题技巧 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-complexity mb-6 flex items-center">
+                <i class="fa fa-lightbulb-o mr-2"></i> CSP初赛复杂度分析解题技巧
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="example-card">
+                    <h3 class="font-semibold text-lg mb-3">快速判断复杂度的实用技巧</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>循环层数判断法</strong>：一般情况下，k重循环的时间复杂度不低于O(nᵏ)</li>
+                        <li><strong>变量变化判断法</strong>：观察循环变量的变化方式，成倍增长通常是O(log n)，线性增长通常是O(n)</li>
+                        <li><strong>递归关系法</strong>：递归问题可通过递归关系式计算复杂度，如T(n) = a*T(n/b) + f(n)</li>
+                        <li><strong>最坏情况法</strong>：复杂度分析通常考虑最坏情况，如查找算法中的O(n)情况</li>
+                        <li><strong>常数忽略法</strong>：系数和低阶项可以忽略，关注最高阶项</li>
+                    </ul>
+                </div>
+                
+                <div class="example-card">
+                    <h3 class="font-semibold text-lg mb-3">常见陷阱与注意事项</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>不要被循环变量的初始值迷惑，关键看变量的变化范围和步长</li>
+                        <li>注意嵌套循环中内层循环是否与外层循环变量相关</li>
+                        <li>递归算法的复杂度不仅要看递归次数，还要看每次递归的操作复杂度</li>
+                        <li>某些算法的复杂度与输入数据的分布有关（如快速排序）</li>
+                        <li>CSP初赛中，通常只要求计算时间复杂度，但若题目明确要求，也需计算空间复杂度</li>
+                    </ul>
+                </div>
+                
+                <div class="example-card">
+                    <h3 class="font-semibold text-lg mb-3">CSP初赛常见复杂度对应的数据规模</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border border-gray-200">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="py-2 px-4 border-b text-left text-sm font-semibold">复杂度</th>
+                                    <th class="py-2 px-4 border-b text-left text-sm font-semibold">可接受的最大n</th>
+                                    <th class="py-2 px-4 border-b text-left text-sm font-semibold">典型算法</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-2 px-4 border-b text-sm">O(1)</td>
+                                    <td class="py-2 px-4 border-b text-sm">无限制</td>
+                                    <td class="py-2 px-4 border-b text-sm">直接计算、数组访问</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-2 px-4 border-b text-sm">O(log n)</td>
+                                    <td class="py-2 px-4 border-b text-sm">10¹⁸</td>
+                                    <td class="py-2 px-4 border-b text-sm">二分查找、快速幂</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b text-sm">O(n)</td>
+                                    <td class="py-2 px-4 border-b text-sm">10⁸</td>
+                                    <td class="py-2 px-4 border-b text-sm">线性查找、前缀和</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-2 px-4 border-b text-sm">O(n log n)</td>
+                                    <td class="py-2 px-4 border-b text-sm">10⁶</td>
+                                    <td class="py-2 px-4 border-b text-sm">归并排序、快速排序</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b text-sm">O(n²)</td>
+                                    <td class="py-2 px-4 border-b text-sm">10⁴</td>
+                                    <td class="py-2 px-4 border-b text-sm">冒泡排序、简单DP</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-2 px-4 border-b text-sm">O(n³)</td>
+                                    <td class="py-2 px-4 border-b text-sm">500</td>
+                                    <td class="py-2 px-4 border-b text-sm"> Floyd算法、矩阵乘法</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b text-sm">O(2ⁿ)</td>
+                                    <td class="py-2 px-4 border-b text-sm">20-30</td>
+                                    <td class="py-2 px-4 border-b text-sm">子集枚举、简单递归</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="py-2 px-4 border-b text-sm">O(n!)</td>
+                                    <td class="py-2 px-4 border-b text-sm">10-12</td>
+                                    <td class="py-2 px-4 border-b text-sm">全排列生成</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 例题解析 -->
+        <section id="examples" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-complexity mb-6 flex items-center">
+                <i class="fa fa-code mr-2"></i> CSP初赛复杂度分析例题
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- 例题1 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题1：单重循环复杂度</h3>
+                    <div class="example-card">
+                        <p class="mb-3">以下代码的时间复杂度是多少？</p>
+                        <pre class="code-block"><code class="language-cpp">int sum = 0;
+for (int i = 1; i <= n; i++) {
+    sum += i;
+}</code></pre>
+                        
+                        <div class="mt-4">
+                            <button class="show-solution bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-md text-sm transition-all" data-target="solution1">
+                                查看解析 <i class="fa fa-chevron-down ml-1"></i>
+                            </button>
+                            
+                            <div id="solution1" class="solution mt-3 p-3 bg-gray-50 rounded-lg hidden">
+                                <h4 class="font-semibold mb-2">解析：</h4>
+                                <p class="text-gray-700 mb-2">
+                                    这是一个简单的单重循环，循环变量i从1递增到n，共执行n次。
+                                </p>
+                                <p class="text-gray-700 mb-2">
+                                    循环体内是简单的加法操作，时间复杂度为O(1)。
+                                </p>
+                                <p class="text-gray-700 font-medium">
+                                    总时间复杂度 = 循环次数 × 循环体复杂度 = O(n) × O(1) = <strong>O(n)</strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 例题2 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题2：嵌套循环复杂度</h3>
+                    <div class="example-card">
+                        <p class="mb-3">以下代码的时间复杂度是多少？</p>
+                        <pre class="code-block"><code class="language-cpp">int count = 0;
+for (int i = 0; i < n; i++) {
+    for (int j = 0; j < i; j++) {
+        count++;
+    }
+}</code></pre>
+                        
+                        <div class="mt-4">
+                            <button class="show-solution bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-md text-sm transition-all" data-target="solution2">
+                                查看解析 <i class="fa fa-chevron-down ml-1"></i>
+                            </button>
+                            
+                            <div id="solution2" class="solution mt-3 p-3 bg-gray-50 rounded-lg hidden">
+                                <h4 class="font-semibold mb-2">解析：</h4>
+                                <p class="text-gray-700 mb-2">
+                                    这是一个嵌套循环，外层循环i从0到n-1，内层循环j从0到i-1。
+                                </p>
+                                <p class="text-gray-700 mb-2">
+                                    内层循环的执行次数随外层循环变量i变化：
+                                    <ul class="list-disc pl-6 mt-1">
+                                        <li>当i=0时，内层循环执行0次</li>
+                                        <li>当i=1时，内层循环执行1次</li>
+                                        <li>当i=2时，内层循环执行2次</li>
+                                        <li>... ...</li>
+                                        <li>当i=n-1时，内层循环执行n-1次</li>
+                                    </ul>
+                                </p>
+                                <p class="text-gray-700 mb-2">
+                                    总执行次数 = 0 + 1 + 2 + ... + (n-1) = n(n-1)/2 = O(n²)
+                                </p>
+                                <p class="text-gray-700 font-medium">
+                                    总时间复杂度 = <strong>O(n²)</strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 例题3 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题3：对数复杂度</h3>
+                    <div class="example-card">
+                        <p class="mb-3">以下代码的时间复杂度是多少？</p>
+                        <pre class="code-block"><code class="language-cpp">int i = 1;
+while (i <= n) {
+    i *= 2;
+}</code></pre>
+                        
+                        <div class="mt-4">
+                            <button class="show-solution bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-md text-sm transition-all" data-target="solution3">
+                                查看解析 <i class="fa fa-chevron-down ml-1"></i>
+                            </button>
+                            
+                            <div id="solution3" class="solution mt-3 p-3 bg-gray-50 rounded-lg hidden">
+                                <h4 class="font-semibold mb-2">解析：</h4>
+                                <p class="text-gray-700 mb-2">
+                                    这是一个while循环，循环变量i每次乘以2，直到i > n为止。
+                                </p>
+                                <p class="text-gray-700 mb-2">
+                                    循环执行次数k满足：2ᵏ ≤ n < 2ᵏ⁺¹，即k = log₂n
+                                </p>
+                                <p class="text-gray-700 font-medium">
+                                    总时间复杂度 = <strong>O(log n)</strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 例题4 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题4：递归复杂度</h3>
+                    <div class="example-card">
+                        <p class="mb-3">以下递归函数的时间复杂度是多少？</p>
+                        <pre class="code-block"><code class="language-cpp">int fib(int n) {
+    if (n <= 1) return n;
+    return fib(n-1) + fib(n-2);
+}</code></pre>
+                        
+                        <div class="mt-4">
+                            <button class="show-solution bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-md text-sm transition-all" data-target="solution4">
+                                查看解析 <i class="fa fa-chevron-down ml-1"></i>
+                            </button>
+                            
+                            <div id="solution4" class="solution mt-3 p-3 bg-gray-50 rounded-lg hidden">
+                                <h4 class="font-semibold mb-2">解析：</h4>
+                                <p class="text-gray-700 mb-2">
+                                    这是斐波那契数列的递归实现，递归关系式为：
+                                    T(n) = T(n-1) + T(n-2) + O(1)
+                                </p>
+                                <p class="text-gray-700 mb-2">
+                                    该递归会产生一棵二叉树，节点总数约为2ⁿ，即时间复杂度为指数级。
+                                </p>
+                                <p class="text-gray-700 font-medium">
+                                    总时间复杂度 = <strong>O(2ⁿ)</strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 例题5 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题5：空间复杂度</h3>
+                    <div class="example-card">
+                        <p class="mb-3">以下代码的空间复杂度是多少？</p>
+                        <pre class="code-block"><code class="language-cpp">int factorial(int n) {
+    if (n == 0) return 1;
+    return n * factorial(n-1);
+}</code></pre>
+                        
+                        <div class="mt-4">
+                            <button class="show-solution bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-md text-sm transition-all" data-target="solution5">
+                                查看解析 <i class="fa fa-chevron-down ml-1"></i>
+                            </button>
+                            
+                            <div id="solution5" class="solution mt-3 p-3 bg-gray-50 rounded-lg hidden">
+                                <h4 class="font-semibold mb-2">解析：</h4>
+                                <p class="text-gray-700 mb-2">
+                                    这是阶乘的递归实现，递归深度为n（从n到0）。
+                                </p>
+                                <p class="text-gray-700 mb-2">
+                                    每次递归调用会在栈上分配一定的空间（保存参数、返回地址等），递归深度为n，因此栈空间复杂度为O(n)。
+                                </p>
+                                <p class="text-gray-700 font-medium">
+                                    总空间复杂度 = <strong>O(n)</strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        hljs.highlightAll();
+        
+        // 复杂度可视化
+        function updateComplexityVisualization(n) {
+            const container = document.getElementById('complexity-bars');
+            container.innerHTML = '';
+            
+            // 计算各种复杂度的值
+            const constant = 1;
+            const linear = n;
+            const quadratic = n * n;
+            const exponential = Math.pow(2, n);
+            
+            // 更新状态文本
+            document.getElementById('complexity-status').textContent = 
+                `当前n=${n}时的步骤数: O(1)=${constant}, O(n)=${linear}, O(n²)=${quadratic}, O(2ⁿ)=${exponential}`;
+            
+            // 为了可视化效果，对较大的值进行缩放
+            const maxHeight = 250;
+            const scale = Math.max(1, exponential / maxHeight);
+            
+            // 创建可视化元素
+            function createBar(value, className, label) {
+                const barContainer = document.createElement('div');
+                barContainer.className = 'flex flex-col items-center mx-2 flex-1';
+                
+                const bar = document.createElement('div');
+                const height = Math.min(value / scale, maxHeight);
+                bar.className = `w-10 rounded-t ${className}`;
+                bar.style.height = `${height}px`;
+                bar.style.marginTop = `${maxHeight - height}px`;
+                
+                const labelDiv = document.createElement('div');
+                labelDiv.className = 'mt-2 text-xs text-center';
+                labelDiv.textContent = label;
+                
+                barContainer.appendChild(bar);
+                barContainer.appendChild(labelDiv);
+                container.appendChild(barContainer);
+            }
+            
+            createBar(constant, 'bg-green-500', 'O(1)');
+            createBar(linear, 'bg-blue-500', 'O(n)');
+            createBar(quadratic, 'bg-yellow-500', 'O(n²)');
+            createBar(exponential, 'bg-red-500', 'O(2ⁿ)');
+        }
+        
+        // 循环代码示例
+        const loopExamples = {
+            single: {
+                code: `// 单重循环示例
+for (int i = 0; i < n; i++) {
+    // 常数时间操作
+    cout << i << endl;
+}`,
+                analysis: `<p>1. 外层循环变量i从0到n-1，共执行n次</p>
+                           <p>2. 循环体内是常数时间操作，复杂度为O(1)</p>
+                           <p>3. 总时间复杂度 = O(n) × O(1) = <strong>O(n)</strong></p>`
+            },
+            nested: {
+                code: `// 嵌套循环示例
+for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+        // 常数时间操作
+        cout << i << "," << j << endl;
+    }
+}`,
+                analysis: `<p>1. 外层循环执行n次</p>
+                           <p>2. 内层循环对于每个外层循环都执行n次</p>
+                           <p>3. 总循环次数 = n × n = n²</p>
+                           <p>4. 总时间复杂度 = <strong>O(n²)</strong></p>`
+            },
+            logarithmic: {
+                code: `// 对数循环示例
+int i = 1;
+while (i <= n) {
+    // 常数时间操作
+    cout << i << endl;
+    i *= 2;
+}`,
+                analysis: `<p>1. 循环变量i每次乘以2，从1增长到n</p>
+                           <p>2. 循环执行次数k满足：2ᵏ ≈ n → k ≈ log₂n</p>
+                           <p>3. 总时间复杂度 = <strong>O(log n)</strong></p>`
+            },
+            mixed: {
+                code: `// 混合循环示例
+for (int i = 1; i <= n; i *= 2) {
+    for (int j = 1; j <= i; j++) {
+        // 常数时间操作
+        cout << i << "," << j << endl;
+    }
+}`,
+                analysis: `<p>1. 外层循环变量i每次乘以2，执行log₂n次</p>
+                           <p>2. 内层循环执行次数随i变化：1, 2, 4, ..., n/2, n</p>
+                           <p>3. 总执行次数 = 1 + 2 + 4 + ... + n = 2n - 1</p>
+                           <p>4. 总时间复杂度 = <strong>O(n)</strong></p>`
+            }
+        };
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化复杂度可视化
+            const complexitySlider = document.getElementById('complexity-n');
+            const complexityValue = document.getElementById('complexity-n-value');
+            
+            complexitySlider.addEventListener('input', function() {
+                const n = parseInt(this.value);
+                complexityValue.textContent = n;
+                updateComplexityVisualization(n);
+            });
+            
+            // 初始渲染
+            updateComplexityVisualization(parseInt(complexitySlider.value));
+            
+            // 循环分析
+            const loopTypeSelect = document.getElementById('loop-type');
+            const loopCodeElement = document.getElementById('loop-code');
+            const loopAnalyzeButton = document.getElementById('loop-analyze');
+            const loopResetButton = document.getElementById('loop-reset');
+            const loopAnalysisResult = document.getElementById('loop-analysis-result');
+            const loopAnalysisContent = document.getElementById('loop-analysis-content');
+            const loopVisualization = document.getElementById('loop-visualization');
+            
+            loopTypeSelect.addEventListener('change', function() {
+                const type = this.value;
+                loopCodeElement.textContent = loopExamples[type].code;
+                hljs.highlightElement(loopCodeElement);
+                loopAnalysisResult.classList.add('hidden');
+                loopVisualization.innerHTML = '<div class="text-center text-gray-500 py-6">点击"分析复杂度"查看执行步骤</div>';
+            });
+            
+            loopAnalyzeButton.addEventListener('click', function() {
+                const type = loopTypeSelect.value;
+                loopAnalysisContent.innerHTML = loopExamples[type].analysis;
+                loopAnalysisResult.classList.remove('hidden');
+                
+                // 简单的可视化
+                if (type === 'single') {
+                    visualizeSingleLoop();
+                } else if (type === 'nested') {
+                    visualizeNestedLoop();
+                } else if (type === 'logarithmic') {
+                    visualizeLogarithmicLoop();
+                } else if (type === 'mixed') {
+                    visualizeMixedLoop();
+                }
+            });
+            
+            loopResetButton.addEventListener('click', function() {
+                loopAnalysisResult.classList.add('hidden');
+                loopVisualization.innerHTML = '<div class="text-center text-gray-500 py-6">点击"分析复杂度"查看执行步骤</div>';
+            });
+            
+            // 显示/隐藏解题步骤
+            document.querySelectorAll('.show-solution').forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const solutionElement = document.getElementById(targetId);
+                    
+                    if (solutionElement.classList.contains('hidden')) {
+                        solutionElement.classList.remove('hidden');
+                        this.innerHTML = '隐藏解析 <i class="fa fa-chevron-up ml-1"></i>';
+                    } else {
+                        solutionElement.classList.add('hidden');
+                        this.innerHTML = '查看解析 <i class="fa fa-chevron-down ml-1"></i>';
+                    }
+                });
+            });
+        });
+        
+        // 循环可视化函数
+        function visualizeSingleLoop() {
+            const container = document.getElementById('loop-visualization');
+            container.innerHTML = '<div class="text-center font-medium mb-2">循环执行步骤可视化 (n=5)</div>';
+            
+            const stepsContainer = document.createElement('div');
+            stepsContainer.className = 'flex flex-wrap justify-center gap-2';
+            
+            for (let i = 0; i < 5; i++) {
+                const step = document.createElement('div');
+                step.className = 'w-10 h-10 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center border border-blue-200';
+                step.textContent = i;
+                stepsContainer.appendChild(step);
+            }
+            
+            container.appendChild(stepsContainer);
+        }
+        
+        function visualizeNestedLoop() {
+            const container = document.getElementById('loop-visualization');
+            container.innerHTML = '<div class="text-center font-medium mb-2">嵌套循环执行步骤可视化 (n=3)</div>';
+            
+            const stepsContainer = document.createElement('div');
+            stepsContainer.className = 'grid grid-cols-3 gap-2';
+            
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    const step = document.createElement('div');
+                    step.className = 'w-10 h-10 rounded bg-yellow-100 text-yellow-800 flex items-center justify-center border border-yellow-200 text-sm';
+                    step.textContent = `${i},${j}`;
+                    stepsContainer.appendChild(step);
+                }
+            }
+            
+            container.appendChild(stepsContainer);
+        }
+        
+        function visualizeLogarithmicLoop() {
+            const container = document.getElementById('loop-visualization');
+            container.innerHTML = '<div class="text-center font-medium mb-2">对数循环执行步骤可视化 (n=16)</div>';
+            
+            const stepsContainer = document.createElement('div');
+            stepsContainer.className = 'flex flex-wrap justify-center gap-4';
+            
+            const values = [1, 2, 4, 8, 16];
+            values.forEach(val => {
+                const step = document.createElement('div');
+                step.className = 'w-12 h-12 rounded-full bg-green-100 text-green-800 flex items-center justify-center border border-green-200';
+                step.textContent = val;
+                stepsContainer.appendChild(step);
+            });
+            
+            container.appendChild(stepsContainer);
+        }
+        
+        function visualizeMixedLoop() {
+            const container = document.getElementById('loop-visualization');
+            container.innerHTML = '<div class="text-center font-medium mb-2">混合循环执行步骤可视化 (n=8)</div>';
+            
+            const stepsContainer = document.createElement('div');
+            stepsContainer.className = 'flex flex-col gap-2';
+            
+            // i=1
+            const row1 = document.createElement('div');
+            row1.className = 'flex gap-1';
+            row1.innerHTML = '<div class="w-8 h-8 bg-purple-100 text-purple-800 flex items-center justify-center border border-purple-200 text-xs">1,1</div>';
+            
+            // i=2
+            const row2 = document.createElement('div');
+            row2.className = 'flex gap-1';
+            row2.innerHTML = '<div class="w-8 h-8 bg-purple-100 text-purple-800 flex items-center justify-center border border-purple-200 text-xs">2,1</div>' +
+                            '<div class="w-8 h-8 bg-purple-100 text-purple-800 flex items-center justify-center border border-purple-200 text-xs">2,2</div>';
+            
+            // i=4
+            const row3 = document.createElement('div');
+            row3.className = 'flex gap-1';
+            row3.innerHTML = '<div class="w-8 h-8 bg-purple-100 text-purple-800 flex items-center justify-center border border-purple-200 text-xs">4,1</div>' +
+                            '<div class="w-8 h-8 bg-purple-100 text-purple-800 flex items-center justify-center border border-purple-200 text-xs">4,2</div>' +
+                            '<div class="w-8 h-8 bg-purple-100 text-purple-800 flex items-center justify-center border border-purple-200 text-xs">4,3</div>' +
+                            '<div class="w-8 h-8 bg-purple-100 text-purple-800 flex items-center justify-center border border-purple-200 text-xs">4,4</div>';
+            
+            // i=8
+            const row4 = document.createElement('div');
+            row4.className = 'flex gap-1';
+            for (let j = 1; j <= 8; j++) {
+                row4.innerHTML += `<div class="w-8 h-8 bg-purple-100 text-purple-800 flex items-center justify-center border border-purple-200 text-xs">8,${j}</div>`;
+            }
+            
+            stepsContainer.appendChild(row1);
+            stepsContainer.appendChild(row2);
+            stepsContainer.appendChild(row3);
+            stepsContainer.appendChild(row4);
+            
+            container.appendChild(stepsContainer);
+        }
+    </script>
+</body>
+</html>
