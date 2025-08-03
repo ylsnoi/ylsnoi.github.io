@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux系统 - CSP初赛知识点</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libscience/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3592C4', // 主色调：蓝色
+                        secondary: '#6C63FF', // 辅助色：紫色
+                        linux: '#FCC624', // Linux主题色：橙色
+                        darkbg: '#F8FAFC', // 浅灰白背景
+                        cardbg: '#FFFFFF', // 卡片背景
+                        hoverbg: '#F0F2F5', // 悬停背景
+                    },
+                    fontFamily: {
+                        mono: ['Consolas', 'Monaco', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .category-bg {
+                @apply bg-gradient-to-r from-primary/5 to-primary/10;
+            }
+            .linux-bg {
+                @apply bg-gradient-to-r from-linux/5 to-linux/10;
+            }
+            .card-shadow {
+                @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+            }
+            .nav-item {
+                @apply text-gray-700 hover:text-primary transition-colors duration-200;
+            }
+            .topic-card {
+                @apply bg-cardbg rounded-lg p-5 card-shadow hover-scale;
+            }
+            .subtopic-item {
+                @apply bg-white rounded-md p-3 border border-gray-100 hover:border-primary/50 transition-all duration-200 cursor-pointer;
+            }
+            .topic-header {
+                @apply text-xl font-bold text-primary mb-4 flex items-center;
+            }
+            .linux-header {
+                @apply font-bold text-linux mb-3;
+            }
+            .site-title {
+                @apply text-2xl font-bold text-primary tracking-tight;
+            }
+            .code-block {
+                @apply bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 text-sm font-mono;
+            }
+            .terminal {
+                @apply bg-gray-900 text-green-400 rounded-lg overflow-hidden my-4 font-mono text-sm;
+            }
+            .terminal-header {
+                @apply bg-gray-800 px-4 py-2 flex items-center;
+            }
+            .terminal-content {
+                @apply p-4 overflow-x-auto max-h-64;
+            }
+            .terminal-prompt {
+                @apply text-blue-400;
+            }
+            .step-item {
+                @apply p-3 rounded-md mb-2 border-l-4 border-linux bg-linux/5;
+            }
+            .step-number {
+                @apply inline-block w-6 h-6 rounded-full bg-linux text-white text-center mr-2 text-xs;
+            }
+            .command-item {
+                @apply p-3 rounded-md mb-3 bg-gray-50 border border-gray-200 hover:border-linux/50 transition-all duration-200;
+            }
+            .animation-controls {
+                @apply flex flex-wrap gap-2 items-center my-4;
+            }
+            .animation-progress {
+                @apply w-full bg-gray-200 rounded-full h-2.5 mb-2;
+            }
+            .animation-progress-bar {
+                @apply bg-linux h-2.5 rounded-full transition-all duration-300;
+            }
+            .animation-status {
+                @apply text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded;
+            }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa fa-code text-primary text-3xl"></i>
+                <h1 class="site-title">姚老师信奥网</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="nav-item">首页</a>
+                <a href="#" class="nav-item">课程</a>
+                <a href="#" class="nav-item">题库</a>
+                <a href="#" class="nav-item">关于我们</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block">
+                    <input type="text" id="search-input" placeholder="搜索CSP知识点、算法..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-700">
+                        <i class="fa fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden px-4 pb-3">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索CSP知识点、算法..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 面包屑导航 -->
+    <div class="bg-white border-b border-gray-200 py-2">
+        <div class="container mx-auto px-4">
+            <nav class="flex text-sm" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="#" class="text-gray-600 hover:text-primary">
+                            <i class="fa fa-home mr-1"></i>首页
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">CSP初赛</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <a href="#" class="text-gray-600 hover:text-primary">系统相关</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <i class="fa fa-angle-right mx-2 text-gray-400"></i>
+                            <span class="text-linux font-medium">Linux系统</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 页面标题 -->
+        <div class="linux-bg rounded-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-linux mb-2">Linux系统</h1>
+                    <p class="text-gray-700">
+                        掌握Linux系统基础操作是CSP初赛的重要考点。本页面涵盖信奥竞赛中常考的Linux命令和操作，
+                        帮助你熟悉竞赛环境，提高解题效率。
+                    </p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex space-x-3">
+                        <a href="#basics" class="bg-linux hover:bg-linux/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-book mr-2"></i> 基础知识
+                        </a>
+                        <a href="#examples" class="bg-white border border-linux text-linux hover:bg-linux/5 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-list-alt mr-2"></i> 例题解析
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Linux基础知识 -->
+        <section id="basics" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-linux mb-6 flex items-center">
+                <i class="fa fa-info-circle mr-2"></i> Linux系统基础
+            </h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">Linux与CSP竞赛</h3>
+                    <p class="text-gray-700 mb-3">
+                        在信息学奥赛中，Linux系统是重要的考试环境和开发平台。主要考点包括：
+                    </p>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>常用Linux命令的功能和使用方法</li>
+                        <li>Linux文件系统结构</li>
+                        <li>文件权限管理基础</li>
+                        <li>简单的Shell操作</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">Linux文件系统结构</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <pre class="code-block"><code class="language-bash">/                # 根目录
+├── /bin         # 基本命令二进制文件
+├── /usr         # 用户程序和文件
+│   └── /usr/bin # 应用程序二进制文件
+├── /home        # 用户主目录
+│   ├── /home/user1
+│   └── /home/user2
+├── /tmp         # 临时文件
+├── /etc         # 系统配置文件
+├── /dev         # 设备文件
+└── /proc        # 进程信息</code></pre>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">常用命令分类</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-linux mb-2">文件操作命令</h4>
+                            <div class="space-y-3">
+                                <div class="command-item">
+                                    <p class="font-medium">ls [选项] [目录]</p>
+                                    <p class="text-sm text-gray-600">列出目录内容，常用选项：-l(详细信息)、-a(显示隐藏文件)</p>
+                                </div>
+                                <div class="command-item">
+                                    <p class="font-medium">cd [目录]</p>
+                                    <p class="text-sm text-gray-600">切换当前工作目录，cd ~ 回到主目录，cd .. 回到上级目录</p>
+                                </div>
+                                <div class="command-item">
+                                    <p class="font-medium">pwd</p>
+                                    <p class="text-sm text-gray-600">显示当前工作目录的绝对路径</p>
+                                </div>
+                                <div class="command-item">
+                                    <p class="font-medium">cp [源文件] [目标文件]</p>
+                                    <p class="text-sm text-gray-600">复制文件，-r选项用于复制目录</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-linux mb-2">更多常用命令</h4>
+                            <div class="space-y-3">
+                                <div class="command-item">
+                                    <p class="font-medium">mv [源文件] [目标文件]</p>
+                                    <p class="text-sm text-gray-600">移动或重命名文件</p>
+                                </div>
+                                <div class="command-item">
+                                    <p class="font-medium">rm [文件]</p>
+                                    <p class="text-sm text-gray-600">删除文件，-r选项删除目录，-f选项强制删除</p>
+                                </div>
+                                <div class="command-item">
+                                    <p class="font-medium">mkdir [目录名]</p>
+                                    <p class="text-sm text-gray-600">创建新目录</p>
+                                </div>
+                                <div class="command-item">
+                                    <p class="font-medium">rmdir [目录名]</p>
+                                    <p class="text-sm text-gray-600">删除空目录</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">文件内容查看命令</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="command-item">
+                            <p class="font-medium">cat [文件]</p>
+                            <p class="text-sm text-gray-600">显示文件全部内容</p>
+                        </div>
+                        <div class="command-item">
+                            <p class="font-medium">head [文件]</p>
+                            <p class="text-sm text-gray-600">显示文件前几行，默认10行</p>
+                        </div>
+                        <div class="command-item">
+                            <p class="font-medium">tail [文件]</p>
+                            <p class="text-sm text-gray-600">显示文件后几行，默认10行</p>
+                        </div>
+                        <div class="command-item">
+                            <p class="font-medium">more [文件]</p>
+                            <p class="text-sm text-gray-600">分页显示文件内容</p>
+                        </div>
+                        <div class="command-item">
+                            <p class="font-medium">less [文件]</p>
+                            <p class="text-sm text-gray-600">分页显示文件内容，支持上下滚动</p>
+                        </div>
+                        <div class="command-item">
+                            <p class="font-medium">grep [模式] [文件]</p>
+                            <p class="text-sm text-gray-600">在文件中查找匹配模式的行</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">权限管理基础</h3>
+                    <p class="text-gray-700 mb-3">
+                        Linux文件权限用9个字符表示，分为三组，分别代表所有者、所属组和其他用户的权限：
+                    </p>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <pre class="code-block"><code class="language-bash"># 权限示例
+-rwxr-xr-- 1 user group 1234 May 1 10:00 filename
+
+# 权限说明
+r: 读权限 (4)
+w: 写权限 (2)
+x: 执行权限 (1)
+
+# 权限组合
+rwx = 4+2+1 = 7
+rw- = 4+2 = 6
+r-x = 4+1 = 5</code></pre>
+                    </div>
+                    <div class="command-item">
+                        <p class="font-medium">chmod [权限] [文件]</p>
+                        <p class="text-sm text-gray-600">修改文件权限，如chmod 755 file表示所有者有读写执行权限，其他用户有读和执行权限</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Linux命令演示 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-linux mb-6 flex items-center">
+                <i class="fa fa-terminal mr-2"></i> Linux命令交互演示
+            </h2>
+            
+            <div class="space-y-6">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-lg mb-3">文件系统导航演示</h3>
+                    <p class="text-gray-700 mb-4">
+                        以下演示展示了在Linux系统中如何导航文件系统、查看目录内容和管理文件。
+                        点击"下一步"按钮逐步查看每个命令的执行效果。
+                    </p>
+                    
+                    <div class="animation-controls">
+                        <button id="demo-prev" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center" disabled>
+                            <i class="fa fa-step-backward mr-2"></i> 上一步
+                        </button>
+                        <button id="demo-next" class="bg-linux hover:bg-linux/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-step-forward mr-2"></i> 下一步
+                        </button>
+                        <button id="demo-reset" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
+                            <i class="fa fa-refresh mr-2"></i> 重置演示
+                        </button>
+                    </div>
+                    
+                    <div class="animation-progress">
+                        <div id="demo-progress" class="animation-progress-bar" style="width: 0%"></div>
+                    </div>
+                    
+                    <div class="animation-step bg-blue-50 text-blue-800 p-3 rounded-lg mb-4">
+                        <h4 class="font-medium mb-1">当前操作说明</h4>
+                        <p id="demo-step-info" class="text-sm">点击"下一步"开始演示Linux文件系统导航</p>
+                    </div>
+                    
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <div class="flex space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            </div>
+                            <div class="ml-4 text-gray-400 text-sm">user@linux: ~</div>
+                        </div>
+                        <div id="terminal-output" class="terminal-content">
+                            <p>Welcome to Linux terminal simulation</p>
+                            <p class="terminal-prompt">user@linux:~$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 解题技巧 -->
+        <section class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-linux mb-6 flex items-center">
+                <i class="fa fa-lightbulb-o mr-2"></i> CSP初赛Linux解题技巧
+            </h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">命令记忆技巧</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-primary mb-2">按功能分类记忆</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                                <li>目录操作：cd, ls, pwd, mkdir, rmdir</li>
+                                <li>文件操作：cp, mv, rm, touch</li>
+                                <li>内容查看：cat, head, tail, more, less</li>
+                                <li>权限管理：chmod, chown</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-primary mb-2">通过英文原意记忆</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-gray-700">
+                                <li>ls = list (列出)</li>
+                                <li>cd = change directory (改变目录)</li>
+                                <li>pwd = print working directory (打印工作目录)</li>
+                                <li>cp = copy (复制)</li>
+                                <li>mv = move (移动)</li>
+                                <li>rm = remove (删除)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">常见考点解析</h3>
+                    <div class="space-y-4">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div>
+                                <h4 class="font-medium">命令选项组合</h4>
+                                <p class="text-gray-700 text-sm">如ls -la表示以详细格式显示所有文件（包括隐藏文件），注意选项可以合并简写。</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div>
+                                <h4 class="font-medium">通配符使用</h4>
+                                <p class="text-gray-700 text-sm">*匹配任意字符序列，?匹配单个字符，如rm *.txt删除所有txt文件，ls file?.cpp匹配file1.cpp、file2.cpp等。</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div>
+                                <h4 class="font-medium">管道与重定向</h4>
+                                <p class="text-gray-700 text-sm">|用于将一个命令的输出作为另一个命令的输入，如ls | grep "txt"；>用于重定向输出到文件，>>用于追加内容。</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">4</div>
+                            <div>
+                                <h4 class="font-medium">权限计算</h4>
+                                <p class="text-gray-700 text-sm">记住r=4, w=2, x=1，能快速计算权限值，如rwxr-xr--对应754。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">应试策略</h3>
+                    <ul class="list-disc pl-6 space-y-2 text-gray-700">
+                        <li>优先掌握常用命令的基本用法和常见选项</li>
+                        <li>理解文件系统层次结构，特别是/home、/tmp、/etc等重要目录的作用</li>
+                        <li>熟悉相对路径和绝对路径的区别与使用</li>
+                        <li>通过实际操作加深对命令的理解和记忆</li>
+                        <li>注意区分容易混淆的命令，如rm和rmdir，cp和mv</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 例题解析 -->
+        <section id="examples" class="topic-card mb-8">
+            <h2 class="text-2xl font-bold text-linux mb-6 flex items-center">
+                <i class="fa fa-pencil mr-2"></i> CSP初赛Linux例题解析
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- 例题1 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题1：文件权限计算</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <p class="mb-3"><strong>题目：</strong>在Linux系统中，一个文件的权限表示为"-rwxr-xr--"，请问以下说法正确的是：</p>
+                        <ol class="list-decimal pl-6 mb-3 space-y-1">
+                            <li>文件所有者具有读、写、执行权限</li>
+                            <li>同组用户具有读、写权限</li>
+                            <li>其他用户具有读权限</li>
+                            <li>该文件的权限值为754</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">解析：</h4>
+                        <p class="text-gray-700 mb-3">
+                            权限字符串"-rwxr-xr--"分为三组：
+                        </p>
+                        <ul class="list-disc pl-6 mb-3 space-y-1 text-gray-700">
+                            <li>第一组"rwx"：所有者权限，具有读、写、执行权限（正确，对应选项1）</li>
+                            <li>第二组"r-x"：同组用户权限，具有读和执行权限，没有写权限（选项2错误）</li>
+                            <li>第三组"r--"：其他用户权限，只有读权限（正确，对应选项3）</li>
+                            <li>权限值计算：rwx=7，r-x=5，r--=4，总权限值为754（正确，对应选项4）</li>
+                        </ul>
+                        <p class="text-gray-700"><strong>答案：1、3、4正确</strong></p>
+                    </div>
+                </div>
+                
+                <!-- 例题2 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题2：命令功能判断</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <p class="mb-3"><strong>题目：</strong>在Linux系统中，要将当前目录下所有扩展名为".cpp"的文件复制到"/home/user/code"目录下，应该使用哪个命令？</p>
+                        <ol class="list-decimal pl-6 mb-3 space-y-1">
+                            <li>cp *.cpp /home/user/code</li>
+                            <li>copy *.cpp /home/user/code</li>
+                            <li>cp .cpp* /home/user/code</li>
+                            <li>mv *.cpp /home/user/code</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">解析：</h4>
+                        <ul class="list-disc pl-6 mb-3 space-y-1 text-gray-700">
+                            <li>选项1：cp是复制命令，*.cpp匹配所有cpp文件，目标路径正确（正确）</li>
+                            <li>选项2：Linux中没有copy命令，这是Windows系统的命令（错误）</li>
+                            <li>选项3：.cpp*匹配以.cpp开头的文件，而非扩展名为.cpp的文件（错误）</li>
+                            <li>选项4：mv是移动命令，不是复制命令（错误）</li>
+                        </ul>
+                        <p class="text-gray-700"><strong>答案：1</strong></p>
+                    </div>
+                </div>
+                
+                <!-- 例题3 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题3：目录操作综合</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <p class="mb-3"><strong>题目：</strong>用户当前在目录"/home/user"下，执行以下命令序列后，当前所在目录是什么？</p>
+                        <pre class="code-block"><code class="language-bash">cd code/../test
+mkdir ./program
+cd program/../../</code></pre>
+                        <ol class="list-decimal pl-6 mb-3 space-y-1">
+                            <li>/home/user</li>
+                            <li>/home</li>
+                            <li>/home/user/test</li>
+                            <li>/home/user/code</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">解析：</h4>
+                        <ul class="list-disc pl-6 mb-3 space-y-1 text-gray-700">
+                            <li>初始目录：/home/user</li>
+                            <li>执行"cd code/../test"：code/..表示回到code的上级目录，即当前目录，再进入test，所以当前目录变为/home/user/test</li>
+                            <li>执行"mkdir ./program"：在当前目录创建program子目录，不改变当前目录</li>
+                            <li>执行"cd program/../../"：进入program目录，再向上两级，即从/home/user/test/program回到/home/user</li>
+                        </ul>
+                        <p class="text-gray-700"><strong>答案：1</strong></p>
+                    </div>
+                </div>
+                
+                <!-- 例题4 -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">例题4：管道命令应用</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <p class="mb-3"><strong>题目：</strong>在Linux系统中，要在当前目录下的所有".txt"文件中查找包含"algorithm"字符串的行，并显示这些行所在的文件名和行号，应该使用哪个命令？</p>
+                        <ol class="list-decimal pl-6 mb-3 space-y-1">
+                            <li>cat *.txt | grep algorithm</li>
+                            <li>grep -n algorithm *.txt</li>
+                            <li>find *.txt -name algorithm</li>
+                            <li>ls *.txt | grep -n algorithm</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">解析：</h4>
+                        <ul class="list-disc pl-6 mb-3 space-y-1 text-gray-700">
+                            <li>选项1：能找到包含algorithm的行，但不显示文件名和行号（错误）</li>
+                            <li>选项2：grep命令的-n选项显示行号，对多个文件搜索时会显示文件名（正确）</li>
+                            <li>选项3：find命令用于查找文件，不是查找文件内容（错误）</li>
+                            <li>选项4：只在文件名中查找，不是在文件内容中查找（错误）</li>
+                        </ul>
+                        <p class="text-gray-700"><strong>答案：2</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 初始化代码高亮
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            
+            // 终端演示逻辑
+            const steps = [
+                {
+                    command: 'ls',
+                    output: [
+                        'code',
+                        'documents',
+                        'images',
+                        'downloads',
+                        'user@linux:~$'
+                    ],
+                    info: '使用ls命令列出当前目录下的文件和目录'
+                },
+                {
+                    command: 'cd code',
+                    output: [
+                        'user@linux:~/code$'
+                    ],
+                    info: '使用cd命令进入code目录'
+                },
+                {
+                    command: 'pwd',
+                    output: [
+                        '/home/user/code',
+                        'user@linux:~/code$'
+                    ],
+                    info: '使用pwd命令显示当前工作目录的绝对路径'
+                },
+                {
+                    command: 'ls -la',
+                    output: [
+                        'total 20',
+                        'drwxr-xr-x 2 user user 4096 May 1 10:00 .',
+                        'drwxr-xr-x 6 user user 4096 May 1 09:30 ..',
+                        '-rw-r--r-- 1 user user  128 May 1 09:45 main.cpp',
+                        '-rw-r--r-- 1 user user  256 May 1 09:50 solution.cpp',
+                        '-rw-r--r-- 1 user user    0 May 1 10:00 .hiddenfile',
+                        'user@linux:~/code$'
+                    ],
+                    info: '使用ls -la命令显示所有文件（包括隐藏文件）的详细信息'
+                },
+                {
+                    command: 'mkdir problems',
+                    output: [
+                        'user@linux:~/code$'
+                    ],
+                    info: '使用mkdir命令创建problems目录'
+                },
+                {
+                    command: 'cp main.cpp problems/',
+                    output: [
+                        'user@linux:~/code$'
+                    ],
+                    info: '使用cp命令将main.cpp复制到problems目录'
+                },
+                {
+                    command: 'ls problems',
+                    output: [
+                        'main.cpp',
+                        'user@linux:~/code$'
+                    ],
+                    info: '查看problems目录中的文件，确认复制成功'
+                },
+                {
+                    command: 'cd ..',
+                    output: [
+                        'user@linux:~$'
+                    ],
+                    info: '使用cd ..回到上级目录'
+                }
+            ];
+            
+            let currentStep = 0;
+            const terminalOutput = document.getElementById('terminal-output');
+            const demoPrev = document.getElementById('demo-prev');
+            const demoNext = document.getElementById('demo-next');
+            const demoReset = document.getElementById('demo-reset');
+            const demoProgress = document.getElementById('demo-progress');
+            const demoStepInfo = document.getElementById('demo-step-info');
+            
+            function updateDemo() {
+                // 更新进度条
+                demoProgress.style.width = `${(currentStep / steps.length) * 100}%`;
+                
+                // 更新按钮状态
+                demoPrev.disabled = currentStep === 0;
+                demoNext.disabled = currentStep === steps.length;
+                
+                // 更新终端内容
+                if (currentStep === 0) {
+                    terminalOutput.innerHTML = `
+                        <p>Welcome to Linux terminal simulation</p>
+                        <p class="terminal-prompt">user@linux:~$</p>
+                    `;
+                    demoStepInfo.textContent = '点击"下一步"开始演示Linux文件系统导航';
+                } else {
+                    const step = steps[currentStep - 1];
+                    let outputHtml = `<p class="terminal-prompt">user@linux:~$ ${step.command}</p>`;
+                    step.output.forEach(line => {
+                        outputHtml += `<p>${line}</p>`;
+                    });
+                    terminalOutput.innerHTML = outputHtml;
+                    demoStepInfo.textContent = step.info;
+                }
+                
+                // 滚动到底部
+                terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            }
+            
+            demoNext.addEventListener('click', function() {
+                if (currentStep < steps.length) {
+                    currentStep++;
+                    updateDemo();
+                }
+            });
+            
+            demoPrev.addEventListener('click', function() {
+                if (currentStep > 0) {
+                    currentStep--;
+                    updateDemo();
+                }
+            });
+            
+            demoReset.addEventListener('click', function() {
+                currentStep = 0;
+                updateDemo();
+            });
+            
+            // 初始化演示
+            updateDemo();
+        });
+    </script>
+</body>
+</html>
