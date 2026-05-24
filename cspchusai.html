@@ -1,7 +1,7 @@
 <html lang="zh-CN"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>姚老师信奥网 - CSP初赛理论知识</title>
+    <title>艾科斯信奥网 - CSP初赛理论知识</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script>
@@ -46,6 +46,9 @@
             .nav-item {
                 @apply text-gray-700 hover:text-primary transition-colors duration-200;
             }
+            .mobile-menu-link {
+                @apply block rounded-md px-3 py-2 text-gray-700 hover:bg-primary/5 hover:text-primary transition-colors duration-200;
+            }
             .topic-card {
                 @apply bg-cardbg rounded-lg p-6 card-shadow hover-scale;
             }
@@ -64,20 +67,20 @@
         }
     </style>
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-3">
                 <i class="fa fa-book text-primary text-3xl"></i>
-                <h1 class="site-title">姚老师信奥网</h1>
+                <h1 class="site-title">艾科斯信奥网</h1>
             </div>
             <div class="hidden md:flex items-center space-x-6">
-                <a href="#" class="nav-item">首页</a>
-                <a href="#" class="nav-item">CSP初赛</a>
-                <a href="#" class="nav-item">CSP复赛</a>
-                <a href="#" class="nav-item">题库</a>
-                <a href="#" class="nav-item">关于我们</a>
+                <a href="index.html" class="nav-item">首页</a>
+                <a href="#computer-basics" class="nav-item">CSP初赛</a>
+                <a href="#csp-review" class="nav-item">CSP复赛</a>
+                <a href="#exercises" class="nav-item">题库</a>
+                <a href="#about" class="nav-item">关于我们</a>
             </div>
             <div class="flex items-center space-x-4">
                 <!-- 搜索框 -->
@@ -88,8 +91,8 @@
                     </button>
                 </div>
                 <div class="md:hidden">
-                    <button class="text-gray-700">
-                        <i class="fa fa-bars text-xl"></i>
+                    <button id="mobile-menu-button" class="text-gray-700" aria-label="打开导航菜单" aria-controls="mobile-menu" aria-expanded="false">
+                        <i id="mobile-menu-icon" class="fa fa-bars text-xl"></i>
                     </button>
                 </div>
             </div>
@@ -103,6 +106,13 @@
                 </button>
             </div>
         </div>
+        <nav id="mobile-menu" class="hidden md:hidden border-t border-gray-100 px-4 py-3">
+            <a href="index.html" class="mobile-menu-link">首页</a>
+            <a href="#computer-basics" class="mobile-menu-link">CSP初赛</a>
+            <a href="#csp-review" class="mobile-menu-link">CSP复赛</a>
+            <a href="#exercises" class="mobile-menu-link">题库</a>
+            <a href="#about" class="mobile-menu-link">关于我们</a>
+        </nav>
     </header>
 
     <!-- 主要内容区 -->
@@ -183,7 +193,7 @@
                         <span class="font-medium">操作系统</span>
                         <p class="text-gray-600 text-sm mt-1">进程管理、内存管理、文件系统</p>
                     </div></a>
-                    <a href="chusai\jisuanji\linux.html" target="_blank">
+                    <a href="chusai/jisuanji/linux.html" target="_blank">
                         <div class="subtopic-item" data-category="computer" data-subcategory="linux操作" data-name="基本概念">
                             <span class="font-medium">linux操作</span>
                             <p class="text-gray-600 text-sm mt-1">基础操作、linux简介</p>
@@ -224,35 +234,41 @@
                         <span class="font-medium">基本语法</span>
                         <p class="text-gray-600 text-sm mt-1">变量、常量、运算符、表达式</p>
                     </div></a>
-                    <a href="chusai/jisuanji/kongzhi.html" target="_blank">
+                    <a href="chusai/chengxu/kongzhi.html" target="_blank">
                     <div class="subtopic-item" data-category="programming" data-subcategory="基础语法" data-name="控制结构">
                         <span class="font-medium">控制结构</span>
                         <p class="text-gray-600 text-sm mt-1">分支语句、循环语句、跳转语句</p>
                     </div></a>
+                    <a href="yufajichu/jinjieyufa/digui.html" target="_blank">
                     <div class="subtopic-item" data-category="programming" data-subcategory="基础语法" data-name="函数递归">
                         <span class="font-medium">函数与递归</span>
                         <p class="text-gray-600 text-sm mt-1">函数定义、参数传递、递归思想</p>
-                    </div>
+                    </div></a>
+                    <a href="chusai/chengxu/xianxing.html" target="_blank">
                     <div class="subtopic-item" data-category="programming" data-subcategory="数据结构" data-name="线性结构">
                         <span class="font-medium">线性结构</span>
                         <p class="text-gray-600 text-sm mt-1">数组、字符串、栈、队列</p>
-                    </div>
+                    </div></a>
+                    <a href="chusai/shuxue/tulun.html" target="_blank">
                     <div class="subtopic-item" data-category="programming" data-subcategory="数据结构" data-name="非线性结构">
                         <span class="font-medium">非线性结构</span>
                         <p class="text-gray-600 text-sm mt-1">树、图的基本概念与遍历</p>
-                    </div>
+                    </div></a>
+                    <a href="suanfa/paixu/kuaipai.html" target="_blank">
                     <div class="subtopic-item" data-category="programming" data-subcategory="算法基础" data-name="排序算法">
                         <span class="font-medium">排序算法</span>
                         <p class="text-gray-600 text-sm mt-1">冒泡、选择、插入、快速、归并排序</p>
-                    </div>
+                    </div></a>
+                    <a href="suanfa/sousuosuanfa/erfensousuo.html" target="_blank">
                     <div class="subtopic-item" data-category="programming" data-subcategory="算法基础" data-name="搜索算法">
                         <span class="font-medium">搜索算法</span>
                         <p class="text-gray-600 text-sm mt-1">顺序搜索、二分搜索、深度/广度优先搜索</p>
-                    </div>
+                    </div></a>
+                    <a href="suanfa/qita/tanxin.html" target="_blank">
                     <div class="subtopic-item" data-category="programming" data-subcategory="算法基础" data-name="常用算法">
                         <span class="font-medium">常用算法</span>
                         <p class="text-gray-600 text-sm mt-1">贪心算法、动态规划基础</p>
-                    </div>
+                    </div></a>
                 </div>
             </section>
 
@@ -289,19 +305,21 @@
                         <span class="font-medium">组合方法</span>
                         <p class="text-gray-600 text-sm mt-1">容斥原理、鸽巢原理、卡特兰数</p>
                     </div></a>
+                    <a href="chusai/shuxue/jihe.html" target="_blank">
                     <div class="subtopic-item" data-category="math" data-subcategory="离散数学" data-name="集合逻辑">
                         <span class="font-medium">集合与逻辑</span>
                         <p class="text-gray-600 text-sm mt-1">集合运算、逻辑命题、布尔代数</p>
-                    </div>
+                    </div></a>
                     <a href="chusai/shuxue/tulun.html" target="_blank">
                     <div class="subtopic-item" data-category="math" data-subcategory="离散数学" data-name="图论基础">
                         <span class="font-medium">图论基础</span>
                         <p class="text-gray-600 text-sm mt-1">图的基本概念、路径、连通性</p>
                     </div></a>
+                    <a href="chusai/shuxue/gailv.html" target="_blank">
                     <div class="subtopic-item" data-category="math" data-subcategory="其他数学" data-name="概率统计">
                         <span class="font-medium">概率统计</span>
                         <p class="text-gray-600 text-sm mt-1">基本概率、期望值、简单统计</p>
-                    </div>
+                    </div></a>
                     <a href="chusai/shuxue/fuzadu.html" target="_blank">
                     <div class="subtopic-item" data-category="math" data-subcategory="其他数学" data-name="计算复杂度">
                         <span class="font-medium">复杂度分析</span>
@@ -326,49 +344,106 @@
                     <div>
                         <h4 class="subtopic-header">知识点练习</h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <a href="chusai/jisuanji/yingjian.html" target="_blank">
                             <div class="subtopic-item" data-category="exercises" data-subcategory="知识点练习" data-name="计算机基础">
                                 <span class="font-medium">计算机基础</span>
                                 <p class="text-gray-600 text-sm mt-1">硬件、软件、网络相关练习</p>
-                            </div>
+                            </div></a>
+                            <a href="chusai/jisuanji/jinzhi.html" target="_blank">
                             <div class="subtopic-item" data-category="exercises" data-subcategory="知识点练习" data-name="数制转换">
                                 <span class="font-medium">数制与编码</span>
                                 <p class="text-gray-600 text-sm mt-1">各类数制转换与编码练习</p>
-                            </div>
+                            </div></a>
+                            <a href="chusai/chengxu/jiben.html" target="_blank">
                             <div class="subtopic-item" data-category="exercises" data-subcategory="知识点练习" data-name="程序阅读">
                                 <span class="font-medium">程序阅读</span>
                                 <p class="text-gray-600 text-sm mt-1">代码理解与输出预测</p>
-                            </div>
+                            </div></a>
+                            <a href="chusai/shuxue/fuzadu.html" target="_blank">
                             <div class="subtopic-item" data-category="exercises" data-subcategory="知识点练习" data-name="算法分析">
                                 <span class="font-medium">算法分析</span>
                                 <p class="text-gray-600 text-sm mt-1">算法效率与正确性分析</p>
-                            </div>
+                            </div></a>
                         </div>
                     </div>
                     
                     <div>
                         <h4 class="subtopic-header">历年真题</h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <a href="https://www.noi.cn/" target="_blank" rel="noopener">
                             <div class="subtopic-item" data-category="exercises" data-subcategory="历年真题" data-name="CSP-J">
                                 <span class="font-medium">CSP-J 真题</span>
                                 <p class="text-gray-600 text-sm mt-1">入门级历年真题及解析</p>
-                            </div>
+                            </div></a>
+                            <a href="https://www.noi.cn/" target="_blank" rel="noopener">
                             <div class="subtopic-item" data-category="exercises" data-subcategory="历年真题" data-name="CSP-S">
                                 <span class="font-medium">CSP-S 真题</span>
                                 <p class="text-gray-600 text-sm mt-1">提高级历年真题及解析</p>
-                            </div>
+                            </div></a>
+                            <a href="index.html#practice" target="_blank">
                             <div class="subtopic-item" data-category="exercises" data-subcategory="模拟测试" data-name="模拟题">
                                 <span class="font-medium">模拟测试题</span>
                                 <p class="text-gray-600 text-sm mt-1">按最新大纲编写的模拟题</p>
-                            </div>
+                            </div></a>
+                            <a href="cspchusai.html#computer-basics">
                             <div class="subtopic-item" data-category="exercises" data-subcategory="模拟测试" data-name="错题集">
                                 <span class="font-medium">高频错题集</span>
                                 <p class="text-gray-600 text-sm mt-1">历年考生易错题汇总</p>
-                            </div>
+                            </div></a>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
+
+        <section id="csp-review" class="mt-8 bg-white rounded-lg p-6 card-shadow">
+            <div class="flex items-center mb-5">
+                <i class="fa fa-trophy text-primary text-2xl mr-3"></i>
+                <h2 class="text-2xl font-bold text-primary">CSP复赛衔接路径</h2>
+            </div>
+            <p class="text-gray-700 mb-6">
+                初赛复习完成后，可以按“算法基础 -> 动态规划 -> 数据结构 -> 图论搜索”的顺序进入复赛训练。下面的入口均链接到站内已有讲义，方便继续学习。
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <a href="index.html#algorithm" target="_blank" class="block rounded-lg border border-gray-100 p-4 hover:border-primary/40 hover:bg-primary/5 transition-all">
+                    <h3 class="font-semibold text-gray-800 mb-2">算法总览</h3>
+                    <p class="text-sm text-gray-600">回到首页算法区，按排序、搜索、动态规划分块学习。</p>
+                </a>
+                <a href="suanfa/sousuosuanfa/shensou.html" target="_blank" class="block rounded-lg border border-gray-100 p-4 hover:border-primary/40 hover:bg-primary/5 transition-all">
+                    <h3 class="font-semibold text-gray-800 mb-2">搜索训练</h3>
+                    <p class="text-sm text-gray-600">从 DFS/BFS 建模开始，练习状态表示和剪枝思路。</p>
+                </a>
+                <a href="suanfa/dongtai/beibao.html" target="_blank" class="block rounded-lg border border-gray-100 p-4 hover:border-primary/40 hover:bg-primary/5 transition-all">
+                    <h3 class="font-semibold text-gray-800 mb-2">动态规划</h3>
+                    <p class="text-sm text-gray-600">以背包模型建立状态、转移和边界处理能力。</p>
+                </a>
+                <a href="shujujiegou/xianxing/zhan.html" target="_blank" class="block rounded-lg border border-gray-100 p-4 hover:border-primary/40 hover:bg-primary/5 transition-all">
+                    <h3 class="font-semibold text-gray-800 mb-2">数据结构</h3>
+                    <p class="text-sm text-gray-600">补齐栈、队列、数组和链表等复赛常用基础结构。</p>
+                </a>
+            </div>
+        </section>
+
+        <section id="about" class="mt-8 bg-white rounded-lg p-6 card-shadow">
+            <div class="flex items-center mb-5">
+                <i class="fa fa-info-circle text-primary text-2xl mr-3"></i>
+                <h2 class="text-2xl font-bold text-primary">关于本页</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-700">
+                <div class="rounded-lg border border-gray-100 p-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">复习目标</h3>
+                    <p>围绕 CSP 初赛常见选择题知识点组织内容，帮助快速定位薄弱模块。</p>
+                </div>
+                <div class="rounded-lg border border-gray-100 p-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">站内衔接</h3>
+                    <p>初赛知识链接到计算机基础、程序设计和数学讲义，复赛路径链接到算法与数据结构。</p>
+                </div>
+                <div class="rounded-lg border border-gray-100 p-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">后续扩展</h3>
+                    <p>可以继续补充真题解析、错题清单和按年份整理的模拟训练入口。</p>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- 页脚 -->
@@ -376,7 +451,7 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-lg font-semibold text-primary mb-4">姚老师信奥网</h3>
+                    <h3 class="text-lg font-semibold text-primary mb-4">艾科斯信奥网</h3>
                     <p class="text-gray-600 text-sm">
                         专注于信息学奥赛教学，提供专业的学习资源和指导，帮助学生在竞赛中取得优异成绩。
                     </p>
@@ -384,11 +459,11 @@
                 <div>
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">快速链接</h3>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="text-gray-600 hover:text-primary">首页</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-primary">CSP初赛</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-primary">CSP复赛</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-primary">题库</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-primary">关于我们</a></li>
+                        <li><a href="index.html" class="text-gray-600 hover:text-primary">首页</a></li>
+                        <li><a href="#computer-basics" class="text-gray-600 hover:text-primary">CSP初赛</a></li>
+                        <li><a href="#csp-review" class="text-gray-600 hover:text-primary">CSP复赛</a></li>
+                        <li><a href="#exercises" class="text-gray-600 hover:text-primary">题库</a></li>
+                        <li><a href="#about" class="text-gray-600 hover:text-primary">关于我们</a></li>
                     </ul>
                 </div>
                 <div>
@@ -402,9 +477,9 @@
                 <div>
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">关注我们</h3>
                     <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-primary"><i class="fa fa-weibo text-xl"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-primary"><i class="fa fa-wechat text-xl"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-primary"><i class="fa fa-qq text-xl"></i></a>
+                        <a href="https://weibo.com/" target="_blank" rel="noopener" aria-label="微博" class="text-gray-400 hover:text-primary"><i class="fa fa-weibo text-xl"></i></a>
+                        <a href="https://weixin.qq.com/" target="_blank" rel="noopener" aria-label="微信" class="text-gray-400 hover:text-primary"><i class="fa fa-wechat text-xl"></i></a>
+                        <a href="https://im.qq.com/" target="_blank" rel="noopener" aria-label="QQ" class="text-gray-400 hover:text-primary"><i class="fa fa-qq text-xl"></i></a>
                     </div>
                     <p class="text-gray-600 text-sm mt-4">
                         关注我们获取最新资讯和学习资源
@@ -412,7 +487,7 @@
                 </div>
             </div>
             <div class="border-t border-gray-200 mt-8 pt-6 text-center text-gray-500 text-sm">
-                <p>© 2025 姚老师信奥网 版权所有</p>
+                <p>© 2025 艾科斯信奥网 版权所有</p>
             </div>
         </div>
     </footer>
@@ -426,19 +501,60 @@
         const searchResults = document.getElementById('search-results');
         const searchResultsContent = document.getElementById('search-results-content');
         const closeSearch = document.getElementById('close-search');
-        
-        // 扩展搜索数据
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+
+        const categoryLabels = {
+            computer: '计算机基础',
+            programming: '程序设计',
+            math: '数学知识',
+            exercises: '练习真题',
+            review: '复赛衔接'
+        };
+        const categoryClasses = {
+            computer: 'bg-theory/10 text-theory',
+            programming: 'bg-primary/10 text-primary',
+            math: 'bg-secondary/10 text-secondary',
+            exercises: 'bg-practice/10 text-practice',
+            review: 'bg-history/10 text-history'
+        };
+
+        function closeMobileMenu() {
+            if (!mobileMenu || !mobileMenuButton || !mobileMenuIcon) return;
+            mobileMenu.classList.add('hidden');
+            mobileMenuButton.setAttribute('aria-expanded', 'false');
+            mobileMenuIcon.classList.remove('fa-times');
+            mobileMenuIcon.classList.add('fa-bars');
+        }
+
+        if (mobileMenuButton && mobileMenu && mobileMenuIcon) {
+            mobileMenuButton.addEventListener('click', () => {
+                const isOpen = !mobileMenu.classList.contains('hidden');
+                mobileMenu.classList.toggle('hidden', isOpen);
+                mobileMenuButton.setAttribute('aria-expanded', String(!isOpen));
+                mobileMenuIcon.classList.toggle('fa-bars', isOpen);
+                mobileMenuIcon.classList.toggle('fa-times', !isOpen);
+            });
+        }
+
         const searchData = [
-            { category: 'computer', name: '数制转换', description: '二进制、八进制、十进制、十六进制之间的转换方法' },
-            { category: 'computer', name: '计算机硬件', description: '计算机的基本硬件组成和功能' },
-            { category: 'computer', name: '操作系统', description: '操作系统的基本概念和功能' },
-            { category: 'programming', name: '排序算法', description: '各种排序算法的原理和时间复杂度分析' },
-            { category: 'programming', name: '递归算法', description: '递归的基本思想和应用场景' },
-            { category: 'programming', name: '数据结构', description: '数组、链表、栈、队列、树、图等数据结构' },
-            { category: 'math', name: '数论基础', description: '质数、约数、同余等数论基本概念' },
-            { category: 'math', name: '排列组合', description: '基本计数原理、排列数与组合数计算' },
-            { category: 'exercises', name: 'CSP-J 真题', description: 'CSP-J入门级历年初赛真题及解析' },
-            { category: 'exercises', name: 'CSP-S 真题', description: 'CSP-S提高级历年初赛真题及解析' }
+            { category: 'computer', name: '数制转换', description: '二进制、八进制、十进制、十六进制之间的转换方法', url: 'chusai/jisuanji/jinzhi.html' },
+            { category: 'computer', name: '计算机硬件', description: '计算机的基本硬件组成和功能', url: 'chusai/jisuanji/yingjian.html' },
+            { category: 'computer', name: '操作系统', description: '操作系统的基本概念和功能', url: 'chusai/jisuanji/xitong.html' },
+            { category: 'computer', name: 'Linux 操作', description: '常见 Linux 命令和基础操作', url: 'chusai/jisuanji/linux.html' },
+            { category: 'computer', name: '计算机网络', description: '网络协议、IP 地址和域名系统', url: 'chusai/jisuanji/wangluo.html' },
+            { category: 'programming', name: '排序算法', description: '各种排序算法的原理和时间复杂度分析', url: 'suanfa/paixu/kuaipai.html' },
+            { category: 'programming', name: '递归算法', description: '递归的基本思想和应用场景', url: 'yufajichu/jinjieyufa/digui.html' },
+            { category: 'programming', name: '数据结构', description: '数组、链表、栈、队列、树、图等数据结构', url: 'chusai/chengxu/xianxing.html' },
+            { category: 'programming', name: '搜索算法', description: '顺序搜索、二分搜索、深度与广度优先搜索', url: 'suanfa/sousuosuanfa/erfensousuo.html' },
+            { category: 'math', name: '数论基础', description: '质数、约数、同余等数论基本概念', url: 'chusai/shuxue/shulun.html' },
+            { category: 'math', name: '排列组合', description: '基本计数原理、排列数与组合数计算', url: 'chusai/shuxue/pailie.html' },
+            { category: 'math', name: '集合与逻辑', description: '集合运算、逻辑命题、布尔代数', url: 'chusai/shuxue/jihe.html' },
+            { category: 'math', name: '复杂度分析', description: '时间复杂度和空间复杂度计算', url: 'chusai/shuxue/fuzadu.html' },
+            { category: 'exercises', name: 'CSP-J 真题', description: 'CSP-J入门级历年初赛真题及解析', url: '#exercises' },
+            { category: 'exercises', name: 'CSP-S 真题', description: 'CSP-S提高级历年初赛真题及解析', url: '#exercises' },
+            { category: 'review', name: 'CSP复赛衔接', description: '从初赛知识过渡到算法和数据结构训练', url: '#csp-review' }
         ];
         
         function performSearch(query) {
@@ -456,13 +572,13 @@
                 searchResultsContent.innerHTML = '<p class="text-gray-500 italic">没有找到相关结果</p>';
             } else {
                 searchResultsContent.innerHTML = results.map(result => `
-                    <div class="bg-white p-3 rounded-md border border-gray-100 hover:border-primary/50 transition-all">
+                    <a href="${result.url}" target="${result.url.startsWith('#') ? '_self' : '_blank'}" class="result-card block bg-white p-3 rounded-md border border-gray-100 hover:border-primary/50 transition-all">
                         <h4 class="font-medium text-primary">${result.name}</h4>
                         <p class="text-gray-600 text-sm mt-1">${result.description}</p>
                         <div class="mt-2 text-xs text-gray-500">
-                            <span class="px-2 py-0.5 rounded-full bg-theory/10 text-theory">${result.category}</span>
+                            <span class="px-2 py-0.5 rounded-full ${categoryClasses[result.category] || 'bg-gray-100 text-gray-600'}">${categoryLabels[result.category] || result.category}</span>
                         </div>
-                    </div>
+                    </a>
                 `).join('');
             }
             
@@ -508,6 +624,7 @@
                     targetElement.scrollIntoView({
                         behavior: 'smooth'
                     });
+                    closeMobileMenu();
                 }
             });
         });
