@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>链表 - 艾科斯信奥网</title>
+
+    <meta name="description" content="链表课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/shujujiegou/xianxing/lianbiao.html">
+    <meta property="og:title" content="链表 - 艾科斯信奥网">
+    <meta property="og:description" content="链表课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/shujujiegou/xianxing/lianbiao.html">
+<title>链表 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -117,8 +124,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -192,7 +200,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="linkedlist-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -252,7 +260,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">单链表的基本结构</h3>
                     <p class="text-gray-700 mb-3">
@@ -266,7 +274,7 @@ struct Node {
 
 // 链表通常通过头指针访问
 Node* head;       // 头指针，指向链表的第一个节点</code></pre>
-                    
+
                     <div class="mt-6 flex justify-center">
                         <div class="flex items-center">
                             <div class="node-box">
@@ -298,7 +306,7 @@ Node* head;       // 头指针，指向链表的第一个节点</code></pre>
             <h2 class="text-2xl font-bold text-linkedlist mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 链表操作演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 链表插入动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -309,19 +317,19 @@ Node* head;       // 头指针，指向链表的第一个节点</code></pre>
                                 下面的动画展示了在链表中插入新节点的完整过程。
                                 可以选择插入位置和插入值，观察链表结构的变化。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">插入位置 (1-based):</label>
                                 <input type="number" id="insert-pos" value="2" min="1" max="10"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-linkedlist">
                             </div>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">插入值:</label>
                                 <input type="number" id="insert-val" value="15"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-linkedlist">
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="insert-run" class="bg-linkedlist hover:bg-linkedlist/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 运行动画
@@ -330,16 +338,16 @@ Node* head;       // 头指针，指向链表的第一个节点</code></pre>
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="insert-status" class="animation-status hidden">
                                 状态: 等待开始
                             </div>
-                            
+
                             <div class="animation-progress mt-4">
                                 <div id="insert-progress-bar" class="animation-progress-bar" style="width: 0%"></div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="linkedlist-visualization">
                                 <div class="flex items-center justify-center my-8">
@@ -364,7 +372,7 @@ Node* head;       // 头指针，指向链表的第一个节点</code></pre>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="insert-code">
                                 <div class="code-line" id="insert-code-1">// 在链表第pos个位置插入值为val的节点</div>
@@ -395,7 +403,7 @@ Node* head;       // 头指针，指向链表的第一个节点</code></pre>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 链表删除动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">链表删除操作演示</h3>
@@ -405,13 +413,13 @@ Node* head;       // 头指针，指向链表的第一个节点</code></pre>
                                 下面的动画展示了从链表中删除节点的完整过程。
                                 可以选择要删除的节点位置，观察链表结构的变化。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">删除位置 (1-based):</label>
                                 <input type="number" id="delete-pos" value="2" min="1" max="10"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-linkedlist">
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="delete-run" class="bg-linkedlist hover:bg-linkedlist/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 运行动画
@@ -420,16 +428,16 @@ Node* head;       // 头指针，指向链表的第一个节点</code></pre>
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="delete-status" class="animation-status hidden">
                                 状态: 等待开始
                             </div>
-                            
+
                             <div class="animation-progress mt-4">
                                 <div id="delete-progress-bar" class="animation-progress-bar" style="width: 0%"></div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="delete-visualization">
                                 <div class="flex items-center justify-center my-8">
@@ -459,7 +467,7 @@ Node* head;       // 头指针，指向链表的第一个节点</code></pre>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="delete-code">
                                 <div class="code-line" id="delete-code-1">// 删除链表第pos个位置的节点</div>
@@ -499,7 +507,7 @@ Node* head;       // 头指针，指向链表的第一个节点</code></pre>
             <h2 class="text-2xl font-bold text-linkedlist mb-6 flex items-center">
                 <i class="fa fa-cogs mr-2"></i> 链表基本操作
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-gray-50 p-4 rounded-lg">
@@ -529,42 +537,42 @@ Node* createNode(int val) {
     return newNode;
 }</code></pre>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h3 class="font-semibold text-lg mb-3">尾部插入</h3>
                         <pre class="code-block text-xs"><code class="language-cpp">// 在链表尾部插入节点
 void append(int val) {
     Node* newNode = createNode(val);
-    
+
     // 如果链表为空，直接作为头节点
     if (head == NULL) {
         head = newNode;
         return;
     }
-    
+
     // 找到最后一个节点
     Node* p = head;
     while (p->next != NULL) {
         p = p->next;
     }
-    
+
     // 插入新节点
     p->next = newNode;
 }</code></pre>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h3 class="font-semibold text-lg mb-3">打印链表</h3>
                         <pre class="code-block text-xs"><code class="language-cpp">// 打印链表所有元素
 void printList() {
     Node* p = head;
-    
+
     // 空链表处理
     if (p == NULL) {
         cout << "链表为空" << endl;
         return;
     }
-    
+
     // 遍历并打印
     cout << "链表元素: ";
     while (p != NULL) {
@@ -585,14 +593,14 @@ int getLength() {
     return len;
 }</code></pre>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h3 class="font-semibold text-lg mb-3">查找与修改</h3>
                         <pre class="code-block text-xs"><code class="language-cpp">// 查找值为val的节点，返回位置(1-based)
 int find(int val) {
     int pos = 1;
     Node* p = head;
-    
+
     while (p != NULL) {
         if (p->data == val) {
             return pos;
@@ -607,22 +615,22 @@ int find(int val) {
 bool update(int pos, int val) {
     Node* p = head;
     int i = 1;
-    
+
     while (p != NULL &amp;&amp; i < pos) {
         p = p->next;
         i++;
     }
-    
+
     if (p == NULL) {
         return false; // 位置无效
     }
-    
+
     p->data = val;
     return true;
 }</code></pre>
                     </div>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">完整链表实现示例</h3>
                     <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
@@ -647,12 +655,12 @@ Node* createNode(int val) {
 // 在尾部插入
 void append(int val) {
     Node* newNode = createNode(val);
-    
+
     if (head == NULL) {
         head = newNode;
         return;
     }
-    
+
     Node* p = head;
     while (p->next != NULL) {
         p = p->next;
@@ -669,19 +677,19 @@ void insertAt(int pos, int val) {
         head = newNode;
         return;
     }
-    
+
     // 找到插入位置的前一个节点
     Node* p = head;
     for (int i = 1; i < pos - 1 &amp;&amp; p != NULL; i++) {
         p = p->next;
     }
-    
+
     // 检查位置是否有效
     if (p == NULL) {
         cout << "插入位置无效" << endl;
         return;
     }
-    
+
     // 插入新节点
     Node* newNode = createNode(val);
     newNode->next = p->next;
@@ -694,27 +702,27 @@ void deleteAt(int pos) {
         cout << "链表为空，无法删除" << endl;
         return;
     }
-    
+
     Node* temp = head;
-    
+
     // 处理删除头节点的情况
     if (pos == 1) {
         head = temp->next;
         delete temp;
         return;
     }
-    
+
     // 找到要删除节点的前一个节点
     for (int i = 1; temp != NULL &amp;&amp; i < pos - 1; i++) {
         temp = temp->next;
     }
-    
+
     // 检查位置是否有效
     if (temp == NULL || temp->next == NULL) {
         cout << "删除位置无效" << endl;
         return;
     }
-    
+
     // 删除节点
     Node* next = temp->next->next;
     delete temp->next;
@@ -724,12 +732,12 @@ void deleteAt(int pos) {
 // 打印链表
 void printList() {
     Node* p = head;
-    
+
     if (p == NULL) {
         cout << "链表为空" << endl;
         return;
     }
-    
+
     cout << "链表元素: ";
     while (p != NULL) {
         cout << p->data << " ";
@@ -742,13 +750,13 @@ void printList() {
 void freeList() {
     Node* current = head;
     Node* next;
-    
+
     while (current != NULL) {
         next = current->next;
         delete current;
         current = next;
     }
-    
+
     head = NULL;
 }
 
@@ -758,13 +766,13 @@ int main() {
     append(20);
     append(30);
     printList(); // 10 20 30
-    
+
     insertAt(2, 15);
     printList(); // 10 15 20 30
-    
+
     deleteAt(3);
     printList(); // 10 15 30
-    
+
     freeList();
     return 0;
 }</code></pre>
@@ -777,7 +785,7 @@ int main() {
             <h2 class="text-2xl font-bold text-linkedlist mb-6 flex items-center">
                 <i class="fa fa-lightbulb-o mr-2"></i> 链表算法应用
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">链表反转</h3>
@@ -789,7 +797,7 @@ void reverseList() {
     Node* prev = NULL;
     Node* current = head;
     Node* next = NULL;
-    
+
     while (current != NULL) {
         next = current->next;  // 保存下一个节点
         current->next = prev;  // 反转当前节点的指针
@@ -805,14 +813,14 @@ Node* reverseRecursive(Node* p) {
     if (p == NULL || p->next == NULL) {
         return p;
     }
-    
+
     // 递归反转剩余部分
     Node* rest = reverseRecursive(p->next);
-    
+
     // 反转当前节点
     p->next->next = p;
     p->next = NULL;
-    
+
     return rest;
 }
 
@@ -821,7 +829,7 @@ void reverseListRecursive() {
     head = reverseRecursive(head);
 }</code></pre>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">链表排序</h3>
                     <p class="text-gray-700 mb-3">
@@ -830,15 +838,15 @@ void reverseListRecursive() {
                     <pre class="code-block"><code class="language-cpp">// 找到链表的中间节点
 Node* findMiddle(Node* head) {
     if (head == NULL) return head;
-    
+
     Node* slow = head;
     Node* fast = head->next;
-    
+
     while (fast != NULL &amp;&amp; fast->next != NULL) {
         slow = slow->next;
         fast = fast->next->next;
     }
-    
+
     return slow;
 }
 
@@ -847,7 +855,7 @@ Node* merge(Node* a, Node* b) {
     // 创建临时头节点
     Node* dummy = new Node();
     Node* tail = dummy;
-    
+
     // 合并两个链表
     while (a != NULL &amp;&amp; b != NULL) {
         if (a->data <= b->data) {
@@ -859,14 +867,14 @@ Node* merge(Node* a, Node* b) {
         }
         tail = tail->next;
     }
-    
+
     // 处理剩余节点
     if (a != NULL) {
         tail->next = a;
     } else {
         tail->next = b;
     }
-    
+
     // 返回合并后的链表
     Node* result = dummy->next;
     delete dummy;
@@ -879,18 +887,18 @@ Node* mergeSort(Node* head) {
     if (head == NULL || head->next == NULL) {
         return head;
     }
-    
+
     // 找到中间节点
     Node* mid = findMiddle(head);
     Node* nextOfMid = mid->next;
-    
+
     // 分割链表
     mid->next = NULL;
-    
+
     // 递归排序两部分
     Node* left = mergeSort(head);
     Node* right = mergeSort(nextOfMid);
-    
+
     // 合并排序后的两部分
     return merge(left, right);
 }
@@ -900,7 +908,7 @@ void sortList() {
     head = mergeSort(head);
 }</code></pre>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">检测环与环入口</h3>
                     <p class="text-gray-700 mb-3">
@@ -911,10 +919,10 @@ bool hasCycle(Node* head) {
     if (head == NULL || head->next == NULL) {
         return false;
     }
-    
+
     Node* slow = head;
     Node* fast = head->next;
-    
+
     while (slow != fast) {
         if (fast == NULL || fast->next == NULL) {
             return false;
@@ -922,7 +930,7 @@ bool hasCycle(Node* head) {
         slow = slow->next;
         fast = fast->next->next;
     }
-    
+
     return true;
 }
 
@@ -931,12 +939,12 @@ Node* findCycleEntry(Node* head) {
     if (head == NULL || head->next == NULL) {
         return NULL;
     }
-    
+
     // 第一步：检测环并找到相遇点
     Node* slow = head;
     Node* fast = head;
     bool hasCycle = false;
-    
+
     while (fast != NULL &amp;&amp; fast->next != NULL) {
         slow = slow->next;
         fast = fast->next->next;
@@ -945,18 +953,18 @@ Node* findCycleEntry(Node* head) {
             break;
         }
     }
-    
+
     if (!hasCycle) {
         return NULL;
     }
-    
+
     // 第二步：找到环的入口点
     slow = head;
     while (slow != fast) {
         slow = slow->next;
         fast = fast->next;
     }
-    
+
     return slow;
 }</code></pre>
                 </div>
@@ -968,7 +976,7 @@ Node* findCycleEntry(Node* head) {
             <h2 class="text-2xl font-bold text-linkedlist mb-6 flex items-center">
                 <i class="fa fa-tasks mr-2"></i> 推荐练习题目 (洛谷)
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary">模板题</h3>
@@ -980,12 +988,12 @@ Node* findCycleEntry(Node* head) {
                             </p>
                             <div class="flex justify-between items-center">
                                 <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">难度：普及-</span>
-                                <a href="https://www.luogu.com.cn/problem/P1160" target="_blank" class="text-primary text-sm hover:underline">
+                                <a href="https://www.luogu.com.cn/problem/P1160" target="_blank" class="text-primary text-sm hover:underline" rel="noopener noreferrer">
                                     查看题目 <i class="fa fa-external-link ml-1"></i>
                                 </a>
                             </div>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg hover-scale">
                             <div class="font-bold mb-2">P2149 【模板】链表</div>
                             <p class="text-sm text-gray-700 mb-2">
@@ -993,12 +1001,12 @@ Node* findCycleEntry(Node* head) {
                             </p>
                             <div class="flex justify-between items-center">
                                 <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">难度：普及-</span>
-                                <a href="https://www.luogu.com.cn/problem/P2149" target="_blank" class="text-primary text-sm hover:underline">
+                                <a href="https://www.luogu.com.cn/problem/P2149" target="_blank" class="text-primary text-sm hover:underline" rel="noopener noreferrer">
                                     查看题目 <i class="fa fa-external-link ml-1"></i>
                                 </a>
                             </div>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg hover-scale">
                             <div class="font-bold mb-2">P1996 约瑟夫问题</div>
                             <p class="text-sm text-gray-700 mb-2">
@@ -1006,14 +1014,14 @@ Node* findCycleEntry(Node* head) {
                             </p>
                             <div class="flex justify-between items-center">
                                 <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">难度：普及-</span>
-                                <a href="https://www.luogu.com.cn/problem/P1996" target="_blank" class="text-primary text-sm hover:underline">
+                                <a href="https://www.luogu.com.cn/problem/P1996" target="_blank" class="text-primary text-sm hover:underline" rel="noopener noreferrer">
                                     查看题目 <i class="fa fa-external-link ml-1"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary">入门题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1024,12 +1032,12 @@ Node* findCycleEntry(Node* head) {
                             </p>
                             <div class="flex justify-between items-center">
                                 <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">难度：普及/提高-</span>
-                                <a href="https://www.luogu.com.cn/problem/P1249" target="_blank" class="text-primary text-sm hover:underline">
+                                <a href="https://www.luogu.com.cn/problem/P1249" target="_blank" class="text-primary text-sm hover:underline" rel="noopener noreferrer">
                                     查看题目 <i class="fa fa-external-link ml-1"></i>
                                 </a>
                             </div>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg hover-scale">
                             <div class="font-bold mb-2">P1116 车厢重组</div>
                             <p class="text-sm text-gray-700 mb-2">
@@ -1037,12 +1045,12 @@ Node* findCycleEntry(Node* head) {
                             </p>
                             <div class="flex justify-between items-center">
                                 <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">难度：普及-</span>
-                                <a href="https://www.luogu.com.cn/problem/P1116" target="_blank" class="text-primary text-sm hover:underline">
+                                <a href="https://www.luogu.com.cn/problem/P1116" target="_blank" class="text-primary text-sm hover:underline" rel="noopener noreferrer">
                                     查看题目 <i class="fa fa-external-link ml-1"></i>
                                 </a>
                             </div>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg hover-scale">
                             <div class="font-bold mb-2">P1540 机器翻译</div>
                             <p class="text-sm text-gray-700 mb-2">
@@ -1050,14 +1058,14 @@ Node* findCycleEntry(Node* head) {
                             </p>
                             <div class="flex justify-between items-center">
                                 <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">难度：普及-</span>
-                                <a href="https://www.luogu.com.cn/problem/P1540" target="_blank" class="text-primary text-sm hover:underline">
+                                <a href="https://www.luogu.com.cn/problem/P1540" target="_blank" class="text-primary text-sm hover:underline" rel="noopener noreferrer">
                                     查看题目 <i class="fa fa-external-link ml-1"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary">进阶题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1068,12 +1076,12 @@ Node* findCycleEntry(Node* head) {
                             </p>
                             <div class="flex justify-between items-center">
                                 <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">难度：普及+/提高</span>
-                                <a href="https://www.luogu.com.cn/problem/P1185" target="_blank" class="text-primary text-sm hover:underline">
+                                <a href="https://www.luogu.com.cn/problem/P1185" target="_blank" class="text-primary text-sm hover:underline" rel="noopener noreferrer">
                                     查看题目 <i class="fa fa-external-link ml-1"></i>
                                 </a>
                             </div>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg hover-scale">
                             <div class="font-bold mb-2">P2824 排序</div>
                             <p class="text-sm text-gray-700 mb-2">
@@ -1081,12 +1089,12 @@ Node* findCycleEntry(Node* head) {
                             </p>
                             <div class="flex justify-between items-center">
                                 <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">难度：普及+/提高</span>
-                                <a href="https://www.luogu.com.cn/problem/P2824" target="_blank" class="text-primary text-sm hover:underline">
+                                <a href="https://www.luogu.com.cn/problem/P2824" target="_blank" class="text-primary text-sm hover:underline" rel="noopener noreferrer">
                                     查看题目 <i class="fa fa-external-link ml-1"></i>
                                 </a>
                             </div>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg hover-scale">
                             <div class="font-bold mb-2">P3658 [USACO17FEB] Why Did the Cow Cross the Road III P</div>
                             <p class="text-sm text-gray-700 mb-2">
@@ -1094,7 +1102,7 @@ Node* findCycleEntry(Node* head) {
                             </p>
                             <div class="flex justify-between items-center">
                                 <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">难度：提高+/省选-</span>
-                                <a href="https://www.luogu.com.cn/problem/P3658" target="_blank" class="text-primary text-sm hover:underline">
+                                <a href="https://www.luogu.com.cn/problem/P3658" target="_blank" class="text-primary text-sm hover:underline" rel="noopener noreferrer">
                                     查看题目 <i class="fa fa-external-link ml-1"></i>
                                 </a>
                             </div>
@@ -1121,7 +1129,7 @@ Node* findCycleEntry(Node* head) {
             const progressBar = document.getElementById('insert-progress-bar');
             const posInput = document.getElementById('insert-pos');
             const valInput = document.getElementById('insert-val');
-            
+
             // 代码行元素
             const codeLines = [
                 document.getElementById('insert-code-4'),
@@ -1134,30 +1142,30 @@ Node* findCycleEntry(Node* head) {
                 document.getElementById('insert-code-22'),
                 document.getElementById('insert-code-23')
             ];
-            
+
             // 节点元素
             const nodes = [
                 document.getElementById('node1'),
                 document.getElementById('node2'),
                 document.getElementById('node3')
             ];
-            
+
             // 运行动画
             runBtn.addEventListener('click', function() {
                 runInsertAnimation(codeLines, nodes, statusEl, progressBar, posInput, valInput);
             });
-            
+
             // 重置动画
             resetBtn.addEventListener('click', function() {
                 resetInsertAnimation(codeLines, nodes, statusEl, progressBar);
             });
         }
-        
+
         // 插入动画执行
         function runInsertAnimation(codeLines, nodes, statusEl, progressBar, posInput, valInput) {
             // 重置状态
             resetInsertAnimation(codeLines, nodes, statusEl, progressBar);
-            
+
             const pos = parseInt(posInput.value);
             const val = parseInt(valInput.value);
             const steps = [
@@ -1171,7 +1179,7 @@ Node* findCycleEntry(Node* head) {
                 {code: 7, status: `新节点的 next 指向 p 的 next`},
                 {code: 8, status: `p 的 next 指向新节点，插入完成`}
             ];
-            
+
             // 创建新节点元素
             const newNode = document.createElement('div');
             newNode.className = 'node-box node-box-active';
@@ -1180,28 +1188,28 @@ Node* findCycleEntry(Node* head) {
                 <div class="text-right text-sm text-gray-500">next →</div>
             `;
             newNode.id = 'new-node';
-            
+
             // 显示状态区域
             statusEl.classList.remove('hidden');
-            
+
             let currentStep = 0;
             const visualization = document.getElementById('linkedlist-visualization').querySelector('div');
-            
+
             // 执行动画步骤
             const interval = setInterval(() => {
                 if (currentStep < steps.length) {
                     // 更新进度条
                     progressBar.style.width = `${(currentStep / steps.length) * 100}%`;
-                    
+
                     // 高亮当前代码行
                     if (currentStep > 0) {
                         codeLines[steps[currentStep - 1].code].classList.remove('code-line-highlight');
                     }
                     codeLines[steps[currentStep].code].classList.add('code-line-highlight');
-                    
+
                     // 更新状态文本
                     statusEl.textContent = `状态: ${steps[currentStep].status}`;
-                    
+
                     // 根据步骤执行可视化操作
                     if (currentStep === 2) {
                         // 显示新节点
@@ -1210,17 +1218,17 @@ Node* findCycleEntry(Node* head) {
                         // 插入节点到链表中
                         const children = Array.from(visualization.children);
                         let insertIndex = 2 * pos; // 计算插入位置
-                        
+
                         // 插入新节点和指针
                         visualization.insertBefore(newNode, children[insertIndex]);
-                        
+
                         const pointer = document.createElement('div');
                         pointer.className = 'pointer-line';
                         pointer.textContent = '→';
                         pointer.id = 'new-pointer';
                         visualization.insertBefore(pointer, children[insertIndex]);
                     }
-                    
+
                     currentStep++;
                 } else {
                     // 动画结束
@@ -1231,30 +1239,30 @@ Node* findCycleEntry(Node* head) {
                 }
             }, 1000);
         }
-        
+
         // 重置插入动画
         function resetInsertAnimation(codeLines, nodes, statusEl, progressBar) {
             // 移除所有代码高亮
             codeLines.forEach(line => {
                 line.classList.remove('code-line-highlight');
             });
-            
+
             // 重置节点状态
             nodes.forEach(node => {
                 node.classList.remove('node-box-active');
             });
-            
+
             // 移除新添加的节点和指针
             const newNode = document.getElementById('new-node');
             const newPointer = document.getElementById('new-pointer');
             if (newNode) newNode.remove();
             if (newPointer) newPointer.remove();
-            
+
             // 重置状态
             statusEl.classList.add('hidden');
             progressBar.style.width = '0%';
         }
-        
+
         // 删除动画初始化
         function initDeleteAnimation() {
             const runBtn = document.getElementById('delete-run');
@@ -1262,7 +1270,7 @@ Node* findCycleEntry(Node* head) {
             const statusEl = document.getElementById('delete-status');
             const progressBar = document.getElementById('delete-progress-bar');
             const posInput = document.getElementById('delete-pos');
-            
+
             // 代码行元素
             const codeLines = [
                 document.getElementById('delete-code-3'),
@@ -1275,7 +1283,7 @@ Node* findCycleEntry(Node* head) {
                 document.getElementById('delete-code-23'),
                 document.getElementById('delete-code-24')
             ];
-            
+
             // 节点元素
             const nodes = [
                 document.getElementById('d-node1'),
@@ -1283,23 +1291,23 @@ Node* findCycleEntry(Node* head) {
                 document.getElementById('d-node3'),
                 document.getElementById('d-node4')
             ];
-            
+
             // 运行动画
             runBtn.addEventListener('click', function() {
                 runDeleteAnimation(codeLines, nodes, statusEl, progressBar, posInput);
             });
-            
+
             // 重置动画
             resetBtn.addEventListener('click', function() {
                 resetDeleteAnimation(codeLines, nodes, statusEl, progressBar);
             });
         }
-        
+
         // 删除动画执行
         function runDeleteAnimation(codeLines, nodes, statusEl, progressBar, posInput) {
             // 重置状态
             resetDeleteAnimation(codeLines, nodes, statusEl, progressBar);
-            
+
             const pos = parseInt(posInput.value);
             const steps = [
                 {code: 0, status: `检查链表是否为空`},
@@ -1312,30 +1320,30 @@ Node* findCycleEntry(Node* head) {
                 {code: 7, status: `释放要删除节点的内存`},
                 {code: 8, status: `将 temp 的 next 指向保存的下一个节点，删除完成`}
             ];
-            
+
             // 显示状态区域
             statusEl.classList.remove('hidden');
-            
+
             let currentStep = 0;
             const visualization = document.getElementById('delete-visualization').querySelector('div');
             const nodesToDelete = Array.from(visualization.querySelectorAll('.node-box')).filter((_, i) => i > 0);
             const nodeToDelete = nodesToDelete[pos - 1];
-            
+
             // 执行动画步骤
             const interval = setInterval(() => {
                 if (currentStep < steps.length) {
                     // 更新进度条
                     progressBar.style.width = `${(currentStep / steps.length) * 100}%`;
-                    
+
                     // 高亮当前代码行
                     if (currentStep > 0) {
                         codeLines[steps[currentStep - 1].code].classList.remove('code-line-highlight');
                     }
                     codeLines[steps[currentStep].code].classList.add('code-line-highlight');
-                    
+
                     // 更新状态文本
                     statusEl.textContent = `状态: ${steps[currentStep].status}`;
-                    
+
                     // 根据步骤执行可视化操作
                     if (currentStep === 3) {
                         // 高亮要删除的节点
@@ -1354,19 +1362,19 @@ Node* findCycleEntry(Node* head) {
                             // 找到并移除对应的指针
                             const prevPointer = nodeToDelete.previousElementSibling;
                             const nextPointer = nodeToDelete.nextElementSibling;
-                            
+
                             if (prevPointer && prevPointer.className.includes('pointer-line')) {
                                 prevPointer.remove();
                             }
                             if (nextPointer && nextPointer.className.includes('pointer-line')) {
                                 nextPointer.remove();
                             }
-                            
+
                             // 移除节点
                             nodeToDelete.remove();
                         }
                     }
-                    
+
                     currentStep++;
                 } else {
                     // 动画结束
@@ -1377,25 +1385,26 @@ Node* findCycleEntry(Node* head) {
                 }
             }, 1000);
         }
-        
+
         // 重置删除动画
         function resetDeleteAnimation(codeLines, nodes, statusEl, progressBar) {
             // 移除所有代码高亮
             codeLines.forEach(line => {
                 line.classList.remove('code-line-highlight');
             });
-            
+
             // 重置节点状态
             nodes.forEach(node => {
                 node.classList.remove('node-box-active');
                 node.style.opacity = '1';
                 node.style.transform = 'scale(1)';
             });
-            
+
             // 重置状态
             statusEl.classList.add('hidden');
             progressBar.style.width = '0%';
         }
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

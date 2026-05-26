@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>数论算法 - CSP初赛专题 - 艾科斯信奥网</title>
+
+    <meta name="description" content="数论算法 - CSP初赛专题课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/chusai/shuxue/shulunsuanfa.html">
+    <meta property="og:title" content="数论算法 - CSP初赛专题 - 艾科斯信奥网">
+    <meta property="og:description" content="数论算法 - CSP初赛专题课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/chusai/shuxue/shulunsuanfa.html">
+<title>数论算法 - CSP初赛专题 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -110,8 +117,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -185,7 +193,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="numbertheory-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -214,7 +222,7 @@
             <h2 class="text-2xl font-bold text-numbertheory mb-6 flex items-center">
                 <i class="fa fa-info-circle mr-2"></i> 数论算法核心概念
             </h2>
-            
+
             <div class="space-y-8">
                 <!-- 辗转相除法 -->
                 <div>
@@ -222,7 +230,7 @@
                         <span class="inline-block w-8 h-8 rounded-full bg-numbertheory text-white text-center mr-2">1</span>
                         辗转相除法（最大公约数）
                     </h3>
-                    
+
                     <div class="space-y-4">
                         <div>
                             <h4 class="font-medium text-lg mb-2">定义</h4>
@@ -231,7 +239,7 @@
                                 最大公约数指两个或多个整数共有约数中最大的一个。
                             </p>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium text-lg mb-2">原理</h4>
                             <p class="text-gray-700 mb-2">
@@ -244,7 +252,7 @@
                                 当余数r为0时，当前的b就是最大公约数。
                             </p>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium text-lg mb-2">C++实现代码</h4>
                             <pre class="code-block"><code class="language-cpp">// 递归实现
@@ -263,7 +271,7 @@ int gcd_iterative(int a, int b) {
     return a;
 }</code></pre>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium text-lg mb-2">最小公倍数（LCM）</h4>
                             <p class="text-gray-700 mb-2">
@@ -278,14 +286,14 @@ int gcd_iterative(int a, int b) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 素数判定 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-4 flex items-center">
                         <span class="inline-block w-8 h-8 rounded-full bg-numbertheory text-white text-center mr-2">2</span>
                         素数判定
                     </h3>
-                    
+
                     <div class="space-y-4">
                         <div>
                             <h4 class="font-medium text-lg mb-2">定义</h4>
@@ -294,7 +302,7 @@ int gcd_iterative(int a, int b) {
                                 否则称为合数。1既不是素数也不是合数。
                             </p>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium text-lg mb-2">判定算法</h4>
                             <div class="space-y-4">
@@ -307,14 +315,14 @@ int gcd_iterative(int a, int b) {
     if (n <= 1) return false;  // 小于等于1的数不是素数
     if (n == 2) return true;   // 2是素数
     if (n % 2 == 0) return false;  // 偶数不是素数
-    
+
     for (int i = 3; i < n; i += 2) {  // 只检查奇数
         if (n % i == 0) return false;
     }
     return true;
 }</code></pre>
                                 </div>
-                                
+
                                 <div>
                                     <h5 class="font-medium">优化判定法</h5>
                                     <p class="text-gray-700 mb-2">
@@ -324,7 +332,7 @@ int gcd_iterative(int a, int b) {
     if (n <= 1) return false;
     if (n == 2) return true;
     if (n % 2 == 0) return false;
-    
+
     // 只需检查到sqrt(n)
     for (int i = 3; i * i <= n; i += 2) {
         if (n % i == 0) return false;
@@ -336,14 +344,14 @@ int gcd_iterative(int a, int b) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 分解质因数 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-4 flex items-center">
                         <span class="inline-block w-8 h-8 rounded-full bg-numbertheory text-white text-center mr-2">3</span>
                         分解质因数
                     </h3>
-                    
+
                     <div class="space-y-4">
                         <div>
                             <h4 class="font-medium text-lg mb-2">定义</h4>
@@ -352,7 +360,7 @@ int gcd_iterative(int a, int b) {
                                 例如：12 = 2<sup>2</sup> × 3<sup>1</sup>。
                             </p>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium text-lg mb-2">分解算法</h4>
                             <p class="text-gray-700 mb-2">
@@ -364,7 +372,7 @@ int gcd_iterative(int a, int b) {
 // 返回质因数及其指数的列表
 vector&lt;pair<int, int&gt;&gt; factorize(int n) {
     vector&lt;pair<int, int&gt;&gt; factors;
-    
+
     // 处理2的情况
     if (n % 2 == 0) {
         int cnt = 0;
@@ -374,7 +382,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
         }
         factors.emplace_back(2, cnt);
     }
-    
+
     // 处理奇数的情况
     for (int i = 3; i * i <= n; i += 2) {
         if (n % i == 0) {
@@ -386,12 +394,12 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
             factors.emplace_back(i, cnt);
         }
     }
-    
+
     // 如果剩下的n是一个大于2的质数
     if (n > 1) {
         factors.emplace_back(n, 1);
     }
-    
+
     return factors;
 }</code></pre>
                         </div>
@@ -405,31 +413,31 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
             <h2 class="text-2xl font-bold text-numbertheory mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 算法动态演示
             </h2>
-            
+
             <div class="space-y-8">
                 <!-- 辗转相除法演示 -->
                 <div class="bg-gray-50 p-5 rounded-lg">
                     <h3 class="font-semibold text-lg mb-4">辗转相除法（求最大公约数）</h3>
-                    
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
                             <p class="text-gray-700 mb-4">
                                 演示求两个数的最大公约数的过程，每一步显示当前的a和b的值以及计算过程。
                             </p>
-                            
+
                             <div class="grid grid-cols-2 gap-4 mb-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">输入a值:</label>
-                                    <input type="number" id="gcd-a" value="84" min="1" 
+                                    <input type="number" id="gcd-a" value="84" min="1"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-numbertheory">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">输入b值:</label>
-                                    <input type="number" id="gcd-b" value="30" min="1" 
+                                    <input type="number" id="gcd-b" value="30" min="1"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-numbertheory">
                                 </div>
                             </div>
-                            
+
                             <div class="animation-controls">
                                 <button id="gcd-run" class="bg-numbertheory hover:bg-numbertheory/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 运行演示
@@ -441,13 +449,13 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="gcd-result" class="mt-4 p-3 bg-gray-100 rounded-md hidden">
                                 <p class="font-medium">计算结果：</p>
                                 <p id="gcd-result-text" class="text-numbertheory font-semibold"></p>
                             </div>
                         </div>
-                        
+
                         <div>
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="gcd-steps">
                                 <div class="text-center text-gray-500 py-8">
@@ -458,23 +466,23 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 素数判定演示 -->
                 <div class="bg-gray-50 p-5 rounded-lg">
                     <h3 class="font-semibold text-lg mb-4">素数判定演示</h3>
-                    
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
                             <p class="text-gray-700 mb-4">
                                 演示判定一个数是否为素数的过程，显示每一步的检查情况。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">输入要判定的数n:</label>
-                                <input type="number" id="prime-n" value="97" min="1" 
+                                <input type="number" id="prime-n" value="97" min="1"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-numbertheory">
                             </div>
-                            
+
                             <div class="animation-controls">
                                 <button id="prime-run" class="bg-numbertheory hover:bg-numbertheory/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 运行演示
@@ -486,12 +494,12 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="prime-result" class="mt-4 p-3 bg-gray-100 rounded-md hidden">
                                 <p id="prime-result-text" class="font-semibold"></p>
                             </div>
                         </div>
-                        
+
                         <div>
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="prime-steps">
                                 <div class="text-center text-gray-500 py-8">
@@ -502,23 +510,23 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 分解质因数演示 -->
                 <div class="bg-gray-50 p-5 rounded-lg">
                     <h3 class="font-semibold text-lg mb-4">分解质因数演示</h3>
-                    
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
                             <p class="text-gray-700 mb-4">
                                 演示将一个数分解为质因数乘积的过程，显示每一步的分解情况。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">输入要分解的数n:</label>
-                                <input type="number" id="factor-n" value="120" min="2" 
+                                <input type="number" id="factor-n" value="120" min="2"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-numbertheory">
                             </div>
-                            
+
                             <div class="animation-controls">
                                 <button id="factor-run" class="bg-numbertheory hover:bg-numbertheory/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 运行演示
@@ -530,14 +538,14 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="factor-result" class="mt-4 p-3 bg-gray-100 rounded-md hidden">
                                 <p class="font-medium">分解结果：</p>
                                 <p id="factor-result-text" class="text-numbertheory font-semibold"></p>
                                 <div id="factor-visualization" class="mt-2 flex flex-wrap"></div>
                             </div>
                         </div>
-                        
+
                         <div>
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="factor-steps">
                                 <div class="text-center text-gray-500 py-8">
@@ -556,7 +564,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
             <h2 class="text-2xl font-bold text-numbertheory mb-6 flex items-center">
                 <i class="fa fa-lightbulb-o mr-2"></i> 解题技巧与注意事项
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">辗转相除法应用技巧</h3>
@@ -567,7 +575,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                         <li>判断两个数是否互质：若gcd(a,b) = 1，则a和b互质</li>
                     </ul>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">素数判定优化技巧</h3>
                     <ul class="list-disc pl-6 space-y-2">
@@ -577,7 +585,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                         <li>对于多次判定素数的场景，可以预处理素数表（筛法）</li>
                     </ul>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">质因数分解技巧</h3>
                     <ul class="list-disc pl-6 space-y-2">
@@ -593,7 +601,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                         </li>
                     </ul>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">CSP初赛常见考点</h3>
                     <ul class="list-disc pl-6 space-y-2">
@@ -612,7 +620,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
             <h2 class="text-2xl font-bold text-numbertheory mb-6 flex items-center">
                 <i class="fa fa-pencil mr-2"></i> 数论算法例题解析
             </h2>
-            
+
             <div class="space-y-8">
                 <!-- 例题1 -->
                 <div class="problem-card">
@@ -622,7 +630,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                             【问题】计算48和18的最大公约数，并写出计算过程。
                         </p>
                     </div>
-                    
+
                     <div class="space-y-3">
                         <h4 class="font-medium">解答步骤：</h4>
                         <div class="pl-4 border-l-2 border-numbertheory/30">
@@ -635,7 +643,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 例题2 -->
                 <div class="problem-card">
                     <h3 class="font-semibold text-lg mb-3">例题2：素数判定</h3>
@@ -644,7 +652,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                             【问题】判断101是否为素数，并说明理由。
                         </p>
                     </div>
-                    
+
                     <div class="space-y-3">
                         <h4 class="font-medium">解答步骤：</h4>
                         <div class="pl-4 border-l-2 border-numbertheory/30">
@@ -661,7 +669,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 例题3 -->
                 <div class="problem-card">
                     <h3 class="font-semibold text-lg mb-3">例题3：质因数分解</h3>
@@ -670,7 +678,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                             【问题】将252分解为质因数的乘积形式。
                         </p>
                     </div>
-                    
+
                     <div class="space-y-3">
                         <h4 class="font-medium">解答步骤：</h4>
                         <div class="pl-4 border-l-2 border-numbertheory/30">
@@ -683,7 +691,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 例题4 -->
                 <div class="problem-card">
                     <h3 class="font-semibold text-lg mb-3">例题4：综合应用</h3>
@@ -692,7 +700,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                             【问题】已知两个数的最大公约数是6，最小公倍数是36，求这两个数。
                         </p>
                     </div>
-                    
+
                     <div class="space-y-3">
                         <h4 class="font-medium">解答步骤：</h4>
                         <div class="pl-4 border-l-2 border-numbertheory/30">
@@ -710,7 +718,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 洛谷推荐题目 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-4">洛谷推荐练习题目</h3>
@@ -723,7 +731,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                                 2. P和Q的最大公约数是x0
                                 3. P和Q的最小公倍数是y0
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1029" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1029" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 <i class="fa fa-external-link mr-1"></i> 查看题目
                             </a>
                         </div>
@@ -733,7 +741,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                                 如题，给定一个范围N，你需要处理M个查询，
                                 每个查询给定一个数X，判断它是否为质数。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P3383" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P3383" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 <i class="fa fa-external-link mr-1"></i> 查看题目
                             </a>
                         </div>
@@ -742,7 +750,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                             <p class="text-gray-700 text-sm mb-3">
                                 已知正整数n是两个不同的质数的乘积，试求出两者中较大的那个质数。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1075" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1075" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 <i class="fa fa-external-link mr-1"></i> 查看题目
                             </a>
                         </div>
@@ -751,7 +759,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                             <p class="text-gray-700 text-sm mb-3">
                                 给出一个正整数n，求将n写成若干个连续正整数之和的方案数。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P2613" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P2613" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 <i class="fa fa-external-link mr-1"></i> 查看题目
                             </a>
                         </div>
@@ -774,23 +782,23 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
     <script>
         // 初始化代码高亮
         hljs.highlightAll();
-        
+
         // 辗转相除法演示逻辑
         let gcdStepIndex = 0;
         let gcdStepsData = [];
-        
+
         document.getElementById('gcd-run').addEventListener('click', function() {
             runGcdDemo(true);
         });
-        
+
         document.getElementById('gcd-step').addEventListener('click', function() {
             runGcdDemo(false);
         });
-        
+
         document.getElementById('gcd-reset').addEventListener('click', function() {
             resetGcdDemo();
         });
-        
+
         function resetGcdDemo() {
             gcdStepIndex = 0;
             gcdStepsData = [];
@@ -802,16 +810,16 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
             `;
             document.getElementById('gcd-result').classList.add('hidden');
         }
-        
+
         function runGcdDemo(autoRun) {
             const a = parseInt(document.getElementById('gcd-a').value);
             const b = parseInt(document.getElementById('gcd-b').value);
-            
+
             if (isNaN(a) || isNaN(b) || a < 1 || b < 1) {
                 alert('请输入有效的正整数');
                 return;
             }
-            
+
             if (gcdStepsData.length === 0) {
                 // 生成步骤数据
                 let x = a, y = b;
@@ -833,10 +841,10 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                     step: `当余数为0时，最大公约数是 ${x}`
                 });
             }
-            
+
             const stepsContainer = document.getElementById('gcd-steps');
             stepsContainer.innerHTML = '';
-            
+
             // 显示到当前步骤
             for (let i = 0; i <= gcdStepIndex; i++) {
                 const step = gcdStepsData[i];
@@ -845,7 +853,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                 stepElement.innerHTML = `<p>${step.step}</p>`;
                 stepsContainer.appendChild(stepElement);
             }
-            
+
             // 检查是否完成
             if (gcdStepIndex === gcdStepsData.length - 1) {
                 // 显示结果
@@ -853,32 +861,32 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                 document.getElementById('gcd-result').classList.remove('hidden');
                 return;
             }
-            
+
             // 继续下一步
             gcdStepIndex++;
-            
+
             // 如果是自动运行，继续执行
             if (autoRun) {
                 setTimeout(() => runGcdDemo(true), 1000);
             }
         }
-        
+
         // 素数判定演示逻辑
         let primeStepIndex = 0;
         let primeStepsData = [];
-        
+
         document.getElementById('prime-run').addEventListener('click', function() {
             runPrimeDemo(true);
         });
-        
+
         document.getElementById('prime-step').addEventListener('click', function() {
             runPrimeDemo(false);
         });
-        
+
         document.getElementById('prime-reset').addEventListener('click', function() {
             resetPrimeDemo();
         });
-        
+
         function resetPrimeDemo() {
             primeStepIndex = 0;
             primeStepsData = [];
@@ -890,19 +898,19 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
             `;
             document.getElementById('prime-result').classList.add('hidden');
         }
-        
+
         function runPrimeDemo(autoRun) {
             const n = parseInt(document.getElementById('prime-n').value);
-            
+
             if (isNaN(n) || n < 1) {
                 alert('请输入有效的正整数');
                 return;
             }
-            
+
             if (primeStepsData.length === 0) {
                 // 生成步骤数据
                 primeStepsData = [];
-                
+
                 if (n <= 1) {
                     primeStepsData.push({
                         step: `${n} ≤ 1，不是素数`,
@@ -923,13 +931,13 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                         step: `${n} 是大于2的奇数，开始检查是否有其他因子`,
                         isPrime: null
                     });
-                    
+
                     const sqrtN = Math.sqrt(n);
                     primeStepsData.push({
                         step: `计算√${n} ≈ ${sqrtN.toFixed(2)}，只需检查到${Math.floor(sqrtN)}`,
                         isPrime: null
                     });
-                    
+
                     let isPrime = true;
                     for (let i = 3; i * i <= n; i += 2) {
                         if (n % i === 0) {
@@ -946,7 +954,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                             });
                         }
                     }
-                    
+
                     if (isPrime) {
                         primeStepsData.push({
                             step: `没有找到能整除${n}的数，${n}是素数`,
@@ -955,16 +963,16 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                     }
                 }
             }
-            
+
             const stepsContainer = document.getElementById('prime-steps');
             stepsContainer.innerHTML = '';
-            
+
             // 显示到当前步骤
             for (let i = 0; i <= primeStepIndex; i++) {
                 const step = primeStepsData[i];
                 const stepElement = document.createElement('div');
                 stepElement.className = i === primeStepIndex ? 'algorithm-step algorithm-step-active' : 'algorithm-step';
-                
+
                 if (step.isPrime === true) {
                     stepElement.innerHTML = `<p class="text-secondary">${step.step}</p>`;
                 } else if (step.isPrime === false) {
@@ -972,16 +980,16 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                 } else {
                     stepElement.innerHTML = `<p>${step.step}</p>`;
                 }
-                
+
                 stepsContainer.appendChild(stepElement);
             }
-            
+
             // 检查是否完成
             if (primeStepIndex === primeStepsData.length - 1) {
                 // 显示结果
                 const resultText = document.getElementById('prime-result-text');
                 const isPrime = primeStepsData[primeStepsData.length - 1].isPrime;
-                
+
                 if (isPrime) {
                     resultText.textContent = `${n} 是素数`;
                     resultText.className = 'font-semibold text-secondary';
@@ -989,37 +997,37 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                     resultText.textContent = `${n} 不是素数`;
                     resultText.className = 'font-semibold text-red-500';
                 }
-                
+
                 document.getElementById('prime-result').classList.remove('hidden');
                 return;
             }
-            
+
             // 继续下一步
             primeStepIndex++;
-            
+
             // 如果是自动运行，继续执行
             if (autoRun) {
                 setTimeout(() => runPrimeDemo(true), 800);
             }
         }
-        
+
         // 分解质因数演示逻辑
         let factorStepIndex = 0;
         let factorStepsData = [];
         let factorsResult = [];
-        
+
         document.getElementById('factor-run').addEventListener('click', function() {
             runFactorDemo(true);
         });
-        
+
         document.getElementById('factor-step').addEventListener('click', function() {
             runFactorDemo(false);
         });
-        
+
         document.getElementById('factor-reset').addEventListener('click', function() {
             resetFactorDemo();
         });
-        
+
         function resetFactorDemo() {
             factorStepIndex = 0;
             factorStepsData = [];
@@ -1033,27 +1041,27 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
             document.getElementById('factor-result').classList.add('hidden');
             document.getElementById('factor-visualization').innerHTML = '';
         }
-        
+
         function runFactorDemo(autoRun) {
             const n = parseInt(document.getElementById('factor-n').value);
-            
+
             if (isNaN(n) || n < 2) {
                 alert('请输入大于等于2的整数');
                 return;
             }
-            
+
             if (factorStepsData.length === 0) {
                 // 生成步骤数据
                 factorStepsData = [];
                 factorsResult = [];
                 let num = n;
-                
+
                 factorStepsData.push({
                     step: `开始分解 ${num}`,
                     currentNum: num,
                     factors: []
                 });
-                
+
                 // 处理2的情况
                 if (num % 2 === 0) {
                     let count = 0;
@@ -1075,7 +1083,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                         factors: []
                     });
                 }
-                
+
                 // 处理奇数的情况
                 for (let i = 3; i * i <= num; i += 2) {
                     if (num % i === 0) {
@@ -1096,7 +1104,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                         factorsResult.push({p: i, e: count});
                     }
                 }
-                
+
                 // 如果剩下的数是一个大于2的质数
                 if (num > 1) {
                     factorsResult.push({p: num, e: 1});
@@ -1106,7 +1114,7 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                         factors: factorsResult
                     });
                 }
-                
+
                 // 生成最终结果
                 let resultStr = `${n} = `;
                 for (let i = 0; i < factorsResult.length; i++) {
@@ -1119,23 +1127,23 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                         resultStr += ' × ';
                     }
                 }
-                
+
                 factorStepsData.push({
                     step: `分解完成: ${resultStr}`,
                     currentNum: 1,
                     factors: factorsResult
                 });
             }
-            
+
             const stepsContainer = document.getElementById('factor-steps');
             stepsContainer.innerHTML = '';
-            
+
             // 显示到当前步骤
             for (let i = 0; i <= factorStepIndex; i++) {
                 const step = factorStepsData[i];
                 const stepElement = document.createElement('div');
                 stepElement.className = i === factorStepIndex ? 'algorithm-step algorithm-step-active' : 'algorithm-step';
-                
+
                 let factorsHtml = '';
                 if (step.factors.length > 0) {
                     factorsHtml = '<div class="mt-1">已找到的质因数：';
@@ -1144,11 +1152,11 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                     }
                     factorsHtml += '</div>';
                 }
-                
+
                 stepElement.innerHTML = `<p>${step.step}</p>${factorsHtml}`;
                 stepsContainer.appendChild(stepElement);
             }
-            
+
             // 检查是否完成
             if (factorStepIndex === factorStepsData.length - 1) {
                 // 显示结果
@@ -1163,9 +1171,9 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                         resultText += ' × ';
                     }
                 }
-                
+
                 document.getElementById('factor-result-text').innerHTML = resultText;
-                
+
                 // 可视化质因数
                 const visualization = document.getElementById('factor-visualization');
                 visualization.innerHTML = '';
@@ -1175,19 +1183,20 @@ vector&lt;pair<int, int&gt;&gt; factorize(int n) {
                     factorElement.innerHTML = `${f.p}<sup>${f.e}</sup>`;
                     visualization.appendChild(factorElement);
                 }
-                
+
                 document.getElementById('factor-result').classList.remove('hidden');
                 return;
             }
-            
+
             // 继续下一步
             factorStepIndex++;
-            
+
             // 如果是自动运行，继续执行
             if (autoRun) {
                 setTimeout(() => runFactorDemo(true), 1000);
             }
         }
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

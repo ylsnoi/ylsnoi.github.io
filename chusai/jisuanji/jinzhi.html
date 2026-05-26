@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>数制转换 - 艾科斯信奥网</title>
+
+    <meta name="description" content="数制转换课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/chusai/jisuanji/jinzhi.html">
+    <meta property="og:title" content="数制转换 - 艾科斯信奥网">
+    <meta property="og:description" content="数制转换课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/chusai/jisuanji/jinzhi.html">
+<title>数制转换 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -122,8 +129,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -197,7 +205,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="number-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -232,7 +240,7 @@
                     <p class="text-gray-700">
                         数制也称计数制，是用一组固定的符号和统一的规则来表示数值的方法。在计算机科学中，常用的数制有：
                     </p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
                         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-number text-center mb-2">二进制 (Binary)</h4>
@@ -264,13 +272,13 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">数制的位权表示法</h3>
                     <p class="text-gray-700 mb-3">
                         任何数制的数都可以表示为各位数字与位权乘积之和。位权是基数的n次幂，n为数位的位置（从右向左，从0开始计数）。
                     </p>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h4 class="font-semibold mb-2">通用公式</h4>
                         <p class="text-center mb-4">N = dₙ₋₁×rⁿ⁻¹ + dₙ₋₂×rⁿ⁻² + ... + d₁×r¹ + d₀×r⁰ + d₋₁×r⁻¹ + ...</p>
@@ -278,7 +286,7 @@
                             其中：r为基数，dᵢ为第i位的数字，rⁱ为第i位的位权
                         </p>
                     </div>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div>
                             <h4 class="font-semibold text-number mb-2">二进制转十进制示例</h4>
@@ -292,7 +300,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">各数制对应关系表</h3>
                     <table class="digit-table">
@@ -333,7 +341,7 @@
             <h2 class="text-2xl font-bold text-number mb-6 flex items-center">
                 <i class="fa fa-exchange mr-2"></i> 数制转换方法
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 其他进制转十进制 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -341,7 +349,7 @@
                     <p class="text-gray-700 mb-3">
                         方法：按位权展开法，将每个数位上的数字乘以该位的位权，然后求和。
                     </p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="bg-white p-3 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-number mb-2">二进制 → 十进制</h4>
@@ -372,7 +380,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 十进制转其他进制 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">2. 十进制转其他进制</h3>
@@ -380,7 +388,7 @@
                         方法：除基取余法，将十进制数除以目标进制的基数，取余数作为最低位，
                         然后将商继续除以基数，直到商为0，最后将所有余数倒序排列。
                     </p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="bg-white p-3 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-number mb-2">十进制 → 二进制</h4>
@@ -416,51 +424,51 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 二进制与八/十六进制转换 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">3. 二进制与八/十六进制转换</h3>
                     <p class="text-gray-700 mb-3">
                         利用2³=8和2⁴=16的关系，可以直接进行分组转换，无需经过十进制中间步骤。
                     </p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-white p-3 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-number mb-2">二进制 ↔ 八进制</h4>
                             <p class="text-sm mb-2">规则：每3位二进制数对应1位八进制数</p>
-                            
+
                             <p class="font-semibold text-sm mb-1">二进制 → 八进制：</p>
                             <p class="font-mono text-sm mb-2">例：10110101₂ → 分组：010 110 101 → 2 6 5 → 265₈</p>
-                            
+
                             <p class="font-semibold text-sm mb-1">八进制 → 二进制：</p>
                             <p class="font-mono text-sm">例：347₈ → 每位转3位：011 100 111 → 11100111₂</p>
                         </div>
                         <div class="bg-white p-3 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-number mb-2">二进制 ↔ 十六进制</h4>
                             <p class="text-sm mb-2">规则：每4位二进制数对应1位十六进制数</p>
-                            
+
                             <p class="font-semibold text-sm mb-1">二进制 → 十六进制：</p>
                             <p class="font-mono text-sm mb-2">例：110101101₂ → 分组：0001 1010 1101 → 1 A D → 1AD₁₆</p>
-                            
+
                             <p class="font-semibold text-sm mb-1">十六进制 → 二进制：</p>
                             <p class="font-mono text-sm">例：3F5₁₆ → 每位转4位：0011 1111 0101 → 1111110101₂</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 八进制与十六进制转换 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">4. 八进制与十六进制转换</h3>
                     <p class="text-gray-700 mb-3">
                         通常以二进制或十进制为中间桥梁进行转换：
                     </p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-white p-3 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-number mb-2">八进制 → 十六进制</h4>
                             <p class="text-sm mb-2">方法1：八进制 → 二进制 → 十六进制</p>
                             <p class="font-mono text-sm">例：257₈ → 010 101 111 → 10101111 → AF₁₆</p>
-                            
+
                             <p class="text-sm mt-2 mb-2">方法2：八进制 → 十进制 → 十六进制</p>
                             <p class="font-mono text-sm">例：257₈ = 175₁₀ → AF₁₆</p>
                         </div>
@@ -468,7 +476,7 @@
                             <h4 class="font-semibold text-number mb-2">十六进制 → 八进制</h4>
                             <p class="text-sm mb-2">方法1：十六进制 → 二进制 → 八进制</p>
                             <p class="font-mono text-sm">例：E3₁₆ → 1110 0011 → 111 000 11 → 703₈</p>
-                            
+
                             <p class="text-sm mt-2 mb-2">方法2：十六进制 → 十进制 → 八进制</p>
                             <p class="font-mono text-sm">例：E3₁₆ = 227₁₀ → 343₈</p>
                         </div>
@@ -482,24 +490,24 @@
             <h2 class="text-2xl font-bold text-number mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 数制转换动态演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 转换演示工具 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">数制转换交互演示</h3>
-                    
+
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="lg:col-span-1">
                             <p class="text-gray-700 mb-4">
                                 输入一个数值，选择其原始进制，然后点击"转换"按钮查看转换结果和步骤。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">输入数值:</label>
-                                <input type="text" id="number-input" value="1101" 
+                                <input type="text" id="number-input" value="1101"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-number">
                             </div>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">原始进制:</label>
                                 <select id="from-base" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-number">
@@ -509,7 +517,7 @@
                                     <option value="16">十六进制 (16)</option>
                                 </select>
                             </div>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">目标进制:</label>
                                 <select id="to-base" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-number">
@@ -519,7 +527,7 @@
                                     <option value="16">十六进制 (16)</option>
                                 </select>
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="convert-btn" class="bg-number hover:bg-number/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-exchange mr-2"></i> 转换
@@ -528,12 +536,12 @@
                                     <i class="fa fa-eraser mr-2"></i> 清除
                                 </button>
                             </div>
-                            
+
                             <div id="conversion-status" class="animation-status hidden mt-4">
                                 转换状态: 等待输入
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-2">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="conversion-steps">
                                 <div class="text-center text-gray-500 py-8">
@@ -552,12 +560,12 @@
             <h2 class="text-2xl font-bold text-number mb-6 flex items-center">
                 <i class="fa fa-lightbulb-o mr-2"></i> 数制转换解题技巧
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h3 class="font-semibold text-lg mb-3">快速转换技巧</h3>
-                        
+
                         <div class="step-item">
                             <span class="step-number">1</span>
                             <div>
@@ -567,7 +575,7 @@
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <span class="step-number">2</span>
                             <div>
@@ -577,7 +585,7 @@
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <span class="step-number">3</span>
                             <div>
@@ -588,10 +596,10 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h3 class="font-semibold text-lg mb-3">CSP初赛常见考点</h3>
-                        
+
                         <div class="step-item">
                             <span class="step-number">1</span>
                             <div>
@@ -601,7 +609,7 @@
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <span class="step-number">2</span>
                             <div>
@@ -611,7 +619,7 @@
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <span class="step-number">3</span>
                             <div>
@@ -623,10 +631,10 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">常见错误及避免方法</h3>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-white p-3 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-red-500 mb-2">常见错误</h4>
@@ -658,13 +666,13 @@
             <h2 class="text-2xl font-bold text-number mb-6 flex items-center">
                 <i class="fa fa-book mr-2"></i> CSP初赛例题解析
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 例题1 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">例题1：基础转换</h3>
                     <p class="font-medium mb-2">（2021年CSP初赛选择题）二进制数10110101对应的十进制数是多少？</p>
-                    
+
                     <div class="bg-white p-4 rounded-lg border border-gray-200 mb-3">
                         <h4 class="font-semibold mb-2">解题步骤：</h4>
                         <p class="text-sm mb-2">使用位权展开法：</p>
@@ -678,15 +686,15 @@
                             = 181₁₀
                         </p>
                     </div>
-                    
+
                     <p class="font-medium">答案：181</p>
                 </div>
-                
+
                 <!-- 例题2 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">例题2：十六进制转换</h3>
                     <p class="font-medium mb-2">（2020年CSP初赛选择题）十六进制数1A3F对应的二进制数是？</p>
-                    
+
                     <div class="bg-white p-4 rounded-lg border border-gray-200 mb-3">
                         <h4 class="font-semibold mb-2">解题步骤：</h4>
                         <p class="text-sm mb-2">将每位十六进制数转换为4位二进制数：</p>
@@ -698,16 +706,16 @@
                             合并结果：1000101000111111₂
                         </p>
                     </div>
-                    
+
                     <p class="font-medium">答案：1000101000111111</p>
                 </div>
-                
+
                 <!-- 例题3 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">例题3：数制比较</h3>
                     <p class="font-medium mb-2">（2019年CSP初赛选择题）下列数值中，最大的是？</p>
                     <p class="pl-4 mb-2">A. 101101₂ &nbsp;&nbsp;B. 53₈ &nbsp;&nbsp;C. 45₁₀ &nbsp;&nbsp;D. 2D₁₆</p>
-                    
+
                     <div class="bg-white p-4 rounded-lg border border-gray-200 mb-3">
                         <h4 class="font-semibold mb-2">解题步骤：</h4>
                         <p class="text-sm mb-2">将所有选项转换为十进制比较：</p>
@@ -719,15 +727,15 @@
                             比较结果：A=C=D>B，最大的是A、C、D
                         </p>
                     </div>
-                    
+
                     <p class="font-medium">答案：ACD</p>
                 </div>
-                
+
                 <!-- 例题4 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">例题4：综合应用</h3>
                     <p class="font-medium mb-2">（2018年CSP初赛选择题）存储一个32×32点阵的汉字，需要占用多少字节？</p>
-                    
+
                     <div class="bg-white p-4 rounded-lg border border-gray-200 mb-3">
                         <h4 class="font-semibold mb-2">解题步骤：</h4>
                         <p class="text-sm mb-2">1. 计算总位数：32×32 = 1024位</p>
@@ -736,7 +744,7 @@
                             答案：128字节
                         </p>
                     </div>
-                    
+
                     <p class="font-medium">答案：128</p>
                 </div>
             </div>
@@ -747,39 +755,39 @@
         // 初始化代码高亮
         document.addEventListener('DOMContentLoaded', function() {
             hljs.highlightAll();
-            
+
             // 转换按钮事件
             document.getElementById('convert-btn').addEventListener('click', performConversion);
             // 清除按钮事件
             document.getElementById('clear-btn').addEventListener('click', clearConversion);
-            
+
             // 初始化状态
             updateStatus('等待输入');
         });
-        
+
         // 执行转换
         function performConversion() {
             const input = document.getElementById('number-input').value.trim();
             const fromBase = parseInt(document.getElementById('from-base').value);
             const toBase = parseInt(document.getElementById('to-base').value);
-            
+
             // 验证输入
             if (!input) {
                 updateStatus('请输入数值', 'error');
                 return;
             }
-            
+
             // 检查输入是否符合所选进制
             if (!isValidNumber(input, fromBase)) {
                 updateStatus(`输入不符合${fromBase}进制规则`, 'error');
                 return;
             }
-            
+
             try {
                 // 先转换为十进制，再转换为目标进制
                 const decimal = parseInt(input, fromBase);
                 let result;
-                
+
                 // 特殊处理十进制转其他进制
                 if (toBase === 2) {
                     result = decimal.toString(2);
@@ -790,7 +798,7 @@
                 } else { // toBase === 10
                     result = decimal.toString();
                 }
-                
+
                 // 显示转换步骤
                 displayConversionSteps(input, fromBase, result, toBase, decimal);
                 updateStatus(`转换成功: ${input}(${fromBase}) = ${result}(${toBase})`);
@@ -798,7 +806,7 @@
                 updateStatus('转换失败: ' + error.message, 'error');
             }
         }
-        
+
         // 验证输入是否符合进制规则
         function isValidNumber(input, base) {
             const pattern = {
@@ -807,27 +815,27 @@
                 10: /^[0-9]+$/,
                 16: /^[0-9A-Fa-f]+$/
             };
-            
+
             return pattern[base].test(input);
         }
-        
+
         // 显示转换步骤
         function displayConversionSteps(input, fromBase, result, toBase, decimal) {
             const stepsContainer = document.getElementById('conversion-steps');
             stepsContainer.innerHTML = '';
-            
+
             // 创建步骤标题
             const title = document.createElement('div');
             title.className = 'font-semibold text-number mb-4 text-center';
             title.textContent = `${input}(${fromBase}) → ${result}(${toBase})`;
             stepsContainer.appendChild(title);
-            
+
             // 分情况显示不同的转换步骤
             if (fromBase !== 10 && toBase !== 10) {
                 // 其他进制转其他进制（通过十进制中转）
-                addStep(stepsContainer, `步骤1: 将${fromBase}进制数${input}转换为十进制`, 
+                addStep(stepsContainer, `步骤1: 将${fromBase}进制数${input}转换为十进制`,
                         `${input}(${fromBase}) = ${decimal}(10)`);
-                
+
                 // 添加十进制转目标进制的步骤
                 addDecimalToBaseSteps(stepsContainer, decimal, toBase);
             } else if (fromBase !== 10) {
@@ -837,57 +845,57 @@
                 // 十进制转其他进制
                 addDecimalToBaseSteps(stepsContainer, parseInt(input), toBase);
             }
-            
+
             // 添加结果总结
             const resultDiv = document.createElement('div');
             resultDiv.className = 'mt-4 p-2 bg-number/10 rounded text-center font-medium';
             resultDiv.textContent = `转换结果: ${input}(${fromBase}) = ${result}(${toBase})`;
             stepsContainer.appendChild(resultDiv);
         }
-        
+
         // 添加其他进制转十进制的步骤
         function addBaseToDecimalSteps(container, number, base, decimal) {
             const stepDiv = document.createElement('div');
             stepDiv.className = 'conversion-step mb-3';
-            
+
             let html = `<p class="font-medium mb-2">将${base}进制数${number}转换为十进制：</p>`;
             html += '<p class="font-mono text-sm mb-2">';
-            
+
             const digits = number.split('').reverse(); // 反转以便从低位开始
             let expression = '';
-            
+
             for (let i = 0; i < digits.length; i++) {
                 // 处理十六进制字母
                 const digitValue = base === 16 ? parseInt(digits[i], 16) : parseInt(digits[i]);
                 const power = Math.pow(base, i);
                 const term = `${digitValue}×${base}^${i}`;
-                
+
                 if (i === 0) {
                     expression = term;
                 } else {
                     expression = term + ' + ' + expression;
                 }
             }
-            
+
             html += `${number}(${base}) = ${expression}`;
             html += '</p>';
             html += `<p class="text-sm mb-1">= ${decimal}(10)</p>`;
-            
+
             stepDiv.innerHTML = html;
             container.appendChild(stepDiv);
         }
-        
+
         // 添加十进制转其他进制的步骤
         function addDecimalToBaseSteps(container, decimal, base) {
             const stepDiv = document.createElement('div');
             stepDiv.className = 'conversion-step mb-3';
-            
+
             let html = `<p class="font-medium mb-2">将十进制数${decimal}转换为${base}进制：</p>`;
             html += '<ul class="list-decimal pl-5 text-sm space-y-1 mb-2">';
-            
+
             let num = decimal;
             const remainders = [];
-            
+
             // 特殊情况：0的转换
             if (num === 0) {
                 remainders.push(0);
@@ -897,31 +905,31 @@
                     const remainder = num % base;
                     remainders.push(remainder);
                     const quotient = Math.floor(num / base);
-                    
+
                     // 处理十六进制余数
-                    const remainderStr = base === 16 && remainder >= 10 
+                    const remainderStr = base === 16 && remainder >= 10
                         ? String.fromCharCode(55 + remainder) // A-F
                         : remainder;
-                    
+
                     html += `<li>${num} ÷ ${base} = ${quotient} 余 ${remainderStr}</li>`;
                     num = quotient;
                 }
             }
-            
+
             html += '</ul>';
-            
+
             // 处理结果
             const resultDigits = remainders.reverse().map(r => {
                 return base === 16 && r >= 10 ? String.fromCharCode(55 + r) : r.toString();
             });
             const result = resultDigits.join('');
-            
+
             html += `<p class="text-sm mb-1">将余数倒序排列：${result}(${base})</p>`;
-            
+
             stepDiv.innerHTML = html;
             container.appendChild(stepDiv);
         }
-        
+
         // 添加步骤
         function addStep(container, title, content) {
             const stepDiv = document.createElement('div');
@@ -932,18 +940,18 @@
             `;
             container.appendChild(stepDiv);
         }
-        
+
         // 更新状态
         function updateStatus(message, type = 'info') {
             const statusDiv = document.getElementById('conversion-status');
             statusDiv.textContent = '转换状态: ' + message;
             statusDiv.classList.remove('hidden', 'text-red-500');
-            
+
             if (type === 'error') {
                 statusDiv.classList.add('text-red-500');
             }
         }
-        
+
         // 清除转换
         function clearConversion() {
             document.getElementById('number-input').value = '';
@@ -956,5 +964,6 @@
             updateStatus('等待输入');
         }
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

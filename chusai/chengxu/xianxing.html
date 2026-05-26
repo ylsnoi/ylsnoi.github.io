@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>线性结构 - 艾科斯信奥网</title>
+
+    <meta name="description" content="线性结构课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/chusai/chengxu/xianxing.html">
+    <meta property="og:title" content="线性结构 - 艾科斯信奥网">
+    <meta property="og:description" content="线性结构课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/chusai/chengxu/xianxing.html">
+<title>线性结构 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -93,8 +100,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -166,7 +174,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -195,7 +203,7 @@
             <h2 class="structure-header text-array">
                 <i class="fa fa-th mr-2"></i> 数组 (Array)
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">数组的概念</h3>
@@ -213,7 +221,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">C++数组定义与操作</h3>
                     <pre class="code-block"><code class="language-cpp">// 1. 静态数组定义
@@ -234,12 +242,12 @@ for (int i = 0; i < 5; i++) {
 int matrix[3][4];          // 3行4列的二维数组
 matrix[1][2] = 5;          // 访问第二行第三列元素</code></pre>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">数组操作动画演示</h3>
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <p class="mb-4">演示数组的访问和修改操作：</p>
-                        
+
                         <div class="mb-4" id="array-demo">
                             <div class="array-item">0:1</div>
                             <div class="array-item">1:3</div>
@@ -247,7 +255,7 @@ matrix[1][2] = 5;          // 访问第二行第三列元素</code></pre>
                             <div class="array-item">3:7</div>
                             <div class="array-item">4:9</div>
                         </div>
-                        
+
                         <div class="animation-controls">
                             <button id="array-access" class="bg-array hover:bg-array/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                 <i class="fa fa-search mr-2"></i> 访问元素
@@ -259,13 +267,13 @@ matrix[1][2] = 5;          // 访问第二行第三列元素</code></pre>
                                 <i class="fa fa-refresh mr-2"></i> 重置
                             </button>
                         </div>
-                        
+
                         <div id="array-status" class="text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded hidden">
                             操作状态将显示在这里
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">解题技巧</h3>
                     <div class="algorithm-step">
@@ -289,7 +297,7 @@ matrix[1][2] = 5;          // 访问第二行第三列元素</code></pre>
             <h2 class="structure-header text-string">
                 <i class="fa fa-font mr-2"></i> 字符串 (String)
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">字符串的概念</h3>
@@ -307,7 +315,7 @@ matrix[1][2] = 5;          // 访问第二行第三列元素</code></pre>
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">C++字符串操作</h3>
                     <pre class="code-block"><code class="language-cpp">// 1. C风格字符串
@@ -332,12 +340,12 @@ for (int i = 0; i < s1.length(); i++) {
     cout << s1[i];          // 访问单个字符
 }</code></pre>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">字符串操作动画演示</h3>
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <p class="mb-4">演示字符串的遍历和查找操作：</p>
-                        
+
                         <div class="mb-4" id="string-demo">
                             <div class="string-item">h</div>
                             <div class="string-item">e</div>
@@ -350,7 +358,7 @@ for (int i = 0; i < s1.length(); i++) {
                             <div class="string-item">l</div>
                             <div class="string-item">d</div>
                         </div>
-                        
+
                         <div class="animation-controls">
                             <button id="string-traverse" class="bg-string hover:bg-string/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                 <i class="fa fa-arrow-right mr-2"></i> 遍历字符串
@@ -362,13 +370,13 @@ for (int i = 0; i < s1.length(); i++) {
                                 <i class="fa fa-refresh mr-2"></i> 重置
                             </button>
                         </div>
-                        
+
                         <div id="string-status" class="text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded hidden">
                             操作状态将显示在这里
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">解题技巧</h3>
                     <div class="algorithm-step">
@@ -396,7 +404,7 @@ for (int i = 0; i < s1.length(); i++) {
             <h2 class="structure-header text-stack">
                 <i class="fa fa-stack-overflow mr-2"></i> 栈 (Stack)
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">栈的概念</h3>
@@ -415,7 +423,7 @@ for (int i = 0; i < s1.length(); i++) {
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">C++栈的实现与操作</h3>
                     <pre class="code-block"><code class="language-cpp">#include <stack>  // 包含栈头文件
@@ -441,12 +449,12 @@ while (!s.empty()) {
     s.pop();
 }</code></pre>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">栈操作动画演示</h3>
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <p class="mb-4">演示栈的入栈和出栈操作：</p>
-                        
+
                         <div class="mb-4 flex justify-center">
                             <div class="stack-container" id="stack-demo">
                                 <div class="stack-item"></div>
@@ -456,7 +464,7 @@ while (!s.empty()) {
                                 <div class="stack-item"></div>
                             </div>
                         </div>
-                        
+
                         <div class="animation-controls">
                             <button id="stack-push" class="bg-stack hover:bg-stack/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                 <i class="fa fa-arrow-up mr-2"></i> 入栈
@@ -468,13 +476,13 @@ while (!s.empty()) {
                                 <i class="fa fa-refresh mr-2"></i> 重置
                             </button>
                         </div>
-                        
+
                         <div id="stack-status" class="text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded hidden">
                             操作状态将显示在这里
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">解题技巧</h3>
                     <div class="algorithm-step">
@@ -502,7 +510,7 @@ while (!s.empty()) {
             <h2 class="structure-header text-queue">
                 <i class="fa fa-list-ol mr-2"></i> 队列 (Queue)
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">队列的概念</h3>
@@ -521,7 +529,7 @@ while (!s.empty()) {
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">C++队列的实现与操作</h3>
                     <pre class="code-block"><code class="language-cpp">#include <queue>  // 包含队列头文件
@@ -548,12 +556,12 @@ while (!q.empty()) {
     q.pop();
 }</code></pre>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">队列操作动画演示</h3>
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <p class="mb-4">演示队列的入队和出队操作：</p>
-                        
+
                         <div class="mb-4" id="queue-demo">
                             <div class="queue-container">
                                 <div class="queue-item"></div>
@@ -563,7 +571,7 @@ while (!q.empty()) {
                                 <div class="queue-item"></div>
                             </div>
                         </div>
-                        
+
                         <div class="animation-controls">
                             <button id="queue-enqueue" class="bg-queue hover:bg-queue/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                 <i class="fa fa-arrow-right mr-2"></i> 入队
@@ -575,13 +583,13 @@ while (!q.empty()) {
                                 <i class="fa fa-refresh mr-2"></i> 重置
                             </button>
                         </div>
-                        
+
                         <div id="queue-status" class="text-sm text-gray-600 my-2 p-2 bg-gray-50 rounded hidden">
                             操作状态将显示在这里
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">解题技巧</h3>
                     <div class="algorithm-step">
@@ -609,7 +617,7 @@ while (!q.empty()) {
             <h2 class="text-2xl font-bold text-primary mb-6 flex items-center">
                 <i class="fa fa-pencil mr-2"></i> CSP初赛例题解析
             </h2>
-            
+
             <div class="space-y-8">
                 <!-- 数组例题 -->
                 <div>
@@ -620,13 +628,13 @@ while (!q.empty()) {
                             给定一个整数数组，找出其中连续子数组的最大和。例如，对于数组[-2,1,-3,4,-1,2,1,-5,4]，
                             连续子数组[4,-1,2,1]的和最大，为6。
                         </p>
-                        
+
                         <h4 class="font-semibold mb-2">解题思路</h4>
                         <p class="text-gray-700 mb-3">
                             使用动态规划思想，遍历数组时维护两个变量：当前最大子数组和和全局最大子数组和。
                             对于每个元素，判断是加入当前子数组还是重新开始一个子数组。
                         </p>
-                        
+
                         <h4 class="font-semibold mb-2">代码实现</h4>
                         <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <vector>
@@ -635,17 +643,17 @@ using namespace std;
 
 int maxSubArray(vector<int>& nums) {
     if (nums.empty()) return 0;
-    
+
     int current_max = nums[0];
     int global_max = nums[0];
-    
+
     for (int i = 1; i < nums.size(); i++) {
         // 要么将当前元素加入之前的子数组，要么从当前元素重新开始
         current_max = max(nums[i], current_max + nums[i]);
         // 更新全局最大值
         global_max = max(global_max, current_max);
     }
-    
+
     return global_max;
 }
 
@@ -656,7 +664,7 @@ int main() {
 }</code></pre>
                     </div>
                 </div>
-                
+
                 <!-- 字符串例题 -->
                 <div>
                     <h3 class="text-xl font-semibold text-string mb-4">字符串例题：最长回文子串</h3>
@@ -666,13 +674,13 @@ int main() {
                             给定一个字符串，找出其中最长的回文子串。例如，对于输入"babad"，输出可以是"bab"或"aba"；
                             对于输入"cbbd"，输出是"bb"。
                         </p>
-                        
+
                         <h4 class="font-semibold mb-2">解题思路</h4>
                         <p class="text-gray-700 mb-3">
                             从每个字符向两边扩展，检查以该字符为中心的最长回文子串。
                             需要分别处理奇数长度和偶数长度的回文子串。
                         </p>
-                        
+
                         <h4 class="font-semibold mb-2">代码实现</h4>
                         <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <string>
@@ -689,19 +697,19 @@ int expandAroundCenter(string s, int left, int right) {
 
 string longestPalindrome(string s) {
     if (s.empty()) return "";
-    
+
     int start = 0, end = 0;
     for (int i = 0; i < s.length(); i++) {
         int len1 = expandAroundCenter(s, i, i);      // 奇数长度
         int len2 = expandAroundCenter(s, i, i + 1);  // 偶数长度
         int len = max(len1, len2);
-        
+
         if (len > end - start) {
             start = i - (len - 1) / 2;
             end = i + len / 2;
         }
     }
-    
+
     return s.substr(start, end - start + 1);
 }
 
@@ -712,7 +720,7 @@ int main() {
 }</code></pre>
                     </div>
                 </div>
-                
+
                 <!-- 栈例题 -->
                 <div>
                     <h3 class="text-xl font-semibold text-stack mb-4">栈例题：有效的括号</h3>
@@ -722,13 +730,13 @@ int main() {
                             给定一个只包括'('，')'，'{'，'}'，'['，']'的字符串，判断字符串是否有效。
                             有效字符串需满足：左括号必须用相同类型的右括号闭合；左括号必须以正确的顺序闭合。
                         </p>
-                        
+
                         <h4 class="font-semibold mb-2">解题思路</h4>
                         <p class="text-gray-700 mb-3">
                             使用栈存储左括号，遇到右括号时检查是否与栈顶左括号匹配。若匹配则弹出栈顶元素，
                             否则字符串无效。最后检查栈是否为空，为空则有效。
                         </p>
-                        
+
                         <h4 class="font-semibold mb-2">代码实现</h4>
                         <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <stack>
@@ -744,25 +752,25 @@ bool isValid(string s) {
         {'}', '{'},
         {']', '['}
     };
-    
+
     for (char c : s) {
         // 如果是右括号
         if (mapping.find(c) != mapping.end()) {
             // 取栈顶元素，若栈为空则用一个特殊字符代替
             char top_element = st.empty() ? '#' : st.top();
             st.pop();
-            
+
             // 检查是否匹配
             if (top_element != mapping[c]) {
                 return false;
             }
-        } 
+        }
         // 如果是左括号，入栈
         else {
             st.push(c);
         }
     }
-    
+
     // 栈为空则所有括号都匹配
     return st.empty();
 }
@@ -774,7 +782,7 @@ int main() {
 }</code></pre>
                     </div>
                 </div>
-                
+
                 <!-- 队列例题 -->
                 <div>
                     <h3 class="text-xl font-semibold text-queue mb-4">队列例题：滑动窗口最大值</h3>
@@ -784,13 +792,13 @@ int main() {
                             给定一个数组nums和滑动窗口的大小k，请找出所有滑动窗口里的最大值。
                             例如，对于nums = [1,3,-1,-3,5,3,6,7], k = 3，输出应为[3,3,5,5,6,7]。
                         </p>
-                        
+
                         <h4 class="font-semibold mb-2">解题思路</h4>
                         <p class="text-gray-700 mb-3">
                             使用双端队列维护窗口中的最大值索引。队列中始终保持索引对应的元素递减，
                             新元素入队前移除所有比它小的元素。队首元素即为当前窗口的最大值。
                         </p>
-                        
+
                         <h4 class="font-semibold mb-2">代码实现</h4>
                         <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <vector>
@@ -800,27 +808,27 @@ using namespace std;
 vector<int> maxSlidingWindow(vector<int>& nums, int k) {
     vector<int> result;
     deque<int> dq;  // 存储索引，对应元素保持递减
-    
+
     for (int i = 0; i < nums.size(); i++) {
         // 移除窗口外的元素
         if (!dq.empty() && dq.front() == i - k) {
             dq.pop_front();
         }
-        
+
         // 移除所有小于当前元素的元素
         while (!dq.empty() && nums[dq.back()] < nums[i]) {
             dq.pop_back();
         }
-        
+
         // 当前元素索引入队
         dq.push_back(i);
-        
+
         // 当窗口大小达到k时，开始记录结果
         if (i >= k - 1) {
             result.push_back(nums[dq.front()]);
         }
     }
-    
+
     return result;
 }
 
@@ -828,7 +836,7 @@ int main() {
     vector<int> nums = {1,3,-1,-3,5,3,6,7};
     int k = 3;
     vector<int> res = maxSlidingWindow(nums, k);
-    
+
     for (int num : res) {
         cout << num << " ";
     }
@@ -854,30 +862,30 @@ int main() {
     <script>
         // 初始化代码高亮
         hljs.highlightAll();
-        
+
         // 数组演示
         let arrayItems = document.querySelectorAll('#array-demo .array-item');
         let arrayAccessBtn = document.getElementById('array-access');
         let arrayModifyBtn = document.getElementById('array-modify');
         let arrayResetBtn = document.getElementById('array-reset');
         let arrayStatus = document.getElementById('array-status');
-        
+
         arrayAccessBtn.addEventListener('click', () => {
             resetArrayDemo();
             arrayStatus.classList.remove('hidden');
             arrayStatus.textContent = '正在访问索引为2的元素...';
-            
+
             setTimeout(() => {
                 arrayItems[2].classList.add('array-item-active');
                 arrayStatus.textContent = '已访问索引为2的元素，值为5';
             }, 500);
         });
-        
+
         arrayModifyBtn.addEventListener('click', () => {
             resetArrayDemo();
             arrayStatus.classList.remove('hidden');
             arrayStatus.textContent = '正在修改索引为3的元素...';
-            
+
             setTimeout(() => {
                 arrayItems[3].classList.add('array-item-active');
                 setTimeout(() => {
@@ -886,15 +894,15 @@ int main() {
                 }, 800);
             }, 500);
         });
-        
+
         arrayResetBtn.addEventListener('click', resetArrayDemo);
-        
+
         function resetArrayDemo() {
             arrayItems.forEach(item => item.classList.remove('array-item-active'));
             arrayItems[3].textContent = '3:7';
             arrayStatus.classList.add('hidden');
         }
-        
+
         // 字符串演示
         let stringItems = document.querySelectorAll('#string-demo .string-item');
         let stringTraverseBtn = document.getElementById('string-traverse');
@@ -902,12 +910,12 @@ int main() {
         let stringResetBtn = document.getElementById('string-reset');
         let stringStatus = document.getElementById('string-status');
         let traverseInterval;
-        
+
         stringTraverseBtn.addEventListener('click', () => {
             resetStringDemo();
             stringStatus.classList.remove('hidden');
             stringStatus.textContent = '开始遍历字符串...';
-            
+
             let i = 0;
             traverseInterval = setInterval(() => {
                 if (i > 0) stringItems[i-1].classList.remove('string-item-active');
@@ -921,15 +929,15 @@ int main() {
                 }
             }, 500);
         });
-        
+
         stringFindBtn.addEventListener('click', () => {
             resetStringDemo();
             stringStatus.classList.remove('hidden');
             stringStatus.textContent = '开始查找字符\'l\'...';
-            
+
             let i = 0;
             let foundIndices = [];
-            
+
             let findInterval = setInterval(() => {
                 if (i > 0) stringItems[i-1].classList.remove('string-item-active');
                 if (i < stringItems.length) {
@@ -948,15 +956,15 @@ int main() {
                 }
             }, 500);
         });
-        
+
         stringResetBtn.addEventListener('click', resetStringDemo);
-        
+
         function resetStringDemo() {
             clearInterval(traverseInterval);
             stringItems.forEach(item => item.classList.remove('string-item-active'));
             stringStatus.classList.add('hidden');
         }
-        
+
         // 栈演示
         let stackItems = document.querySelectorAll('#stack-demo .stack-item');
         let stackPushBtn = document.getElementById('stack-push');
@@ -965,17 +973,17 @@ int main() {
         let stackStatus = document.getElementById('stack-status');
         let stackTop = -1;
         let stackValues = [10, 20, 30, 40, 50];
-        
+
         stackPushBtn.addEventListener('click', () => {
             if (stackTop >= stackItems.length - 1) {
                 stackStatus.classList.remove('hidden');
                 stackStatus.textContent = '栈已满，无法入栈';
                 return;
             }
-            
+
             stackStatus.classList.remove('hidden');
             stackStatus.textContent = '正在执行入栈操作...';
-            
+
             stackTop++;
             setTimeout(() => {
                 stackItems.forEach(item => item.classList.remove('stack-item-top'));
@@ -984,17 +992,17 @@ int main() {
                 stackStatus.textContent = `已将${stackValues[stackTop]}入栈，栈顶位置: ${stackTop}`;
             }, 500);
         });
-        
+
         stackPopBtn.addEventListener('click', () => {
             if (stackTop < 0) {
                 stackStatus.classList.remove('hidden');
                 stackStatus.textContent = '栈为空，无法出栈';
                 return;
             }
-            
+
             stackStatus.classList.remove('hidden');
             stackStatus.textContent = '正在执行出栈操作...';
-            
+
             let poppedValue = stackValues[stackTop];
             setTimeout(() => {
                 stackItems[stackTop].classList.remove('stack-item-top');
@@ -1006,7 +1014,7 @@ int main() {
                 stackStatus.textContent = `已将${poppedValue}出栈，栈顶位置: ${stackTop}`;
             }, 500);
         });
-        
+
         stackResetBtn.addEventListener('click', () => {
             stackItems.forEach(item => {
                 item.classList.remove('stack-item-top');
@@ -1015,7 +1023,7 @@ int main() {
             stackTop = -1;
             stackStatus.classList.add('hidden');
         });
-        
+
         // 队列演示
         let queueItems = document.querySelectorAll('#queue-demo .queue-item');
         let queueEnqueueBtn = document.getElementById('queue-enqueue');
@@ -1026,61 +1034,61 @@ int main() {
         let queueRear = -1;
         let queueSize = 0;
         let queueValues = [10, 20, 30, 40, 50];
-        
+
         queueEnqueueBtn.addEventListener('click', () => {
             if (queueSize >= queueItems.length) {
                 queueStatus.classList.remove('hidden');
                 queueStatus.textContent = '队列已满，无法入队';
                 return;
             }
-            
+
             queueStatus.classList.remove('hidden');
             queueStatus.textContent = '正在执行入队操作...';
-            
+
             queueRear = (queueRear + 1) % queueItems.length;
             queueSize++;
-            
+
             setTimeout(() => {
                 queueItems.forEach(item => {
                     item.classList.remove('queue-item-front', 'queue-item-rear');
                 });
-                
+
                 queueItems[queueRear].textContent = queueValues[queueRear];
                 queueItems[queueFront].classList.add('queue-item-front');
                 queueItems[queueRear].classList.add('queue-item-rear');
-                
+
                 queueStatus.textContent = `已将${queueValues[queueRear]}入队，队首: ${queueFront}, 队尾: ${queueRear}`;
             }, 500);
         });
-        
+
         queueDequeueBtn.addEventListener('click', () => {
             if (queueSize <= 0) {
                 queueStatus.classList.remove('hidden');
                 queueStatus.textContent = '队列为空，无法出队';
                 return;
             }
-            
+
             queueStatus.classList.remove('hidden');
             queueStatus.textContent = '正在执行出队操作...';
-            
+
             let dequeuedValue = queueItems[queueFront].textContent;
-            
+
             setTimeout(() => {
                 queueItems[queueFront].textContent = '';
                 queueItems[queueFront].classList.remove('queue-item-front');
-                
+
                 queueFront = (queueFront + 1) % queueItems.length;
                 queueSize--;
-                
+
                 if (queueSize > 0) {
                     queueItems[queueFront].classList.add('queue-item-front');
                     queueItems[queueRear].classList.add('queue-item-rear');
                 }
-                
+
                 queueStatus.textContent = `已将${dequeuedValue}出队，队首: ${queueFront}, 队尾: ${queueRear}`;
             }, 500);
         });
-        
+
         queueResetBtn.addEventListener('click', () => {
             queueItems.forEach(item => {
                 item.classList.remove('queue-item-front', 'queue-item-rear');
@@ -1092,5 +1100,6 @@ int main() {
             queueStatus.classList.add('hidden');
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

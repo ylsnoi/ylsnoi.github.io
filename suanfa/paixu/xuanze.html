@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>选择排序 - 艾科斯信奥网</title>
+
+    <meta name="description" content="选择排序课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/suanfa/paixu/xuanze.html">
+    <meta property="og:title" content="选择排序 - 艾科斯信奥网">
+    <meta property="og:description" content="选择排序课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/suanfa/paixu/xuanze.html">
+<title>选择排序 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -120,8 +127,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -195,7 +203,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="sort-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -242,7 +250,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">选择排序的基本步骤</h3>
                     <div class="space-y-3">
@@ -259,7 +267,7 @@
                             <p>从余下的N-1个元素中，找出关键字最小的元素，重复步骤2，直到排序结束</p>
                         </div>
                     </div>
-                    
+
                     <div class="mt-6">
                         <h4 class="font-semibold mb-3">时间复杂度分析</h4>
                         <div class="bg-gray-50 p-4 rounded-lg">
@@ -280,7 +288,7 @@
             <h2 class="text-2xl font-bold text-sort mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 选择排序过程演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 排序动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -290,14 +298,14 @@
                             <p class="text-gray-700 mb-4">
                                 下面的动画展示了选择排序的完整过程，包括寻找最小元素、交换位置和已排序区间扩展三个主要步骤。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">输入待排序数组:</label>
                                 <input type="text" id="array-input" value="64, 25, 12, 22, 11"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-sort">
                                 <p class="text-xs text-gray-500 mt-1">请使用逗号分隔的整数，如: 5,3,8,4,2</p>
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="sort-run" class="bg-sort hover:bg-sort/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 开始排序
@@ -309,11 +317,11 @@
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="sort-status" class="animation-status mt-4">
                                 状态: 准备就绪
                             </div>
-                            
+
                             <div class="animation-progress mt-4">
                                 <div id="sort-progress-bar" class="animation-progress-bar" style="width: 0%"></div>
                             </div>
@@ -321,7 +329,7 @@
                                 <span id="sort-progress-text">进度: 0/0 步</span>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 flex items-center justify-center" id="sort-visualization">
                                 <div class="flex flex-wrap justify-center">
@@ -336,7 +344,7 @@
                                 排序可视化区域
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="sort-code">
                                 <div class="code-line" id="code-1">// 选择排序函数</div>
@@ -364,7 +372,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 算法优化 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">选择排序的优化</h3>
@@ -375,16 +383,16 @@
 void optimizedSelectionSort(int arr[], int n) {
     int left = 0;          // 左边界
     int right = n - 1;     // 右边界
-    
+
     while (left < right) {
         int min_idx = left;  // 最小值索引
         int max_idx = right; // 最大值索引
-        
+
         // 确保min_idx初始值小于max_idx初始值
         if (arr[min_idx] > arr[max_idx]) {
             swap(min_idx, max_idx);
         }
-        
+
         // 寻找最小值和最大值索引
         for (int i = left + 1; i <= right; i++) {
             if (arr[i] < arr[min_idx]) {
@@ -393,18 +401,18 @@ void optimizedSelectionSort(int arr[], int n) {
                 max_idx = i;
             }
         }
-        
+
         // 将最小值交换到左边界
         swap(arr[left], arr[min_idx]);
-        
+
         // 如果最大值在左边界，更新max_idx（因为上面的交换可能改变了它）
         if (max_idx == left) {
             max_idx = min_idx;
         }
-        
+
         // 将最大值交换到右边界
         swap(arr[right], arr[max_idx]);
-        
+
         // 缩小排序范围
         left++;
         right--;
@@ -422,7 +430,7 @@ void optimizedSelectionSort(int arr[], int n) {
             <h2 class="text-2xl font-bold text-sort mb-6 flex items-center">
                 <i class="fa fa-code mr-2"></i> 选择排序代码示例 (C++)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 基础实现 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -430,14 +438,14 @@ void optimizedSelectionSort(int arr[], int n) {
                     <p class="text-gray-700 mb-3">
                         标准的选择排序实现，从小到大排序一个整数数组
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 using namespace std;
 
 // 选择排序函数：将数组按升序排列
 void selectionSort(int arr[], int n) {
     int i, j, min_idx;
-    
+
     // 外层循环：控制已排序元素的数量
     for (i = 0; i < n - 1; i++) {
         // 找到未排序部分的最小元素索引
@@ -447,7 +455,7 @@ void selectionSort(int arr[], int n) {
                 min_idx = j;
             }
         }
-        
+
         // 将最小元素与未排序部分的第一个元素交换
         swap(arr[min_idx], arr[i]);
     }
@@ -464,33 +472,33 @@ void printArray(int arr[], int size) {
 int main() {
     int arr[] = {64, 25, 12, 22, 11};
     int n = sizeof(arr) / sizeof(arr[0]);
-    
+
     cout << "排序前的数组: ";
     printArray(arr, n);
-    
+
     selectionSort(arr, n);
-    
+
     cout << "排序后的数组: ";
     printArray(arr, n);
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 降序排序 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">2. 降序选择排序</h3>
                     <p class="text-gray-700 mb-3">
                         修改比较条件，实现从大到小的降序排序
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 using namespace std;
 
 // 选择排序（降序）：将数组按降序排列
 void selectionSortDescending(int arr[], int n) {
     int i, j, max_idx;
-    
+
     // 外层循环：控制已排序元素的数量
     for (i = 0; i < n - 1; i++) {
         // 找到未排序部分的最大元素索引
@@ -500,7 +508,7 @@ void selectionSortDescending(int arr[], int n) {
                 max_idx = j;
             }
         }
-        
+
         // 将最大元素与未排序部分的第一个元素交换
         swap(arr[max_idx], arr[i]);
     }
@@ -517,26 +525,26 @@ void printArray(int arr[], int size) {
 int main() {
     int arr[] = {34, 12, 45, 9, 23};
     int n = sizeof(arr) / sizeof(arr[0]);
-    
+
     cout << "排序前的数组: ";
     printArray(arr, n);
-    
+
     selectionSortDescending(arr, n);
-    
+
     cout << "降序排序后的数组: ";
     printArray(arr, n);
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 结构体排序 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">3. 对结构体数组排序</h3>
                     <p class="text-gray-700 mb-3">
                         选择排序不仅可以用于基本数据类型，还可以对结构体数组按指定字段排序
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <string>
 using namespace std;
@@ -550,7 +558,7 @@ struct Student {
 // 按分数对学生数组进行排序（升序）
 void sortStudentsByScore(Student arr[], int n) {
     int i, j, min_idx;
-    
+
     for (i = 0; i < n - 1; i++) {
         min_idx = i;
         // 寻找分数最低的学生索引
@@ -559,7 +567,7 @@ void sortStudentsByScore(Student arr[], int n) {
                 min_idx = j;
             }
         }
-        
+
         // 交换结构体元素
         swap(arr[min_idx], arr[i]);
     }
@@ -568,7 +576,7 @@ void sortStudentsByScore(Student arr[], int n) {
 // 打印学生信息
 void printStudents(Student arr[], int n) {
     for (int i = 0; i < n; i++) {
-        cout << "姓名: " << arr[i].name 
+        cout << "姓名: " << arr[i].name
              << ", 分数: " << arr[i].score << endl;
     }
 }
@@ -581,15 +589,15 @@ int main() {
         {"赵六", 90}
     };
     int n = sizeof(students) / sizeof(students[0]);
-    
+
     cout << "排序前的学生信息:" << endl;
     printStudents(students, n);
-    
+
     sortStudentsByScore(students, n);
-    
+
     cout << "\n按分数升序排序后的学生信息:" << endl;
     printStudents(students, n);
-    
+
     return 0;
 }</code></pre>
                 </div>
@@ -601,7 +609,7 @@ int main() {
             <h2 class="text-2xl font-bold text-sort mb-6 flex items-center">
                 <i class="fa fa-tasks mr-2"></i> 洛谷推荐练习题
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 模板题 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -609,17 +617,17 @@ int main() {
                         <span class="inline-block w-8 h-8 rounded-full bg-primary text-white text-center leading-8 mr-2">1</span>
                         模板题（巩固基础）
                     </h3>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <a href="https://www.luogu.com.cn/problem/P1177" target="_blank" class="subtopic-item flex justify-between items-center group">
+                        <a href="https://www.luogu.com.cn/problem/P1177" target="_blank" class="subtopic-item flex justify-between items-center group" rel="noopener noreferrer">
                             <div>
                                 <h4 class="font-medium">P1177 【模板】排序</h4>
                                 <p class="text-sm text-gray-600 mt-1">使用排序算法对数组进行排序，直接应用选择排序算法</p>
                             </div>
                             <i class="fa fa-external-link text-gray-400 group-hover:text-primary transition-colors"></i>
                         </a>
-                        
-                        <a href="https://www.luogu.com.cn/problem/P5713" target="_blank" class="subtopic-item flex justify-between items-center group">
+
+                        <a href="https://www.luogu.com.cn/problem/P5713" target="_blank" class="subtopic-item flex justify-between items-center group" rel="noopener noreferrer">
                             <div>
                                 <h4 class="font-medium">P5713 【深基4.例5】最大数输出</h4>
                                 <p class="text-sm text-gray-600 mt-1">找出三个数中的最大值，体现选择排序的核心思想</p>
@@ -628,24 +636,24 @@ int main() {
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- 入门题 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-4 flex items-center">
                         <span class="inline-block w-8 h-8 rounded-full bg-secondary text-white text-center leading-8 mr-2">2</span>
                         入门题（应用练习）
                     </h3>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <a href="https://www.luogu.com.cn/problem/P1059" target="_blank" class="subtopic-item flex justify-between items-center group">
+                        <a href="https://www.luogu.com.cn/problem/P1059" target="_blank" class="subtopic-item flex justify-between items-center group" rel="noopener noreferrer">
                             <div>
                                 <h4 class="font-medium">P1059 [NOIP2006 普及组] 明明的随机数</h4>
                                 <p class="text-sm text-gray-600 mt-1">去重后排序，综合应用数组去重和选择排序</p>
                             </div>
                             <i class="fa fa-external-link text-gray-400 group-hover:text-primary transition-colors"></i>
                         </a>
-                        
-                        <a href="https://www.luogu.com.cn/problem/P1271" target="_blank" class="subtopic-item flex justify-between items-center group">
+
+                        <a href="https://www.luogu.com.cn/problem/P1271" target="_blank" class="subtopic-item flex justify-between items-center group" rel="noopener noreferrer">
                             <div>
                                 <h4 class="font-medium">P1271 【深基9.例1】选举学生会</h4>
                                 <p class="text-sm text-gray-600 mt-1">对选票结果进行排序，适合使用选择排序实现</p>
@@ -654,24 +662,24 @@ int main() {
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- 进阶题 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-4 flex items-center">
                         <span class="inline-block w-8 h-8 rounded-full bg-sort text-white text-center leading-8 mr-2">3</span>
                         进阶题（综合提升）
                     </h3>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <a href="https://www.luogu.com.cn/problem/P1093" target="_blank" class="subtopic-item flex justify-between items-center group">
+                        <a href="https://www.luogu.com.cn/problem/P1093" target="_blank" class="subtopic-item flex justify-between items-center group" rel="noopener noreferrer">
                             <div>
                                 <h4 class="font-medium">P1093 [NOIP2007 普及组] 奖学金</h4>
                                 <p class="text-sm text-gray-600 mt-1">多关键字排序问题，需要修改选择排序的比较逻辑</p>
                             </div>
                             <i class="fa fa-external-link text-gray-400 group-hover:text-primary transition-colors"></i>
                         </a>
-                        
-                        <a href="https://www.luogu.com.cn/problem/P1116" target="_blank" class="subtopic-item flex justify-between items-center group">
+
+                        <a href="https://www.luogu.com.cn/problem/P1116" target="_blank" class="subtopic-item flex justify-between items-center group" rel="noopener noreferrer">
                             <div>
                                 <h4 class="font-medium">P1116 车厢重组</h4>
                                 <p class="text-sm text-gray-600 mt-1">统计排序所需的交换次数，深入理解选择排序过程</p>
@@ -687,7 +695,7 @@ int main() {
     <script>
         // 初始化代码高亮
         hljs.highlightAll();
-        
+
         // 选择排序动画演示逻辑
         document.addEventListener('DOMContentLoaded', function() {
             // 获取DOM元素
@@ -699,7 +707,7 @@ int main() {
             const statusDisplay = document.getElementById('sort-status');
             const progressBar = document.getElementById('sort-progress-bar');
             const progressText = document.getElementById('sort-progress-text');
-            
+
             // 排序状态变量
             let originalArray = [64, 25, 12, 22, 11];
             let currentArray = [...originalArray];
@@ -710,7 +718,7 @@ int main() {
             let isStepMode = false;
             let totalSteps = 0;
             let currentStep = 0;
-            
+
             // 计算总步骤数
             function calculateTotalSteps() {
                 let steps = 0;
@@ -719,17 +727,17 @@ int main() {
                 }
                 return steps;
             }
-            
+
             // 渲染数组
             function renderArray(highlightIndices = { min: -1, compared: -1, sortedUpTo: -1 }) {
                 visualization.innerHTML = '';
                 const arrayContainer = document.createElement('div');
                 arrayContainer.className = 'flex flex-wrap justify-center';
-                
+
                 currentArray.forEach((num, idx) => {
                     const element = document.createElement('div');
                     element.className = 'array-element';
-                    
+
                     // 已排序的元素
                     if (idx <= highlightIndices.sortedUpTo) {
                         element.classList.add('array-element-sorted');
@@ -742,14 +750,14 @@ int main() {
                     else if (idx === highlightIndices.compared) {
                         element.classList.add('array-element-compared');
                     }
-                    
+
                     element.textContent = num;
                     arrayContainer.appendChild(element);
                 });
-                
+
                 visualization.appendChild(arrayContainer);
             }
-            
+
             // 重置代码高亮
             function resetCodeHighlight() {
                 for (let line = 1; line <= 18; line++) {
@@ -757,7 +765,7 @@ int main() {
                     codeLine.classList.remove('code-line-highlight');
                 }
             }
-            
+
             // 高亮当前执行的代码行
             function highlightCodeLine(lineNumber) {
                 resetCodeHighlight();
@@ -766,7 +774,7 @@ int main() {
                     codeLine.classList.add('code-line-highlight');
                 }
             }
-            
+
             // 重置排序状态
             function resetSort() {
                 // 解析输入的数组
@@ -784,7 +792,7 @@ int main() {
                 } catch (e) {
                     console.error('数组解析错误:', e);
                 }
-                
+
                 currentArray = [...originalArray];
                 n = currentArray.length;
                 i = 0;
@@ -794,7 +802,7 @@ int main() {
                 isStepMode = false;
                 currentStep = 0;
                 totalSteps = calculateTotalSteps();
-                
+
                 // 更新UI
                 renderArray();
                 resetCodeHighlight();
@@ -802,7 +810,7 @@ int main() {
                 progressBar.style.width = '0%';
                 progressText.textContent = `进度: 0/${totalSteps} 步`;
             }
-            
+
             // 执行一步排序
             function stepSort() {
                 if (i >= n - 1) {
@@ -813,19 +821,19 @@ int main() {
                     isRunning = false;
                     return false; // 排序已完成
                 }
-                
+
                 if (j < n) {
                     // 正在寻找最小值
                     statusDisplay.textContent = `状态: 比较元素 [${minIdx}] = ${currentArray[minIdx]} 和 [${j}] = ${currentArray[j]}`;
                     renderArray({ min: minIdx, compared: j, sortedUpTo: i - 1 });
                     highlightCodeLine(10); // 高亮比较行
-                    
+
                     // 如果找到更小的元素，更新minIdx
                     if (currentArray[j] < currentArray[minIdx]) {
                         minIdx = j;
                         highlightCodeLine(11); // 高亮更新minIdx行
                     }
-                    
+
                     j++;
                 } else {
                     // 找到最小值，进行交换
@@ -837,34 +845,34 @@ int main() {
                         statusDisplay.textContent = `状态: 最小元素已在正确位置`;
                         highlightCodeLine(16); // 高亮交换行
                     }
-                    
+
                     renderArray({ sortedUpTo: i });
-                    
+
                     // 进入下一轮
                     i++;
                     j = i + 1;
                     minIdx = i;
                     highlightCodeLine(6); // 高亮外层循环行
                 }
-                
+
                 // 更新进度
                 currentStep++;
                 const progress = (currentStep / totalSteps) * 100;
                 progressBar.style.width = `${progress}%`;
                 progressText.textContent = `进度: ${currentStep}/${totalSteps} 步`;
-                
+
                 return true; // 还有步骤要执行
             }
-            
+
             // 自动执行排序动画
             function autoSort() {
                 if (!isRunning) return;
-                
+
                 if (stepSort()) {
                     setTimeout(autoSort, 800); // 控制动画速度
                 }
             }
-            
+
             // 事件监听
             runBtn.addEventListener('click', function() {
                 if (isRunning) {
@@ -877,19 +885,20 @@ int main() {
                     autoSort();
                 }
             });
-            
+
             stepBtn.addEventListener('click', function() {
                 isRunning = false;
                 runBtn.innerHTML = '<i class="fa fa-play mr-2"></i> 开始排序';
                 stepSort();
             });
-            
+
             resetBtn.addEventListener('click', resetSort);
             arrayInput.addEventListener('change', resetSort);
-            
+
             // 初始化
             resetSort();
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

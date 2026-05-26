@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>贪心算法 - 艾科斯信奥网</title>
+
+    <meta name="description" content="贪心算法课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/suanfa/qita/tanxin.html">
+    <meta property="og:title" content="贪心算法 - 艾科斯信奥网">
+    <meta property="og:description" content="贪心算法课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/suanfa/qita/tanxin.html">
+<title>贪心算法 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -117,8 +124,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -192,7 +200,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="greedy-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -238,13 +246,13 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">贪心算法的适用条件</h3>
                     <p class="text-gray-700 mb-3">
                         贪心算法并非适用于所有问题，它能够得到最优解需要满足两个重要性质：
                     </p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="bg-gray-50 p-3 rounded-lg">
                             <h4 class="font-semibold text-greedy">贪心选择性质</h4>
@@ -262,7 +270,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">贪心算法的基本步骤</h3>
                     <div class="space-y-3">
@@ -306,7 +314,7 @@
             <h2 class="text-2xl font-bold text-greedy mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 贪心算法过程演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 贪心算法动画 - 活动选择问题 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -315,13 +323,13 @@
                         活动选择问题是贪心算法的经典应用：有n个活动，每个活动有开始时间和结束时间，
                         选择最多的活动，使得这些活动互不重叠。贪心策略是：每次选择结束时间最早的活动。
                     </p>
-                    
+
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="lg:col-span-1">
                             <p class="text-gray-700 mb-4">
                                 下面的动画展示了活动选择问题的贪心算法执行过程，包括活动排序和选择两个主要步骤。
                             </p>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="greedy-run" class="bg-greedy hover:bg-greedy/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 运行动画
@@ -330,11 +338,11 @@
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="greedy-status" class="animation-status mt-4">
                                 状态: 等待开始
                             </div>
-                            
+
                             <div class="mt-4">
                                 <div class="animation-progress">
                                     <div id="greedy-progress-bar" class="animation-progress-bar" style="width: 0%"></div>
@@ -344,7 +352,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="greedy-execution">
                                 <div class="text-center text-gray-500 py-8">
@@ -353,7 +361,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="greedy-code">
                                 <div class="code-line" id="gcode-1">#include &lt;iostream&gt;</div>
@@ -405,7 +413,7 @@
             <h2 class="text-2xl font-bold text-greedy mb-6 flex items-center">
                 <i class="fa fa-code mr-2"></i> 贪心算法代码示例 (C++)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 硬币找零问题 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -413,7 +421,7 @@
                     <p class="text-gray-700 mb-3">
                         有不同面额的硬币，用最少的硬币数找出给定金额。贪心策略：每次选择最大面额的硬币。
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -423,10 +431,10 @@ using namespace std;
 int coinChange(vector<int>& coins, int amount) {
     // 排序硬币面额（从大到小）
     sort(coins.rbegin(), coins.rend());
-    
+
     int count = 0;
     int remaining = amount;
-    
+
     // 贪心选择：每次取最大面额的硬币
     for (int coin : coins) {
         if (remaining >= coin) {
@@ -435,13 +443,13 @@ int coinChange(vector<int>& coins, int amount) {
             remaining -= num * coin;
             cout << "使用 " << num << " 个 " << coin << " 元硬币" << endl;
         }
-        
+
         // 如果已经找零完成，退出循环
         if (remaining == 0) {
             break;
         }
     }
-    
+
     // 如果无法找零（remaining不为0），返回-1
     return remaining == 0 ? count : -1;
 }
@@ -450,29 +458,29 @@ int main() {
     // 硬币面额（必须包含1元，否则可能无法找零）
     vector<int> coins = {1, 5, 10, 20, 50, 100};
     int amount;
-    
+
     cout << "请输入要找零的金额: ";
     cin >> amount;
-    
+
     int result = coinChange(coins, amount);
-    
+
     if (result != -1) {
         cout << "最少需要 " << result << " 个硬币" << endl;
     } else {
         cout << "无法完成找零" << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 区间调度问题 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">2. 区间调度问题</h3>
                     <p class="text-gray-700 mb-3">
                         选择最多的非重叠区间。贪心策略：每次选择结束时间最早的区间。
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -483,7 +491,7 @@ struct Interval {
     int start;  // 开始时间
     int end;    // 结束时间
     int id;     // 区间编号
-    
+
     Interval(int s, int e, int i) : start(s), end(e), id(i) {}
 };
 
@@ -496,14 +504,14 @@ bool compareIntervals(const Interval& a, const Interval& b) {
 vector<Interval> selectIntervals(vector<Interval>& intervals) {
     // 按结束时间排序
     sort(intervals.begin(), intervals.end(), compareIntervals);
-    
+
     vector<Interval> selected;
     if (intervals.empty()) return selected;
-    
+
     // 选择第一个区间
     selected.push_back(intervals[0]);
     int lastEnd = intervals[0].end;
-    
+
     // 依次选择后续区间
     for (size_t i = 1; i < intervals.size(); ++i) {
         // 如果当前区间的开始时间 >= 最后选中区间的结束时间
@@ -512,7 +520,7 @@ vector<Interval> selectIntervals(vector<Interval>& intervals) {
             lastEnd = intervals[i].end;
         }
     }
-    
+
     return selected;
 }
 
@@ -530,27 +538,27 @@ int main() {
     intervals.emplace_back(8, 12, 9);
     intervals.emplace_back(2, 14, 10);
     intervals.emplace_back(12, 16, 11);
-    
+
     // 选择最多的非重叠区间
     vector<Interval> result = selectIntervals(intervals);
-    
+
     // 输出结果
     cout << "最多可以选择 " << result.size() << " 个非重叠区间：" << endl;
     for (const auto& interval : result) {
         cout << "区间 " << interval.id << "：[" << interval.start << ", " << interval.end << ")" << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 哈夫曼编码 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">3. 哈夫曼编码</h3>
                     <p class="text-gray-700 mb-3">
                         哈夫曼编码是一种用于数据压缩的贪心算法。贪心策略：每次选择两个频率最低的节点合并。
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <queue>
 #include <vector>
@@ -563,7 +571,7 @@ struct HuffmanNode {
     char data;           // 字符
     int freq;            // 频率
     HuffmanNode *left, *right; // 左右子树
-    
+
     HuffmanNode(char d, int f) : data(d), freq(f), left(nullptr), right(nullptr) {}
 };
 
@@ -578,30 +586,30 @@ struct CompareNodes {
 HuffmanNode* buildHuffmanTree(unordered_map<char, int>& freq) {
     // 创建最小堆
     priority_queue<HuffmanNode*, vector<HuffmanNode*>, CompareNodes> minHeap;
-    
+
     // 将所有字符作为叶子节点加入堆
     for (auto& pair : freq) {
         minHeap.push(new HuffmanNode(pair.first, pair.second));
     }
-    
+
     // 合并节点直到堆中只剩一个节点
     while (minHeap.size() > 1) {
         // 取出两个频率最小的节点
         HuffmanNode* left = minHeap.top();
         minHeap.pop();
-        
+
         HuffmanNode* right = minHeap.top();
         minHeap.pop();
-        
+
         // 创建新的内部节点，频率为两个节点频率之和
         HuffmanNode* internal = new HuffmanNode('$', left->freq + right->freq);
         internal->left = left;
         internal->right = right;
-        
+
         // 将新节点加入堆
         minHeap.push(internal);
     }
-    
+
     // 返回根节点
     return minHeap.top();
 }
@@ -609,13 +617,13 @@ HuffmanNode* buildHuffmanTree(unordered_map<char, int>& freq) {
 // 生成哈夫曼编码
 void generateCodes(HuffmanNode* root, string code, unordered_map<char, string>& codes) {
     if (root == nullptr) return;
-    
+
     // 如果是叶子节点，保存编码
     if (root->data != '$') {
         codes[root->data] = code;
         return;
     }
-    
+
     // 左子树加0，右子树加1
     generateCodes(root->left, code + "0", codes);
     generateCodes(root->right, code + "1", codes);
@@ -625,11 +633,11 @@ void generateCodes(HuffmanNode* root, string code, unordered_map<char, string>& 
 unordered_map<char, string> huffmanEncoding(unordered_map<char, int>& freq) {
     // 构建哈夫曼树
     HuffmanNode* root = buildHuffmanTree(freq);
-    
+
     // 生成编码
     unordered_map<char, string> codes;
     generateCodes(root, "", codes);
-    
+
     return codes;
 }
 
@@ -638,16 +646,16 @@ int main() {
     unordered_map<char, int> freq = {
         {'a', 5}, {'b', 9}, {'c', 12}, {'d', 13}, {'e', 16}, {'f', 45}
     };
-    
+
     // 获取哈夫曼编码
     unordered_map<char, string> codes = huffmanEncoding(freq);
-    
+
     // 输出结果
     cout << "哈夫曼编码结果：" << endl;
     for (auto& pair : codes) {
         cout << pair.first << " : " << pair.second << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
@@ -659,7 +667,7 @@ int main() {
             <h2 class="text-2xl font-bold text-greedy mb-6 flex items-center">
                 <i class="fa fa-trophy mr-2"></i> 贪心算法的奥赛应用
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">信息学奥赛中常见的贪心问题类型</h3>
@@ -702,7 +710,7 @@ int main() {
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">贪心算法的解题技巧</h3>
                     <div class="bg-gray-50 p-4 rounded-lg">
@@ -724,7 +732,7 @@ int main() {
             <h2 class="text-2xl font-bold text-greedy mb-6 flex items-center">
                 <i class="fa fa-list-alt mr-2"></i> 推荐练习题目 (洛谷)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 模板题 -->
                 <div>
@@ -738,11 +746,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 经典的分数背包问题，通过计算单位重量价值进行贪心选择。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P2240" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P2240" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale card-shadow">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1094 [NOIP2007 普及组] 纪念品分组</h4>
@@ -751,11 +759,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 利用贪心策略对纪念品进行最优分组，适合初学者练习。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1094" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1094" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale card-shadow">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1223 排队接水</h4>
@@ -764,13 +772,13 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 简单的贪心排序问题，通过排序使总等待时间最小。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1223" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1223" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 入门题 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary">入门题</h3>
@@ -783,11 +791,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 0-1背包问题的变形，可用贪心思想解决，适合巩固基础。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1060" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1060" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale card-shadow">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1199 三国游戏</h4>
@@ -796,11 +804,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 结合贪心策略的游戏问题，需要分析最优选择策略。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1199" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1199" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale card-shadow">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1803 凌乱的yyy / 线段覆盖</h4>
@@ -809,13 +817,13 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 经典的区间覆盖问题，应用结束时间最早的贪心策略。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1803" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1803" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 进阶题 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary">进阶题</h3>
@@ -828,11 +836,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 较复杂的贪心排序问题，需要推导出正确的排序规则。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P2123" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P2123" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale card-shadow">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P3620 [APIO/CTSC 2007] 数据备份</h4>
@@ -841,11 +849,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 结合贪心和数据结构的问题，需要巧妙的贪心策略。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P3620" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P3620" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale card-shadow">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P4053 [JSOI2007] 建筑抢修</h4>
@@ -854,7 +862,7 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 带约束条件的调度问题，需要结合贪心和优先队列。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P4053" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P4053" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -868,7 +876,7 @@ int main() {
         // 初始化高亮显示
         document.addEventListener('DOMContentLoaded', function() {
             hljs.highlightAll();
-            
+
             // 活动数据
             const activities = [
                 { start: 1, end: 4, id: 1 },
@@ -883,7 +891,7 @@ int main() {
                 { start: 2, end: 14, id: 10 },
                 { start: 12, end: 16, id: 11 }
             ];
-            
+
             // 动画步骤
             const animationSteps = [
                 {
@@ -1000,23 +1008,23 @@ int main() {
                     </div>`
                 }
             ];
-            
+
             let currentStep = 0;
             let animationInterval;
-            
+
             // 运行动画
             document.getElementById('greedy-run').addEventListener('click', function() {
                 if (animationInterval) return; // 防止重复点击
-                
+
                 const totalSteps = animationSteps.length;
                 const executionDiv = document.getElementById('greedy-execution');
                 const statusDiv = document.getElementById('greedy-status');
                 const progressBar = document.getElementById('greedy-progress-bar');
                 const progressText = document.getElementById('greedy-progress-text');
-                
+
                 // 重置所有代码行高亮
                 resetCodeHighlight();
-                
+
                 // 开始动画
                 animationInterval = setInterval(function() {
                     if (currentStep >= totalSteps) {
@@ -1024,35 +1032,35 @@ int main() {
                         animationInterval = null;
                         return;
                     }
-                    
+
                     // 更新状态
                     statusDiv.textContent = `状态: ${animationSteps[currentStep].status}`;
-                    
+
                     // 更新执行过程
                     executionDiv.innerHTML = animationSteps[currentStep].execution;
-                    
+
                     // 高亮当前代码行
                     resetCodeHighlight();
                     animationSteps[currentStep].codeLines.forEach(line => {
                         const codeLine = document.getElementById(`gcode-${line}`);
                         if (codeLine) codeLine.classList.add('code-line-highlight');
                     });
-                    
+
                     // 更新进度
                     const progress = Math.round((currentStep + 1) / totalSteps * 100);
                     progressBar.style.width = `${progress}%`;
                     progressText.textContent = `${progress}%`;
-                    
+
                     currentStep++;
                 }, 2000); // 每2秒执行一步
             });
-            
+
             // 重置动画
             document.getElementById('greedy-reset').addEventListener('click', function() {
                 clearInterval(animationInterval);
                 animationInterval = null;
                 currentStep = 0;
-                
+
                 // 重置显示
                 document.getElementById('greedy-execution').innerHTML = `
                     <div class="text-center text-gray-500 py-8">
@@ -1063,11 +1071,11 @@ int main() {
                 document.getElementById('greedy-status').textContent = "状态: 等待开始";
                 document.getElementById('greedy-progress-bar').style.width = "0%";
                 document.getElementById('greedy-progress-text').textContent = "0%";
-                
+
                 // 重置代码高亮
                 resetCodeHighlight();
             });
-            
+
             // 重置代码高亮
             function resetCodeHighlight() {
                 document.querySelectorAll('.code-line').forEach(line => {
@@ -1076,5 +1084,6 @@ int main() {
             }
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

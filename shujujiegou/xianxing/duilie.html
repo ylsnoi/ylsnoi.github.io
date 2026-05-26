@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>队列 - 艾科斯信奥网</title>
+
+    <meta name="description" content="队列课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/shujujiegou/xianxing/duilie.html">
+    <meta property="og:title" content="队列 - 艾科斯信奥网">
+    <meta property="og:description" content="队列课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/shujujiegou/xianxing/duilie.html">
+<title>队列 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -138,8 +145,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -213,7 +221,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="queue-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -248,7 +256,7 @@
                         队列(Queue)是一种特殊的线性表，它只允许在表的前端（front）进行删除操作，而在表的后端（rear）进行插入操作。
                         进行插入操作的端称为队尾，进行删除操作的端称为队头。队列遵循"先进先出"（First In First Out, FIFO）的原则。
                     </p>
-                    
+
                     <div class="flex justify-center my-6">
                         <div class="w-full max-w-2xl">
                             <div class="queue-container bg-white">
@@ -271,7 +279,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg mt-3">
                         <h4 class="font-semibold mb-2">生活中的队列例子：</h4>
                         <ul class="list-disc pl-5 space-y-2">
@@ -282,7 +290,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">队列的基本操作</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -312,7 +320,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">C++ STL中的队列</h3>
                     <p class="text-gray-700 mb-3">
@@ -347,7 +355,7 @@ int size = q.size();  // 返回队列中元素的个数</code></pre>
             <h2 class="text-2xl font-bold text-queue mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 队列操作过程演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 队列操作动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -358,7 +366,7 @@ int size = q.size();  // 返回队列中元素的个数</code></pre>
                                 下面的动画展示了队列的基本操作过程，包括入队、出队、查看队头元素等操作。
                                 可以通过输入框输入要入队的元素，然后点击相应按钮执行操作。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">入队元素:</label>
                                 <div class="flex">
@@ -369,7 +377,7 @@ int size = q.size();  // 返回队列中元素的个数</code></pre>
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div class="grid grid-cols-2 gap-2 mb-4">
                                 <button id="dequeue-btn" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all">
                                     出队
@@ -381,12 +389,12 @@ int size = q.size();  // 返回队列中元素的个数</code></pre>
                                     清空队列
                                 </button>
                             </div>
-                            
+
                             <div id="queue-status" class="animation-status">
                                 状态: 队列为空
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="queue-execution">
                                 <div class="text-center text-gray-500 py-8">
@@ -395,7 +403,7 @@ int size = q.size();  // 返回队列中元素的个数</code></pre>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="queue-code">
                                 <div class="code-line" id="qcode-1">#include &lt;iostream&gt;</div>
@@ -425,7 +433,7 @@ int size = q.size();  // 返回队列中元素的个数</code></pre>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 队列实现方式 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">队列的两种主要实现方式</h3>
@@ -465,7 +473,7 @@ int getFront() {
                                 数组实现的队列通常设计为循环队列，以充分利用存储空间，避免"假溢出"问题。
                             </p>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-queue mb-2">链表实现</h4>
                             <pre class="code-block text-xs"><code class="language-cpp">// 链表节点结构
@@ -484,7 +492,7 @@ private:
 
 public:
     Queue() : front(nullptr), rear(nullptr), count(0) {}
-    
+
     // 入队操作
     void enqueue(int val) {
         Node* newNode = new Node(val);
@@ -496,7 +504,7 @@ public:
         }
         count++;
     }
-    
+
     // 出队操作
     bool dequeue() {
         if (isEmpty()) return false;
@@ -507,13 +515,13 @@ public:
         if (front == nullptr) rear = nullptr;
         return true;
     }
-    
+
     // 获取队头元素
     int getFront() {
         if (isEmpty()) return -1;
         return front->data;
     }
-    
+
     // 判断是否为空
     bool isEmpty() {
         return count == 0;
@@ -533,7 +541,7 @@ public:
             <h2 class="text-2xl font-bold text-queue mb-6 flex items-center">
                 <i class="fa fa-lightbulb-o mr-2"></i> 队列的算法应用
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">队列在信息学奥赛中的典型应用</h3>
@@ -564,7 +572,7 @@ public:
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">BFS算法中的队列应用示例</h3>
                     <p class="text-gray-700 mb-3">
@@ -599,14 +607,14 @@ int bfs() {
             steps[i][j] = -1;
         }
     }
-    
+
     // 创建队列，存储坐标
     queue&lt;pair&lt;int, int&gt;&gt; q;
-    
+
     // 起点入队
     q.push({start_x, start_y});
     steps[start_x][start_y] = 0;
-    
+
     // 队列不为空时循环
     while (!q.empty()) {
         // 取出队头元素
@@ -614,19 +622,19 @@ int bfs() {
         q.pop();
         int x = current.first;
         int y = current.second;
-        
+
         // 如果到达终点，返回步数
         if (x == end_x && y == end_y) {
             return steps[x][y];
         }
-        
+
         // 探索四个方向
         for (int i = 0; i < 4; i++) {
             int nx = x + dx[i];
             int ny = y + dy[i];
-            
+
             // 判断新坐标是否合法且未访问过且不是障碍物
-            if (nx >= 0 && nx < n && ny >= 0 && ny < m 
+            if (nx >= 0 && nx < n && ny >= 0 && ny < m
                 && steps[nx][ny] == -1 && maze[nx][ny] == 0) {
                 // 新坐标入队
                 q.push({nx, ny});
@@ -635,28 +643,28 @@ int bfs() {
             }
         }
     }
-    
+
     // 无法到达终点
     return -1;
 }
 
 int main() {
     cin >> n >> m;
-    
+
     // 读取迷宫
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
             cin >> maze[i][j];
         }
     }
-    
+
     // 读取起点和终点
     cin >> start_x >> start_y >> end_x >> end_y;
-    
+
     // 求解并输出结果
     int result = bfs();
     cout << "最短路径长度: " << result << endl;
-    
+
     return 0;
 }</code></pre>
                     <p class="text-gray-700 mt-3">
@@ -671,7 +679,7 @@ int main() {
             <h2 class="text-2xl font-bold text-queue mb-6 flex items-center">
                 <i class="fa fa-tasks mr-2"></i> 洛谷推荐题目
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-4">模板题</h3>
@@ -684,11 +692,11 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 本题可使用队列模拟翻译器的内存机制，当内存满时，需要将最早进入内存的单词移除。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1540" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1540" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1996 约瑟夫问题</h4>
@@ -697,13 +705,13 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 经典的约瑟夫环问题，可以用队列模拟报数过程，每次将报数不为k的人移到队尾。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1996" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1996" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4">入门题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -715,11 +723,11 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 本题可使用两个队列（或优先队列）维护中位数，动态插入并保持有序状态。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1168" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1168" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P2058 [NOIP2016 普及组] 海港</h4>
@@ -728,11 +736,11 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 模拟海港入境情况，使用队列维护24小时内到达的船只，统计不同国家的人数。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P2058" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P2058" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1886 滑动窗口 /【模板】单调队列</h4>
@@ -741,13 +749,13 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 利用单调队列求解滑动窗口中的最大值和最小值，是队列的高级应用。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1886" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1886" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4">进阶题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -759,11 +767,11 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 结合前缀和与队列优化，高效求解子矩阵的最大和问题，需要灵活运用队列特性。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P2258" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P2258" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P3956 棋盘</h4>
@@ -772,11 +780,11 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 利用BFS和队列求解棋盘上的最短路径问题，需要处理特殊的移动规则。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P3956" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P3956" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1332 血色先锋队</h4>
@@ -785,7 +793,7 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 多源BFS问题，使用队列同时处理多个起点，计算感染时间，是队列在BFS中的高级应用。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1332" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1332" target="_blank" class="text-queue hover:text-queue/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -799,61 +807,61 @@ int main() {
         // 初始化高亮
         document.addEventListener('DOMContentLoaded', function() {
             hljs.highlightAll();
-            
+
             // 队列动画演示相关变量
             const queueContainer = document.createElement('div');
             queueContainer.className = 'queue-container bg-white';
             document.getElementById('queue-execution').innerHTML = '';
             document.getElementById('queue-execution').appendChild(queueContainer);
-            
+
             const statusElement = document.getElementById('queue-status');
             const codeLines = {
                 push: document.getElementById('qcode-10'),
                 pop: document.getElementById('qcode-14'),
                 front: document.getElementById('qcode-19')
             };
-            
+
             // 重置所有代码行高亮
             function resetCodeHighlights() {
                 document.querySelectorAll('.code-line').forEach(line => {
                     line.classList.remove('code-line-highlight');
                 });
             }
-            
+
             // 入队操作
             document.getElementById('enqueue-btn').addEventListener('click', function() {
                 const value = document.getElementById('queue-element').value;
                 if (!value) return;
-                
+
                 resetCodeHighlights();
                 codeLines.push.classList.add('code-line-highlight');
                 document.getElementById('push-value').textContent = value;
-                
+
                 // 创建新元素
                 const newElement = document.createElement('div');
                 newElement.className = 'queue-element min-w-[60px] h-[60px]';
                 newElement.textContent = value;
-                
+
                 // 添加到队列容器
                 queueContainer.appendChild(newElement);
-                
+
                 // 添加动画效果
                 setTimeout(() => {
                     newElement.classList.add('queue-element-active');
-                    
+
                     // 更新状态
                     statusElement.textContent = `状态: 元素 ${value} 已入队`;
-                    
+
                     // 更新队头队尾标识
                     updateQueueMarkers();
-                    
+
                     // 移除高亮
                     setTimeout(() => {
                         newElement.classList.remove('queue-element-active');
                     }, 1000);
                 }, 300);
             });
-            
+
             // 出队操作
             document.getElementById('dequeue-btn').addEventListener('click', function() {
                 const elements = queueContainer.querySelectorAll('.queue-element');
@@ -861,29 +869,29 @@ int main() {
                     statusElement.textContent = '状态: 队列为空，无法出队';
                     return;
                 }
-                
+
                 resetCodeHighlights();
                 codeLines.pop.classList.add('code-line-highlight');
-                
+
                 // 获取队头元素
                 const frontElement = elements[0];
                 frontElement.classList.add('queue-element-active');
-                
+
                 // 更新状态
                 statusElement.textContent = `状态: 元素 ${frontElement.textContent} 已出队`;
-                
+
                 // 移除元素
                 setTimeout(() => {
                     queueContainer.removeChild(frontElement);
-                    
+
                     // 更新队头队尾标识
                     updateQueueMarkers();
-                    
+
                     // 移除高亮
                     resetCodeHighlights();
                 }, 1000);
             });
-            
+
             // 查看队头操作
             document.getElementById('front-btn').addEventListener('click', function() {
                 const elements = queueContainer.querySelectorAll('.queue-element');
@@ -891,45 +899,45 @@ int main() {
                     statusElement.textContent = '状态: 队列为空，无队头元素';
                     return;
                 }
-                
+
                 resetCodeHighlights();
                 codeLines.front.classList.add('code-line-highlight');
-                
+
                 // 获取队头元素
                 const frontElement = elements[0];
                 frontElement.classList.add('queue-element-active');
-                
+
                 // 更新状态
                 statusElement.textContent = `状态: 队头元素为 ${frontElement.textContent}`;
-                
+
                 // 移除高亮
                 setTimeout(() => {
                     frontElement.classList.remove('queue-element-active');
                     resetCodeHighlights();
                 }, 1000);
             });
-            
+
             // 清空队列
             document.getElementById('clear-btn').addEventListener('click', function() {
                 queueContainer.innerHTML = '';
                 statusElement.textContent = '状态: 队列已清空';
                 resetCodeHighlights();
             });
-            
+
             // 更新队头队尾标识
             function updateQueueMarkers() {
                 const elements = queueContainer.querySelectorAll('.queue-element');
-                
+
                 // 移除所有标识
                 elements.forEach(el => {
                     el.classList.remove('queue-front', 'queue-back');
                 });
-                
+
                 // 为队头和队尾添加标识
                 if (elements.length > 0) {
                     elements[0].classList.add('queue-front');
                     elements[elements.length - 1].classList.add('queue-back');
-                    
+
                     if (elements.length === 1) {
                         statusElement.textContent = `状态: 队列中有1个元素 (队头和队尾为同一元素)`;
                     } else {
@@ -941,5 +949,6 @@ int main() {
             }
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

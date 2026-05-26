@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C++标准输入输出 - 艾科斯信奥网</title>
+
+    <meta name="description" content="C++标准输入输出课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/yufajichu/shurushuchu/shurushuchu.html">
+    <meta property="og:title" content="C++标准输入输出 - 艾科斯信奥网">
+    <meta property="og:description" content="C++标准输入输出课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/yufajichu/shurushuchu/shurushuchu.html">
+<title>C++标准输入输出 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -126,8 +133,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -201,7 +209,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="io-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -247,7 +255,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">C++标准输入输出流</h3>
                     <p class="text-gray-700 mb-3">
@@ -259,14 +267,14 @@ using namespace std;  // 使用标准命名空间
 int main() {
     // 输出示例
     cout << "Hello, World!" << endl;
-    
+
     // 输入示例
     int x;
     cin >> x;
-    
+
     return 0;
 }</code></pre>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="bg-gray-50 p-3 rounded-lg">
                             <h4 class="font-semibold text-io">cout (标准输出流)</h4>
@@ -302,7 +310,7 @@ int main() {
             <h2 class="text-2xl font-bold text-io mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 输入输出过程演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 输入输出动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -312,13 +320,13 @@ int main() {
                             <p class="text-gray-700 mb-4">
                                 下面的动画展示了程序如何接收输入并产生输出的完整过程。示例程序会读取两个整数，计算它们的和并输出结果。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">请输入两个整数 (用空格分隔):</label>
-                                <input type="text" id="input-values" value="15 28" 
+                                <input type="text" id="input-values" value="15 28"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-io">
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="io-run" class="bg-io hover:bg-io/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 运行演示
@@ -327,12 +335,12 @@ int main() {
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="io-status" class="animation-status hidden">
                                 状态: 等待开始
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="io-execution">
                                 <div class="text-center text-gray-500 py-8">
@@ -341,7 +349,7 @@ int main() {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="io-code">
                                 <div class="code-line" id="io-code-1">#include &lt;iostream&gt;</div>
@@ -365,7 +373,7 @@ int main() {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 输入输出类型对比 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">常见输入输出方式</h3>
@@ -389,7 +397,7 @@ cin >> c2;</code></pre>
                                 cin会自动根据变量类型解析输入，并跳过空格、制表符和换行符。
                             </p>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-io mb-2">基本数据类型输出</h4>
                             <pre class="code-block text-xs"><code class="language-cpp">// 整数输出
@@ -407,7 +415,7 @@ cout << "Character: " << c << endl;</code></pre>
                                 cout可以连续输出多个数据，使用"<<"连接，自动处理不同数据类型。
                             </p>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-io mb-2">字符串输入</h4>
                             <pre class="code-block text-xs"><code class="language-cpp">#include &lt;string&gt;  // 需包含字符串库
@@ -424,7 +432,7 @@ getline(cin, line);  // 读取整行，包括空格</code></pre>
                                 注意cin和getline混合使用时需要处理缓冲区中的换行符。
                             </p>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-io mb-2">格式化输出</h4>
                             <pre class="code-block text-xs"><code class="language-cpp">#include &lt;iomanip&gt;  // 需包含格式化库
@@ -435,9 +443,9 @@ double pi = 3.1415926535;
 cout << fixed << setprecision(2) << pi << endl;  // 输出3.14
 
 // 设置宽度和对齐方式
-cout << setw(10) << left << "Name" 
+cout << setw(10) << left << "Name"
      << setw(5) << right << "Age" << endl;
-cout << setw(10) << left << "Tom" 
+cout << setw(10) << left << "Tom"
      << setw(5) << right << 15 << endl;</code></pre>
                             <p class="text-gray-700 text-sm mt-3">
                                 使用iomanip库中的函数可以控制输出格式，如小数位数、对齐方式等。
@@ -453,12 +461,12 @@ cout << setw(10) << left << "Tom"
             <h2 class="text-2xl font-bold text-io mb-6 flex items-center">
                 <i class="fa fa-lightbulb-o mr-2"></i> 输入输出技巧与注意事项
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h3 class="font-semibold text-lg mb-3">输入输出优化</h3>
-                        
+
                         <div class="mb-4">
                             <h4 class="font-semibold text-io mb-2">加速输入输出</h4>
                             <pre class="code-block text-xs"><code class="language-cpp">#include &lt;iostream&gt;
@@ -469,7 +477,7 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
     cout.tie(0);
-    
+
     // 大数据量输入输出时效果明显
     int n;
     cin >> n;
@@ -478,7 +486,7 @@ int main() {
         cin >> x;
         cout << x * 2 << "\n";  // 用"\n"代替endl避免频繁刷新
     }
-    
+
     return 0;
 }</code></pre>
                             <p class="text-gray-700 text-sm mt-2">
@@ -486,7 +494,7 @@ int main() {
                             </p>
                         </div>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h3 class="font-semibold text-lg mb-3">常见错误与解决方案</h3>
                         <div class="space-y-3">
@@ -517,7 +525,7 @@ int main() {
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">信奥中的特殊输入处理</h3>
                     <p class="text-gray-700 mb-3">
@@ -543,7 +551,7 @@ void readAndSplitLine() {
     string line;
     getline(cin, line);  // 读取整行
     istringstream iss(line);  // 创建字符串流
-    
+
     int num;
     while (iss >> num) {  // 从字符串流中读取数字
         cout << num * 2 << " ";
@@ -564,13 +572,13 @@ void readStringWithSpaces() {
 int main() {
     cout << "测试读取直到文件结束:" << endl;
     readUntilEof();
-    
+
     cout << "测试读取一行并分割:" << endl;
     readAndSplitLine();
-    
+
     cout << "测试读取带空格的字符串:" << endl;
     readStringWithSpaces();
-    
+
     return 0;
 }</code></pre>
                 </div>
@@ -582,7 +590,7 @@ int main() {
             <h2 class="text-2xl font-bold text-io mb-6 flex items-center">
                 <i class="fa fa-code mr-2"></i> 输入输出代码示例 (C++)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 基础输入输出示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -590,22 +598,22 @@ int main() {
                     <p class="text-gray-700 mb-3">
                         读取两个整数，计算它们的和并输出结果
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 using namespace std;
 
 int main() {
     int a, b;
-    
+
     // 读取输入
     cin >> a >> b;
-    
+
     // 计算和
     int sum = a + b;
-    
+
     // 输出结果
     cout << sum << endl;
-    
+
     return 0;
 }</code></pre>
                     <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -619,14 +627,14 @@ int main() {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 格式化输出示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">2. 格式化输出 - 保留小数位数</h3>
                     <p class="text-gray-700 mb-3">
                         读取半径，计算圆的面积，并保留两位小数输出
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <iomanip>  // 用于格式化输出
 using namespace std;
@@ -634,16 +642,16 @@ using namespace std;
 int main() {
     const double PI = 3.1415926535;
     double radius;
-    
+
     // 读取输入
     cin >> radius;
-    
+
     // 计算面积
     double area = PI * radius * radius;
-    
+
     // 格式化输出，保留两位小数
     cout << fixed << setprecision(2) << area << endl;
-    
+
     return 0;
 }</code></pre>
                     <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -657,28 +665,28 @@ int main() {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 多行输入示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">3. 多行输入 - 处理多组测试数据</h3>
                     <p class="text-gray-700 mb-3">
                         第一行输入测试数据组数，然后每行输入两个整数，输出它们的乘积
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 using namespace std;
 
 int main() {
     int t;  // 测试数据组数
     cin >> t;
-    
+
     // 处理t组测试数据
     for (int i = 0; i < t; i++) {
         int a, b;
         cin >> a >> b;
         cout << a * b << endl;
     }
-    
+
     return 0;
 }</code></pre>
                     <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -692,14 +700,14 @@ int main() {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 字符串输入示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">4. 字符串输入 - 处理带空格的姓名</h3>
                     <p class="text-gray-700 mb-3">
                         读取姓名（可能包含空格）和年龄，格式化输出个人信息
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <string>
 #include <iomanip>
@@ -708,20 +716,20 @@ using namespace std;
 int main() {
     string name;
     int age;
-    
+
     // 读取年龄
     cin >> age;
-    
+
     // 忽略缓冲区中的换行符
     cin.ignore();
-    
+
     // 读取姓名（可能包含空格）
     getline(cin, name);
-    
+
     // 格式化输出
     cout << left << setw(20) << "姓名" << "年龄" << endl;
     cout << left << setw(20) << name << age << endl;
-    
+
     return 0;
 }</code></pre>
                     <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -743,7 +751,7 @@ int main() {
             <h2 class="text-2xl font-bold text-io mb-6 flex items-center">
                 <i class="fa fa-tasks mr-2"></i> 推荐练习题 (洛谷)
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-4">模板题</h3>
@@ -756,11 +764,11 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 最基础的A+B问题，检验基本输入输出能力。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1001" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1001" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P5703 【深基2.例5】苹果采购</h4>
@@ -769,11 +777,11 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 简单的乘法计算，熟悉基本输入输出格式。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P5703" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P5703" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P5704 【深基2.例6】字母转换</h4>
@@ -782,13 +790,13 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 字符输入输出与简单转换，熟悉字符类型处理。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P5704" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P5704" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4">入门题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -800,11 +808,11 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 计算时间差，需要处理多行输入和格式化输出。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1425" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1425" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P5708 【深基2.习2】三角形面积</h4>
@@ -813,11 +821,11 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 计算三角形面积，需要处理浮点数输入输出和格式化。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P5708" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P5708" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1042 乒乓球</h4>
@@ -826,13 +834,13 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 处理多行字符串输入，统计比赛结果并输出。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1042" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1042" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4">进阶题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -844,11 +852,11 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 需要处理大量输入数据，并按照特定格式输出结果。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1056" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1056" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1152 欢乐的跳</h4>
@@ -857,11 +865,11 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 处理数组输入，判断序列特性并输出特定结果。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1152" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1152" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1308 统计单词数</h4>
@@ -870,7 +878,7 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 复杂字符串处理，需要精确控制输入输出格式和匹配规则。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1308" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1308" target="_blank" class="text-io hover:text-io/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -884,7 +892,7 @@ int main() {
         // 初始化代码高亮
         document.addEventListener('DOMContentLoaded', function() {
             hljs.highlightAll();
-            
+
             // 输入输出演示动画
             const runBtn = document.getElementById('io-run');
             const resetBtn = document.getElementById('io-reset');
@@ -895,7 +903,7 @@ int main() {
             for (let i = 1; i <= 17; i++) {
                 codeLines.push(document.getElementById(`io-code-${i}`));
             }
-            
+
             // 重置函数
             function resetDemo() {
                 executionDiv.innerHTML = `
@@ -906,29 +914,29 @@ int main() {
                 `;
                 statusDiv.textContent = "状态: 等待开始";
                 statusDiv.classList.add('hidden');
-                
+
                 // 移除所有代码行高亮
                 codeLines.forEach(line => {
                     line.classList.remove('code-line-highlight');
                 });
             }
-            
+
             // 运行演示
             runBtn.addEventListener('click', function() {
                 resetDemo();
                 statusDiv.classList.remove('hidden');
-                
+
                 const values = inputValues.value.split(' ').map(Number);
                 if (values.length < 2 || isNaN(values[0]) || isNaN(values[1])) {
                     executionDiv.innerHTML = `<p class="text-red-500">输入格式错误，请输入两个整数</p>`;
                     statusDiv.textContent = "状态: 输入错误";
                     return;
                 }
-                
+
                 const a = values[0];
                 const b = values[1];
                 const sum = a + b;
-                
+
                 // 执行步骤
                 const steps = [
                     { codeLine: 7, message: "程序开始执行，准备读取输入" },
@@ -937,44 +945,45 @@ int main() {
                     { codeLine: 14, message: `输出计算结果: Sum: ${sum}` },
                     { codeLine: 16, message: "程序执行完毕" }
                 ];
-                
+
                 let stepIndex = 0;
-                
+
                 // 显示步骤的函数
                 function showStep() {
                     if (stepIndex >= steps.length) {
                         statusDiv.textContent = "状态: 演示完成";
                         return;
                     }
-                    
+
                     const step = steps[stepIndex];
-                    
+
                     // 更新状态
                     statusDiv.textContent = `状态: 执行步骤 ${stepIndex + 1}/${steps.length}`;
-                    
+
                     // 移除上一步的高亮
                     if (stepIndex > 0) {
                         codeLines[steps[stepIndex - 1].codeLine - 1].classList.remove('code-line-highlight');
                     }
-                    
+
                     // 添加当前步的高亮
                     codeLines[step.codeLine - 1].classList.add('code-line-highlight');
-                    
+
                     // 更新执行区域
                     executionDiv.innerHTML += `<p class="mb-2"><span class="inline-block w-6 h-6 rounded-full bg-io text-white text-center text-xs mr-2">${stepIndex + 1}</span>${step.message}</p>`;
                     executionDiv.scrollTop = executionDiv.scrollHeight;
-                    
+
                     stepIndex++;
                     setTimeout(showStep, 1500);
                 }
-                
+
                 // 开始演示
                 setTimeout(showStep, 500);
             });
-            
+
             // 重置按钮
             resetBtn.addEventListener('click', resetDemo);
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

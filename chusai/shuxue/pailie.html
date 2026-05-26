@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>排列组合 - 艾科斯信奥网</title>
+
+    <meta name="description" content="排列组合课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/chusai/shuxue/pailie.html">
+    <meta property="og:title" content="排列组合 - 艾科斯信奥网">
+    <meta property="og:description" content="排列组合课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/chusai/shuxue/pailie.html">
+<title>排列组合 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -104,8 +111,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -179,7 +187,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="combinatorics-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -208,7 +216,7 @@
             <h2 class="text-2xl font-bold text-combinatorics mb-6 flex items-center">
                 <i class="fa fa-info-circle mr-2"></i> 基本计数原理
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 加法原理 -->
                 <div class="bg-gray-50 p-5 rounded-lg">
@@ -220,11 +228,11 @@
                         在第\( 2 \)类方式中有\( m_2 \)种不同的方法，……，在第\( n \)类方式中有\( m_n \)种不同的方法，
                         那么完成这件事共有\( N = m_1 + m_2 + \dots + m_n \)种不同的方法。
                     </p>
-                    
+
                     <div class="mb-4">
                         <h4 class="font-medium mb-2">动画演示</h4>
                         <p class="text-sm text-gray-600 mb-3">从A地到B地，有2种火车和3种汽车可以选择，总共有多少种不同的交通方式？</p>
-                        
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                             <div>
                                 <div class="flex justify-center mb-2">
@@ -232,7 +240,7 @@
                                     <i class="fa fa-long-arrow-right mx-4 text-gray-500"></i>
                                     <span class="text-lg font-medium">B地</span>
                                 </div>
-                                
+
                                 <div class="perm-comb-container">
                                     <div class="perm-comb-element">火车1</div>
                                     <div class="perm-comb-element">火车2</div>
@@ -240,14 +248,14 @@
                                     <div class="perm-comb-element">汽车2</div>
                                     <div class="perm-comb-element">汽车3</div>
                                 </div>
-                                
+
                                 <div class="animation-controls">
                                     <button id="addition-run" class="bg-combinatorics hover:bg-combinatorics/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                         <i class="fa fa-play mr-2"></i> 演示
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div class="result-container">
                                 <h4 class="font-medium mb-2">计算结果</h4>
                                 <p class="text-gray-700">总方式数 = 火车方式数 + 汽车方式数</p>
@@ -257,7 +265,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 乘法原理 -->
                 <div class="bg-gray-50 p-5 rounded-lg">
                     <h3 class="text-xl font-semibold mb-3 flex items-center">
@@ -268,11 +276,11 @@
                         做第\( 2 \)步有\( m_2 \)种不同的方法，……，做第\( n \)步有\( m_n \)种不同的方法，
                         那么完成这件事共有\( N = m_1 \times m_2 \times \dots \times m_n \)种不同的方法。
                     </p>
-                    
+
                     <div class="mb-4">
                         <h4 class="font-medium mb-2">动画演示</h4>
                         <p class="text-sm text-gray-600 mb-3">从A地到B地有2条路，从B地到C地有3条路，从A地经B地到C地总共有多少种不同的走法？</p>
-                        
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                             <div>
                                 <div class="flex justify-center mb-2">
@@ -282,7 +290,7 @@
                                     <i class="fa fa-long-arrow-right mx-2 text-gray-500"></i>
                                     <span class="text-lg font-medium">C地</span>
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <p class="text-center text-sm mb-1">A到B的路径</p>
                                     <div class="perm-comb-container">
@@ -290,7 +298,7 @@
                                         <div class="perm-comb-element">路径2</div>
                                     </div>
                                 </div>
-                                
+
                                 <div>
                                     <p class="text-center text-sm mb-1">B到C的路径</p>
                                     <div class="perm-comb-container">
@@ -299,14 +307,14 @@
                                         <div class="perm-comb-element">路径C</div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="animation-controls">
                                     <button id="multiplication-run" class="bg-combinatorics hover:bg-combinatorics/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                         <i class="fa fa-play mr-2"></i> 演示
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div class="result-container">
                                 <h4 class="font-medium mb-2">计算结果</h4>
                                 <p class="text-gray-700">总走法数 = A到B的路径数 × B到C的路径数</p>
@@ -334,7 +342,7 @@
             <h2 class="text-2xl font-bold text-combinatorics mb-6 flex items-center">
                 <i class="fa fa-sort-numeric-asc mr-2"></i> 排列数
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">排列的定义</h3>
@@ -343,32 +351,32 @@
                         叫做从\( n \)个不同元素中取出\( m \)个元素的一个排列。所有这样的排列的个数，叫做排列数，
                         用符号\( P(n, m) \)或\( A(n, m) \)表示。
                     </p>
-                    
+
                     <div class="formula">
                         \( P(n, m) = n \times (n-1) \times (n-2) \times \dots \times (n-m+1) \)
                     </div>
-                    
+
                     <p class="text-gray-700 mb-4">
                         特别地，当\( m = n \)时，称为全排列，计算公式为：
                     </p>
-                    
+
                     <div class="formula">
                         \( P(n, n) = n! = n \times (n-1) \times (n-2) \times \dots \times 1 \)
                     </div>
                     <p class="text-sm text-gray-600 text-center">其中\( 0! = 1 \)</p>
                 </div>
-                
+
                 <div class="bg-gray-50 p-5 rounded-lg">
                     <h3 class="text-xl font-semibold mb-3">排列数动画演示</h3>
                     <p class="text-gray-700 mb-4">
                         从\( n \)个不同元素中取出\( m \)个元素进行排列，总共有多少种不同的排列方式？
                     </p>
-                    
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">元素总数(n):</label>
-                                <input type="range" id="perm-n" min="2" max="5" value="3" 
+                                <input type="range" id="perm-n" min="2" max="5" value="3"
                                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-combinatorics">
                                 <div class="flex justify-between text-xs text-gray-500 mt-1">
                                     <span>2</span>
@@ -376,10 +384,10 @@
                                     <span>5</span>
                                 </div>
                             </div>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">选取元素数(m):</label>
-                                <input type="range" id="perm-m" min="1" max="3" value="2" 
+                                <input type="range" id="perm-m" min="1" max="3" value="2"
                                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-combinatorics">
                                 <div class="flex justify-between text-xs text-gray-500 mt-1">
                                     <span>1</span>
@@ -387,7 +395,7 @@
                                     <span id="perm-m-max">3</span>
                                 </div>
                             </div>
-                            
+
                             <div class="animation-controls">
                                 <button id="perm-run" class="bg-combinatorics hover:bg-combinatorics/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 生成排列
@@ -396,12 +404,12 @@
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div class="animation-progress">
                                 <div id="perm-progress" class="animation-progress-bar" style="width: 0%"></div>
                             </div>
                         </div>
-                        
+
                         <div>
                             <div>
                                 <h4 class="font-medium mb-2">可用元素</h4>
@@ -411,7 +419,7 @@
                                     <div class="perm-comb-element">C</div>
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <h4 class="font-medium mb-2">所有排列 (共 <span id="perm-count">0</span> 种)</h4>
                                 <div id="perm-results" class="perm-comb-container min-h-[100px]">
@@ -429,7 +437,7 @@
             <h2 class="text-2xl font-bold text-combinatorics mb-6 flex items-center">
                 <i class="fa fa-th-large mr-2"></i> 组合数
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">组合的定义</h3>
@@ -437,11 +445,11 @@
                         从\( n \)个不同元素中，任取\( m \)个元素（\( m \leq n \)）并成一组，叫做从\( n \)个不同元素中取出\( m \)个元素的一个组合。
                         所有这样的组合的个数，叫做组合数，用符号\( C(n, m) \)或\( \binom{n}{m} \)表示。
                     </p>
-                    
+
                     <div class="formula">
                         \( C(n, m) = \frac{P(n, m)}{m!} = \frac{n!}{m! \times (n-m)!} \)
                     </div>
-                    
+
                     <p class="text-gray-700 mb-4">组合数具有以下重要性质：</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="formula">
@@ -452,18 +460,18 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="bg-gray-50 p-5 rounded-lg">
                     <h3 class="text-xl font-semibold mb-3">组合数动画演示</h3>
                     <p class="text-gray-700 mb-4">
                         从\( n \)个不同元素中取出\( m \)个元素组成一组，总共有多少种不同的组合方式？
                     </p>
-                    
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">元素总数(n):</label>
-                                <input type="range" id="comb-n" min="2" max="6" value="4" 
+                                <input type="range" id="comb-n" min="2" max="6" value="4"
                                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-combinatorics">
                                 <div class="flex justify-between text-xs text-gray-500 mt-1">
                                     <span>2</span>
@@ -471,10 +479,10 @@
                                     <span>6</span>
                                 </div>
                             </div>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">选取元素数(m):</label>
-                                <input type="range" id="comb-m" min="1" max="3" value="2" 
+                                <input type="range" id="comb-m" min="1" max="3" value="2"
                                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-combinatorics">
                                 <div class="flex justify-between text-xs text-gray-500 mt-1">
                                     <span>1</span>
@@ -482,7 +490,7 @@
                                     <span id="comb-m-max">3</span>
                                 </div>
                             </div>
-                            
+
                             <div class="animation-controls">
                                 <button id="comb-run" class="bg-combinatorics hover:bg-combinatorics/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 生成组合
@@ -491,12 +499,12 @@
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div class="animation-progress">
                                 <div id="comb-progress" class="animation-progress-bar" style="width: 0%"></div>
                             </div>
                         </div>
-                        
+
                         <div>
                             <div>
                                 <h4 class="font-medium mb-2">可用元素</h4>
@@ -507,7 +515,7 @@
                                     <div class="perm-comb-element">D</div>
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <h4 class="font-medium mb-2">所有组合 (共 <span id="comb-count">0</span> 种)</h4>
                                 <div id="comb-results" class="perm-comb-container min-h-[100px]">
@@ -525,7 +533,7 @@
             <h2 class="text-2xl font-bold text-combinatorics mb-6 flex items-center">
                 <i class="fa fa-lightbulb-o mr-2"></i> 解题技巧
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-gray-50 p-5 rounded-lg">
@@ -538,7 +546,7 @@
                             <li>常见组合场景：选若干元素、分组、子集等</li>
                         </ul>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-5 rounded-lg">
                         <h3 class="text-xl font-semibold mb-3">计算组合数的方法</h3>
                         <ul class="list-disc pl-6 space-y-2">
@@ -550,7 +558,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div class="bg-gray-50 p-5 rounded-lg">
                     <h3 class="text-xl font-semibold mb-3">常见解题思路</h3>
                     <div class="space-y-4">
@@ -558,22 +566,22 @@
                             <h4 class="font-medium">1. 分步与分类</h4>
                             <p class="text-gray-700">复杂问题分解为若干步骤（乘法原理）或若干类别（加法原理）</p>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium">2. 正难则反</h4>
                             <p class="text-gray-700">当直接计算困难时，可计算总情况数减去不符合条件的情况数</p>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium">3. 对称思想</h4>
                             <p class="text-gray-700">利用组合数的对称性\( C(n, m) = C(n, n-m) \)简化计算</p>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium">4. 特殊元素优先考虑</h4>
                             <p class="text-gray-700">对于有特殊要求的元素，先安排特殊元素，再处理其他元素</p>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium">5. 排除法</h4>
                             <p class="text-gray-700">先计算不考虑限制条件的总情况数，再减去不符合条件的情况数</p>
@@ -588,7 +596,7 @@
             <h2 class="text-2xl font-bold text-combinatorics mb-6 flex items-center">
                 <i class="fa fa-book mr-2"></i> 例题解析
             </h2>
-            
+
             <div class="space-y-8">
                 <!-- 例题1 -->
                 <div class="bg-gray-50 p-5 rounded-lg">
@@ -599,7 +607,7 @@
                             用数字1, 2, 3, 4, 5可以组成多少个没有重复数字的三位数？
                         </p>
                     </div>
-                    
+
                     <div class="mb-4">
                         <p class="text-gray-700 font-medium">解析：</p>
                         <p class="text-gray-700 pl-4 border-l-2 border-gray-200 my-2">
@@ -612,7 +620,7 @@
                             P(5, 3) = 5 × 4 × 3 = 60
                         </p>
                     </div>
-                    
+
                     <div>
                         <p class="text-gray-700 font-medium">答案：</p>
                         <p class="text-gray-700 pl-4 border-l-2 border-combinatorics bg-combinatorics/5 my-2 text-lg">
@@ -620,7 +628,7 @@
                         </p>
                     </div>
                 </div>
-                
+
                 <!-- 例题2 -->
                 <div class="bg-gray-50 p-5 rounded-lg">
                     <h3 class="text-xl font-semibold mb-3">例题2：组合基础题</h3>
@@ -630,7 +638,7 @@
                             某班有10名同学，从中选出3名参加数学竞赛，共有多少种不同的选法？
                         </p>
                     </div>
-                    
+
                     <div class="mb-4">
                         <p class="text-gray-700 font-medium">解析：</p>
                         <p class="text-gray-700 pl-4 border-l-2 border-gray-200 my-2">
@@ -643,7 +651,7 @@
                             C(10, 3) = 10! / (3! × 7!) = (10 × 9 × 8) / (3 × 2 × 1) = 120
                         </p>
                     </div>
-                    
+
                     <div>
                         <p class="text-gray-700 font-medium">答案：</p>
                         <p class="text-gray-700 pl-4 border-l-2 border-combinatorics bg-combinatorics/5 my-2 text-lg">
@@ -651,7 +659,7 @@
                         </p>
                     </div>
                 </div>
-                
+
                 <!-- 例题3 -->
                 <div class="bg-gray-50 p-5 rounded-lg">
                     <h3 class="text-xl font-semibold mb-3">例题3：综合应用题</h3>
@@ -661,7 +669,7 @@
                             书架上有5本不同的数学书和4本不同的语文书，从中任取3本，要求至少有1本数学书和1本语文书，有多少种不同的取法？
                         </p>
                     </div>
-                    
+
                     <div class="mb-4">
                         <p class="text-gray-700 font-medium">解析：</p>
                         <p class="text-gray-700 pl-4 border-l-2 border-gray-200 my-2">
@@ -678,7 +686,7 @@
                             C(5, 2) × C(4, 1) + C(5, 1) × C(4, 2) = 10 × 4 + 5 × 6 = 40 + 30 = 70
                         </p>
                     </div>
-                    
+
                     <div>
                         <p class="text-gray-700 font-medium">答案：</p>
                         <p class="text-gray-700 pl-4 border-l-2 border-combinatorics bg-combinatorics/5 my-2 text-lg">
@@ -686,7 +694,7 @@
                         </p>
                     </div>
                 </div>
-                
+
                 <!-- 例题4（CSP真题） -->
                 <div class="bg-gray-50 p-5 rounded-lg">
                     <h3 class="text-xl font-semibold mb-3">例题4：CSP初赛真题</h3>
@@ -696,7 +704,7 @@
                             （CSP-J 2020）甲、乙、丙三位同学选修课程，从4门课程中，甲选修2门，乙、丙各选修3门，则不同的选修方案共有（ ）种。
                         </p>
                     </div>
-                    
+
                     <div class="mb-4">
                         <p class="text-gray-700 font-medium">解析：</p>
                         <p class="text-gray-700 pl-4 border-l-2 border-gray-200 my-2">
@@ -711,7 +719,7 @@
                             总方案数 = 6 × 4 × 4 = 96
                         </p>
                     </div>
-                    
+
                     <div>
                         <p class="text-gray-700 font-medium">答案：</p>
                         <p class="text-gray-700 pl-4 border-l-2 border-combinatorics bg-combinatorics/5 my-2 text-lg">
@@ -726,14 +734,14 @@
     <script>
         // 初始化高亮显示
         hljs.highlightAll();
-        
+
         // 加法原理演示
         document.getElementById('addition-run').addEventListener('click', function() {
             const explanation = document.getElementById('addition-explanation');
             const elements = document.querySelectorAll('.perm-comb-element');
-            
+
             explanation.textContent = '计算过程：火车有2种选择，汽车有3种选择，总共有2+3=5种方式';
-            
+
             // 逐个高亮元素
             elements.forEach((el, index) => {
                 setTimeout(() => {
@@ -741,12 +749,12 @@
                 }, 500 * (index + 1));
             });
         });
-        
+
         // 乘法原理演示
         document.getElementById('multiplication-run').addEventListener('click', function() {
             const resultDiv = document.getElementById('multiplication-result');
             resultDiv.classList.remove('hidden');
-            
+
             const elements = document.querySelectorAll('.perm-comb-element');
             elements.forEach((el, index) => {
                 setTimeout(() => {
@@ -754,7 +762,7 @@
                 }, 300 * (index + 1));
             });
         });
-        
+
         // 排列数演示
         const permN = document.getElementById('perm-n');
         const permM = document.getElementById('perm-m');
@@ -765,7 +773,7 @@
         const permResults = document.getElementById('perm-results');
         const permCount = document.getElementById('perm-count');
         const permProgress = document.getElementById('perm-progress');
-        
+
         // 更新排列演示的参数
         permN.addEventListener('input', function() {
             const n = parseInt(this.value);
@@ -778,11 +786,11 @@
             }
             updatePermElements(n);
         });
-        
+
         permM.addEventListener('input', function() {
             permMValue.textContent = this.value;
         });
-        
+
         // 更新可用元素
         function updatePermElements(n) {
             permElements.innerHTML = '';
@@ -794,47 +802,47 @@
                 permElements.appendChild(el);
             }
         }
-        
+
         // 生成排列
         document.getElementById('perm-run').addEventListener('click', function() {
             const n = parseInt(permN.value);
             const m = parseInt(permM.value);
             const letters = Array.from(permElements.children).map(el => el.textContent);
-            
+
             // 计算排列数
             let count = 1;
             for (let i = 0; i < m; i++) {
                 count *= (n - i);
             }
             permCount.textContent = count;
-            
+
             // 生成所有排列
             const perms = permute(letters, m);
             permResults.innerHTML = '';
-            
+
             // 逐步显示排列
             let progress = 0;
             const interval = 300;
-            
+
             perms.forEach((perm, index) => {
                 setTimeout(() => {
                     const el = document.createElement('div');
                     el.className = 'px-3 py-1 m-1 bg-gray-100 rounded border';
                     el.textContent = perm.join('');
                     permResults.appendChild(el);
-                    
+
                     // 更新进度条
                     progress = ((index + 1) / perms.length) * 100;
                     permProgress.style.width = `${progress}%`;
                 }, index * interval);
             });
         });
-        
+
         // 排列生成函数
         function permute(arr, m) {
             const result = [];
             if (m === 1) return arr.map(item => [item]);
-            
+
             arr.forEach((current, index, origin) => {
                 const remaining = [...origin.slice(0, index), ...origin.slice(index + 1)];
                 const remainingPerms = permute(remaining, m - 1);
@@ -842,22 +850,22 @@
                     result.push([current, ...perm]);
                 });
             });
-            
+
             return result;
         }
-        
+
         // 重置排列演示
         document.getElementById('perm-reset').addEventListener('click', function() {
             permResults.innerHTML = '<p class="text-gray-500">点击"生成排列"按钮查看结果</p>';
             permCount.textContent = '0';
             permProgress.style.width = '0%';
-            
+
             const elements = document.querySelectorAll('#perm-elements .perm-comb-element');
             elements.forEach(el => {
                 el.classList.remove('perm-comb-element-selected');
             });
         });
-        
+
         // 组合数演示
         const combN = document.getElementById('comb-n');
         const combM = document.getElementById('comb-m');
@@ -868,7 +876,7 @@
         const combResults = document.getElementById('comb-results');
         const combCount = document.getElementById('comb-count');
         const combProgress = document.getElementById('comb-progress');
-        
+
         // 更新组合演示的参数
         combN.addEventListener('input', function() {
             const n = parseInt(this.value);
@@ -881,11 +889,11 @@
             }
             updateCombElements(n);
         });
-        
+
         combM.addEventListener('input', function() {
             combMValue.textContent = this.value;
         });
-        
+
         // 更新可用元素
         function updateCombElements(n) {
             combElements.innerHTML = '';
@@ -897,42 +905,42 @@
                 combElements.appendChild(el);
             }
         }
-        
+
         // 生成组合
         document.getElementById('comb-run').addEventListener('click', function() {
             const n = parseInt(combN.value);
             const m = parseInt(combM.value);
             const letters = Array.from(combElements.children).map(el => el.textContent);
-            
+
             // 计算组合数
             let count = 1;
             for (let i = 0; i < m; i++) {
                 count = count * (n - i) / (i + 1);
             }
             combCount.textContent = count;
-            
+
             // 生成所有组合
             const combs = combine(letters, m);
             combResults.innerHTML = '';
-            
+
             // 逐步显示组合
             let progress = 0;
             const interval = 300;
-            
+
             combs.forEach((comb, index) => {
                 setTimeout(() => {
                     const el = document.createElement('div');
                     el.className = 'px-3 py-1 m-1 bg-gray-100 rounded border';
                     el.textContent = comb.join('');
                     combResults.appendChild(el);
-                    
+
                     // 更新进度条
                     progress = ((index + 1) / combs.length) * 100;
                     combProgress.style.width = `${progress}%`;
                 }, index * interval);
             });
         });
-        
+
         // 组合生成函数
         function combine(arr, m) {
             const result = [];
@@ -941,29 +949,30 @@
                     result.push([...path]);
                     return;
                 }
-                
+
                 for (let i = start; i < arr.length; i++) {
                     path.push(arr[i]);
                     combineHelper(i + 1, path);
                     path.pop();
                 }
             };
-            
+
             combineHelper(0, []);
             return result;
         }
-        
+
         // 重置组合演示
         document.getElementById('comb-reset').addEventListener('click', function() {
             combResults.innerHTML = '<p class="text-gray-500">点击"生成组合"按钮查看结果</p>';
             combCount.textContent = '0';
             combProgress.style.width = '0%';
-            
+
             const elements = document.querySelectorAll('#comb-elements .perm-comb-element');
             elements.forEach(el => {
                 el.classList.remove('perm-comb-element-selected');
             });
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

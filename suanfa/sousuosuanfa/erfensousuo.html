@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>二分查找 - 艾科斯信奥网</title>
+
+    <meta name="description" content="二分查找课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/suanfa/sousuosuanfa/erfensousuo.html">
+    <meta property="og:title" content="二分查找 - 艾科斯信奥网">
+    <meta property="og:description" content="二分查找课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/suanfa/sousuosuanfa/erfensousuo.html">
+<title>二分查找 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -120,8 +127,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -195,7 +203,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="binary-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -240,7 +248,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">二分查找的基本步骤</h3>
                     <div class="space-y-3">
@@ -251,7 +259,7 @@
                                 <p class="text-gray-700 text-sm">设置两个指针，left指向数组的起始位置（0），right指向数组的最后一个元素位置（n-1）</p>
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <span class="step-number">2</span>
                             <div>
@@ -259,7 +267,7 @@
                                 <p class="text-gray-700 text-sm">计算中间索引 mid = (left + right) / 2（为避免溢出，更安全的写法是 mid = left + (right - left) / 2）</p>
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <span class="step-number">3</span>
                             <div>
@@ -271,7 +279,7 @@
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <span class="step-number">4</span>
                             <div>
@@ -281,7 +289,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">二分查找的时间复杂度</h3>
                     <div class="bg-gray-50 p-4 rounded-lg">
@@ -300,7 +308,7 @@
             <h2 class="text-2xl font-bold text-binary mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 二分查找过程演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 二分查找动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -311,20 +319,20 @@
                                 下面的动画展示了二分查找的完整过程，包括范围初始化、中间元素计算、范围调整等步骤。
                                 可以自定义数组和目标值来观察不同情况下的查找过程。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">目标值:</label>
                                 <input type="number" id="target" value="23" min="1" max="100"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-binary">
                             </div>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">数组元素 (用逗号分隔):</label>
                                 <input type="text" id="array-input" value="5,8,12,15,17,20,23,28,30,35,40"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-binary">
                                 <p class="text-xs text-gray-500 mt-1">提示: 请输入升序排列的整数</p>
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="binary-run" class="bg-binary hover:bg-binary/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 运行动画
@@ -333,16 +341,16 @@
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="binary-status" class="animation-status hidden">
                                 状态: 等待开始
                             </div>
-                            
+
                             <div class="animation-progress mt-4">
                                 <div id="binary-progress-bar" class="animation-progress-bar" style="width: 0%"></div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="binary-execution">
                                 <div class="text-center text-gray-500 py-8">
@@ -351,7 +359,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="binary-code">
                                 <div class="code-line" id="bcode-1">// 二分查找函数</div>
@@ -379,7 +387,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- 数组可视化区域 -->
                     <div class="mt-6">
                         <h4 class="font-semibold mb-3">数组可视化:</h4>
@@ -388,7 +396,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 二分查找的变体 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">二分查找的常见变体</h3>
@@ -399,10 +407,10 @@
 int findFirstOccurrence(int arr[], int n, int target) {
     int left = 0, right = n - 1;
     int result = -1;
-    
+
     while (left <= right) {
         int mid = left + (right - left) / 2;
-        
+
         if (arr[mid] == target) {
             result = mid;  // 记录找到的位置
             right = mid - 1;  // 继续向左查找
@@ -417,17 +425,17 @@ int findFirstOccurrence(int arr[], int n, int target) {
     return result;
 }</code></pre>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-binary mb-2">查找最后一个等于目标值的元素</h4>
                             <pre class="code-block text-xs"><code class="language-cpp">// 查找最后一个等于目标值的元素索引
 int findLastOccurrence(int arr[], int n, int target) {
     int left = 0, right = n - 1;
     int result = -1;
-    
+
     while (left <= right) {
         int mid = left + (right - left) / 2;
-        
+
         if (arr[mid] == target) {
             result = mid;  // 记录找到的位置
             left = mid + 1;  // 继续向右查找
@@ -442,17 +450,17 @@ int findLastOccurrence(int arr[], int n, int target) {
     return result;
 }</code></pre>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-binary mb-2">查找第一个大于等于目标值的元素</h4>
                             <pre class="code-block text-xs"><code class="language-cpp">// 查找第一个大于等于目标值的元素索引
 int findFirstGreaterOrEqual(int arr[], int n, int target) {
     int left = 0, right = n - 1;
     int result = n;  // 默认返回n表示所有元素都小于目标
-    
+
     while (left <= right) {
         int mid = left + (right - left) / 2;
-        
+
         if (arr[mid] >= target) {
             result = mid;  // 可能是答案，继续向左查找
             right = mid - 1;
@@ -464,7 +472,7 @@ int findFirstGreaterOrEqual(int arr[], int n, int target) {
     return result;
 }</code></pre>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-binary mb-2">递归版本的二分查找</h4>
                             <pre class="code-block text-xs"><code class="language-cpp">// 递归版本的二分查找
@@ -473,20 +481,20 @@ int binarySearchRecursive(int arr[], int left, int right, int target) {
     if (left > right) {
         return -1;
     }
-    
+
     // 计算中间位置
     int mid = left + (right - left) / 2;
-    
+
     // 找到目标
     if (arr[mid] == target) {
         return mid;
     }
-    
+
     // 目标在左半部分
     if (arr[mid] > target) {
         return binarySearchRecursive(arr, left, mid - 1, target);
     }
-    
+
     // 目标在右半部分
     return binarySearchRecursive(arr, mid + 1, right, target);
 }</code></pre>
@@ -501,7 +509,7 @@ int binarySearchRecursive(int arr[], int left, int right, int target) {
             <h2 class="text-2xl font-bold text-binary mb-6 flex items-center">
                 <i class="fa fa-code mr-2"></i> 二分查找代码示例 (C++)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 基础二分查找示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -509,7 +517,7 @@ int binarySearchRecursive(int arr[], int left, int right, int target) {
                     <p class="text-gray-700 mb-3">
                         标准的二分查找实现，在有序数组中查找目标值并返回索引
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 using namespace std;
 
@@ -521,12 +529,12 @@ using namespace std;
 int binarySearch(int arr[], int n, int target) {
     int left = 0;          // 左边界
     int right = n - 1;     // 右边界
-    
+
     // 当左边界小于等于右边界时继续查找
     while (left <= right) {
         // 计算中间位置，避免溢出
         int mid = left + (right - left) / 2;
-        
+
         // 找到目标值，返回索引
         if (arr[mid] == target) {
             return mid;
@@ -540,7 +548,7 @@ int binarySearch(int arr[], int n, int target) {
             right = mid - 1;
         }
     }
-    
+
     // 未找到目标值
     return -1;
 }
@@ -549,29 +557,29 @@ int main() {
     int arr[] = {2, 5, 8, 12, 16, 23, 38, 56, 72, 91};
     int n = sizeof(arr) / sizeof(arr[0]);
     int target;
-    
+
     cout << "请输入要查找的数字: ";
     cin >> target;
-    
+
     int result = binarySearch(arr, n, target);
-    
+
     if (result != -1) {
         cout << "元素 " << target << " 找到，索引为 " << result << endl;
     } else {
         cout << "元素 " << target << " 未在数组中找到" << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 二分查找解决实际问题 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">2. 二分查找解决实际问题 - 查找插入位置</h3>
                     <p class="text-gray-700 mb-3">
                         利用二分查找确定目标值在有序数组中的插入位置，使得插入后数组仍然保持有序
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 using namespace std;
 
@@ -579,16 +587,16 @@ using namespace std;
 int searchInsert(int arr[], int n, int target) {
     int left = 0;
     int right = n - 1;
-    
+
     // 如果目标值大于所有元素，插入到最后
     if (target > arr[right]) {
         return n;
     }
-    
+
     // 二分查找
     while (left < right) {
         int mid = left + (right - left) / 2;
-        
+
         if (arr[mid] == target) {
             return mid;  // 找到目标值，直接返回其位置
         }
@@ -599,7 +607,7 @@ int searchInsert(int arr[], int n, int target) {
             right = mid;  // 目标在左半部分，不-1是因为可能就是插入位置
         }
     }
-    
+
     // 循环结束时left == right，就是插入位置
     return left;
 }
@@ -608,24 +616,24 @@ int main() {
     int nums[] = {1, 3, 5, 6};
     int n = sizeof(nums) / sizeof(nums[0]);
     int target;
-    
+
     cout << "请输入目标值: ";
     cin >> target;
-    
+
     int position = searchInsert(nums, n, target);
     cout << "插入位置为: " << position << endl;
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 二分查找在答案范围上的应用 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">3. 二分查找在答案范围上的应用 - 求平方根</h3>
                     <p class="text-gray-700 mb-3">
                         利用二分查找求一个非负整数的平方根的整数部分，展示二分查找在数值计算中的应用
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 using namespace std;
 
@@ -635,15 +643,15 @@ int mySqrt(int x) {
     if (x == 0 || x == 1) {
         return x;
     }
-    
+
     // 二分查找范围：1到x
     int left = 1;
     int right = x;
     int result = 0;
-    
+
     while (left <= right) {
         int mid = left + (right - left) / 2;
-        
+
         // 避免溢出，使用除法代替乘法
         if (mid == x / mid) {
             return mid;  // 找到精确的平方根
@@ -657,7 +665,7 @@ int mySqrt(int x) {
             right = mid - 1;
         }
     }
-    
+
     return result;
 }
 
@@ -665,10 +673,10 @@ int main() {
     int x;
     cout << "请输入一个非负整数: ";
     cin >> x;
-    
+
     int sqrtX = mySqrt(x);
     cout << x << "的平方根的整数部分是: " << sqrtX << endl;
-    
+
     return 0;
 }</code></pre>
                 </div>
@@ -680,7 +688,7 @@ int main() {
             <h2 class="text-2xl font-bold text-binary mb-6 flex items-center">
                 <i class="fa fa-lightbulb-o mr-2"></i> 二分查找的算法应用
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">二分查找在信息学奥赛中的典型应用</h3>
@@ -711,7 +719,7 @@ int main() {
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">二分查找的注意事项</h3>
                     <ul class="list-disc pl-5 space-y-2 text-gray-700">
@@ -730,7 +738,7 @@ int main() {
             <h2 class="text-2xl font-bold text-binary mb-6 flex items-center">
                 <i class="fa fa-trophy mr-2"></i> 推荐练习题目 (洛谷)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 模板题 -->
                 <div>
@@ -744,11 +752,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 给定一个有序数组，多次查询某个数是否存在，存在则输出第一次出现的位置。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P2249" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P2249" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-primary/50 transition-all duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1102 A-B 数对</h4>
@@ -757,13 +765,13 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 给定一个数组，求有多少对 (A,B) 满足 A - B = C，使用二分查找优化计数过程。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1102" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1102" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 入门题 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-secondary">入门题</h3>
@@ -776,11 +784,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 在答案范围上应用二分查找，求砍树的最大高度，使得砍下的木材总量不少于需求。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1873" target="_blank" class="text-secondary hover:text-secondary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1873" target="_blank" class="text-secondary hover:text-secondary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-secondary/50 transition-all duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P2678 跳石头</h4>
@@ -789,11 +797,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 二分查找最大的最小跳跃距离，需要移除一些石头，使跳跃距离不小于该值。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P2678" target="_blank" class="text-secondary hover:text-secondary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P2678" target="_blank" class="text-secondary hover:text-secondary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-secondary/50 transition-all duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1024 一元三次方程求解</h4>
@@ -802,13 +810,13 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 利用二分法在可能的根区间内查找一元三次方程的实根，精确到一定小数位数。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1024" target="_blank" class="text-secondary hover:text-secondary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1024" target="_blank" class="text-secondary hover:text-secondary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 进阶题 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-binary">进阶题</h3>
@@ -821,11 +829,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 二分查找的扩展，用于在单峰函数上查找极值点，是信息学奥赛中的重要算法。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P3382" target="_blank" class="text-binary hover:text-binary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P3382" target="_blank" class="text-binary hover:text-binary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-binary/50 transition-all duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P2853 [USACO06DEC] Cow Picnic S</h4>
@@ -834,11 +842,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 结合图论与二分查找的综合题，求所有牛都能到达的牧场数量。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P2853" target="_blank" class="text-binary hover:text-binary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P2853" target="_blank" class="text-binary hover:text-binary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-binary/50 transition-all duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1182 数列分段 Section II</h4>
@@ -847,7 +855,7 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 将数列分成指定段数，使各段和的最大值最小，典型的二分答案问题。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1182" target="_blank" class="text-binary hover:text-binary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1182" target="_blank" class="text-binary hover:text-binary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 前往做题 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -862,32 +870,32 @@ int main() {
         document.addEventListener('DOMContentLoaded', function() {
             // 初始化数组可视化
             updateArrayVisualization();
-            
+
             // 运行按钮事件
             document.getElementById('binary-run').addEventListener('click', startBinarySearchAnimation);
-            
+
             // 重置按钮事件
             document.getElementById('binary-reset').addEventListener('click', resetAnimation);
-            
+
             // 输入变化时更新数组显示
             document.getElementById('array-input').addEventListener('change', updateArrayVisualization);
             document.getElementById('array-input').addEventListener('blur', updateArrayVisualization);
         });
-        
+
         // 更新数组可视化
         function updateArrayVisualization() {
             const arrayInput = document.getElementById('array-input');
             const arrayVisualization = document.getElementById('array-visualization');
             const codeNum1 = document.getElementById('code-num1');
             const codeNum2 = document.getElementById('code-num2');
-            
+
             // 清空可视化区域
             arrayVisualization.innerHTML = '';
-            
+
             // 解析数组
             const arrayStr = arrayInput.value.trim();
             const arr = arrayStr.split(',').map(Number);
-            
+
             // 创建数组元素可视化
             arr.forEach((num, index) => {
                 const element = document.createElement('div');
@@ -897,19 +905,19 @@ int main() {
                 arrayVisualization.appendChild(element);
             });
         }
-        
+
         // 重置动画
         function resetAnimation() {
             // 重置代码高亮
             for (let i = 1; i <= 22; i++) {
                 document.getElementById(`bcode-${i}`).classList.remove('code-line-highlight');
             }
-            
+
             // 重置数组元素样式
             document.querySelectorAll('.binary-element').forEach(el => {
                 el.classList.remove('binary-element-current', 'binary-element-highlight', 'binary-element-found');
             });
-            
+
             // 重置状态和进度
             document.getElementById('binary-status').textContent = '状态: 已重置';
             document.getElementById('binary-status').classList.remove('hidden');
@@ -920,28 +928,28 @@ int main() {
                     <p>点击"运行动画"开始演示</p>
                 </div>
             `;
-            
+
             // 重置运行按钮状态
             document.getElementById('binary-run').disabled = false;
         }
-        
+
         // 开始二分查找动画
         function startBinarySearchAnimation() {
             // 解析输入
             const arrayInput = document.getElementById('array-input');
             const targetInput = document.getElementById('target');
             const target = parseInt(targetInput.value);
-            
+
             // 解析数组
             const arrayStr = arrayInput.value.trim();
             const arr = arrayStr.split(',').map(Number);
-            
+
             // 验证输入
             if (arr.length === 0 || isNaN(target)) {
                 alert('请输入有效的数组和目标值');
                 return;
             }
-            
+
             // 检查数组是否有序
             let isSorted = true;
             for (let i = 1; i < arr.length; i++) {
@@ -955,27 +963,27 @@ int main() {
                     return;
                 }
             }
-            
+
             // 禁用运行按钮
             document.getElementById('binary-run').disabled = true;
-            
+
             // 重置动画状态
             resetAnimation();
-            
+
             // 获取元素
             const executionLog = document.getElementById('binary-execution');
             const statusElement = document.getElementById('binary-status');
             const progressBar = document.getElementById('binary-progress-bar');
-            
+
             // 初始化二分查找参数
             let left = 0;
             let right = arr.length - 1;
             let steps = [];
             let currentStep = 0;
-            
+
             // 记录查找步骤
             executionLog.innerHTML = '<div class="font-medium mb-2">查找步骤:</div>';
-            
+
             // 二分查找过程
             function step() {
                 if (left > right) {
@@ -986,23 +994,23 @@ int main() {
                     progressBar.style.width = '100%';
                     return;
                 }
-                
+
                 // 计算中间位置
                 const mid = left + Math.floor((right - left) / 2);
                 logStep(`步骤 ${currentStep + 1}: left=${left}, right=${right}, mid=${mid}, arr[mid]=${arr[mid]}`);
-                
+
                 // 高亮当前中间元素
                 resetArrayHighlights();
                 document.querySelector(`.binary-element[data-index="${mid}"]`).classList.add('binary-element-current');
-                
+
                 // 高亮左右范围
                 for (let i = left; i <= right; i++) {
                     document.querySelector(`.binary-element[data-index="${i}"]`).classList.add('binary-element-highlight');
                 }
-                
+
                 // 高亮当前执行的代码行
                 highlightCode(8); // int mid = ...
-                
+
                 // 延迟执行比较步骤
                 setTimeout(() => {
                     if (arr[mid] === target) {
@@ -1023,17 +1031,17 @@ int main() {
                         right = mid - 1;
                         highlightCode(16, 17); // else 及 right = ...
                     }
-                    
+
                     // 更新进度
                     currentStep++;
                     const progress = Math.min(100, (currentStep / (Math.log2(arr.length) + 1)) * 100);
                     progressBar.style.width = `${progress}%`;
-                    
+
                     // 继续下一步
                     setTimeout(step, 1500);
                 }, 1500);
             }
-            
+
             // 记录步骤日志
             function logStep(message) {
                 const stepElement = document.createElement('div');
@@ -1042,32 +1050,33 @@ int main() {
                 executionLog.appendChild(stepElement);
                 executionLog.scrollTop = executionLog.scrollHeight;
             }
-            
+
             // 重置数组高亮
             function resetArrayHighlights() {
                 document.querySelectorAll('.binary-element').forEach(el => {
                     el.classList.remove('binary-element-current', 'binary-element-highlight', 'binary-element-found');
                 });
             }
-            
+
             // 高亮代码行
             function highlightCode(...lines) {
                 // 移除所有高亮
                 for (let i = 1; i <= 22; i++) {
                     document.getElementById(`bcode-${i}`).classList.remove('code-line-highlight');
                 }
-                
+
                 // 高亮指定行
                 lines.forEach(line => {
                     document.getElementById(`bcode-${line}`).classList.add('code-line-highlight');
                 });
             }
-            
+
             // 开始第一步
             highlightCode(3, 4); // 初始化left和right
             statusElement.textContent = `状态: 开始查找目标值 ${target}`;
             setTimeout(step, 1000);
         }
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

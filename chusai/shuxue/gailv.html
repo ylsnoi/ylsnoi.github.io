@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>概率统计 - CSP初赛知识点</title>
+
+    <meta name="description" content="概率统计 - CSP初赛知识点课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/chusai/shuxue/gailv.html">
+    <meta property="og:title" content="概率统计 - CSP初赛知识点">
+    <meta property="og:description" content="概率统计 - CSP初赛知识点课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/chusai/shuxue/gailv.html">
+<title>概率统计 - CSP初赛知识点</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -96,8 +103,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -171,7 +179,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="probability-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -200,7 +208,7 @@
             <h2 class="text-2xl font-bold text-probability mb-6 flex items-center">
                 <i class="fa fa-random mr-2"></i> 基本概率
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">概率的基本概念</h3>
@@ -213,7 +221,7 @@
                         <p class="text-sm text-gray-600">其中0 ≤ P(A) ≤ 1，P(A)=0表示事件A不可能发生，P(A)=1表示事件A必然发生</p>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">概率的基本运算</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -233,14 +241,14 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 概率动画演示 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">概率动画演示：掷骰子</h3>
                     <p class="text-gray-700 mb-4">
                         下面的动画演示了掷一个六面骰子的概率分布情况。随着试验次数增加，每个点数出现的频率会逐渐接近理论概率(1/6)。
                     </p>
-                    
+
                     <div class="animation-container">
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div>
@@ -249,7 +257,7 @@
                                         ?
                                     </div>
                                 </div>
-                                
+
                                 <div class="animation-controls">
                                     <button id="roll-once" class="bg-probability hover:bg-probability/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                         <i class="fa fa-play mr-2"></i> 掷一次
@@ -261,7 +269,7 @@
                                         <i class="fa fa-refresh mr-2"></i> 重置
                                     </button>
                                 </div>
-                                
+
                                 <div class="mt-4">
                                     <p class="text-sm font-medium mb-1">试验次数: <span id="trial-count">0</span></p>
                                     <div class="grid grid-cols-3 gap-2 text-sm">
@@ -274,7 +282,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <canvas id="dice-chart" width="400" height="250"></canvas>
                             </div>
@@ -289,7 +297,7 @@
             <h2 class="text-2xl font-bold text-probability mb-6 flex items-center">
                 <i class="fa fa-balance-scale mr-2"></i> 期望值
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">期望值的定义</h3>
@@ -302,7 +310,7 @@
                         <p class="text-sm text-gray-600">其中x₁, x₂, ..., xₙ是随机变量X的可能取值，P(x₁), P(x₂), ..., P(xₙ)是对应的概率</p>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">期望值的性质</h3>
                     <ul class="list-disc pl-6 space-y-2">
@@ -312,7 +320,7 @@
                         <li>对于独立随机变量X和Y，E(X·Y) = E(X)·E(Y)</li>
                     </ul>
                 </div>
-                
+
                 <!-- 期望值动画演示 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">期望值动画演示：抽奖游戏</h3>
@@ -324,7 +332,7 @@
                         <li>对应奖品价值分别为1元、5元、10元、100元</li>
                         <li>理论期望值：E = 1×0.5 + 5×0.3 + 10×0.15 + 100×0.05 = 0.5 + 1.5 + 1.5 + 5 = 8.5元</li>
                     </ul>
-                    
+
                     <div class="animation-container">
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div>
@@ -333,11 +341,11 @@
                                         <i class="fa fa-gift mr-2"></i> 抽取奖品
                                     </button>
                                 </div>
-                                
+
                                 <div class="mb-4 text-center">
                                     <p class="text-xl font-bold text-gray-700" id="current-prize">等待抽奖...</p>
                                 </div>
-                                
+
                                 <div class="animation-controls">
                                     <button id="draw-multiple" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                         <i class="fa fa-repeat mr-2"></i> 连续抽取
@@ -346,7 +354,7 @@
                                         <i class="fa fa-refresh mr-2"></i> 重置
                                     </button>
                                 </div>
-                                
+
                                 <div class="mt-4">
                                     <p class="text-sm font-medium mb-1">抽奖次数: <span id="draw-count">0</span></p>
                                     <p class="text-sm font-medium mb-1">总价值: <span id="total-value">0</span>元</p>
@@ -354,7 +362,7 @@
                                     <p class="text-sm font-medium mb-1">理论期望值: <span class="text-probability font-bold">8.5</span>元</p>
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <canvas id="expectation-chart" width="400" height="250"></canvas>
                             </div>
@@ -369,7 +377,7 @@
             <h2 class="text-2xl font-bold text-statistics mb-6 flex items-center">
                 <i class="fa fa-bar-chart mr-2"></i> 简单统计
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">基本统计量</h3>
@@ -395,26 +403,26 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 统计量计算演示 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">统计量计算演示</h3>
                     <p class="text-gray-700 mb-4">
                         下面可以输入一组数据，系统会自动计算其基本统计量。
                     </p>
-                    
+
                     <div class="animation-container">
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div>
                                 <div class="mb-4">
                                     <label class="block text-sm font-medium text-gray-700 mb-2">输入数据（用逗号分隔）：</label>
-                                    <input type="text" id="statistics-data" placeholder="例如：1,3,5,7,9" value="1,3,5,7,9" 
+                                    <input type="text" id="statistics-data" placeholder="例如：1,3,5,7,9" value="1,3,5,7,9"
                                         class="w-full px-4 py-2 rounded-md bg-white border border-gray-300 focus:outline-none focus:border-statistics">
                                     <button id="calculate-stats" class="mt-2 bg-statistics hover:bg-statistics/90 text-white px-4 py-2 rounded-md transition-all">
                                         计算统计量
                                     </button>
                                 </div>
-                                
+
                                 <div class="mt-6 space-y-2">
                                     <div class="p-2 bg-gray-50 rounded-md">
                                         <span class="text-gray-600">平均值：</span>
@@ -438,7 +446,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <canvas id="statistics-chart" width="400" height="250"></canvas>
                             </div>
@@ -453,7 +461,7 @@
             <h2 class="text-2xl font-bold text-primary mb-6 flex items-center">
                 <i class="fa fa-lightbulb-o mr-2"></i> 解题技巧
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="probability-bg p-4 rounded-lg">
                     <h3 class="text-xl font-semibold mb-3">概率问题解题技巧</h3>
@@ -465,7 +473,7 @@
                         <li><strong>递推关系</strong>：建立概率的递推公式，特别是对于复杂的随机过程</li>
                     </ul>
                 </div>
-                
+
                 <div class="statistics-bg p-4 rounded-lg">
                     <h3 class="text-xl font-semibold mb-3">统计问题解题技巧</h3>
                     <ul class="list-disc pl-6 space-y-2">
@@ -476,7 +484,7 @@
                         <li><strong>边界情况处理</strong>：特别注意数据为空、只有一个数据等特殊情况</li>
                     </ul>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="text-xl font-semibold mb-3">期望值问题解题技巧</h3>
                     <ul class="list-disc pl-6 space-y-2">
@@ -495,7 +503,7 @@
             <h2 class="text-2xl font-bold text-primary mb-6 flex items-center">
                 <i class="fa fa-pencil mr-2"></i> 例题解析
             </h2>
-            
+
             <div class="space-y-8">
                 <!-- 例题1 -->
                 <div>
@@ -504,7 +512,7 @@
                         <p class="text-gray-700 mb-2"><strong>题目描述：</strong>掷两个六面骰子，求点数之和为7的概率。</p>
                         <p class="text-gray-700"><strong>选项：</strong>A. 1/6 &nbsp;&nbsp; B. 1/12 &nbsp;&nbsp; C. 1/36 &nbsp;&nbsp; D. 1/8</p>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h4 class="font-semibold mb-2">解析：</h4>
                         <p class="text-gray-700 mb-2">1. 确定样本空间：掷两个骰子，总共有6×6=36种可能的结果。</p>
@@ -513,7 +521,7 @@
                         <p class="text-gray-700 font-medium">答案：A</p>
                     </div>
                 </div>
-                
+
                 <!-- 例题2 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">例题2：期望值计算</h3>
@@ -521,7 +529,7 @@
                         <p class="text-gray-700 mb-2"><strong>题目描述：</strong>一个袋子中有3个红球和2个蓝球，随机取出一个球，若为红球则得2分，若为蓝球则得5分。求得分的期望值。</p>
                         <p class="text-gray-700"><strong>选项：</strong>A. 3.2 &nbsp;&nbsp; B. 3.4 &nbsp;&nbsp; C. 3.6 &nbsp;&nbsp; D. 3.8</p>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h4 class="font-semibold mb-2">解析：</h4>
                         <p class="text-gray-700 mb-2">1. 计算取出红球的概率：P(红) = 3/5。</p>
@@ -530,7 +538,7 @@
                         <p class="text-gray-700 font-medium">答案：A</p>
                     </div>
                 </div>
-                
+
                 <!-- 例题3 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">例题3：统计量计算</h3>
@@ -538,7 +546,7 @@
                         <p class="text-gray-700 mb-2"><strong>题目描述：</strong>给定一组数据：[2, 5, 3, 5, 7, 5, 9]，这组数据的众数是多少？</p>
                         <p class="text-gray-700"><strong>选项：</strong>A. 3 &nbsp;&nbsp; B. 5 &nbsp;&nbsp; C. 7 &nbsp;&nbsp; D. 9</p>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h4 class="font-semibold mb-2">解析：</h4>
                         <p class="text-gray-700 mb-2">1. 众数是指在数据集中出现次数最多的数值。</p>
@@ -546,7 +554,7 @@
                         <p class="text-gray-700 font-medium">答案：B</p>
                     </div>
                 </div>
-                
+
                 <!-- 例题4 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">例题4：CSP初赛真题</h3>
@@ -554,7 +562,7 @@
                         <p class="text-gray-700 mb-2"><strong>题目描述：</strong>有五张卡片，分别写有数字1, 2, 3, 4, 5。从中任取两张，它们的和为偶数的概率是多少？</p>
                         <p class="text-gray-700"><strong>选项：</strong>A. 1/5 &nbsp;&nbsp; B. 2/5 &nbsp;&nbsp; C. 3/5 &nbsp;&nbsp; D. 4/5</p>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h4 class="font-semibold mb-2">解析：</h4>
                         <p class="text-gray-700 mb-2">1. 计算总取法：从5张卡片中任取2张，总共有C(5,2) = 10种取法。</p>
@@ -573,7 +581,7 @@
     <script>
         // 初始化图表
         let diceChart, expectationChart, statisticsChart;
-        
+
         function initCharts() {
             // 骰子概率图表
             const diceCtx = document.getElementById('dice-chart').getContext('2d');
@@ -622,7 +630,7 @@
                     }
                 }
             });
-            
+
             // 期望值图表
             const expectationCtx = document.getElementById('expectation-chart').getContext('2d');
             expectationChart = new Chart(expectationCtx, {
@@ -670,7 +678,7 @@
                     }
                 }
             });
-            
+
             // 统计图表
             const statisticsCtx = document.getElementById('statistics-chart').getContext('2d');
             statisticsChart = new Chart(statisticsCtx, {
@@ -711,31 +719,31 @@
                 }
             });
         }
-        
+
         // 骰子动画相关
         let diceCounts = [0, 0, 0, 0, 0, 0]; // 1-6点的计数
         let trialCount = 0;
         let isRolling = false;
         let rollInterval;
-        
+
         function rollDice() {
             // 生成1-6的随机数
             const result = Math.floor(Math.random() * 6) + 1;
-            
+
             // 更新显示
             const diceElement = document.getElementById('dice');
             diceElement.textContent = result;
-            
+
             // 高亮当前结果
             for (let i = 1; i <= 6; i++) {
                 document.getElementById(`count-${i}`).parentElement.classList.remove('probability-highlight');
             }
             document.getElementById(`count-${result}`).parentElement.classList.add('probability-highlight');
-            
+
             // 更新计数
             diceCounts[result - 1]++;
             trialCount++;
-            
+
             // 更新统计显示
             document.getElementById('trial-count').textContent = trialCount;
             for (let i = 1; i <= 6; i++) {
@@ -743,12 +751,12 @@
                 const probability = ((diceCounts[i - 1] / trialCount) * 100).toFixed(1);
                 document.getElementById(`prob-${i}`).textContent = `${probability}%`;
             }
-            
+
             // 更新图表
             diceChart.data.datasets[0].data = diceCounts.map(count => count / trialCount);
             diceChart.update();
         }
-        
+
         // 抽奖动画相关
         let drawCount = 0;
         let totalValue = 0;
@@ -760,12 +768,12 @@
             { value: 10, probability: 0.15, name: '10元奖品' },
             { value: 100, probability: 0.05, name: '100元大奖' }
         ];
-        
+
         function drawPrize() {
             // 根据概率抽取奖品
             let random = Math.random();
             let selectedPrize;
-            
+
             for (const prize of prizes) {
                 if (random < prize.probability) {
                     selectedPrize = prize;
@@ -773,43 +781,43 @@
                 }
                 random -= prize.probability;
             }
-            
+
             // 更新显示
             document.getElementById('current-prize').textContent = selectedPrize.name;
-            
+
             // 更新计数
             drawCount++;
             totalValue += selectedPrize.value;
             const averageValue = (totalValue / drawCount).toFixed(2);
-            
+
             // 更新统计显示
             document.getElementById('draw-count').textContent = drawCount;
             document.getElementById('total-value').textContent = totalValue;
             document.getElementById('average-value').textContent = averageValue;
-            
+
             // 更新图表
             expectationChart.data.labels.push(drawCount);
             expectationChart.data.datasets[0].data.push(parseFloat(averageValue));
             expectationChart.data.datasets[1].data.push(8.5); // 理论期望值
             expectationChart.update();
         }
-        
+
         // 统计计算相关
         function calculateStatistics() {
             const input = document.getElementById('statistics-data').value;
             const data = input.split(',').map(x => parseFloat(x.trim())).filter(x => !isNaN(x));
-            
+
             if (data.length === 0) {
                 alert('请输入有效的数据');
                 return;
             }
-            
+
             // 排序数据
             const sortedData = [...data].sort((a, b) => a - b);
-            
+
             // 计算平均值
             const mean = (data.reduce((sum, x) => sum + x, 0) / data.length).toFixed(2);
-            
+
             // 计算中位数
             let median;
             const mid = Math.floor(sortedData.length / 2);
@@ -818,7 +826,7 @@
             } else {
                 median = ((sortedData[mid - 1] + sortedData[mid]) / 2).toFixed(2);
             }
-            
+
             // 计算众数
             const frequency = {};
             let maxFreq = 0;
@@ -829,31 +837,31 @@
             const mode = Object.keys(frequency)
                 .filter(x => frequency[x] === maxFreq)
                 .join(', ');
-            
+
             // 计算极差
             const range = (sortedData[sortedData.length - 1] - sortedData[0]).toFixed(2);
-            
+
             // 更新显示
             document.getElementById('stats-mean').textContent = mean;
             document.getElementById('stats-median').textContent = median;
             document.getElementById('stats-mode').textContent = mode;
             document.getElementById('stats-range').textContent = range;
             document.getElementById('stats-count').textContent = data.length;
-            
+
             // 更新图表
             statisticsChart.data.labels = data.map((_, i) => i + 1);
             statisticsChart.data.datasets[0].data = data;
             statisticsChart.update();
         }
-        
+
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', function() {
             initCharts();
             calculateStatistics(); // 初始化统计图表
-            
+
             // 骰子相关事件监听
             document.getElementById('roll-once').addEventListener('click', rollDice);
-            
+
             document.getElementById('roll-multiple').addEventListener('click', function() {
                 if (isRolling) {
                     clearInterval(rollInterval);
@@ -864,7 +872,7 @@
                 }
                 isRolling = !isRolling;
             });
-            
+
             document.getElementById('reset-dice').addEventListener('click', function() {
                 clearInterval(rollInterval);
                 isRolling = false;
@@ -873,20 +881,20 @@
                 document.getElementById('trial-count').textContent = trialCount;
                 document.getElementById('dice').textContent = '?';
                 document.getElementById('roll-multiple').innerHTML = '<i class="fa fa-repeat mr-2"></i> 连续掷';
-                
+
                 for (let i = 1; i <= 6; i++) {
                     document.getElementById(`count-${i}`).textContent = 0;
                     document.getElementById(`prob-${i}`).textContent = '0%';
                     document.getElementById(`count-${i}`).parentElement.classList.remove('probability-highlight');
                 }
-                
+
                 diceChart.data.datasets[0].data = [0, 0, 0, 0, 0, 0];
                 diceChart.update();
             });
-            
+
             // 抽奖相关事件监听
             document.getElementById('draw-prize').addEventListener('click', drawPrize);
-            
+
             document.getElementById('draw-multiple').addEventListener('click', function() {
                 if (isDrawing) {
                     clearInterval(drawInterval);
@@ -897,7 +905,7 @@
                 }
                 isDrawing = !isDrawing;
             });
-            
+
             document.getElementById('reset-draw').addEventListener('click', function() {
                 clearInterval(drawInterval);
                 isDrawing = false;
@@ -908,19 +916,20 @@
                 document.getElementById('average-value').textContent = '0';
                 document.getElementById('current-prize').textContent = '等待抽奖...';
                 document.getElementById('draw-multiple').innerHTML = '<i class="fa fa-repeat mr-2"></i> 连续抽取';
-                
+
                 expectationChart.data.labels = [];
                 expectationChart.data.datasets[0].data = [];
                 expectationChart.data.datasets[1].data = [];
                 expectationChart.update();
             });
-            
+
             // 统计相关事件监听
             document.getElementById('calculate-stats').addEventListener('click', calculateStatistics);
-            
+
             // 初始化代码高亮
             hljs.highlightAll();
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

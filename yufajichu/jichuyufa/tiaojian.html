@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>条件语句 - 艾科斯信奥网</title>
+
+    <meta name="description" content="条件语句课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/yufajichu/jichuyufa/tiaojian.html">
+    <meta property="og:title" content="条件语句 - 艾科斯信奥网">
+    <meta property="og:description" content="条件语句课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/yufajichu/jichuyufa/tiaojian.html">
+<title>条件语句 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -116,8 +123,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -191,7 +199,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="condition-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -282,7 +290,7 @@
             <h2 class="text-2xl font-bold text-condition mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 条件语句执行流程演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- if-else语句演示 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -293,10 +301,10 @@
                                 下面的动画展示了if-else语句的执行流程。程序会先判断条件是否成立，
                                 如果成立则执行if块中的代码，否则执行else块中的代码。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">设置变量x的值:</label>
-                                <input type="range" id="x-value" min="0" max="100" value="75" 
+                                <input type="range" id="x-value" min="0" max="100" value="75"
                                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-condition">
                                 <div class="flex justify-between text-xs text-gray-500 mt-1">
                                     <span>0</span>
@@ -304,7 +312,7 @@
                                     <span>100</span>
                                 </div>
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="ifelse-run" class="bg-condition hover:bg-condition/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 运行动画
@@ -313,12 +321,12 @@
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="ifelse-status" class="animation-status hidden">
                                 状态: 等待开始
                             </div>
                         </div>
-                        
+
                         <div>
                             <div class="bg-white border border-gray-200 rounded-lg p-4 min-h-[300px]" id="ifelse-animation">
                                 <div class="text-center text-gray-500 py-8">
@@ -329,7 +337,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 多分支条件语句演示 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">多分支条件语句执行流程</h3>
@@ -343,10 +351,10 @@
                                 <li>执行第一个条件为真的分支</li>
                                 <li>如果所有条件都为假，则执行else分支</li>
                             </ul>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">设置分数值:</label>
-                                <input type="range" id="score-value" min="0" max="100" value="85" 
+                                <input type="range" id="score-value" min="0" max="100" value="85"
                                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-condition">
                                 <div class="flex justify-between text-xs text-gray-500 mt-1">
                                     <span>0</span>
@@ -354,7 +362,7 @@
                                     <span>100</span>
                                 </div>
                             </div>
-                            
+
                             <div class="animation-controls">
                                 <button id="multibranch-run" class="bg-condition hover:bg-condition/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 运行动画
@@ -366,17 +374,17 @@
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div class="animation-progress">
                                 <div id="multibranch-progress" class="animation-progress-bar" style="width: 0%"></div>
                             </div>
-                            
+
                             <div class="animation-step bg-blue-50 text-blue-800 p-3 rounded-lg mb-4">
                                 <h4 class="font-medium mb-1">当前步骤说明</h4>
                                 <p id="multibranch-step-info" class="text-sm">点击"运行动画"或"单步执行"开始演示</p>
                             </div>
                         </div>
-                        
+
                         <div>
                             <div class="bg-white border border-gray-200 rounded-lg p-4 min-h-[400px]" id="multibranch-animation">
                                 <div class="text-center text-gray-500 py-16">
@@ -395,7 +403,7 @@
             <h2 class="text-2xl font-bold text-condition mb-6 flex items-center">
                 <i class="fa fa-code mr-2"></i> 条件语句代码示例 (C++)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- if语句示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -403,7 +411,7 @@
                     <p class="text-gray-700 mb-3">
                         if语句是最基本的条件判断结构，当条件为真时执行其后的代码块：
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
 using namespace std;
 
@@ -411,23 +419,23 @@ int main() {
     int age;
     cout << "请输入你的年龄: ";
     cin >> age;
-    
+
     // 如果年龄大于等于18岁，则输出成年信息
     <span class="condition-keyword">if</span> (age >= 18) {
         cout << "你已经成年了，可以独立生活了！" << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- if-else语句示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">2. if-else语句</h3>
                     <p class="text-gray-700 mb-3">
                         if-else语句提供了两种选择，条件为真时执行if块，否则执行else块：
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
 using namespace std;
 
@@ -435,25 +443,25 @@ int main() {
     int score;
     cout << "请输入你的分数: ";
     cin >> score;
-    
+
     // 判断分数是否及格
     <span class="condition-keyword">if</span> (score >= 60) {
         cout << "恭喜你，考试及格了！" << endl;
     } <span class="condition-keyword">else</span> {
         cout << "很遗憾，考试不及格，需要补考。" << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- if-else if-else语句示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">3. if-else if-else语句</h3>
                     <p class="text-gray-700 mb-3">
                         多分支条件语句，用于处理多种可能的情况：
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
 using namespace std;
 
@@ -461,7 +469,7 @@ int main() {
     int score;
     cout << "请输入你的分数: ";
     cin >> score;
-    
+
     // 根据分数判断等级
     <span class="condition-keyword">if</span> (score >= 90) {
         cout << "优秀" << endl;
@@ -472,18 +480,18 @@ int main() {
     } <span class="condition-keyword">else</span> {
         cout << "不及格" << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- switch语句示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">4. switch语句</h3>
                     <p class="text-gray-700 mb-3">
                         switch语句用于基于不同的值执行不同的代码块，适合判断离散的值：
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
 using namespace std;
 
@@ -491,7 +499,7 @@ int main() {
     char grade;
     cout << "请输入你的等级(A/B/C/D/E): ";
     cin >> grade;
-    
+
     // 根据等级输出评价
     <span class="condition-keyword">switch</span> (grade) {
         <span class="condition-keyword">case</span> 'A':
@@ -512,18 +520,18 @@ int main() {
         <span class="condition-keyword">default</span>:
             cout << "无效的等级！" << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 三元运算符示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">5. 三元运算符</h3>
                     <p class="text-gray-700 mb-3">
                         三元运算符是if-else语句的简洁形式，语法为：条件 ? 表达式1 : 表达式2
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
 using namespace std;
 
@@ -531,12 +539,12 @@ int main() {
     int a, b, max;
     cout << "请输入两个整数: ";
     cin >> a >> b;
-    
+
     // 使用三元运算符求两个数中的最大值
     max = (a > b) ? a : b;
-    
+
     cout << "两个数中最大的是: " << max << endl;
-    
+
     return 0;
 }</code></pre>
                 </div>
@@ -548,7 +556,7 @@ int main() {
             <h2 class="text-2xl font-bold text-condition mb-6 flex items-center">
                 <i class="fa fa-lightbulb-o mr-2"></i> 条件语句应用
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">条件语句的典型应用场景</h3>
@@ -579,7 +587,7 @@ int main() {
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">条件语句的注意事项</h3>
                     <ul class="list-disc pl-6 space-y-2">
@@ -598,7 +606,7 @@ int main() {
             <h2 class="text-2xl font-bold text-condition mb-6 flex items-center">
                 <i class="fa fa-puzzle-piece mr-2"></i> 洛谷推荐题目
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">入门题</h3>
@@ -612,7 +620,7 @@ int main() {
                             现在给出一个整数 x，请问他们是否喜欢这个整数？
                         </p>
                         <div class="flex space-x-3 mt-3">
-                            <a href="https://www.luogu.com.cn/problem/P5710" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P5710" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-all flex items-center" rel="noopener noreferrer">
                                 <i class="fa fa-external-link mr-2"></i> 题目链接
                             </a>
                             <a href="../../index.html#practice" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
@@ -621,7 +629,7 @@ int main() {
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">基础题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -633,7 +641,7 @@ int main() {
                                 （1）能被4整除，但不能被100整除的年份是闰年；
                                 （2）能被400整除的年份是闰年。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P5711" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P5711" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 <i class="fa fa-external-link mr-1"></i> 查看题目
                             </a>
                         </div>
@@ -642,13 +650,13 @@ int main() {
                             <p class="text-gray-700 text-sm mb-3">
                                 津津上初中了。妈妈认为津津应该更加用功学习，所以津津除了上学之外，还要参加妈妈为她报名的各科复习班。另外每周妈妈还会送她去学习朗诵、舞蹈和钢琴。但是津津如果一天上课超过八个小时就会不高兴，而且上得越久就越不高兴。假设津津不会因为其它事不高兴，并且她的不高兴不会持续到第二天。请你帮忙检查一下津津下周的日程安排，看看下周她会不会不高兴；如果会的话，哪天最不高兴。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1085" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1085" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 <i class="fa fa-external-link mr-1"></i> 查看题目
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">进阶题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -659,7 +667,7 @@ int main() {
                                 商店不允许将铅笔的包装拆开，因此P老师可能需要购买超过n支铅笔才够给小朋友们发礼物。
                                 现在P老师想知道，在商店每种包装的数量都足够的情况下，要买够至少n支铅笔最少需要花费多少钱。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1909" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1909" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 <i class="fa fa-external-link mr-1"></i> 查看题目
                             </a>
                         </div>
@@ -671,7 +679,7 @@ int main() {
                                 前9位数字分别乘以1，2，…，9，再求和，用和除以11，所得的余数即为识别码，如果余数为10，则识别码为大写字母X。
                                 你的任务是编写程序判断输入的ISBN号码中识别码是否正确，如果正确，则输出“Right”；否则，输出你认为正确的ISBN号码。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1055" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1055" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 <i class="fa fa-external-link mr-1"></i> 查看题目
                             </a>
                         </div>
@@ -713,25 +721,25 @@ int main() {
     <script>
         // 初始化代码高亮
         hljs.highlightAll();
-        
+
         // 显示滑块值
         document.getElementById('x-value').addEventListener('input', function() {
             document.getElementById('x-value-display').textContent = this.value;
         });
-        
+
         document.getElementById('score-value').addEventListener('input', function() {
             document.getElementById('score-value-display').textContent = this.value;
         });
-        
+
         // if-else动画演示
         document.getElementById('ifelse-run').addEventListener('click', function() {
             const x = parseInt(document.getElementById('x-value').value);
             const animationContainer = document.getElementById('ifelse-animation');
             const statusElement = document.getElementById('ifelse-status');
-            
+
             statusElement.classList.remove('hidden');
             statusElement.textContent = '状态: 开始执行';
-            
+
             // 构建代码可视化
             animationContainer.innerHTML = `
                 <div class="space-y-4">
@@ -742,15 +750,15 @@ int main() {
                     <div class="condition-block ml-6" id="else-body">cout << "x小于等于50";}</div>
                 </div>
             `;
-            
+
             // 执行动画
             setTimeout(() => {
                 document.getElementById('if-condition').classList.add('condition-block-active');
                 statusElement.textContent = `状态: 判断条件 x > 50 (${x} > 50 结果为 ${x > 50})`;
-                
+
                 setTimeout(() => {
                     document.getElementById('if-condition').classList.remove('condition-block-active');
-                    
+
                     if (x > 50) {
                         document.getElementById('if-body').classList.add('condition-block-active');
                         statusElement.textContent = '状态: 条件为真，执行if块';
@@ -762,39 +770,39 @@ int main() {
                             statusElement.textContent = '状态: 条件为假，执行else块';
                         }, 800);
                     }
-                    
+
                     setTimeout(() => {
                         statusElement.textContent = '状态: 执行完成';
                     }, 1600);
                 }, 1000);
             }, 500);
         });
-        
+
         // 重置if-else动画
         document.getElementById('ifelse-reset').addEventListener('click', function() {
             const animationContainer = document.getElementById('ifelse-animation');
             const statusElement = document.getElementById('ifelse-status');
-            
+
             animationContainer.innerHTML = `
                 <div class="text-center text-gray-500 py-8">
                     <i class="fa fa-arrow-down mb-2"></i>
                     <p>点击"运行动画"开始演示</p>
                 </div>
             `;
-            
+
             statusElement.classList.add('hidden');
         });
-        
+
         // 多分支条件语句动画
         let currentStep = 0;
         let animationInterval;
-        
+
         function runMultiBranchStep() {
             const score = parseInt(document.getElementById('score-value').value);
             const animationContainer = document.getElementById('multibranch-animation');
             const progressBar = document.getElementById('multibranch-progress');
             const stepInfo = document.getElementById('multibranch-step-info');
-            
+
             // 初始化
             if (currentStep === 0) {
                 animationContainer.innerHTML = `
@@ -811,16 +819,16 @@ int main() {
                     </div>
                 `;
             }
-            
+
             // 清除所有活跃状态
             document.querySelectorAll('.condition-block-active').forEach(el => {
                 el.classList.remove('condition-block-active');
             });
-            
+
             // 执行当前步骤
             let stepDesc = '';
             let progress = 0;
-            
+
             switch(currentStep) {
                 case 0:
                     document.getElementById('cond1').classList.add('condition-block-active');
@@ -868,14 +876,14 @@ int main() {
                     }
                     break;
             }
-            
+
             stepInfo.textContent = stepDesc;
             progressBar.style.width = `${progress}%`;
-            
+
             currentStep++;
-            
+
             // 检查是否完成
-            if ((score >= 90 && currentStep > 2) || 
+            if ((score >= 90 && currentStep > 2) ||
                 (score >= 80 && score < 90 && currentStep > 3) ||
                 (score >= 60 && score < 80 && currentStep > 4) ||
                 (score < 60 && currentStep > 5)) {
@@ -884,24 +892,24 @@ int main() {
                 document.getElementById('multibranch-step').classList.remove('hidden');
                 return true;
             }
-            
+
             return false;
         }
-        
+
         // 单步执行
         document.getElementById('multibranch-step').addEventListener('click', function() {
             runMultiBranchStep();
         });
-        
+
         // 运行多分支动画
         document.getElementById('multibranch-run').addEventListener('click', function() {
             currentStep = 0;
             this.classList.add('hidden');
             document.getElementById('multibranch-step').classList.add('hidden');
-            
+
             // 立即执行第一步
             const isComplete = runMultiBranchStep();
-            
+
             if (!isComplete) {
                 // 设置定时器执行后续步骤
                 animationInterval = setInterval(() => {
@@ -913,29 +921,30 @@ int main() {
                 }, 1500);
             }
         });
-        
+
         // 重置多分支动画
         document.getElementById('multibranch-reset').addEventListener('click', function() {
             clearInterval(animationInterval);
             currentStep = 0;
-            
+
             const animationContainer = document.getElementById('multibranch-animation');
             const progressBar = document.getElementById('multibranch-progress');
             const stepInfo = document.getElementById('multibranch-step-info');
-            
+
             animationContainer.innerHTML = `
                 <div class="text-center text-gray-500 py-16">
                     <i class="fa fa-arrow-down mb-2"></i>
                     <p>点击"运行动画"或"单步执行"开始演示</p>
                 </div>
             `;
-            
+
             progressBar.style.width = '0%';
             stepInfo.textContent = '点击"运行动画"或"单步执行"开始演示';
-            
+
             document.getElementById('multibranch-run').classList.remove('hidden');
             document.getElementById('multibranch-step').classList.remove('hidden');
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

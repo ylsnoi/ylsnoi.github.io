@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>栈 - 艾科斯信奥网</title>
+
+    <meta name="description" content="栈课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/shujujiegou/xianxing/zhan.html">
+    <meta property="og:title" content="栈 - 艾科斯信奥网">
+    <meta property="og:description" content="栈课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/shujujiegou/xianxing/zhan.html">
+<title>栈 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -144,8 +151,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -219,7 +227,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="stack-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -255,7 +263,7 @@
                         栈是一种特殊的线性表，它只允许在表的一端进行插入和删除操作。这一端被称为栈顶(top)，另一端则被称为栈底(bottom)。
                         栈遵循"后进先出"(Last In First Out, LIFO)的原则，即最后插入的元素最先被删除。
                     </p>
-                    
+
                     <div class="flex justify-center my-6">
                         <div class="relative w-64">
                             <div class="stack-container">
@@ -269,7 +277,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">栈的基本操作</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -307,7 +315,7 @@
             <h2 class="text-2xl font-bold text-stack mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 栈操作过程演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 栈操作动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -318,13 +326,13 @@
                                 下面的动画展示了栈的基本操作过程，包括入栈(push)、出栈(pop)和取栈顶元素(top)。
                                 可以通过控制面板观察栈的状态变化和对应的代码执行过程。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">输入元素值:</label>
                                 <input type="number" id="stack-element" value="5" min="1" max="100"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-stack">
                             </div>
-                            
+
                             <div class="flex flex-wrap gap-2 mb-4">
                                 <button id="stack-push" class="bg-stack hover:bg-stack/90 text-white px-3 py-2 rounded-md transition-all flex items-center text-sm">
                                     <i class="fa fa-arrow-up mr-1"></i> 入栈 (Push)
@@ -336,7 +344,7 @@
                                     <i class="fa fa-eye mr-1"></i> 取栈顶
                                 </button>
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="stack-run-all" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play-circle mr-2"></i> 演示全部操作
@@ -345,12 +353,12 @@
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="stack-status" class="animation-status mt-4">
                                 状态: 栈为空
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 flex flex-col items-center justify-center">
                                 <div class="text-sm font-medium mb-3">栈的状态可视化</div>
@@ -364,7 +372,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="stack-code">
                                 <div class="code-line" id="stack-code-1">#include &lt;iostream&gt;</div>
@@ -399,7 +407,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 栈的实现方式 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">栈的两种实现方式</h3>
@@ -412,13 +420,13 @@ class Stack {
 private:
     int data[MAX_SIZE]; // 存储栈元素的数组
     int top; // 栈顶指针，指向栈顶元素的位置
-    
+
 public:
     // 构造函数，初始化栈
     Stack() {
         top = -1; // 栈空时，栈顶指针为-1
     }
-    
+
     // 入栈操作
     bool push(int value) {
         // 检查栈是否已满
@@ -428,7 +436,7 @@ public:
         data[++top] = value; // 栈顶指针加1，然后存入元素
         return true;
     }
-    
+
     // 出栈操作
     bool pop() {
         // 检查栈是否为空
@@ -438,7 +446,7 @@ public:
         top--; // 栈顶指针减1，相当于移除栈顶元素
         return true;
     }
-    
+
     // 取栈顶元素
     int getTop() {
         if (isEmpty()) {
@@ -446,12 +454,12 @@ public:
         }
         return data[top]; // 返回栈顶元素
     }
-    
+
     // 判断栈是否为空
     bool isEmpty() {
         return top == -1;
     }
-    
+
     // 获取栈的大小
     int size() {
         return top + 1;
@@ -461,7 +469,7 @@ public:
                                 数组实现的栈大小固定，实现简单，访问速度快，但需要预先确定最大容量。
                             </p>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-stack mb-2">2. C++ STL栈</h4>
                             <pre class="code-block text-xs"><code class="language-cpp">#include &lt;iostream&gt;
@@ -471,29 +479,29 @@ using namespace std;
 int main() {
     // 创建一个int类型的栈
     stack&lt;int&gt; s;
-    
+
     // 入栈操作
     s.push(10);
     s.push(20);
     s.push(30);
-    
+
     // 输出栈的大小
     cout << "栈的大小: " << s.size() << endl;
-    
+
     // 取栈顶元素
     cout << "栈顶元素: " << s.top() << endl;
-    
+
     // 出栈操作
     s.pop();
     cout << "出栈后栈顶元素: " << s.top() << endl;
-    
+
     // 判断栈是否为空
     if (s.empty()) {
         cout << "栈为空" << endl;
     } else {
         cout << "栈不为空" << endl;
     }
-    
+
     return 0;
 }</code></pre>
                             <p class="text-gray-700 text-sm mt-3">
@@ -510,7 +518,7 @@ int main() {
             <h2 class="text-2xl font-bold text-stack mb-6 flex items-center">
                 <i class="fa fa-lightbulb-o mr-2"></i> 栈的算法应用
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">栈在信息学奥赛中的典型应用</h3>
@@ -541,11 +549,11 @@ int main() {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 栈应用示例 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">栈的应用代码示例</h3>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg mb-6">
                         <h4 class="font-semibold text-stack mb-2">1. 括号匹配问题</h4>
                         <p class="text-gray-700 mb-3">
@@ -566,7 +574,7 @@ bool isMatching(char open, char close) {
 // 检查括号序列是否有效
 bool isValidParentheses(string s) {
     stack&lt;char&gt; st;
-    
+
     for (char c : s) {
         // 如果是左括号，入栈
         if (c == '(' || c == '[' || c == '{') {
@@ -582,7 +590,7 @@ bool isValidParentheses(string s) {
             st.pop();
         }
     }
-    
+
     // 栈为空表示所有括号都匹配
     return st.empty();
 }
@@ -591,16 +599,16 @@ int main() {
     string s1 = "()[]{}";
     string s2 = "([)]";
     string s3 = "{[]}";
-    
+
     cout << boolalpha; // 输出true/false而不是1/0
     cout << s1 << ": " << isValidParentheses(s1) << endl; // true
     cout << s2 << ": " << isValidParentheses(s2) << endl; // false
     cout << s3 << ": " << isValidParentheses(s3) << endl; // true
-    
+
     return 0;
 }</code></pre>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h4 class="font-semibold text-stack mb-2">2. 单调栈应用：下一个更大元素</h4>
                         <p class="text-gray-700 mb-3">
@@ -616,7 +624,7 @@ vector&lt;int&gt; nextGreaterElement(vector&lt;int&gt;& nums) {
     int n = nums.size();
     vector&lt;int&gt; result(n, -1); // 初始化结果为-1
     stack&lt;int&gt; st; // 存储索引
-    
+
     for (int i = 0; i < n; i++) {
         // 当栈不为空且当前元素大于栈顶元素时
         while (!st.empty() && nums[i] > nums[st.top()]) {
@@ -626,27 +634,27 @@ vector&lt;int&gt; nextGreaterElement(vector&lt;int&gt;& nums) {
         }
         st.push(i); // 当前元素索引入栈
     }
-    
+
     return result;
 }
 
 int main() {
     vector&lt;int&gt; nums = {2, 1, 2, 4, 3};
     vector&lt;int&gt; res = nextGreaterElement(nums);
-    
+
     cout << "数组: ";
     for (int num : nums) {
         cout << num << " ";
     }
     cout << endl;
-    
+
     cout << "下一个更大元素: ";
     for (int val : res) {
         cout << val << " ";
     }
     cout << endl;
     // 输出: 4 2 4 -1 -1
-    
+
     return 0;
 }</code></pre>
                     </div>
@@ -659,7 +667,7 @@ int main() {
             <h2 class="text-2xl font-bold text-stack mb-6 flex items-center">
                 <i class="fa fa-trophy mr-2"></i> 推荐练习题目 (洛谷)
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-4">模板题</h3>
@@ -672,11 +680,11 @@ int main() {
                             <p class="text-sm text-gray-700 mb-3">
                                 计算后缀表达式的值，直接应用栈的基本操作。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1449" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1449" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg hover:shadow-md transition-shadow duration-300">
                             <div class="flex justify-between items-center mb-2">
                                 <h4 class="font-semibold">P1739 表达式括号匹配</h4>
@@ -685,11 +693,11 @@ int main() {
                             <p class="text-sm text-gray-700 mb-3">
                                 判断表达式中的括号是否匹配，栈的经典应用。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1739" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1739" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg hover:shadow-md transition-shadow duration-300">
                             <div class="flex justify-between items-center mb-2">
                                 <h4 class="font-semibold">P3388 【模板】割点</h4>
@@ -698,13 +706,13 @@ int main() {
                             <p class="text-sm text-gray-700 mb-3">
                                 图论中使用栈实现的经典算法题。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P3388" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P3388" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4">入门题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -716,11 +724,11 @@ int main() {
                             <p class="text-sm text-gray-700 mb-3">
                                 将中缀表达式转换为后缀表达式，栈的典型应用。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1175" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1175" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg hover:shadow-md transition-shadow duration-300">
                             <div class="flex justify-between items-center mb-2">
                                 <h4 class="font-semibold">P2825 [HEOI2016/TJOI2016] 游戏</h4>
@@ -729,11 +737,11 @@ int main() {
                             <p class="text-sm text-gray-700 mb-3">
                                 使用栈模拟游戏过程，理解栈的特性。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P2825" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P2825" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg hover:shadow-md transition-shadow duration-300">
                             <div class="flex justify-between items-center mb-2">
                                 <h4 class="font-semibold">P1044 栈</h4>
@@ -742,13 +750,13 @@ int main() {
                             <p class="text-sm text-gray-700 mb-3">
                                 计算栈的出栈序列数目，卡特兰数应用。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1044" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1044" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4">进阶题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -760,11 +768,11 @@ int main() {
                             <p class="text-sm text-gray-700 mb-3">
                                 单调栈模板题，寻找每个元素的下一个更大元素。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P5788" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P5788" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg hover:shadow-md transition-shadow duration-300">
                             <div class="flex justify-between items-center mb-2">
                                 <h4 class="font-semibold">P3469 [POI2008] BLO-Blockade</h4>
@@ -773,11 +781,11 @@ int main() {
                             <p class="text-sm text-gray-700 mb-3">
                                 图论与栈结合的进阶题目，需要深入理解栈的应用。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P3469" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P3469" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg hover:shadow-md transition-shadow duration-300">
                             <div class="flex justify-between items-center mb-2">
                                 <h4 class="font-semibold">P4387 【深基15.习9】验证栈序列</h4>
@@ -786,7 +794,7 @@ int main() {
                             <p class="text-sm text-gray-700 mb-3">
                                 判断给定的序列是否可能是栈的弹出序列，栈的经典问题。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P4387" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P4387" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -800,7 +808,7 @@ int main() {
         // 初始化代码高亮
         document.addEventListener('DOMContentLoaded', function() {
             hljs.highlightAll();
-            
+
             // 栈动画演示相关变量
             const stackContainer = document.getElementById('stack-elements-container');
             const stackStatus = document.getElementById('stack-status');
@@ -810,14 +818,14 @@ int main() {
             for (let i = 1; i <= 28; i++) {
                 codeLines.push(document.getElementById(`stack-code-${i}`));
             }
-            
+
             // 重置所有代码行高亮
             function resetCodeHighlights() {
                 codeLines.forEach(line => {
                     line.classList.remove('code-line-highlight');
                 });
             }
-            
+
             // 高亮指定代码行
             function highlightCodeLine(lineNumber) {
                 resetCodeHighlights();
@@ -825,90 +833,90 @@ int main() {
                     codeLines[lineNumber - 1].classList.add('code-line-highlight');
                 }
             }
-            
+
             // 更新栈信息
             function updateStackInfo() {
                 const count = stackContainer.children.length;
                 stackInfo.textContent = `栈元素数量: ${count}`;
-                
+
                 if (count === 0) {
                     stackStatus.textContent = '状态: 栈为空';
                 } else {
                     stackStatus.textContent = `状态: 栈顶元素为 ${stackContainer.firstChild.textContent}`;
                 }
             }
-            
+
             // 入栈操作
             document.getElementById('stack-push').addEventListener('click', function() {
                 const value = stackElementInput.value;
                 if (!value) return;
-                
+
                 // 创建新元素
                 const newElement = document.createElement('div');
                 newElement.className = 'stack-element stack-element-push';
                 newElement.textContent = value;
-                
+
                 // 添加到栈顶（容器的最前面）
                 stackContainer.insertBefore(newElement, stackContainer.firstChild);
-                
+
                 // 高亮对应的代码行
                 highlightCodeLine(10);
-                
+
                 // 更新栈信息
                 updateStackInfo();
             });
-            
+
             // 出栈操作
             document.getElementById('stack-pop').addEventListener('click', function() {
                 if (stackContainer.children.length === 0) {
                     stackStatus.textContent = '状态: 栈为空，无法出栈';
                     return;
                 }
-                
+
                 // 获取栈顶元素
                 const topElement = stackContainer.firstChild;
-                
+
                 // 添加出栈动画
                 topElement.classList.add('stack-element-pop');
-                
+
                 // 高亮对应的代码行
                 highlightCodeLine(18);
-                
+
                 // 动画结束后移除元素
                 setTimeout(() => {
                     stackContainer.removeChild(topElement);
                     updateStackInfo();
                 }, 500);
             });
-            
+
             // 取栈顶元素
             document.getElementById('stack-top').addEventListener('click', function() {
                 if (stackContainer.children.length === 0) {
                     stackStatus.textContent = '状态: 栈为空，无栈顶元素';
                     return;
                 }
-                
+
                 const topValue = stackContainer.firstChild.textContent;
                 stackStatus.textContent = `状态: 栈顶元素为 ${topValue}`;
-                
+
                 // 高亮对应的代码行
                 highlightCodeLine(15);
             });
-            
+
             // 重置栈
             document.getElementById('stack-reset').addEventListener('click', function() {
                 stackContainer.innerHTML = '';
                 resetCodeHighlights();
                 updateStackInfo();
             });
-            
+
             // 演示全部操作
             document.getElementById('stack-run-all').addEventListener('click', function() {
                 // 重置栈
                 stackContainer.innerHTML = '';
                 resetCodeHighlights();
                 updateStackInfo();
-                
+
                 // 定义演示步骤
                 const steps = [
                     { action: 'highlight', line: 7, delay: 1000 },
@@ -922,15 +930,15 @@ int main() {
                     { action: 'highlight', line: 24, delay: 1500 },
                     { action: 'reset', delay: 1000 }
                 ];
-                
+
                 let currentStep = 0;
-                
+
                 // 执行步骤
                 function executeStep() {
                     if (currentStep >= steps.length) return;
-                    
+
                     const step = steps[currentStep];
-                    
+
                     if (step.action === 'highlight') {
                         highlightCodeLine(step.line);
                         stackStatus.textContent = `状态: 执行代码行 ${step.line}`;
@@ -956,15 +964,16 @@ int main() {
                         resetCodeHighlights();
                         stackStatus.textContent = '状态: 演示结束';
                     }
-                    
+
                     currentStep++;
                     setTimeout(executeStep, step.delay);
                 }
-                
+
                 // 开始执行步骤
                 executeStep();
             });
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

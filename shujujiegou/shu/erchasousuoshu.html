@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>二叉搜索树 - 艾科斯信奥网</title>
+
+    <meta name="description" content="二叉搜索树课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/shujujiegou/shu/erchasousuoshu.html">
+    <meta property="og:title" content="二叉搜索树 - 艾科斯信奥网">
+    <meta property="og:description" content="二叉搜索树课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/shujujiegou/shu/erchasousuoshu.html">
+<title>二叉搜索树 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -120,8 +127,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -195,7 +203,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="bst-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -238,7 +246,7 @@
                             <li>树中没有关键字相等的节点</li>
                         </ul>
                     </div>
-                    
+
                     <div class="mt-6 flex justify-center">
                         <div class="inline-block">
                             <div class="flex justify-center">
@@ -262,7 +270,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">二叉搜索树的优势</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -300,7 +308,7 @@
             <h2 class="text-2xl font-bold text-bst mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 二叉搜索树操作演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 操作动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -311,7 +319,7 @@
                                 下面的动画展示了二叉搜索树的三种基本操作：插入、查找和删除。
                                 可以通过控制面板选择不同操作并观察执行过程。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">操作类型:</label>
                                 <div class="grid grid-cols-3 gap-2">
@@ -320,13 +328,13 @@
                                     <button id="op-delete" class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-md transition-all">删除</button>
                                 </div>
                             </div>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">数值:</label>
                                 <input type="number" id="bst-value" value="5" min="1" max="100"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-bst">
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="bst-run" class="bg-bst hover:bg-bst/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 执行
@@ -335,16 +343,16 @@
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="bst-status" class="animation-status">
                                 状态: 就绪 - 请选择操作和数值
                             </div>
-                            
+
                             <div class="animation-progress">
                                 <div id="bst-progress-bar" class="animation-progress-bar" style="width: 0%"></div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-80 overflow-y-auto" id="bst-execution">
                                 <div class="text-center text-gray-500 py-12">
@@ -353,7 +361,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-80 overflow-y-auto font-mono text-sm" id="bst-code">
                                 <div class="code-line" id="bst-code-1">// 二叉搜索树节点结构</div>
@@ -392,11 +400,28 @@
                                 <div class="code-line" id="bst-code-34">&nbsp;&nbsp;&nbsp;&nbsp;return search(root->right, val);</div>
                                 <div class="code-line" id="bst-code-35">&nbsp;&nbsp;}</div>
                                 <div class="code-line" id="bst-code-36">}</div>
+                                <div class="code-line" id="bst-code-37">&nbsp;</div>
+                                <div class="code-line" id="bst-code-38">// 删除操作</div>
+                                <div class="code-line" id="bst-code-39">Node* remove(Node* root, int val) {</div>
+                                <div class="code-line" id="bst-code-40">&nbsp;&nbsp;if (root == nullptr) return root;</div>
+                                <div class="code-line" id="bst-code-41">&nbsp;&nbsp;if (val < root->val) {</div>
+                                <div class="code-line" id="bst-code-42">&nbsp;&nbsp;&nbsp;&nbsp;root->left = remove(root->left, val);</div>
+                                <div class="code-line" id="bst-code-43">&nbsp;&nbsp;} else if (val > root->val) {</div>
+                                <div class="code-line" id="bst-code-44">&nbsp;&nbsp;&nbsp;&nbsp;root->right = remove(root->right, val);</div>
+                                <div class="code-line" id="bst-code-45">&nbsp;&nbsp;} else {</div>
+                                <div class="code-line" id="bst-code-46">&nbsp;&nbsp;&nbsp;&nbsp;if (root->left == nullptr) return root->right;</div>
+                                <div class="code-line" id="bst-code-47">&nbsp;&nbsp;&nbsp;&nbsp;if (root->right == nullptr) return root->left;</div>
+                                <div class="code-line" id="bst-code-48">&nbsp;&nbsp;&nbsp;&nbsp;Node* temp = findMin(root->right);</div>
+                                <div class="code-line" id="bst-code-49">&nbsp;&nbsp;&nbsp;&nbsp;root->val = temp->val;</div>
+                                <div class="code-line" id="bst-code-50">&nbsp;&nbsp;&nbsp;&nbsp;root->right = remove(root->right, temp->val);</div>
+                                <div class="code-line" id="bst-code-51">&nbsp;&nbsp;}</div>
+                                <div class="code-line" id="bst-code-52">&nbsp;&nbsp;return root;</div>
+                                <div class="code-line" id="bst-code-53">}</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 可视化区域 -->
                 <div class="bg-white p-4 rounded-lg border border-gray-200">
                     <h3 class="font-semibold text-lg mb-3">二叉搜索树可视化</h3>
@@ -415,7 +440,7 @@
             <h2 class="text-2xl font-bold text-bst mb-6 flex items-center">
                 <i class="fa fa-code mr-2"></i> 二叉搜索树实现 (C++)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 基本实现 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -423,7 +448,7 @@
                     <p class="text-gray-700 mb-3">
                         包含节点定义、插入、查找、删除和遍历操作的完整实现
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 using namespace std;
 
@@ -440,14 +465,14 @@ Node* insert(Node* root, int val) {
     if (root == nullptr) {
         return new Node(val);
     }
-    
+
     // 否则递归地插入到左子树或右子树
     if (val < root->val) {
         root->left = insert(root->left, val);
     } else if (val > root->val) {  // 假设没有重复值
         root->right = insert(root->right, val);
     }
-    
+
     return root;
 }
 
@@ -457,7 +482,7 @@ bool search(Node* root, int val) {
     if (root == nullptr) {
         return false;
     }
-    
+
     // 找到目标值，返回true
     if (root->val == val) {
         return true;
@@ -486,7 +511,7 @@ Node* remove(Node* root, int val) {
     if (root == nullptr) {
         return root;
     }
-    
+
     // 查找要删除的节点
     if (val < root->val) {
         root->left = remove(root->left, val);
@@ -494,7 +519,7 @@ Node* remove(Node* root, int val) {
         root->right = remove(root->right, val);
     } else {
         // 找到要删除的节点
-        
+
         // 情况1：叶子节点（没有子节点）
         if (root->left == nullptr && root->right == nullptr) {
             delete root;
@@ -549,7 +574,7 @@ void postorder(Node* root) {
 
 int main() {
     Node* root = nullptr;
-    
+
     // 插入节点
     root = insert(root, 50);
     root = insert(root, 30);
@@ -558,11 +583,11 @@ int main() {
     root = insert(root, 40);
     root = insert(root, 60);
     root = insert(root, 80);
-    
+
     cout << "中序遍历: ";
     inorder(root);  // 中序遍历结果应为升序
     cout << endl;
-    
+
     // 查找测试
     int key = 40;
     if (search(root, key)) {
@@ -570,24 +595,24 @@ int main() {
     } else {
         cout << key << " 不存在于树中" << endl;
     }
-    
+
     // 删除测试
     root = remove(root, 50);
     cout << "删除50后中序遍历: ";
     inorder(root);
     cout << endl;
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 应用示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">2. 二叉搜索树应用 - 统计频率</h3>
                     <p class="text-gray-700 mb-3">
                         使用二叉搜索树统计数组中元素出现的频率，并按升序输出结果
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <vector>
 using namespace std;
@@ -605,7 +630,7 @@ FrequencyNode* insertWithCount(FrequencyNode* root, int val) {
     if (root == nullptr) {
         return new FrequencyNode(val);
     }
-    
+
     if (val < root->val) {
         root->left = insertWithCount(root->left, val);
     } else if (val > root->val) {
@@ -614,7 +639,7 @@ FrequencyNode* insertWithCount(FrequencyNode* root, int val) {
         // 值已存在，增加计数
         root->count++;
     }
-    
+
     return root;
 }
 
@@ -632,7 +657,7 @@ vector<pair<int, int>> countFrequency(int arr[], int n) {
     for (int i = 0; i < n; i++) {
         root = insertWithCount(root, arr[i]);
     }
-    
+
     vector<pair<int, int>> result;
     collectFrequency(root, result);
     return result;
@@ -641,14 +666,14 @@ vector<pair<int, int>> countFrequency(int arr[], int n) {
 int main() {
     int arr[] = {5, 3, 8, 5, 2, 5, 7, 3, 8, 9};
     int n = sizeof(arr) / sizeof(arr[0]);
-    
+
     vector<pair<int, int>> freq = countFrequency(arr, n);
-    
+
     cout << "元素频率（升序）:" << endl;
     for (auto& p : freq) {
         cout << p.first << " 出现了 " << p.second << " 次" << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
@@ -660,7 +685,7 @@ int main() {
             <h2 class="text-2xl font-bold text-bst mb-6 flex items-center">
                 <i class="fa fa-clock-o mr-2"></i> 时间复杂度分析
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">二叉搜索树各操作的时间复杂度</h3>
@@ -702,7 +727,7 @@ int main() {
                             </tbody>
                         </table>
                     </div>
-                    
+
                     <div class="mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded">
                         <p class="text-sm text-yellow-700">
                             <i class="fa fa-exclamation-triangle mr-2"></i>
@@ -719,7 +744,7 @@ int main() {
             <h2 class="text-2xl font-bold text-bst mb-6 flex items-center">
                 <i class="fa fa-trophy mr-2"></i> 推荐练习题目 (洛谷)
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary">模板题</h3>
@@ -732,11 +757,11 @@ int main() {
                             <p class="text-sm text-gray-600 mb-3">
                                 实现一个支持插入、删除、查询排名、查询第k大等操作的平衡树，可用二叉搜索树实现。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P3369" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P3369" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-primary transition-all">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1177 【模板】排序</h4>
@@ -745,13 +770,13 @@ int main() {
                             <p class="text-sm text-gray-600 mb-3">
                                 利用二叉搜索树的中序遍历特性实现排序功能，巩固对BST有序性的理解。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1177" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1177" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-secondary">入门题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -763,11 +788,11 @@ int main() {
                             <p class="text-sm text-gray-600 mb-3">
                                 根据中序和后序遍历求先序遍历，考查对二叉树结构的理解。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1030" target="_blank" class="text-secondary hover:text-secondary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1030" target="_blank" class="text-secondary hover:text-secondary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-secondary transition-all">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1305 新二叉树</h4>
@@ -776,11 +801,11 @@ int main() {
                             <p class="text-sm text-gray-600 mb-3">
                                 根据先序遍历构建二叉树并输出中序和后序遍历，熟悉二叉树的基本操作。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1305" target="_blank" class="text-secondary hover:text-secondary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1305" target="_blank" class="text-secondary hover:text-secondary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-secondary transition-all">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P2149 【模板】二叉搜索树</h4>
@@ -789,13 +814,13 @@ int main() {
                             <p class="text-sm text-gray-600 mb-3">
                                 实现二叉搜索树的基本操作，包括插入和查询排名。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P2149" target="_blank" class="text-secondary hover:text-secondary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P2149" target="_blank" class="text-secondary hover:text-secondary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-bst">进阶题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -807,11 +832,11 @@ int main() {
                             <p class="text-sm text-gray-600 mb-3">
                                 利用二叉搜索树存储分数并进行排序和去重，综合应用BST特性。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1530" target="_blank" class="text-bst hover:text-bst/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1530" target="_blank" class="text-bst hover:text-bst/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-bst transition-all">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P3807 【模板】卢卡斯定理</h4>
@@ -820,11 +845,11 @@ int main() {
                             <p class="text-sm text-gray-600 mb-3">
                                 虽然是数论题，但可以利用二叉搜索树优化组合数的计算过程。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P3807" target="_blank" class="text-bst hover:text-bst/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P3807" target="_blank" class="text-bst hover:text-bst/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-bst transition-all">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1967 货车运输</h4>
@@ -833,7 +858,7 @@ int main() {
                             <p class="text-sm text-gray-600 mb-3">
                                 结合最大生成树和二叉搜索树的思想，解决路径查询问题。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1967" target="_blank" class="text-bst hover:text-bst/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1967" target="_blank" class="text-bst hover:text-bst/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -847,32 +872,32 @@ int main() {
         // 初始化代码高亮
         document.addEventListener('DOMContentLoaded', function() {
             hljs.highlightAll();
-            
+
             // 操作按钮切换
             const opButtons = [
                 document.getElementById('op-insert'),
                 document.getElementById('op-search'),
                 document.getElementById('op-delete')
             ];
-            
+
             opButtons.forEach(btn => {
                 btn.addEventListener('click', function() {
                     // 重置所有按钮样式
                     opButtons.forEach(b => {
                         b.className = 'bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-md transition-all';
                     });
-                    
+
                     // 设置当前按钮样式
                     this.className = 'bg-bst text-white px-3 py-2 rounded-md transition-all';
                 });
             });
-            
+
             // 初始化BST
             let bstRoot = null;
             let steps = [];
             let currentStep = 0;
             let animationInterval = null;
-            
+
             // BST节点类
             class BSTNode {
                 constructor(val) {
@@ -881,25 +906,25 @@ int main() {
                     this.right = null;
                 }
             }
-            
+
             // 插入操作及步骤记录
             function insertAndRecord(root, val) {
                 steps = [];
                 steps.push(`开始插入值 ${val}`);
-                
+
                 if (root === null) {
                     steps.push(`树为空，创建新节点 ${val} 作为根节点`);
                     return new BSTNode(val);
                 }
-                
+
                 let current = root;
                 let parent = null;
                 let direction = '';
-                
+
                 while (current !== null) {
                     steps.push(`当前节点: ${current.val}`);
                     parent = current;
-                    
+
                     if (val < current.val) {
                         steps.push(`${val} < ${current.val}，移向左子树`);
                         current = current.left;
@@ -910,28 +935,28 @@ int main() {
                         direction = 'right';
                     }
                 }
-                
+
                 steps.push(`找到插入位置，在 ${parent.val} 的${direction}子树插入 ${val}`);
                 parent[direction] = new BSTNode(val);
                 steps.push(`插入完成`);
-                
+
                 return root;
             }
-            
+
             // 查找操作及步骤记录
             function searchAndRecord(root, val) {
                 steps = [];
                 steps.push(`开始查找值 ${val}`);
-                
+
                 if (root === null) {
                     steps.push(`树为空，未找到 ${val}`);
                     return false;
                 }
-                
+
                 let current = root;
                 while (current !== null) {
                     steps.push(`当前节点: ${current.val}`);
-                    
+
                     if (current.val === val) {
                         steps.push(`找到值 ${val}`);
                         return true;
@@ -943,16 +968,79 @@ int main() {
                         current = current.right;
                     }
                 }
-                
+
                 steps.push(`未找到值 ${val}`);
                 return false;
             }
-            
+
+            // 删除操作及步骤记录
+            function deleteAndRecord(root, val) {
+                steps = [];
+                steps.push(`开始删除值 ${val}`);
+                const result = removeNode(root, val);
+                if (!result.removed) {
+                    steps.push(`树中不存在 ${val}，结构保持不变`);
+                } else {
+                    steps.push(`删除完成，重新保持左小右大的搜索树性质`);
+                }
+                return result.root;
+            }
+
+            function removeNode(node, val) {
+                if (node === null) {
+                    steps.push(`到达空子树，未找到 ${val}`);
+                    return { root: null, removed: false };
+                }
+
+                steps.push(`当前节点: ${node.val}`);
+                if (val < node.val) {
+                    steps.push(`${val} < ${node.val}，进入左子树继续删除`);
+                    const result = removeNode(node.left, val);
+                    node.left = result.root;
+                    return { root: node, removed: result.removed };
+                }
+
+                if (val > node.val) {
+                    steps.push(`${val} > ${node.val}，进入右子树继续删除`);
+                    const result = removeNode(node.right, val);
+                    node.right = result.root;
+                    return { root: node, removed: result.removed };
+                }
+
+                steps.push(`找到待删除节点 ${val}`);
+                if (node.left === null && node.right === null) {
+                    steps.push(`${val} 是叶子节点，直接删除`);
+                    return { root: null, removed: true };
+                }
+
+                if (node.left === null) {
+                    steps.push(`${val} 只有右子树，用右子树接到父节点`);
+                    return { root: node.right, removed: true };
+                }
+
+                if (node.right === null) {
+                    steps.push(`${val} 只有左子树，用左子树接到父节点`);
+                    return { root: node.left, removed: true };
+                }
+
+                let successor = node.right;
+                steps.push(`${val} 有两个子树，寻找右子树中最小的后继节点`);
+                while (successor.left !== null) {
+                    steps.push(`后继候选 ${successor.val} 仍有左子树，继续向左`);
+                    successor = successor.left;
+                }
+                steps.push(`用后继节点 ${successor.val} 替换 ${val}`);
+                node.val = successor.val;
+                const result = removeNode(node.right, successor.val);
+                node.right = result.root;
+                return { root: node, removed: true };
+            }
+
             // 执行操作
             document.getElementById('bst-run').addEventListener('click', function() {
                 const value = parseInt(document.getElementById('bst-value').value);
                 let operation = '';
-                
+
                 // 确定当前选中的操作
                 if (document.getElementById('op-insert').classList.contains('bg-bst')) {
                     operation = 'insert';
@@ -960,12 +1048,8 @@ int main() {
                     operation = 'search';
                 } else if (document.getElementById('op-delete').classList.contains('bg-bst')) {
                     operation = 'delete';
-                    steps = [];
-                    steps.push('删除操作演示即将上线，敬请期待');
-                    startAnimation();
-                    return;
                 }
-                
+
                 // 执行相应操作
                 if (operation === 'insert') {
                     bstRoot = insertAndRecord(bstRoot, value);
@@ -975,54 +1059,59 @@ int main() {
                     searchAndRecord(bstRoot, value);
                     // 高亮查找相关代码
                     highlightCodeLines([23, 24, 25, 26, 27, 29, 30, 31, 32, 33, 34, 35]);
+                } else if (operation === 'delete') {
+                    bstRoot = deleteAndRecord(bstRoot, value);
+                    // 高亮删除相关代码
+                    highlightCodeLines([38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 52]);
                 }
-                
+
                 // 更新状态和可视化
-                document.getElementById('bst-status').textContent = `状态: 执行${operation === 'insert' ? '插入' : '查找'}操作`;
+                const operationName = operation === 'insert' ? '插入' : operation === 'search' ? '查找' : '删除';
+                document.getElementById('bst-status').textContent = `状态: 执行${operationName}操作`;
                 startAnimation();
             });
-            
+
             // 重置按钮
             document.getElementById('bst-reset').addEventListener('click', function() {
                 if (animationInterval) {
                     clearInterval(animationInterval);
                     animationInterval = null;
                 }
-                
+
                 bstRoot = null;
                 steps = [];
                 currentStep = 0;
-                
+
                 document.getElementById('bst-execution').innerHTML = `
                     <div class="text-center text-gray-500 py-12">
                         <i class="fa fa-tree mb-2 text-2xl"></i>
                         <p>选择操作并点击"执行"开始演示</p>
                     </div>
                 `;
-                
+
                 document.getElementById('bst-visualization').innerHTML = `
                     <div class="text-center text-gray-500">
                         <i class="fa fa-arrow-up mb-2"></i>
                         <p>执行操作后将在这里显示二叉搜索树</p>
                     </div>
                 `;
-                
+
                 document.getElementById('bst-status').textContent = '状态: 就绪 - 请选择操作和数值';
                 document.getElementById('bst-progress-bar').style.width = '0%';
-                
+
                 // 清除代码高亮
                 clearCodeHighlights();
             });
-            
+
             // 开始动画
             function startAnimation() {
                 if (animationInterval) {
                     clearInterval(animationInterval);
                 }
-                
+
                 currentStep = 0;
                 updateAnimationStep();
-                
+
                 animationInterval = setInterval(function() {
                     currentStep++;
                     if (currentStep >= steps.length) {
@@ -1035,7 +1124,7 @@ int main() {
                     updateAnimationStep();
                 }, 1500);
             }
-            
+
             // 更新动画步骤
             function updateAnimationStep() {
                 // 更新步骤显示
@@ -1044,23 +1133,25 @@ int main() {
                     stepsHtml += `<div class="p-2 ${i === currentStep ? 'bg-bst/10 rounded' : ''}">${i + 1}. ${steps[i]}</div>`;
                 }
                 document.getElementById('bst-execution').innerHTML = stepsHtml;
-                
+
                 // 更新进度条
                 const progress = ((currentStep + 1) / steps.length) * 100;
                 document.getElementById('bst-progress-bar').style.width = `${progress}%`;
-                
+
                 // 更新状态
                 document.getElementById('bst-status').textContent = `状态: ${steps[currentStep]}`;
-                
+
                 // 更新可视化（对于插入操作，逐步显示）
                 if (document.getElementById('op-insert').classList.contains('bg-bst')) {
                     visualizeBST(bstRoot);
                 } else if (document.getElementById('op-search').classList.contains('bg-bst')) {
                     const value = parseInt(document.getElementById('bst-value').value);
                     visualizeBST(bstRoot, value);
+                } else if (document.getElementById('op-delete').classList.contains('bg-bst')) {
+                    visualizeBST(bstRoot);
                 }
             }
-            
+
             // 可视化BST
             function visualizeBST(root, highlightValue = null) {
                 if (!root) {
@@ -1071,45 +1162,45 @@ int main() {
                     `;
                     return;
                 }
-                
+
                 // 创建可视化容器
                 const container = document.createElement('div');
                 container.className = 'w-full';
-                
+
                 // 递归构建树的HTML
                 function buildTreeHtml(node, isRoot = false) {
                     if (!node) return '';
-                    
-                    const isHighlighted = highlightValue !== null && 
-                                        (node.val === highlightValue || 
+
+                    const isHighlighted = highlightValue !== null &&
+                                        (node.val === highlightValue ||
                                          (highlightValue < node.val && node.left && node.left.val === highlightValue) ||
                                          (highlightValue > node.val && node.right && node.right.val === highlightValue));
-                    
+
                     const nodeClass = `bst-node ${isHighlighted ? 'bst-node-current' : ''} ${node.val === highlightValue ? 'bst-node-found' : ''}`;
-                    
+
                     let html = `<div class="flex flex-col items-center">`;
                     html += `<div class="${nodeClass}">${node.val}</div>`;
-                    
+
                     if (node.left || node.right) {
                         html += `<div class="flex justify-center w-full mt-4">`;
                         html += `<div class="mr-4">${buildTreeHtml(node.left)}</div>`;
                         html += `<div class="ml-4">${buildTreeHtml(node.right)}</div>`;
                         html += `</div>`;
                     }
-                    
+
                     html += `</div>`;
                     return html;
                 }
-                
+
                 container.innerHTML = buildTreeHtml(root, true);
                 document.getElementById('bst-visualization').innerHTML = '';
                 document.getElementById('bst-visualization').appendChild(container);
             }
-            
+
             // 高亮代码行
             function highlightCodeLines(lineNumbers) {
                 clearCodeHighlights();
-                
+
                 lineNumbers.forEach(line => {
                     const element = document.getElementById(`bst-code-${line}`);
                     if (element) {
@@ -1117,7 +1208,7 @@ int main() {
                     }
                 });
             }
-            
+
             // 清除代码高亮
             function clearCodeHighlights() {
                 document.querySelectorAll('#bst-code .code-line').forEach(el => {
@@ -1126,5 +1217,6 @@ int main() {
             }
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>线性搜索 - 艾科斯信奥网</title>
+
+    <meta name="description" content="线性搜索课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/suanfa/sousuosuanfa/xianxingsousuo.html">
+    <meta property="og:title" content="线性搜索 - 艾科斯信奥网">
+    <meta property="og:description" content="线性搜索课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/suanfa/sousuosuanfa/xianxingsousuo.html">
+<title>线性搜索 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -123,8 +130,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -198,7 +206,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="search-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -245,7 +253,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">线性搜索的基本步骤</h3>
                     <div class="space-y-3">
@@ -279,7 +287,7 @@
             <h2 class="text-2xl font-bold text-search mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 线性搜索过程演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 搜索动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -289,23 +297,23 @@
                             <p class="text-gray-700 mb-4">
                                 下面的动画展示了线性搜索的完整过程。算法会逐个检查数组元素，直到找到目标值或遍历完整个数组。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">设置搜索参数：</label>
-                                
+
                                 <div class="mb-3">
                                     <label class="block text-xs text-gray-600 mb-1">数组元素 (用逗号分隔)</label>
                                     <input type="text" id="array-input" value="12, 5, 9, 3, 17, 8, 21, 4"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-search">
                                 </div>
-                                
+
                                 <div>
                                     <label class="block text-xs text-gray-600 mb-1">目标值</label>
                                     <input type="number" id="target-input" value="17"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-search">
                                 </div>
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="search-run" class="bg-search hover:bg-search/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 开始搜索
@@ -317,12 +325,12 @@
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="search-status" class="animation-status mt-4">
                                 状态: 准备就绪
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 flex flex-col">
                                 <div class="text-center mb-4">数组元素</div>
@@ -334,7 +342,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="search-code">
                                 <div class="code-line" id="code-1">#include &lt;iostream&gt;</div>
@@ -377,7 +385,7 @@
             <h2 class="text-2xl font-bold text-search mb-6 flex items-center">
                 <i class="fa fa-code mr-2"></i> 线性搜索代码示例 (C++)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 基础实现 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -385,7 +393,7 @@
                     <p class="text-gray-700 mb-3">
                         基本的线性搜索实现，查找数组中是否存在目标元素并返回其索引
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 using namespace std;
 
@@ -408,26 +416,26 @@ int main() {
     int numbers[] = {5, 2, 9, 1, 5, 6};
     int size = sizeof(numbers) / sizeof(numbers[0]);
     int target = 9;
-    
+
     int index = linearSearch(numbers, size, target);
-    
+
     if (index != -1) {
         cout << "元素 " << target << " 找到，索引为: " << index << endl;
     } else {
         cout << "元素 " << target << " 未找到" << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 查找所有出现 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">2. 查找所有出现 - 多个匹配项</h3>
                     <p class="text-gray-700 mb-3">
                         查找目标元素在数组中所有出现的位置，并存储这些索引
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <vector>
 using namespace std;
@@ -435,13 +443,13 @@ using namespace std;
 // 查找目标元素所有出现的位置
 vector<int> findAllOccurrences(int arr[], int size, int target) {
     vector<int> indices; // 存储所有找到的索引
-    
+
     for (int i = 0; i < size; i++) {
         if (arr[i] == target) {
             indices.push_back(i); // 将找到的索引添加到向量中
         }
     }
-    
+
     return indices;
 }
 
@@ -449,9 +457,9 @@ int main() {
     int numbers[] = {5, 2, 5, 1, 5, 6};
     int size = sizeof(numbers) / sizeof(numbers[0]);
     int target = 5;
-    
+
     vector<int> results = findAllOccurrences(numbers, size, target);
-    
+
     if (results.empty()) {
         cout << "元素 " << target << " 未找到" << endl;
     } else {
@@ -464,18 +472,18 @@ int main() {
         }
         cout << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 查找最大值 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">3. 应用示例 - 查找最大值</h3>
                     <p class="text-gray-700 mb-3">
                         利用线性搜索的思想查找数组中的最大值
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 using namespace std;
 
@@ -484,10 +492,10 @@ int findMax(int arr[], int size) {
     if (size <= 0) {
         return -1; // 处理空数组情况
     }
-    
+
     int maxVal = arr[0]; // 假设第一个元素是最大值
     int maxIndex = 0;    // 记录最大值的索引
-    
+
     // 线性搜索整个数组
     for (int i = 1; i < size; i++) {
         if (arr[i] > maxVal) {
@@ -495,23 +503,23 @@ int findMax(int arr[], int size) {
             maxIndex = i;     // 更新最大值索引
         }
     }
-    
+
     return maxIndex; // 返回最大值的索引
 }
 
 int main() {
     int numbers[] = {5, 2, 9, 1, 5, 6};
     int size = sizeof(numbers) / sizeof(numbers[0]);
-    
+
     int maxIndex = findMax(numbers, size);
-    
+
     if (maxIndex != -1) {
-        cout << "数组中的最大值是: " << numbers[maxIndex] 
+        cout << "数组中的最大值是: " << numbers[maxIndex]
              << ", 位于索引 " << maxIndex << endl;
     } else {
         cout << "数组为空" << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
@@ -523,14 +531,14 @@ int main() {
             <h2 class="text-2xl font-bold text-search mb-6 flex items-center">
                 <i class="fa fa-clock-o mr-2"></i> 时间复杂度分析
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">线性搜索的效率分析</h3>
                     <p class="text-gray-700 mb-4">
                         线性搜索的时间复杂度为 O(n)，其中 n 是数组中的元素数量。这是因为在最坏情况下，我们可能需要检查数组中的所有元素。
                     </p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="bg-white p-3 rounded-lg border border-gray-200">
                             <h4 class="font-semibold text-green-600 mb-2">最佳情况</h4>
@@ -554,7 +562,7 @@ int main() {
                             </p>
                         </div>
                     </div>
-                    
+
                     <div class="mt-4">
                         <h4 class="font-semibold mb-2">空间复杂度</h4>
                         <p class="text-gray-700">
@@ -562,7 +570,7 @@ int main() {
                         </p>
                     </div>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">线性搜索的适用场景</h3>
                     <ul class="list-disc pl-5 space-y-2 text-gray-700">
@@ -572,7 +580,7 @@ int main() {
                         <li>数据结构不支持随机访问（如链表）</li>
                         <li>一次性搜索，不需要多次查询</li>
                     </ul>
-                    
+
                     <div class="mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded">
                         <p class="text-sm text-gray-700">
                             <i class="fa fa-lightbulb-o text-yellow-500 mr-2"></i>
@@ -588,7 +596,7 @@ int main() {
             <h2 class="text-2xl font-bold text-search mb-6 flex items-center">
                 <i class="fa fa-trophy mr-2"></i> 推荐练习题目 (洛谷)
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-green-600">模板题</h3>
@@ -601,11 +609,11 @@ int main() {
                             <p class="text-sm text-gray-600 mb-3">
                                 统计给定区间内数字的出现次数，适合练习基础线性搜索思想。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1179" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1179" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-green-300 transition-all duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P5728 找最小值</h4>
@@ -614,13 +622,13 @@ int main() {
                             <p class="text-sm text-gray-600 mb-3">
                                 找出数组中的最小值，直接应用线性搜索的思想。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P5728" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P5728" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-blue-600">入门题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -632,11 +640,11 @@ int main() {
                             <p class="text-sm text-gray-600 mb-3">
                                 在区间中标记被移除的树，需要多次线性搜索判断。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1047" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1047" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-blue-300 transition-all duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1428 小鱼比可爱</h4>
@@ -645,13 +653,13 @@ int main() {
                             <p class="text-sm text-gray-600 mb-3">
                                 对每个元素进行线性搜索，统计前面比它小的元素数量。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1428" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1428" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-purple-600">进阶题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -663,11 +671,11 @@ int main() {
                             <p class="text-sm text-gray-600 mb-3">
                                 判断序列是否为欢乐的跳，需要结合线性搜索检查元素是否存在。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1152" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1152" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-purple-300 transition-all duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1618 三连击（升级版）</h4>
@@ -676,7 +684,7 @@ int main() {
                             <p class="text-sm text-gray-600 mb-3">
                                 寻找满足比例的三个数，需要结合线性搜索检查数字是否重复。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1618" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1618" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -694,12 +702,12 @@ int main() {
         let searchComplete = false;
         let searchFound = false;
         let animationInterval;
-        
+
         // 初始化页面
         function initializeArray() {
             const arrayContainer = document.getElementById('array-visualization');
             arrayContainer.innerHTML = '';
-            
+
             // 从输入框获取数组
             const arrayInput = document.getElementById('array-input').value;
             if (arrayInput.trim() !== '') {
@@ -710,17 +718,17 @@ int main() {
                     return false;
                 }
             }
-            
+
             // 从输入框获取目标值
             const targetInput = document.getElementById('target-input').value;
             if (targetInput.trim() !== '') {
                 target = parseInt(targetInput);
             }
-            
+
             // 更新代码中的目标值
             document.getElementById('code-17').innerHTML = `&nbsp;&nbsp;int target = ${target};`;
             document.getElementById('code-15').innerHTML = `&nbsp;&nbsp;int arr[] = {${array.join(', ')}};`;
-            
+
             // 创建数组元素可视化
             array.forEach((value, index) => {
                 const element = document.createElement('div');
@@ -729,20 +737,20 @@ int main() {
                 element.textContent = value;
                 arrayContainer.appendChild(element);
             });
-            
+
             // 重置状态
             currentIndex = -1;
             searchComplete = false;
             searchFound = false;
             document.getElementById('search-result').textContent = '等待搜索开始...';
             document.getElementById('search-status').textContent = '状态: 准备就绪';
-            
+
             // 重置代码高亮
             resetCodeHighlight();
-            
+
             return true;
         }
-        
+
         // 重置代码高亮
         function resetCodeHighlight() {
             for (let i = 1; i <= 28; i++) {
@@ -750,7 +758,7 @@ int main() {
                 line.classList.remove('code-line-highlight');
             }
         }
-        
+
         // 高亮代码行
         function highlightCodeLine(lineNumber) {
             resetCodeHighlight();
@@ -759,7 +767,7 @@ int main() {
                 line.classList.add('code-line-highlight');
             }
         }
-        
+
         // 高亮当前数组元素
         function highlightCurrentElement() {
             // 重置所有元素样式
@@ -767,11 +775,11 @@ int main() {
                 const element = document.getElementById(`array-element-${index}`);
                 element.className = 'array-item array-item-normal';
             });
-            
+
             if (currentIndex >= 0 && currentIndex < array.length) {
                 const currentElement = document.getElementById(`array-element-${currentIndex}`);
                 currentElement.className = 'array-item array-item-current';
-                
+
                 // 如果找到目标，标记为找到状态
                 if (searchFound) {
                     currentElement.className = 'array-item array-item-found';
@@ -785,14 +793,14 @@ int main() {
                 }
             }
         }
-        
+
         // 执行一步搜索
         function stepSearch() {
             if (searchComplete) return;
-            
+
             // 移动到下一个元素
             currentIndex++;
-            
+
             // 检查是否超出数组范围
             if (currentIndex >= array.length) {
                 searchComplete = true;
@@ -803,13 +811,13 @@ int main() {
                 highlightCurrentElement();
                 return;
             }
-            
+
             // 更新状态
             document.getElementById('search-status').textContent = `状态: 检查索引 ${currentIndex}，值为 ${array[currentIndex]}`;
-            
+
             // 高亮当前代码行
             highlightCodeLine(6); // 高亮 for 循环行
-            
+
             // 检查当前元素是否为目标
             if (array[currentIndex] === target) {
                 searchComplete = true;
@@ -820,18 +828,18 @@ int main() {
             } else {
                 highlightCodeLine(7); // 高亮 if 判断行
             }
-            
+
             // 高亮当前元素
             highlightCurrentElement();
         }
-        
+
         // 开始自动搜索动画
         function startSearchAnimation() {
             if (searchComplete || animationInterval) return;
-            
+
             // 先初始化
             if (!initializeArray()) return;
-            
+
             // 开始动画
             animationInterval = setInterval(() => {
                 stepSearch();
@@ -841,21 +849,21 @@ int main() {
                 }
             }, 1000);
         }
-        
+
         // 单步执行
         function stepThroughSearch() {
             if (searchComplete) {
                 initializeArray();
                 return;
             }
-            
+
             if (currentIndex === -1) {
                 initializeArray();
             }
-            
+
             stepSearch();
         }
-        
+
         // 重置搜索
         function resetSearch() {
             if (animationInterval) {
@@ -864,19 +872,20 @@ int main() {
             }
             initializeArray();
         }
-        
+
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', () => {
             initializeArray();
-            
+
             // 绑定按钮事件
             document.getElementById('search-run').addEventListener('click', startSearchAnimation);
             document.getElementById('search-step').addEventListener('click', stepThroughSearch);
             document.getElementById('search-reset').addEventListener('click', resetSearch);
-            
+
             // 初始化代码高亮
             hljs.highlightAll();
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

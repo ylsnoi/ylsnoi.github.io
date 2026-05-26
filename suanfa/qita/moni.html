@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>模拟算法 - 艾科斯信奥网</title>
+
+    <meta name="description" content="模拟算法课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/suanfa/qita/moni.html">
+    <meta property="og:title" content="模拟算法 - 艾科斯信奥网">
+    <meta property="og:description" content="模拟算法课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/suanfa/qita/moni.html">
+<title>模拟算法 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -117,8 +124,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -192,7 +200,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="simulation-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -238,7 +246,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">模拟算法的适用场景</h3>
                     <p class="text-gray-700 mb-3">
@@ -271,7 +279,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">模拟算法的解题步骤</h3>
                     <div class="space-y-3 mt-3">
@@ -305,7 +313,7 @@
             <h2 class="text-2xl font-bold text-simulation mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 模拟算法过程演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 模拟算法动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -316,7 +324,7 @@
                                 下面的动画展示了一个简单的模拟算法过程：根据规则处理一系列数字，计算最终结果。
                                 示例展示如何模拟"逢7过"游戏的计数过程。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">输入游戏人数和最大数字:</label>
                                 <div class="grid grid-cols-2 gap-4">
@@ -332,7 +340,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="simulation-run" class="bg-simulation hover:bg-simulation/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 运行动画
@@ -344,16 +352,16 @@
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="simulation-status" class="animation-status mt-4">
                                 状态: 等待开始
                             </div>
-                            
+
                             <div class="animation-progress mt-4">
                                 <div id="simulation-progress-bar" class="animation-progress-bar" style="width: 0%"></div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="simulation-execution">
                                 <div class="text-center text-gray-500 py-8">
@@ -363,7 +371,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="simulation-code">
                                 <div class="code-line" id="sim-code-1">#include &lt;iostream&gt;</div>
@@ -409,7 +417,7 @@
             <h2 class="text-2xl font-bold text-simulation mb-6 flex items-center">
                 <i class="fa fa-code mr-2"></i> 模拟算法代码示例 (C++)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 日期模拟示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -417,7 +425,7 @@
                     <p class="text-gray-700 mb-3">
                         给定一个日期和天数n，计算n天后的日期，需要考虑月份天数和闰年
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 using namespace std;
 
@@ -441,18 +449,18 @@ int getDaysInMonth(int year, int month) {
 // 计算n天后的日期
 void addDays(int &year, int &month, int &day, int n) {
     day += n;  // 先将天数加上
-    
+
     // 处理天数超过当月天数的情况
     while (true) {
         int daysInMonth = getDaysInMonth(year, month);
         if (day <= daysInMonth) {
             break;  // 天数在合理范围内，退出循环
         }
-        
+
         // 减去当月天数，月份加1
         day -= daysInMonth;
         month++;
-        
+
         // 处理月份超过12的情况
         if (month > 12) {
             month = 1;
@@ -465,22 +473,22 @@ int main() {
     int year, month, day, n;
     cout << "请输入日期(年 月 日)和天数n: ";
     cin >> year >> month >> day >> n;
-    
+
     addDays(year, month, day, n);
-    
+
     cout << "n天后的日期是: " << year << "年" << month << "月" << day << "日" << endl;
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 模拟行走路线示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">2. 路径模拟 - 模拟机器人行走</h3>
                     <p class="text-gray-700 mb-3">
                         模拟机器人按照指令在网格中行走，计算最终位置和方向
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <string>
 using namespace std;
@@ -491,7 +499,7 @@ void simulateRobot(int &x, int &y, char &dir, string commands) {
     int dx[] = {0, 1, 0, -1};
     int dy[] = {1, 0, -1, 0};
     int direction = 0;  // 初始方向向北
-    
+
     // 根据初始方向设置direction值
     switch(dir) {
         case 'N': direction = 0; break;
@@ -499,7 +507,7 @@ void simulateRobot(int &x, int &y, char &dir, string commands) {
         case 'S': direction = 2; break;
         case 'W': direction = 3; break;
     }
-    
+
     // 执行每个命令
     for (char cmd : commands) {
         if (cmd == 'F') {
@@ -514,7 +522,7 @@ void simulateRobot(int &x, int &y, char &dir, string commands) {
             direction = (direction + 3) % 4;  // +3等同于-1取模
         }
     }
-    
+
     // 更新最终方向字符
     switch(direction) {
         case 0: dir = 'N'; break;
@@ -528,26 +536,26 @@ int main() {
     int x = 0, y = 0;
     char dir = 'N';  // 初始方向向北
     string commands;
-    
+
     cout << "请输入机器人指令(F=前进, R=右转, L=左转): ";
     cin >> commands;
-    
+
     simulateRobot(x, y, dir, commands);
-    
+
     cout << "最终位置: (" << x << ", " << y << ")" << endl;
     cout << "最终方向: " << dir << endl;
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 模拟排队示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">3. 过程模拟 - 银行排队模拟</h3>
                     <p class="text-gray-700 mb-3">
                         模拟银行窗口服务顾客的过程，计算平均等待时间
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <queue>
 using namespace std;
@@ -563,12 +571,12 @@ double simulateBankQueue(int windows, queue<Customer> customers) {
     vector<int> windowFreeTime(windows, 0);  // 每个窗口的空闲时间
     int totalWaitTime = 0;                  // 总等待时间
     int customerCount = customers.size();    // 顾客总数
-    
+
     // 处理所有顾客
     while (!customers.empty()) {
         Customer c = customers.front();
         customers.pop();
-        
+
         // 找到最早空闲的窗口
         int earliestWindow = 0;
         for (int i = 1; i < windows; i++) {
@@ -576,7 +584,7 @@ double simulateBankQueue(int windows, queue<Customer> customers) {
                 earliestWindow = i;
             }
         }
-        
+
         // 计算等待时间
         if (windowFreeTime[earliestWindow] > c.arriveTime) {
             totalWaitTime += windowFreeTime[earliestWindow] - c.arriveTime;
@@ -586,7 +594,7 @@ double simulateBankQueue(int windows, queue<Customer> customers) {
             windowFreeTime[earliestWindow] = c.arriveTime + c.serviceTime;
         }
     }
-    
+
     // 返回平均等待时间
     return (double)totalWaitTime / customerCount;
 }
@@ -595,7 +603,7 @@ int main() {
     int n, windows;
     cout << "请输入顾客数量和窗口数量: ";
     cin >> n >> windows;
-    
+
     queue<Customer> customers;
     for (int i = 0; i < n; i++) {
         Customer c;
@@ -603,10 +611,10 @@ int main() {
         cin >> c.arriveTime >> c.serviceTime;
         customers.push(c);
     }
-    
+
     double avgWait = simulateBankQueue(windows, customers);
     cout << "平均等待时间: " << avgWait << "分钟" << endl;
-    
+
     return 0;
 }</code></pre>
                 </div>
@@ -618,7 +626,7 @@ int main() {
             <h2 class="text-2xl font-bold text-simulation mb-6 flex items-center">
                 <i class="fa fa-lightbulb-o mr-2"></i> 模拟算法的优化技巧
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-gray-50 p-4 rounded-lg">
@@ -649,7 +657,7 @@ for (int i = 0; i < n; i++) {
     }
 }</code></pre>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h3 class="font-semibold text-lg mb-3">批量处理代替逐个处理</h3>
                         <p class="text-gray-700 mb-3">
@@ -685,7 +693,7 @@ while (pos < total) {
 }</code></pre>
                     </div>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">选择合适的数据结构</h3>
                     <p class="text-gray-700 mb-3">
@@ -738,7 +746,7 @@ while (pos < total) {
             <h2 class="text-2xl font-bold text-simulation mb-6 flex items-center">
                 <i class="fa fa-trophy mr-2"></i> 推荐练习题 (洛谷)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 模板题 -->
                 <div>
@@ -752,11 +760,11 @@ while (pos < total) {
                             <p class="text-gray-600 text-sm mb-3">
                                 在平面上铺设多个矩形地毯，查询指定点被多少个地毯覆盖。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1003" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1003" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white border border-gray-200 rounded-lg p-4 hover:border-simulation transition-colors duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1067 多项式输出</h4>
@@ -765,11 +773,11 @@ while (pos < total) {
                             <p class="text-gray-600 text-sm mb-3">
                                 根据给定的多项式系数，按照规定格式输出多项式。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1067" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1067" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white border border-gray-200 rounded-lg p-4 hover:border-simulation transition-colors duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1425 小鱼的游泳时间</h4>
@@ -778,13 +786,13 @@ while (pos < total) {
                             <p class="text-gray-600 text-sm mb-3">
                                 计算小鱼从开始游泳到结束游泳的时间差。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1425" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1425" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 入门题 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary">入门题</h3>
@@ -797,11 +805,11 @@ while (pos < total) {
                             <p class="text-gray-600 text-sm mb-3">
                                 按照特定规则生成数字序列，计算可以生成的数字总数。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1028" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1028" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white border border-gray-200 rounded-lg p-4 hover:border-simulation transition-colors duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1152 欢乐的跳</h4>
@@ -810,11 +818,11 @@ while (pos < total) {
                             <p class="text-gray-600 text-sm mb-3">
                                 判断一个数组是否为"欢乐的跳"，即相邻元素差是否覆盖1到n-1的所有整数。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1152" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1152" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white border border-gray-200 rounded-lg p-4 hover:border-simulation transition-colors duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1563 玩具谜题</h4>
@@ -823,13 +831,13 @@ while (pos < total) {
                             <p class="text-gray-600 text-sm mb-3">
                                 模拟玩具小人转圈的过程，根据指令找到最终指向的小人。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1563" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1563" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 进阶题 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary">进阶题</h3>
@@ -842,11 +850,11 @@ while (pos < total) {
                             <p class="text-gray-600 text-sm mb-3">
                                 根据特定规则展开字符串中的简写表达式，如将a-d展开为abcd。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1098" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1098" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white border border-gray-200 rounded-lg p-4 hover:border-simulation transition-colors duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1192 台阶问题</h4>
@@ -855,11 +863,11 @@ while (pos < total) {
                             <p class="text-gray-600 text-sm mb-3">
                                 模拟上台阶的过程，每次可以上1到k级台阶，计算总共有多少种不同的走法。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1192" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1192" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white border border-gray-200 rounded-lg p-4 hover:border-simulation transition-colors duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1057 传球游戏</h4>
@@ -868,7 +876,7 @@ while (pos < total) {
                             <p class="text-gray-600 text-sm mb-3">
                                 模拟n个同学传球的过程，经过m次传球后回到发球者手中的方法数。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1057" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1057" target="_blank" class="text-simulation hover:text-simulation/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -882,7 +890,7 @@ while (pos < total) {
         // 初始化代码高亮
         document.addEventListener('DOMContentLoaded', function() {
             hljs.highlightAll();
-            
+
             // 模拟算法动画演示功能
             const runBtn = document.getElementById('simulation-run');
             const stepBtn = document.getElementById('simulation-step');
@@ -894,13 +902,13 @@ while (pos < total) {
             const maxNumberInput = document.getElementById('max-number');
             const codePlayers = document.getElementById('sim-players');
             const codeMaxnum = document.getElementById('sim-maxnum');
-            
+
             // 代码行元素
             const codeLines = [];
             for (let i = 1; i <= 31; i++) {
                 codeLines.push(document.getElementById(`sim-code-${i}`));
             }
-            
+
             // 模拟状态
             let simulationState = {
                 running: false,
@@ -913,24 +921,24 @@ while (pos < total) {
                 currentNumber: 1,
                 interval: null
             };
-            
+
             // 更新代码中的数值
             playerCountInput.addEventListener('input', function() {
                 simulationState.players = parseInt(this.value) || 5;
                 codePlayers.textContent = simulationState.players;
             });
-            
+
             maxNumberInput.addEventListener('input', function() {
                 simulationState.maxNum = parseInt(this.value) || 20;
                 codeMaxnum.textContent = simulationState.maxNum;
             });
-            
+
             // 重置模拟
             function resetSimulation() {
                 if (simulationState.interval) {
                     clearInterval(simulationState.interval);
                 }
-                
+
                 simulationState = {
                     running: false,
                     stepMode: false,
@@ -942,7 +950,7 @@ while (pos < total) {
                     currentNumber: 1,
                     interval: null
                 };
-                
+
                 // 重置UI
                 statusEl.textContent = "状态: 等待开始";
                 statusEl.classList.remove('hidden');
@@ -954,18 +962,18 @@ while (pos < total) {
                     </div>
                 `;
                 progressBar.style.width = "0%";
-                
+
                 // 重置代码高亮
                 codeLines.forEach(line => {
                     line.classList.remove('code-line-highlight');
                 });
             }
-            
+
             // 检查是否需要说"过"
             function needPass(num) {
                 return num % 7 === 0 || num % 10 === 7 || Math.floor(num / 10) === 7;
             }
-            
+
             // 执行一步模拟
             function executeStep() {
                 if (simulationState.currentNumber > simulationState.maxNum) {
@@ -975,30 +983,30 @@ while (pos < total) {
                     if (simulationState.interval) {
                         clearInterval(simulationState.interval);
                     }
-                    
+
                     // 取消所有代码高亮
                     codeLines.forEach(line => {
                         line.classList.remove('code-line-highlight');
                     });
                     return false;
                 }
-                
+
                 // 更新状态
                 simulationState.currentStep++;
                 const progress = (simulationState.currentStep / simulationState.totalSteps) * 100;
                 progressBar.style.width = `${progress}%`;
                 statusEl.textContent = `状态: 正在执行 (步骤 ${simulationState.currentStep}/${simulationState.totalSteps})`;
-                
+
                 // 取消所有代码高亮
                 codeLines.forEach(line => {
                     line.classList.remove('code-line-highlight');
                 });
-                
+
                 // 高亮当前执行的代码行
                 codeLines[13].classList.add('code-line-highlight'); // for循环行
                 codeLines[14].classList.add('code-line-highlight'); // 输出玩家
                 codeLines[16].classList.add('code-line-highlight'); // if判断
-                
+
                 // 判断是否需要说"过"
                 const pass = needPass(simulationState.currentNumber);
                 if (pass) {
@@ -1008,46 +1016,46 @@ while (pos < total) {
                     codeLines[19].classList.add('code-line-highlight'); // else分支
                     codeLines[20].classList.add('code-line-highlight'); // 输出数字
                 }
-                
+
                 codeLines[23].classList.add('code-line-highlight'); // 切换玩家注释
                 codeLines[24].classList.add('code-line-highlight'); // currentPlayer++
                 codeLines[25].classList.add('code-line-highlight'); // if判断
                 codeLines[26].classList.add('code-line-highlight'); // 重置currentPlayer
-                
+
                 // 记录执行步骤
                 const stepEl = document.createElement('div');
                 stepEl.className = 'execution-step';
                 stepEl.innerHTML = `
-                    <strong>步骤 ${simulationState.currentStep}:</strong> 
+                    <strong>步骤 ${simulationState.currentStep}:</strong>
                     玩家${simulationState.currentPlayer} ${pass ? '说"过"' : `说"${simulationState.currentNumber}"`}
                 `;
                 executionEl.appendChild(stepEl);
                 executionEl.scrollTop = executionEl.scrollHeight;
-                
+
                 // 更新玩家
                 simulationState.currentPlayer++;
                 if (simulationState.currentPlayer > simulationState.players) {
                     simulationState.currentPlayer = 1;
                 }
-                
+
                 // 更新数字
                 simulationState.currentNumber++;
-                
+
                 return true;
             }
-            
+
             // 运行模拟
             function runSimulation() {
                 if (simulationState.running) return;
-                
+
                 simulationState.running = true;
                 simulationState.stepMode = false;
-                
+
                 // 清除任何现有间隔
                 if (simulationState.interval) {
                     clearInterval(simulationState.interval);
                 }
-                
+
                 // 设置新间隔
                 simulationState.interval = setInterval(() => {
                     if (!executeStep()) {
@@ -1056,7 +1064,7 @@ while (pos < total) {
                     }
                 }, 1000);
             }
-            
+
             // 绑定按钮事件
             runBtn.addEventListener('click', runSimulation);
             stepBtn.addEventListener('click', () => {
@@ -1066,10 +1074,11 @@ while (pos < total) {
                 }
             });
             resetBtn.addEventListener('click', resetSimulation);
-            
+
             // 初始化
             resetSimulation();
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

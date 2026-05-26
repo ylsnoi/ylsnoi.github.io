@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>弗洛伊德最短路算法 - 艾科斯信奥网</title>
+
+    <meta name="description" content="弗洛伊德最短路算法课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/suanfa/sousuosuanfa/floyd.html">
+    <meta property="og:title" content="弗洛伊德最短路算法 - 艾科斯信奥网">
+    <meta property="og:description" content="弗洛伊德最短路算法课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/suanfa/sousuosuanfa/floyd.html">
+<title>弗洛伊德最短路算法 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -123,8 +130,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -198,7 +206,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="floyd-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -245,14 +253,14 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">算法基本思想</h3>
                     <p class="text-gray-700 mb-3">
                         弗洛伊德算法的核心思想是"松弛"操作，通过考虑从顶点i到顶点j是否经过顶点k可以缩短路径长度，来更新最短路径。
                         算法的基本步骤如下：
                     </p>
-                    
+
                     <div class="space-y-3">
                         <div class="step-item">
                             <span class="step-number">1</span>
@@ -261,7 +269,7 @@
                                 <p class="text-sm text-gray-700">创建一个n×n的距离矩阵dist，其中dist[i][j]表示从顶点i到顶点j的初始距离。</p>
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <span class="step-number">2</span>
                             <div>
@@ -270,7 +278,7 @@
                                 如果经过k的路径比当前路径更短，则更新dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])。</p>
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <span class="step-number">3</span>
                             <div>
@@ -279,7 +287,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="mt-4">
                         <h4 class="font-semibold mb-2">核心递推公式</h4>
                         <div class="bg-gray-800 text-white p-3 rounded-lg text-center">
@@ -298,7 +306,7 @@
             <h2 class="text-2xl font-bold text-floyd mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 弗洛伊德算法执行过程演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 算法执行动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -309,7 +317,7 @@
                                 下面的动画展示了Floyd算法计算所有顶点对之间最短路径的完整过程。
                                 示例使用一个4顶点的带权图，演示距离矩阵如何逐步更新。
                             </p>
-                            
+
                             <div class="flex space-x-2 mb-4">
                                 <button id="floyd-run" class="bg-floyd hover:bg-floyd/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 运行动画
@@ -321,11 +329,11 @@
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="floyd-status" class="animation-status">
                                 状态: 等待开始
                             </div>
-                            
+
                             <div class="mt-4">
                                 <h4 class="font-medium text-sm mb-2">当前中间顶点k:</h4>
                                 <div id="current-k" class="bg-gray-200 w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl">
@@ -333,7 +341,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-80 overflow-y-auto" id="floyd-execution">
                                 <div class="text-center text-gray-500 py-10">
@@ -342,7 +350,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-80 overflow-y-auto font-mono text-sm" id="floyd-code">
                                 <div class="code-line" id="floyd-code-1">#include &lt;iostream&gt;</div>
@@ -399,7 +407,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- 距离矩阵可视化 -->
                     <div class="mt-6">
                         <h4 class="font-semibold mb-3">距离矩阵动态变化</h4>
@@ -454,11 +462,11 @@
             <h2 class="text-2xl font-bold text-floyd mb-6 flex items-center">
                 <i class="fa fa-code-fork mr-2"></i> 弗洛伊德算法实现详解
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">算法实现步骤</h3>
-                    
+
                     <div class="space-y-4">
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h4 class="font-semibold text-floyd mb-2">1. 数据结构选择</h4>
@@ -474,7 +482,7 @@
 const int MAXN = 100; // 最大顶点数
 int dist[MAXN][MAXN]; // 距离矩阵</code></pre>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h4 class="font-semibold text-floyd mb-2">2. 初始化距离矩阵</h4>
                             <p class="text-gray-700 mb-2">
@@ -492,7 +500,7 @@ void init(int n) {
             }
         }
     }
-    
+
     // 2. 读入边的信息，更新距离矩阵
     // 假设有m条边
     int m, u, v, w;
@@ -500,13 +508,13 @@ void init(int n) {
     for (int i = 0; i < m; i++) {
         cin >> u >> v >> w; // 读入一条从u到v的边，权重为w
         dist[u][v] = w;
-        
+
         // 如果是无向图，还需要添加下面一行
         // dist[v][u] = w;
     }
 }</code></pre>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h4 class="font-semibold text-floyd mb-2">3. 核心算法实现</h4>
                             <p class="text-gray-700 mb-2">
@@ -521,7 +529,7 @@ void floyd(int n) {
             // j为终点
             for (int j = 0; j < n; j++) {
                 // 松弛操作：如果经过k的路径更短，则更新
-                if (dist[i][k] != INF && dist[k][j] != INF && 
+                if (dist[i][k] != INF && dist[k][j] != INF &&
                     dist[i][j] > dist[i][k] + dist[k][j]) {
                     dist[i][j] = dist[i][k] + dist[k][j];
                 }
@@ -533,7 +541,7 @@ void floyd(int n) {
                                 注意：必须先判断dist[i][k]和dist[k][j]是否为INF，否则可能会因为整数溢出导致错误结果。
                             </p>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h4 class="font-semibold text-floyd mb-2">4. 输出最短路径</h4>
                             <p class="text-gray-700 mb-2">
@@ -555,7 +563,7 @@ void printResult(int n) {
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">完整代码示例</h3>
                     <p class="text-gray-700 mb-3">
@@ -588,7 +596,7 @@ void floyd(int n) {
             // j为终点
             for (int j = 0; j < n; j++) {
                 // 松弛操作：如果经过k的路径更短，则更新
-                if (dist[i][k] != INF && dist[k][j] != INF && 
+                if (dist[i][k] != INF && dist[k][j] != INF &&
                     dist[i][j] > dist[i][k] + dist[k][j]) {
                     dist[i][j] = dist[i][k] + dist[k][j];
                 }
@@ -616,23 +624,23 @@ int main() {
     int n, m;
     cout << "请输入顶点数和边数：";
     cin >> n >> m;
-    
+
     init(n);
-    
+
     cout << "请输入" << m << "条边的信息（u v w）：" << endl;
     for (int i = 0; i < m; i++) {
         int u, v, w;
         cin >> u >> v >> w;
         dist[u][v] = w;
     }
-    
+
     floyd(n);
     printResult(n);
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">路径记录与输出</h3>
                     <p class="text-gray-700 mb-3">
@@ -663,7 +671,7 @@ void floyd(int n) {
     for (int k = 0; k < n; k++) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                if (dist[i][k] != INF && dist[k][j] != INF && 
+                if (dist[i][k] != INF && dist[k][j] != INF &&
                     dist[i][j] > dist[i][k] + dist[k][j]) {
                     dist[i][j] = dist[i][k] + dist[k][j];
                     path[i][j] = k; // 记录路径：i到j的路径经过k
@@ -706,7 +714,7 @@ int main() {
             <h2 class="text-2xl font-bold text-floyd mb-6 flex items-center">
                 <i class="fa fa-line-chart mr-2"></i> 算法分析与优化
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-gray-50 p-4 rounded-lg">
@@ -724,7 +732,7 @@ int main() {
                             空间复杂度为O(n²)，主要用于存储距离矩阵。
                         </p>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h3 class="font-semibold text-lg mb-3">适用场景</h3>
                         <p class="text-gray-700 mb-3">
@@ -741,7 +749,7 @@ int main() {
                         </p>
                     </div>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">常见优化与注意事项</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -752,7 +760,7 @@ int main() {
                                 例如：如果最大边权为1e5，顶点数为1e3，则INF应大于1e8（1e5×1e3）。
                             </p>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-semibold text-floyd mb-2">2. 负权回路检测</h4>
                             <p class="text-gray-700 text-sm">
@@ -760,14 +768,14 @@ int main() {
                                 则说明从顶点i出发经过某个回路回到i的总权值为负。
                             </p>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-semibold text-floyd mb-2">3. 无向图处理</h4>
                             <p class="text-gray-700 text-sm">
                                 对于无向图，每条边需要在矩阵中对称存储，即dist[u][v] = dist[v][u] = w。
                             </p>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-semibold text-floyd mb-2">4. 稀疏图优化</h4>
                             <p class="text-gray-700 text-sm">
@@ -776,7 +784,7 @@ int main() {
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">与其他最短路径算法的比较</h3>
                     <div class="overflow-x-auto">
@@ -826,7 +834,7 @@ int main() {
             <h2 class="text-2xl font-bold text-floyd mb-6 flex items-center">
                 <i class="fa fa-tasks mr-2"></i> 推荐练习题（洛谷）
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary">1. 模板题</h3>
@@ -845,12 +853,12 @@ int main() {
                                 <div class="text-sm text-gray-500">
                                     <i class="fa fa-clock-o mr-1"></i> 时间限制：1.00s
                                 </div>
-                                <a href="https://www.luogu.com.cn/problem/P1144" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <a href="https://www.luogu.com.cn/problem/P1144" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                     查看题目 <i class="fa fa-external-link ml-1"></i>
                                 </a>
                             </div>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg hover-scale">
                             <div class="flex justify-between items-start">
                                 <div>
@@ -865,14 +873,14 @@ int main() {
                                 <div class="text-sm text-gray-500">
                                     <i class="fa fa-clock-o mr-1"></i> 时间限制：1.00s
                                 </div>
-                                <a href="https://www.luogu.com.cn/problem/P2910" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <a href="https://www.luogu.com.cn/problem/P2910" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                     查看题目 <i class="fa fa-external-link ml-1"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary">2. 入门题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -890,12 +898,12 @@ int main() {
                                 <div class="text-sm text-gray-500">
                                     <i class="fa fa-clock-o mr-1"></i> 时间限制：1.00s
                                 </div>
-                                <a href="https://www.luogu.com.cn/problem/P1346" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <a href="https://www.luogu.com.cn/problem/P1346" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                     查看题目 <i class="fa fa-external-link ml-1"></i>
                                 </a>
                             </div>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg hover-scale">
                             <div class="flex justify-between items-start">
                                 <div>
@@ -910,14 +918,14 @@ int main() {
                                 <div class="text-sm text-gray-500">
                                     <i class="fa fa-clock-o mr-1"></i> 时间限制：1.00s
                                 </div>
-                                <a href="https://www.luogu.com.cn/problem/P2888" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <a href="https://www.luogu.com.cn/problem/P2888" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                     查看题目 <i class="fa fa-external-link ml-1"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary">3. 进阶题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -935,12 +943,12 @@ int main() {
                                 <div class="text-sm text-gray-500">
                                     <i class="fa fa-clock-o mr-1"></i> 时间限制：1.00s
                                 </div>
-                                <a href="https://www.luogu.com.cn/problem/P1119" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <a href="https://www.luogu.com.cn/problem/P1119" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                     查看题目 <i class="fa fa-external-link ml-1"></i>
                                 </a>
                             </div>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg hover-scale">
                             <div class="flex justify-between items-start">
                                 <div>
@@ -955,7 +963,7 @@ int main() {
                                 <div class="text-sm text-gray-500">
                                     <i class="fa fa-clock-o mr-1"></i> 时间限制：1.00s
                                 </div>
-                                <a href="https://www.luogu.com.cn/problem/P3385" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                                <a href="https://www.luogu.com.cn/problem/P3385" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                     查看题目 <i class="fa fa-external-link ml-1"></i>
                                 </a>
                             </div>
@@ -970,7 +978,7 @@ int main() {
         // 初始化代码高亮
         document.addEventListener('DOMContentLoaded', function() {
             hljs.highlightAll();
-            
+
             // 初始化Floyd算法演示数据
             const initialDist = [
                 [0, 5, "INF", 10],
@@ -978,7 +986,7 @@ int main() {
                 ["INF", "INF", 0, 1],
                 ["INF", "INF", "INF", 0]
             ];
-            
+
             // 算法执行步骤
             const steps = [
                 {k: 0, i: 0, j: 0, action: "开始处理k=0", codeLines: [11]},
@@ -1047,19 +1055,19 @@ int main() {
                 {k: 3, i: 3, j: 3, action: "检查i=3,j=3: 不更新", codeLines: [13,15]},
                 {k: -1, i: -1, j: -1, action: "算法执行完成！所有顶点对之间的最短路径已计算完毕", codeLines: []}
             ];
-            
+
             let currentStep = 0;
             let isRunning = false;
             let animationInterval;
             let currentDist = JSON.parse(JSON.stringify(initialDist));
-            
+
             // 重置演示
             function resetDemo() {
                 currentStep = 0;
                 isRunning = false;
                 clearInterval(animationInterval);
                 currentDist = JSON.parse(JSON.stringify(initialDist));
-                
+
                 // 重置矩阵显示
                 for (let i = 0; i < 4; i++) {
                     for (let j = 0; j < 4; j++) {
@@ -1067,13 +1075,13 @@ int main() {
                         document.getElementById(`dist-${i}-${j}`).classList.remove('matrix-cell-highlight');
                     }
                 }
-                
+
                 // 重置代码高亮
                 for (let i = 1; i <= 51; i++) {
                     const line = document.getElementById(`floyd-code-${i}`);
                     if (line) line.classList.remove('code-line-highlight');
                 }
-                
+
                 // 重置状态
                 document.getElementById('floyd-status').textContent = '状态: 等待开始';
                 document.getElementById('current-k').textContent = '-';
@@ -1084,7 +1092,7 @@ int main() {
                     </div>
                 `;
             }
-            
+
             // 执行下一步
             function executeStep() {
                 if (currentStep >= steps.length) {
@@ -1092,34 +1100,34 @@ int main() {
                     clearInterval(animationInterval);
                     return;
                 }
-                
+
                 // 清除上一步的高亮
                 for (let i = 1; i <= 51; i++) {
                     const line = document.getElementById(`floyd-code-${i}`);
                     if (line) line.classList.remove('code-line-highlight');
                 }
-                
+
                 // 清除上一步的矩阵高亮
                 for (let i = 0; i < 4; i++) {
                     for (let j = 0; j < 4; j++) {
                         document.getElementById(`dist-${i}-${j}`).classList.remove('matrix-cell-highlight');
                     }
                 }
-                
+
                 const step = steps[currentStep];
-                
+
                 // 更新状态
                 document.getElementById('floyd-status').textContent = `状态: ${step.action}`;
-                
+
                 // 更新当前k值
                 document.getElementById('current-k').textContent = step.k !== -1 ? step.k : '-';
-                
+
                 // 高亮当前代码行
                 step.codeLines.forEach(lineNum => {
                     const line = document.getElementById(`floyd-code-${lineNum}`);
                     if (line) line.classList.add('code-line-highlight');
                 });
-                
+
                 // 更新执行日志
                 const executionLog = document.getElementById('floyd-execution');
                 const logEntry = document.createElement('div');
@@ -1131,7 +1139,7 @@ int main() {
                 }
                 executionLog.appendChild(logEntry);
                 executionLog.scrollTop = executionLog.scrollHeight;
-                
+
                 // 更新距离矩阵
                 if (step.dist) {
                     for (const i in step.dist) {
@@ -1145,17 +1153,17 @@ int main() {
                     // 高亮当前正在检查的单元格
                     document.getElementById(`dist-${step.i}-${step.j}`).classList.add('matrix-cell-highlight');
                 }
-                
+
                 currentStep++;
             }
-            
+
             // 自动播放动画
             function startAnimation() {
                 if (isRunning) return;
-                
+
                 isRunning = true;
                 document.getElementById('floyd-status').textContent = '状态: 动画运行中...';
-                
+
                 animationInterval = setInterval(() => {
                     if (currentStep >= steps.length) {
                         clearInterval(animationInterval);
@@ -1166,7 +1174,7 @@ int main() {
                     executeStep();
                 }, 1000);
             }
-            
+
             // 绑定按钮事件
             document.getElementById('floyd-run').addEventListener('click', startAnimation);
             document.getElementById('floyd-step').addEventListener('click', () => {
@@ -1174,10 +1182,11 @@ int main() {
                 executeStep();
             });
             document.getElementById('floyd-reset').addEventListener('click', resetDemo);
-            
+
             // 初始化演示
             resetDemo();
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

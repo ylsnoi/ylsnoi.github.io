@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>复杂度分析 - 艾科斯信奥网</title>
+
+    <meta name="description" content="复杂度分析课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/chusai/shuxue/fuzadu.html">
+    <meta property="og:title" content="复杂度分析 - 艾科斯信奥网">
+    <meta property="og:description" content="复杂度分析课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/chusai/shuxue/fuzadu.html">
+<title>复杂度分析 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -100,8 +107,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -169,7 +177,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="complexity-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -291,7 +299,7 @@
             <h2 class="text-2xl font-bold text-complexity mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 时间复杂度动态演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 不同复杂度对比 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -302,10 +310,10 @@
                                 下面的动画展示了不同复杂度随输入规模n增长时的执行步骤数量变化。
                                 拖动滑块可以改变n的值，观察各种复杂度的增长速度差异。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">输入规模n:</label>
-                                <input type="range" id="complexity-n" min="1" max="10" value="5" 
+                                <input type="range" id="complexity-n" min="1" max="10" value="5"
                                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-complexity">
                                 <div class="flex justify-between text-xs text-gray-500 mt-1">
                                     <span>1</span>
@@ -313,7 +321,7 @@
                                     <span>10</span>
                                 </div>
                             </div>
-                            
+
                             <div class="grid grid-cols-2 gap-2 mb-4">
                                 <div class="flex items-center">
                                     <span class="time-unit time-unit-constant mr-2"></span>
@@ -332,12 +340,12 @@
                                     <span class="text-sm">O(2ⁿ) - 指数</span>
                                 </div>
                             </div>
-                            
+
                             <div id="complexity-status" class="animation-status">
                                 当前n=5时的步骤数: O(1)=1, O(n)=5, O(n²)=25, O(2ⁿ)=32
                             </div>
                         </div>
-                        
+
                         <div>
                             <div class="bg-white border border-gray-200 rounded-lg p-4 min-h-[300px]" id="complexity-visualization">
                                 <div class="flex flex-wrap justify-center gap-1" id="complexity-bars">
@@ -347,7 +355,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 循环复杂度演示 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">循环结构的时间复杂度分析</h3>
@@ -356,7 +364,7 @@
                             <p class="text-gray-700 mb-4">
                                 选择不同的循环结构，观察其时间复杂度的计算过程：
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">选择循环类型:</label>
                                 <select id="loop-type" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-complexity">
@@ -366,7 +374,7 @@
                                     <option value="mixed">混合循环</option>
                                 </select>
                             </div>
-                            
+
                             <div class="animation-controls">
                                 <button id="loop-analyze" class="bg-complexity hover:bg-complexity/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-calculator mr-2"></i> 分析复杂度
@@ -375,7 +383,7 @@
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="loop-analysis-result" class="mt-4 p-3 bg-white rounded-lg border border-gray-200 hidden">
                                 <h4 class="font-semibold mb-2">复杂度分析结果</h4>
                                 <div id="loop-analysis-content">
@@ -383,7 +391,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div>
                             <div class="bg-white border border-gray-200 rounded-lg p-4" id="loop-code-container">
                                 <pre class="code-block"><code class="language-cpp" id="loop-code">// 单重循环示例
@@ -408,12 +416,12 @@ for (int i = 0; i < n; i++) {
             <h2 class="text-2xl font-bold text-complexity mb-6 flex items-center">
                 <i class="fa fa-calculator mr-2"></i> 复杂度计算方法
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 时间复杂度计算 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">时间复杂度计算规则</h3>
-                    
+
                     <div class="space-y-4">
                         <div class="step-item">
                             <div class="step-number">1</div>
@@ -421,7 +429,7 @@ for (int i = 0; i < n; i++) {
                                 <strong>基本操作规则</strong>：基本操作（如赋值、比较、算术运算等）的时间复杂度为O(1)
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <div class="step-number">2</div>
                             <div>
@@ -431,7 +439,7 @@ for (int i = 0; i < n; i++) {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <div class="step-number">3</div>
                             <div>
@@ -441,7 +449,7 @@ for (int i = 0; i < n; i++) {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <div class="step-number">4</div>
                             <div>
@@ -451,7 +459,7 @@ for (int i = 0; i < n; i++) {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <div class="step-number">5</div>
                             <div>
@@ -463,11 +471,11 @@ for (int i = 0; i < n; i++) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 空间复杂度计算 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">空间复杂度计算规则</h3>
-                    
+
                     <div class="space-y-4">
                         <div class="step-item">
                             <div class="step-number">1</div>
@@ -475,7 +483,7 @@ for (int i = 0; i < n; i++) {
                                 <strong>基本空间规则</strong>：基本数据类型（int、char等）占用常数空间，复杂度为O(1)
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <div class="step-number">2</div>
                             <div>
@@ -485,7 +493,7 @@ for (int i = 0; i < n; i++) {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <div class="step-number">3</div>
                             <div>
@@ -495,7 +503,7 @@ for (int i = 0; i < n; i++) {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="step-item">
                             <div class="step-number">4</div>
                             <div>
@@ -515,7 +523,7 @@ for (int i = 0; i < n; i++) {
             <h2 class="text-2xl font-bold text-complexity mb-6 flex items-center">
                 <i class="fa fa-lightbulb-o mr-2"></i> CSP初赛复杂度分析解题技巧
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="example-card">
                     <h3 class="font-semibold text-lg mb-3">快速判断复杂度的实用技巧</h3>
@@ -527,7 +535,7 @@ for (int i = 0; i < n; i++) {
                         <li><strong>常数忽略法</strong>：系数和低阶项可以忽略，关注最高阶项</li>
                     </ul>
                 </div>
-                
+
                 <div class="example-card">
                     <h3 class="font-semibold text-lg mb-3">常见陷阱与注意事项</h3>
                     <ul class="list-disc pl-6 space-y-2">
@@ -538,7 +546,7 @@ for (int i = 0; i < n; i++) {
                         <li>CSP初赛中，通常只要求计算时间复杂度，但若题目明确要求，也需计算空间复杂度</li>
                     </ul>
                 </div>
-                
+
                 <div class="example-card">
                     <h3 class="font-semibold text-lg mb-3">CSP初赛常见复杂度对应的数据规模</h3>
                     <div class="overflow-x-auto">
@@ -603,7 +611,7 @@ for (int i = 0; i < n; i++) {
             <h2 class="text-2xl font-bold text-complexity mb-6 flex items-center">
                 <i class="fa fa-code mr-2"></i> CSP初赛复杂度分析例题
             </h2>
-            
+
             <div class="space-y-8">
                 <!-- 例题1 -->
                 <div>
@@ -614,12 +622,12 @@ for (int i = 0; i < n; i++) {
 for (int i = 1; i <= n; i++) {
     sum += i;
 }</code></pre>
-                        
+
                         <div class="mt-4">
                             <button class="show-solution bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-md text-sm transition-all" data-target="solution1">
                                 查看解析 <i class="fa fa-chevron-down ml-1"></i>
                             </button>
-                            
+
                             <div id="solution1" class="solution mt-3 p-3 bg-gray-50 rounded-lg hidden">
                                 <h4 class="font-semibold mb-2">解析：</h4>
                                 <p class="text-gray-700 mb-2">
@@ -635,7 +643,7 @@ for (int i = 1; i <= n; i++) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 例题2 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">例题2：嵌套循环复杂度</h3>
@@ -647,12 +655,12 @@ for (int i = 0; i < n; i++) {
         count++;
     }
 }</code></pre>
-                        
+
                         <div class="mt-4">
                             <button class="show-solution bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-md text-sm transition-all" data-target="solution2">
                                 查看解析 <i class="fa fa-chevron-down ml-1"></i>
                             </button>
-                            
+
                             <div id="solution2" class="solution mt-3 p-3 bg-gray-50 rounded-lg hidden">
                                 <h4 class="font-semibold mb-2">解析：</h4>
                                 <p class="text-gray-700 mb-2">
@@ -678,7 +686,7 @@ for (int i = 0; i < n; i++) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 例题3 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">例题3：对数复杂度</h3>
@@ -688,12 +696,12 @@ for (int i = 0; i < n; i++) {
 while (i <= n) {
     i *= 2;
 }</code></pre>
-                        
+
                         <div class="mt-4">
                             <button class="show-solution bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-md text-sm transition-all" data-target="solution3">
                                 查看解析 <i class="fa fa-chevron-down ml-1"></i>
                             </button>
-                            
+
                             <div id="solution3" class="solution mt-3 p-3 bg-gray-50 rounded-lg hidden">
                                 <h4 class="font-semibold mb-2">解析：</h4>
                                 <p class="text-gray-700 mb-2">
@@ -709,7 +717,7 @@ while (i <= n) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 例题4 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">例题4：递归复杂度</h3>
@@ -719,12 +727,12 @@ while (i <= n) {
     if (n <= 1) return n;
     return fib(n-1) + fib(n-2);
 }</code></pre>
-                        
+
                         <div class="mt-4">
                             <button class="show-solution bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-md text-sm transition-all" data-target="solution4">
                                 查看解析 <i class="fa fa-chevron-down ml-1"></i>
                             </button>
-                            
+
                             <div id="solution4" class="solution mt-3 p-3 bg-gray-50 rounded-lg hidden">
                                 <h4 class="font-semibold mb-2">解析：</h4>
                                 <p class="text-gray-700 mb-2">
@@ -741,7 +749,7 @@ while (i <= n) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 例题5 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">例题5：空间复杂度</h3>
@@ -751,12 +759,12 @@ while (i <= n) {
     if (n == 0) return 1;
     return n * factorial(n-1);
 }</code></pre>
-                        
+
                         <div class="mt-4">
                             <button class="show-solution bg-primary/10 hover:bg-primary/20 text-primary px-3 py-1 rounded-md text-sm transition-all" data-target="solution5">
                                 查看解析 <i class="fa fa-chevron-down ml-1"></i>
                             </button>
-                            
+
                             <div id="solution5" class="solution mt-3 p-3 bg-gray-50 rounded-lg hidden">
                                 <h4 class="font-semibold mb-2">解析：</h4>
                                 <p class="text-gray-700 mb-2">
@@ -779,52 +787,52 @@ while (i <= n) {
     <script>
         // 初始化代码高亮
         hljs.highlightAll();
-        
+
         // 复杂度可视化
         function updateComplexityVisualization(n) {
             const container = document.getElementById('complexity-bars');
             container.innerHTML = '';
-            
+
             // 计算各种复杂度的值
             const constant = 1;
             const linear = n;
             const quadratic = n * n;
             const exponential = Math.pow(2, n);
-            
+
             // 更新状态文本
-            document.getElementById('complexity-status').textContent = 
+            document.getElementById('complexity-status').textContent =
                 `当前n=${n}时的步骤数: O(1)=${constant}, O(n)=${linear}, O(n²)=${quadratic}, O(2ⁿ)=${exponential}`;
-            
+
             // 为了可视化效果，对较大的值进行缩放
             const maxHeight = 250;
             const scale = Math.max(1, exponential / maxHeight);
-            
+
             // 创建可视化元素
             function createBar(value, className, label) {
                 const barContainer = document.createElement('div');
                 barContainer.className = 'flex flex-col items-center mx-2 flex-1';
-                
+
                 const bar = document.createElement('div');
                 const height = Math.min(value / scale, maxHeight);
                 bar.className = `w-10 rounded-t ${className}`;
                 bar.style.height = `${height}px`;
                 bar.style.marginTop = `${maxHeight - height}px`;
-                
+
                 const labelDiv = document.createElement('div');
                 labelDiv.className = 'mt-2 text-xs text-center';
                 labelDiv.textContent = label;
-                
+
                 barContainer.appendChild(bar);
                 barContainer.appendChild(labelDiv);
                 container.appendChild(barContainer);
             }
-            
+
             createBar(constant, 'bg-green-500', 'O(1)');
             createBar(linear, 'bg-blue-500', 'O(n)');
             createBar(quadratic, 'bg-yellow-500', 'O(n²)');
             createBar(exponential, 'bg-red-500', 'O(2ⁿ)');
         }
-        
+
         // 循环代码示例
         const loopExamples = {
             single: {
@@ -876,22 +884,22 @@ for (int i = 1; i <= n; i *= 2) {
                            <p>4. 总时间复杂度 = <strong>O(n)</strong></p>`
             }
         };
-        
+
         // 初始化页面
         document.addEventListener('DOMContentLoaded', function() {
             // 初始化复杂度可视化
             const complexitySlider = document.getElementById('complexity-n');
             const complexityValue = document.getElementById('complexity-n-value');
-            
+
             complexitySlider.addEventListener('input', function() {
                 const n = parseInt(this.value);
                 complexityValue.textContent = n;
                 updateComplexityVisualization(n);
             });
-            
+
             // 初始渲染
             updateComplexityVisualization(parseInt(complexitySlider.value));
-            
+
             // 循环分析
             const loopTypeSelect = document.getElementById('loop-type');
             const loopCodeElement = document.getElementById('loop-code');
@@ -900,7 +908,7 @@ for (int i = 1; i <= n; i *= 2) {
             const loopAnalysisResult = document.getElementById('loop-analysis-result');
             const loopAnalysisContent = document.getElementById('loop-analysis-content');
             const loopVisualization = document.getElementById('loop-visualization');
-            
+
             loopTypeSelect.addEventListener('change', function() {
                 const type = this.value;
                 loopCodeElement.textContent = loopExamples[type].code;
@@ -908,12 +916,12 @@ for (int i = 1; i <= n; i *= 2) {
                 loopAnalysisResult.classList.add('hidden');
                 loopVisualization.innerHTML = '<div class="text-center text-gray-500 py-6">点击"分析复杂度"查看执行步骤</div>';
             });
-            
+
             loopAnalyzeButton.addEventListener('click', function() {
                 const type = loopTypeSelect.value;
                 loopAnalysisContent.innerHTML = loopExamples[type].analysis;
                 loopAnalysisResult.classList.remove('hidden');
-                
+
                 // 简单的可视化
                 if (type === 'single') {
                     visualizeSingleLoop();
@@ -925,18 +933,18 @@ for (int i = 1; i <= n; i *= 2) {
                     visualizeMixedLoop();
                 }
             });
-            
+
             loopResetButton.addEventListener('click', function() {
                 loopAnalysisResult.classList.add('hidden');
                 loopVisualization.innerHTML = '<div class="text-center text-gray-500 py-6">点击"分析复杂度"查看执行步骤</div>';
             });
-            
+
             // 显示/隐藏解题步骤
             document.querySelectorAll('.show-solution').forEach(button => {
                 button.addEventListener('click', function() {
                     const targetId = this.getAttribute('data-target');
                     const solutionElement = document.getElementById(targetId);
-                    
+
                     if (solutionElement.classList.contains('hidden')) {
                         solutionElement.classList.remove('hidden');
                         this.innerHTML = '隐藏解析 <i class="fa fa-chevron-up ml-1"></i>';
@@ -947,32 +955,32 @@ for (int i = 1; i <= n; i *= 2) {
                 });
             });
         });
-        
+
         // 循环可视化函数
         function visualizeSingleLoop() {
             const container = document.getElementById('loop-visualization');
             container.innerHTML = '<div class="text-center font-medium mb-2">循环执行步骤可视化 (n=5)</div>';
-            
+
             const stepsContainer = document.createElement('div');
             stepsContainer.className = 'flex flex-wrap justify-center gap-2';
-            
+
             for (let i = 0; i < 5; i++) {
                 const step = document.createElement('div');
                 step.className = 'w-10 h-10 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center border border-blue-200';
                 step.textContent = i;
                 stepsContainer.appendChild(step);
             }
-            
+
             container.appendChild(stepsContainer);
         }
-        
+
         function visualizeNestedLoop() {
             const container = document.getElementById('loop-visualization');
             container.innerHTML = '<div class="text-center font-medium mb-2">嵌套循环执行步骤可视化 (n=3)</div>';
-            
+
             const stepsContainer = document.createElement('div');
             stepsContainer.className = 'grid grid-cols-3 gap-2';
-            
+
             for (let i = 0; i < 3; i++) {
                 for (let j = 0; j < 3; j++) {
                     const step = document.createElement('div');
@@ -981,17 +989,17 @@ for (int i = 1; i <= n; i *= 2) {
                     stepsContainer.appendChild(step);
                 }
             }
-            
+
             container.appendChild(stepsContainer);
         }
-        
+
         function visualizeLogarithmicLoop() {
             const container = document.getElementById('loop-visualization');
             container.innerHTML = '<div class="text-center font-medium mb-2">对数循环执行步骤可视化 (n=16)</div>';
-            
+
             const stepsContainer = document.createElement('div');
             stepsContainer.className = 'flex flex-wrap justify-center gap-4';
-            
+
             const values = [1, 2, 4, 8, 16];
             values.forEach(val => {
                 const step = document.createElement('div');
@@ -999,28 +1007,28 @@ for (int i = 1; i <= n; i *= 2) {
                 step.textContent = val;
                 stepsContainer.appendChild(step);
             });
-            
+
             container.appendChild(stepsContainer);
         }
-        
+
         function visualizeMixedLoop() {
             const container = document.getElementById('loop-visualization');
             container.innerHTML = '<div class="text-center font-medium mb-2">混合循环执行步骤可视化 (n=8)</div>';
-            
+
             const stepsContainer = document.createElement('div');
             stepsContainer.className = 'flex flex-col gap-2';
-            
+
             // i=1
             const row1 = document.createElement('div');
             row1.className = 'flex gap-1';
             row1.innerHTML = '<div class="w-8 h-8 bg-purple-100 text-purple-800 flex items-center justify-center border border-purple-200 text-xs">1,1</div>';
-            
+
             // i=2
             const row2 = document.createElement('div');
             row2.className = 'flex gap-1';
             row2.innerHTML = '<div class="w-8 h-8 bg-purple-100 text-purple-800 flex items-center justify-center border border-purple-200 text-xs">2,1</div>' +
                             '<div class="w-8 h-8 bg-purple-100 text-purple-800 flex items-center justify-center border border-purple-200 text-xs">2,2</div>';
-            
+
             // i=4
             const row3 = document.createElement('div');
             row3.className = 'flex gap-1';
@@ -1028,21 +1036,22 @@ for (int i = 1; i <= n; i *= 2) {
                             '<div class="w-8 h-8 bg-purple-100 text-purple-800 flex items-center justify-center border border-purple-200 text-xs">4,2</div>' +
                             '<div class="w-8 h-8 bg-purple-100 text-purple-800 flex items-center justify-center border border-purple-200 text-xs">4,3</div>' +
                             '<div class="w-8 h-8 bg-purple-100 text-purple-800 flex items-center justify-center border border-purple-200 text-xs">4,4</div>';
-            
+
             // i=8
             const row4 = document.createElement('div');
             row4.className = 'flex gap-1';
             for (let j = 1; j <= 8; j++) {
                 row4.innerHTML += `<div class="w-8 h-8 bg-purple-100 text-purple-800 flex items-center justify-center border border-purple-200 text-xs">8,${j}</div>`;
             }
-            
+
             stepsContainer.appendChild(row1);
             stepsContainer.appendChild(row2);
             stepsContainer.appendChild(row3);
             stepsContainer.appendChild(row4);
-            
+
             container.appendChild(stepsContainer);
         }
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

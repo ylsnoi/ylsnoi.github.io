@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>位运算 - 艾科斯信奥网</title>
+
+    <meta name="description" content="位运算课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/yufajichu/jinjieyufa/weiyunsuan.html">
+    <meta property="og:title" content="位运算 - 艾科斯信奥网">
+    <meta property="og:description" content="位运算课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/yufajichu/jinjieyufa/weiyunsuan.html">
+<title>位运算 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -123,8 +130,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -198,7 +206,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="bitwise-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -243,7 +251,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">C++中的六种位运算</h3>
                     <div class="overflow-x-auto">
@@ -305,7 +313,7 @@
             <h2 class="text-2xl font-bold text-bitwise mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 位运算过程演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 位运算动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -316,7 +324,7 @@
                                 下面的动画展示了位运算的执行过程，包括二进制表示和每一位的运算结果。
                                 选择不同的运算类型和操作数，观察位运算的具体执行过程。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">选择运算类型:</label>
                                 <select id="operation-type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-bitwise">
@@ -327,7 +335,7 @@
                                     <option value="right">右移 (>>)</option>
                                 </select>
                             </div>
-                            
+
                             <div class="mb-4" id="operand-container">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">输入操作数:</label>
                                 <div class="grid grid-cols-2 gap-4">
@@ -341,7 +349,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="bitwise-run" class="bg-bitwise hover:bg-bitwise/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 运行动画
@@ -350,12 +358,12 @@
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div id="bitwise-status" class="animation-status hidden">
                                 状态: 等待开始
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="bitwise-execution">
                                 <div class="text-center text-gray-500 py-8">
@@ -364,7 +372,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="bitwise-code">
                                 <div class="code-line" id="bcode-1">#include &lt;iostream&gt;</div>
@@ -385,7 +393,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 二进制表示可视化 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">二进制位运算可视化</h3>
@@ -397,7 +405,7 @@
                             <div class="bit">1</div>
                             <div class="bit">1</div>
                         </div>
-                        
+
                         <div class="text-center mb-2">操作数 B: <span id="b-value">5</span></div>
                         <div class="bit-visual" id="bits-b">
                             <div class="bit">0</div>
@@ -405,9 +413,9 @@
                             <div class="bit">0</div>
                             <div class="bit">1</div>
                         </div>
-                        
+
                         <div class="text-center mb-2">运算符: <span id="op-value">&amp;</span></div>
-                        
+
                         <div class="text-center mb-2">结果: <span id="result-value">1</span></div>
                         <div class="bit-visual" id="bits-result">
                             <div class="bit">0</div>
@@ -425,7 +433,7 @@
             <h2 class="text-2xl font-bold text-bitwise mb-6 flex items-center">
                 <i class="fa fa-cogs mr-2"></i> 位运算的典型应用
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-gray-50 p-4 rounded-lg">
@@ -453,7 +461,7 @@ int average(int x, int y) {
                             位运算可以替代某些算术运算，执行效率更高，尤其适合对性能要求高的场景。
                         </p>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h3 class="font-semibold text-lg mb-3">2. 状态压缩与标记</h3>
                         <pre class="code-block text-xs"><code class="language-cpp">#include <iostream>
@@ -498,7 +506,7 @@ int main() {
                             位运算非常适合实现状态压缩，用一个整数的二进制位表示多个布尔状态，节省内存空间。
                         </p>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h3 class="font-semibold text-lg mb-3">3. 位操作技巧</h3>
                         <pre class="code-block text-xs"><code class="language-cpp">#include <iostream>
@@ -540,7 +548,7 @@ int findFirstSetBit(int x) {
                             位运算可以实现许多巧妙的编程技巧，解决特定问题时非常高效。
                         </p>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h3 class="font-semibold text-lg mb-3">4. 算法竞赛中的应用</h3>
                         <pre class="code-block text-xs"><code class="language-cpp">#include <iostream>
@@ -606,7 +614,7 @@ int main() {
             <h2 class="text-2xl font-bold text-bitwise mb-6 flex items-center">
                 <i class="fa fa-code mr-2"></i> 位运算代码示例 (C++)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 基础位运算示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -614,7 +622,7 @@ int main() {
                     <p class="text-gray-700 mb-3">
                         演示六种基本位运算的使用方法和结果
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <bitset>  // 用于二进制输出
 using namespace std;
@@ -622,35 +630,35 @@ using namespace std;
 int main() {
     int a = 10;  // 二进制: 1010
     int b = 12;  // 二进制: 1100
-    
+
     cout << "a = " << a << ", 二进制: " << bitset<8>(a) << endl;
     cout << "b = " << b << ", 二进制: " << bitset<8>(b) << endl;
     cout << endl;
-    
+
     // 按位与
     int and_result = a & b;
     cout << "a & b = " << and_result << ", 二进制: " << bitset<8>(and_result) << endl;
-    
+
     // 按位或
     int or_result = a | b;
     cout << "a | b = " << or_result << ", 二进制: " << bitset<8>(or_result) << endl;
-    
+
     // 按位异或
     int xor_result = a ^ b;
     cout << "a ^ b = " << xor_result << ", 二进制: " << bitset<8>(xor_result) << endl;
-    
+
     // 按位取反
     int not_result = ~a;
     cout << "~a = " << not_result << ", 二进制: " << bitset<8>(not_result) << endl;
-    
+
     // 左移
     int left_result = a << 2;
     cout << "a << 2 = " << left_result << ", 二进制: " << bitset<8>(left_result) << endl;
-    
+
     // 右移
     int right_result = b >> 2;
     cout << "b >> 2 = " << right_result << ", 二进制: " << bitset<8>(right_result) << endl;
-    
+
     return 0;
 }</code></pre>
                     <div class="bg-gray-800 text-gray-100 p-4 rounded-lg text-sm font-mono mt-3">
@@ -666,14 +674,14 @@ int main() {
                         <p>b >> 2 = 3, 二进制: 00000011</p>
                     </div>
                 </div>
-                
+
                 <!-- 位运算实现集合操作 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">2. 位运算实现集合操作</h3>
                     <p class="text-gray-700 mb-3">
                         使用位运算实现集合的交、并、补等操作，适合处理小规模集合
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <bitset>
 using namespace std;
@@ -693,43 +701,43 @@ int main() {
     const int n = 5;  // 集合元素范围: 0~4
     int setA = 0b10101;  // 元素 {0, 2, 4}
     int setB = 0b10011;  // 元素 {0, 1, 4}
-    
+
     printSet(setA, n, "集合A");
     printSet(setB, n, "集合B");
     cout << endl;
-    
+
     // 并集
     int unionSet = setA | setB;
     printSet(unionSet, n, "A ∪ B (并集)");
-    
+
     // 交集
     int intersectSet = setA & setB;
     printSet(intersectSet, n, "A ∩ B (交集)");
-    
+
     // 差集 A - B
     int diffSet = setA & ~setB;
     printSet(diffSet, n, "A - B (差集)");
-    
+
     // 对称差集
     int symDiffSet = setA ^ setB;
     printSet(symDiffSet, n, "A Δ B (对称差集)");
-    
+
     // 补集
     int fullSet = (1 << n) - 1;  // 全集 {0,1,2,3,4}
     int complementSet = fullSet & ~setA;
     printSet(complementSet, n, "A' (补集)");
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 位运算优化算法 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">3. 位运算优化的算法</h3>
                     <p class="text-gray-700 mb-3">
                         使用位运算优化的算法示例：计算二进制中1的个数和判断是否为2的幂
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <bitset>
 #include <chrono>  // 用于计时
@@ -769,7 +777,7 @@ bool isPowerOfFour(int x) {
 int main() {
     int numbers[] = {0, 1, 5, 15, 16, 32, 64, 127, 128};
     int n = sizeof(numbers) / sizeof(numbers[0]);
-    
+
     for (int i = 0; i < n; i++) {
         int num = numbers[i];
         cout << num << " (" << bitset<8>(num) << "): ";
@@ -777,7 +785,7 @@ int main() {
         cout << "是2的幂? " << (isPowerOfTwo(num) ? "是" : "否") << ", ";
         cout << "是4的幂? " << (isPowerOfFour(num) ? "是" : "否") << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
@@ -789,7 +797,7 @@ int main() {
             <h2 class="text-2xl font-bold text-bitwise mb-6 flex items-center">
                 <i class="fa fa-trophy mr-2"></i> 位运算竞赛题应用
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">例题1: 只出现一次的数字</h3>
@@ -799,7 +807,7 @@ int main() {
                     <p class="text-gray-700 mb-3">
                         <strong>解题思路:</strong> 利用异或运算的特性：a ^ a = 0，a ^ 0 = a，且异或运算满足交换律和结合律。将数组中所有元素进行异或运算，最终结果即为只出现一次的数字。
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <vector>
 using namespace std;
@@ -816,15 +824,15 @@ int main() {
     vector<int> test1 = {2, 2, 1};
     vector<int> test2 = {4, 1, 2, 1, 2};
     vector<int> test3 = {1};
-    
+
     cout << "测试1结果: " << singleNumber(test1) << endl;  // 输出1
     cout << "测试2结果: " << singleNumber(test2) << endl;  // 输出4
     cout << "测试3结果: " << singleNumber(test3) << endl;  // 输出1
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">例题2: 子集枚举</h3>
                     <p class="text-gray-700 mb-3">
@@ -833,7 +841,7 @@ int main() {
                     <p class="text-gray-700 mb-3">
                         <strong>解题思路:</strong> 使用位运算枚举所有可能的子集，每个子集对应一个二进制数，二进制位为1表示对应元素在子集中。
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <vector>
 using namespace std;
@@ -859,7 +867,7 @@ vector<vector<int>> subsets(vector<int>& nums) {
 int main() {
     vector<int> nums = {1, 2, 3};
     vector<vector<int>> allSubsets = subsets(nums);
-    
+
     cout << "所有子集共 " << allSubsets.size() << " 个:" << endl;
     for (auto& subset : allSubsets) {
         cout << "{ ";
@@ -868,7 +876,7 @@ int main() {
         }
         cout << "}" << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
@@ -880,7 +888,7 @@ int main() {
         // 初始化高亮
         document.addEventListener('DOMContentLoaded', function() {
             hljs.highlightAll();
-            
+
             // 位运算动画相关元素
             const operationType = document.getElementById('operation-type');
             const operand1 = document.getElementById('operand1');
@@ -896,12 +904,12 @@ int main() {
             const bValue = document.getElementById('b-value');
             const opValue = document.getElementById('op-value');
             const resultValue = document.getElementById('result-value');
-            
+
             // 二进制位显示元素
             const bitsA = document.getElementById('bits-a');
             const bitsB = document.getElementById('bits-b');
             const bitsResult = document.getElementById('bits-result');
-            
+
             // 运算符映射
             const opMap = {
                 'and': { symbol: '&', name: '按位与' },
@@ -910,40 +918,40 @@ int main() {
                 'left': { symbol: '<<', name: '左移' },
                 'right': { symbol: '>>', name: '右移' }
             };
-            
+
             // 更新运算符显示
             operationType.addEventListener('change', function() {
                 const op = opMap[this.value];
                 codeOp.textContent = op.symbol;
                 opValue.textContent = op.symbol;
             });
-            
+
             // 更新操作数显示
             operand1.addEventListener('input', function() {
                 codeNum1.textContent = this.value;
                 aValue.textContent = this.value;
                 updateBits(parseInt(this.value) || 0, bitsA);
             });
-            
+
             operand2.addEventListener('input', function() {
                 codeNum2.textContent = this.value;
                 bValue.textContent = this.value;
                 updateBits(parseInt(this.value) || 0, bitsB);
             });
-            
+
             // 重置按钮
             resetBtn.addEventListener('click', function() {
                 operand1.value = 3;
                 operand2.value = 5;
                 operationType.value = 'and';
-                
+
                 codeNum1.textContent = 3;
                 codeNum2.textContent = 5;
                 codeOp.textContent = '&';
                 opValue.textContent = '&';
                 aValue.textContent = 3;
                 bValue.textContent = 5;
-                
+
                 executionDiv.innerHTML = `
                     <div class="text-center text-gray-500 py-8">
                         <i class="fa fa-arrow-down mb-2"></i>
@@ -951,24 +959,24 @@ int main() {
                     </div>
                 `;
                 statusDiv.classList.add('hidden');
-                
+
                 // 重置所有代码行高亮
                 for (let i = 1; i <= 14; i++) {
                     document.getElementById(`bcode-${i}`).classList.remove('code-line-highlight');
                 }
-                
+
                 // 重置位显示
                 updateBits(3, bitsA);
                 updateBits(5, bitsB);
                 updateBits(1, bitsResult);
                 resultValue.textContent = 1;
             });
-            
+
             // 运行按钮
             runBtn.addEventListener('click', function() {
                 runAnimation();
             });
-            
+
             // 更新二进制位显示
             function updateBits(num, container) {
                 container.innerHTML = '';
@@ -981,47 +989,47 @@ int main() {
                     container.appendChild(bitDiv);
                 }
             }
-            
+
             // 运行动画
             async function runAnimation() {
                 // 获取操作数和运算符
                 const a = parseInt(operand1.value) || 0;
                 const b = parseInt(operand2.value) || 0;
                 const op = operationType.value;
-                
+
                 // 清空执行区域
                 executionDiv.innerHTML = '';
                 statusDiv.classList.remove('hidden');
                 statusDiv.textContent = '状态: 开始执行';
-                
+
                 // 重置所有代码行高亮
                 for (let i = 1; i <= 14; i++) {
                     document.getElementById(`bcode-${i}`).classList.remove('code-line-highlight');
                 }
-                
+
                 // 步骤1: 显示变量初始化
                 addExecutionStep('初始化变量:');
                 addExecutionStep(`int a = ${a} (二进制: ${binaryStr(a)})`);
                 addExecutionStep(`int b = ${b} (二进制: ${binaryStr(b)})`);
                 await delay(1000);
-                
+
                 // 高亮代码行
                 document.getElementById('bcode-5').classList.add('code-line-highlight');
                 document.getElementById('bcode-6').classList.add('code-line-highlight');
                 statusDiv.textContent = '状态: 初始化变量';
                 await delay(800);
-                
+
                 // 步骤2: 执行位运算
                 addExecutionStep(`执行${opMap[op].name}运算: ${a} ${opMap[op].symbol} ${b}`);
                 await delay(1000);
-                
+
                 // 高亮代码行
                 for (let i = 5; i <= 8; i++) {
                     document.getElementById(`bcode-${i}`).classList.remove('code-line-highlight');
                 }
                 document.getElementById('bcode-9').classList.add('code-line-highlight');
                 statusDiv.textContent = '状态: 执行位运算';
-                
+
                 // 计算结果
                 let result;
                 switch(op) {
@@ -1046,47 +1054,47 @@ int main() {
                         await showShiftProcess(a, b, result, false);
                         break;
                 }
-                
+
                 // 步骤3: 显示结果
                 addExecutionStep(`运算结果: ${result} (二进制: ${binaryStr(result)})`);
                 resultValue.textContent = result;
                 updateBits(result, bitsResult);
                 await delay(1000);
-                
+
                 // 高亮代码行
                 document.getElementById('bcode-9').classList.remove('code-line-highlight');
                 document.getElementById('bcode-11').classList.add('code-line-highlight');
                 statusDiv.textContent = '状态: 输出结果';
                 await delay(800);
-                
+
                 // 完成
                 statusDiv.textContent = '状态: 执行完成';
                 document.getElementById('bcode-11').classList.remove('code-line-highlight');
             }
-            
+
             // 显示按位运算过程
             async function showBitwiseProcess(a, b, result, opFunc, opName) {
                 // 更新位显示
                 updateBits(a, bitsA);
                 updateBits(b, bitsB);
-                
+
                 // 逐位显示运算过程
                 for (let i = 7; i >= 0; i--) {
                     const bitA = (a >> i) & 1;
                     const bitB = (b >> i) & 1;
                     const bitResult = opFunc(bitA, bitB);
-                    
+
                     // 高亮当前位
                     bitsA.children[7 - i].classList.add('bit-highlight');
                     bitsB.children[7 - i].classList.add('bit-highlight');
-                    
+
                     addExecutionStep(`第${i}位运算: ${bitA} ${opName} ${bitB} = ${bitResult}`);
                     await delay(600);
-                    
+
                     // 取消高亮
                     bitsA.children[7 - i].classList.remove('bit-highlight');
                     bitsB.children[7 - i].classList.remove('bit-highlight');
-                    
+
                     // 更新结果位
                     const resultBits = bitsResult.children;
                     resultBits[7 - i].textContent = bitResult;
@@ -1095,15 +1103,15 @@ int main() {
                     resultBits[7 - i].classList.remove('bit-highlight');
                 }
             }
-            
+
             // 显示移位运算过程
             async function showShiftProcess(a, b, result, isLeft) {
                 // 更新位显示
                 updateBits(a, bitsA);
-                
+
                 addExecutionStep(`将 ${a} (${binaryStr(a)}) ${isLeft ? '左' : '右'}移 ${b} 位`);
                 await delay(1000);
-                
+
                 let current = a;
                 for (let i = 1; i <= b; i++) {
                     current = isLeft ? current << 1 : current >> 1;
@@ -1112,7 +1120,7 @@ int main() {
                     await delay(800);
                 }
             }
-            
+
             // 添加执行步骤
             function addExecutionStep(text) {
                 const stepDiv = document.createElement('div');
@@ -1121,22 +1129,23 @@ int main() {
                 executionDiv.appendChild(stepDiv);
                 executionDiv.scrollTop = executionDiv.scrollHeight;
             }
-            
+
             // 延迟函数
             function delay(ms) {
                 return new Promise(resolve => setTimeout(resolve, ms));
             }
-            
+
             // 转换为8位二进制字符串
             function binaryStr(num) {
                 return num.toString(2).padStart(8, '0');
             }
-            
+
             // 初始化位显示
             updateBits(3, bitsA);
             updateBits(5, bitsB);
             updateBits(1, bitsResult);
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

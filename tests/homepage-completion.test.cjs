@@ -20,6 +20,19 @@ function read(file) {
   return fs.readFileSync(path.join(root, file), 'utf8');
 }
 
+function toPosix(file) {
+  return file.replace(/\\/g, '/');
+}
+
+function isFeedbackPage(page) {
+  return toPosix(page).startsWith('反馈/');
+}
+
+function expectedAssetPrefix(page) {
+  const depth = toPosix(page).split('/').length - 1;
+  return depth === 0 ? '' : '../'.repeat(depth);
+}
+
 function extractSearchData(html) {
   const match = html.match(/const searchData = \[([\s\S]*?)\];/);
   assert(match, 'searchData array should exist');
@@ -92,6 +105,23 @@ function assertLocalLinksResolve(page, html) {
   }
 }
 
+function assertSiteShell(page, html) {
+  const prefix = expectedAssetPrefix(page);
+  assert(html.includes(`href="${prefix}assets/site.css"`), `${page} should load the shared site stylesheet`);
+  assert(html.includes(`src="${prefix}assets/site.js"`), `${page} should load the shared site script`);
+  assert(/<meta\s+name=(["'])description\1\s+content=(["'])[^"']{20,}\2/i.test(html), `${page} should include a meaningful meta description`);
+  assert(/<link\s+rel=(["'])canonical\1\s+href=(["'])https:\/\/ylsnoi\.github\.io\//i.test(html), `${page} should include a canonical URL`);
+  assert(/<meta\s+property=(["'])og:title\1/i.test(html), `${page} should include Open Graph title metadata`);
+  assert(/<meta\s+property=(["'])og:description\1/i.test(html), `${page} should include Open Graph description metadata`);
+  assert(/<main\b[^>]*\bid=(["'])main-content\1/i.test(html), `${page} should expose a main content landmark`);
+}
+
+function assertBlankTargetsAreHardened(page, html) {
+  for (const match of html.matchAll(/<a\b[^>]*\btarget=(["'])_blank\1[^>]*>/gi)) {
+    assert(/\brel=(["'])[^"']*\bnoopener\b[^"']*\1/i.test(match[0]), `${page} target="_blank" link should include rel="noopener": ${match[0]}`);
+  }
+}
+
 for (const page of pages) {
   const html = read(page);
   assert(html.includes('id="mobile-menu-button"'), `${page} should have a mobile menu button`);
@@ -114,6 +144,9 @@ for (const page of pages) {
   assert(html.includes('result-card'), `${page} should render search results as clickable cards`);
 }
 
+const htmlPages = listHtmlPages(root);
+const sitePages = htmlPages.filter((page) => !isFeedbackPage(page));
+
 const indexHtml = read('index.html');
 assert(indexHtml.includes('id="roadmap"'), 'index.html should include a learning roadmap section');
 assert(indexHtml.includes('查看学习路径'), 'index.html should promote the learning roadmap in the hero');
@@ -122,7 +155,25 @@ const cspHtml = read('cspchusai.html');
 assert(cspHtml.includes('id="exam-plan"'), 'cspchusai.html should include an exam preparation plan');
 assert(cspHtml.includes('查看备考计划'), 'cspchusai.html should promote the exam plan in the hero');
 
-for (const page of listHtmlPages(root)) {
+const siteCss = read('assets/site.css');
+assert(siteCss.includes('prefers-reduced-motion'), 'shared stylesheet should respect reduced-motion preferences');
+assert(siteCss.includes('.site-progress'), 'shared stylesheet should style the reading progress indicator');
+assert(siteCss.includes('.site-back-to-top'), 'shared stylesheet should style the back-to-top control');
+assert(siteCss.includes('.code-copy-button'), 'shared stylesheet should style code copy controls');
+
+const siteJs = read('assets/site.js');
+for (const hook of ['initMobileMenu', 'initReadingProgress', 'initBackToTop', 'initCodeTools', 'initAnchorBehavior']) {
+  assert(siteJs.includes(`var ${hook}`), `shared script should define ${hook}`);
+}
+assert(siteJs.includes('noopener'), 'shared script should harden target blank links');
+
+for (const page of sitePages) {
+  const html = read(page);
+  assertSiteShell(page, html);
+  assertBlankTargetsAreHardened(page, html);
+}
+
+for (const page of htmlPages) {
   const html = read(page);
   assert(!/href=(["'])#\1/.test(html), `${page} should not contain empty hash links`);
   assert(!/javascript:;/i.test(html), `${page} should not contain javascript placeholder links`);

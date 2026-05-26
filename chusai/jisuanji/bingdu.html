@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSP初赛 - 信息安全基础</title>
+
+    <meta name="description" content="CSP初赛 - 信息安全基础课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/chusai/jisuanji/bingdu.html">
+    <meta property="og:title" content="CSP初赛 - 信息安全基础">
+    <meta property="og:description" content="CSP初赛 - 信息安全基础课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/chusai/jisuanji/bingdu.html">
+<title>CSP初赛 - 信息安全基础</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -82,8 +89,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -141,7 +149,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="security-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -170,7 +178,7 @@
             <h2 class="text-2xl font-bold text-security mb-6 flex items-center">
                 <i class="fa fa-book mr-2"></i> 核心知识点
             </h2>
-            
+
             <!-- 标签页导航 -->
             <div class="border-b border-gray-200 mb-6">
                 <div class="flex flex-wrap -mb-px">
@@ -179,11 +187,11 @@
                     <button class="tab-button" data-tab="other">其他安全概念</button>
                 </div>
             </div>
-            
+
             <!-- 病毒防护 -->
             <div id="virus" class="tab-content active">
                 <h3 class="text-xl font-semibold mb-4 text-primary">计算机病毒与防护</h3>
-                
+
                 <div class="space-y-4">
                     <div class="security-item">
                         <h4 class="font-bold mb-1">计算机病毒的定义</h4>
@@ -192,7 +200,7 @@
                             当被执行时会将自身复制到其他程序或存储介质中。
                         </p>
                     </div>
-                    
+
                     <div class="security-item">
                         <h4 class="font-bold mb-1">计算机病毒的特征</h4>
                         <ul class="list-disc pl-6 mt-1 space-y-1 text-gray-700">
@@ -203,7 +211,7 @@
                             <li><strong>可触发性</strong>：在满足特定条件（如特定日期、特定操作）时才激活</li>
                         </ul>
                     </div>
-                    
+
                     <div class="security-item">
                         <h4 class="font-bold mb-1">常见病毒类型（CSP常考）</h4>
                         <ul class="list-disc pl-6 mt-1 space-y-1 text-gray-700">
@@ -213,7 +221,7 @@
                             <li><strong>宏病毒</strong>：利用文档中的宏功能编写的病毒，常见于Office文档</li>
                         </ul>
                     </div>
-                    
+
                     <div class="security-item">
                         <h4 class="font-bold mb-1">病毒防护措施</h4>
                         <ul class="list-disc pl-6 mt-1 space-y-1 text-gray-700">
@@ -225,7 +233,7 @@
                             <li>禁用不必要的系统服务和端口</li>
                         </ul>
                     </div>
-                    
+
                     <!-- 动态演示：病毒传播模拟 -->
                     <div class="bg-gray-50 p-4 rounded-lg mt-6">
                         <h4 class="font-semibold mb-3">病毒传播模拟演示</h4>
@@ -233,11 +241,11 @@
                             以下演示了病毒在计算机网络中的传播过程，红色表示已感染的计算机，绿色表示健康的计算机。
                             可以观察不同防护措施对病毒传播的影响。
                         </p>
-                        
+
                         <div class="grid grid-cols-1 md:grid-cols-12 gap-1 mb-4" id="virus-simulation">
                             <!-- 动态生成的网格将在这里显示 -->
                         </div>
-                        
+
                         <div class="flex flex-wrap gap-2 mt-4">
                             <button id="start-simulation" class="bg-security hover:bg-security/90 text-white px-3 py-1 rounded text-sm transition-all">
                                 <i class="fa fa-play mr-1"></i> 开始传播
@@ -257,11 +265,11 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- 加密技术基础 -->
             <div id="encryption" class="tab-content">
                 <h3 class="text-xl font-semibold mb-4 text-primary">加密技术基础</h3>
-                
+
                 <div class="space-y-4">
                     <div class="security-item">
                         <h4 class="font-bold mb-1">加密技术的基本概念</h4>
@@ -270,7 +278,7 @@
                             加密技术用于保护信息的机密性，防止未授权访问。
                         </p>
                     </div>
-                    
+
                     <div class="security-item">
                         <h4 class="font-bold mb-1">加密技术分类</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
@@ -298,7 +306,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="security-item">
                         <h4 class="font-bold mb-1">CSP常考加密算法</h4>
                         <ul class="list-disc pl-6 mt-1 space-y-2 text-gray-700">
@@ -315,7 +323,7 @@
                             </li>
                         </ul>
                     </div>
-                    
+
                     <!-- 凯撒密码演示 -->
                     <div class="bg-gray-50 p-4 rounded-lg mt-6">
                         <h4 class="font-semibold mb-3">凯撒密码加密演示</h4>
@@ -323,13 +331,13 @@
                             <div>
                                 <div class="mb-4">
                                     <label class="block text-sm font-medium text-gray-700 mb-1">明文:</label>
-                                    <input type="text" id="caesar-plaintext" value="HELLOWORLD" 
+                                    <input type="text" id="caesar-plaintext" value="HELLOWORLD"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary">
                                 </div>
-                                
+
                                 <div class="mb-4">
                                     <label class="block text-sm font-medium text-gray-700 mb-1">偏移量 (1-25):</label>
-                                    <input type="range" id="caesar-shift" min="1" max="25" value="3" 
+                                    <input type="range" id="caesar-shift" min="1" max="25" value="3"
                                         class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-security">
                                     <div class="flex justify-between text-xs text-gray-500 mt-1">
                                         <span>1</span>
@@ -337,12 +345,12 @@
                                         <span>25</span>
                                     </div>
                                 </div>
-                                
+
                                 <button id="caesar-encrypt" class="bg-security hover:bg-security/90 text-white px-4 py-2 rounded-md transition-all">
                                     <i class="fa fa-lock mr-1"></i> 加密
                                 </button>
                             </div>
-                            
+
                             <div>
                                 <div class="mb-4">
                                     <label class="block text-sm font-medium text-gray-700 mb-1">密文:</label>
@@ -350,7 +358,7 @@
                                         KHOORZRUOG
                                     </div>
                                 </div>
-                                
+
                                 <div class="bg-white p-3 rounded border border-gray-100 mt-4">
                                     <h5 class="font-semibold text-sm mb-2">加密过程说明</h5>
                                     <p id="caesar-explanation" class="text-sm text-gray-700">
@@ -363,11 +371,11 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- 其他安全概念 -->
             <div id="other" class="tab-content">
                 <h3 class="text-xl font-semibold mb-4 text-primary">其他信息安全概念</h3>
-                
+
                 <div class="space-y-4">
                     <div class="security-item">
                         <h4 class="font-bold mb-1">认证与授权</h4>
@@ -377,7 +385,7 @@
                             两者结合确保"正确的人访问正确的资源"
                         </p>
                     </div>
-                    
+
                     <div class="security-item">
                         <h4 class="font-bold mb-1">数据备份与恢复</h4>
                         <ul class="list-disc pl-6 mt-1 space-y-1 text-gray-700">
@@ -387,7 +395,7 @@
                             <li>3-2-1备份策略：3份数据副本，2种不同存储介质，1份异地存储</li>
                         </ul>
                     </div>
-                    
+
                     <div class="security-item">
                         <h4 class="font-bold mb-1">防火墙与入侵检测</h4>
                         <p class="text-gray-700">
@@ -395,7 +403,7 @@
                             <strong>入侵检测系统(IDS)</strong>：监控网络或系统活动，检测可疑行为和攻击
                         </p>
                     </div>
-                    
+
                     <div class="security-item">
                         <h4 class="font-bold mb-1">常见网络安全协议</h4>
                         <ul class="list-disc pl-6 mt-1 space-y-1 text-gray-700">
@@ -413,11 +421,11 @@
             <h2 class="text-2xl font-bold text-security mb-6 flex items-center">
                 <i class="fa fa-lightbulb-o mr-2"></i> 解题技巧
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">CSP初赛信息安全题解题要点</h3>
-                    
+
                     <div class="space-y-3">
                         <div class="flex">
                             <div class="flex-shrink-0 w-6 h-6 rounded-full bg-security text-white flex items-center justify-center mr-3 mt-0.5">1</div>
@@ -428,7 +436,7 @@
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div class="flex">
                             <div class="flex-shrink-0 w-6 h-6 rounded-full bg-security text-white flex items-center justify-center mr-3 mt-0.5">2</div>
                             <div>
@@ -438,7 +446,7 @@
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div class="flex">
                             <div class="flex-shrink-0 w-6 h-6 rounded-full bg-security text-white flex items-center justify-center mr-3 mt-0.5">3</div>
                             <div>
@@ -448,7 +456,7 @@
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div class="flex">
                             <div class="flex-shrink-0 w-6 h-6 rounded-full bg-security text-white flex items-center justify-center mr-3 mt-0.5">4</div>
                             <div>
@@ -458,7 +466,7 @@
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div class="flex">
                             <div class="flex-shrink-0 w-6 h-6 rounded-full bg-security text-white flex items-center justify-center mr-3 mt-0.5">5</div>
                             <div>
@@ -470,10 +478,10 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">加密算法解题步骤</h3>
-                    
+
                     <div class="space-y-4">
                         <div class="border-l-4 border-primary pl-3 py-1">
                             <h4 class="font-medium">凯撒密码解题步骤</h4>
@@ -485,7 +493,7 @@
                                 <li>解密过程则是减去偏移量（同样取模26）</li>
                             </ol>
                         </div>
-                        
+
                         <div class="border-l-4 border-primary pl-3 py-1">
                             <h4 class="font-medium">维吉尼亚密码解题要点</h4>
                             <ol class="list-decimal pl-5 mt-2 text-gray-700 text-sm space-y-1">
@@ -505,7 +513,7 @@
             <h2 class="text-2xl font-bold text-security mb-6 flex items-center">
                 <i class="fa fa-code-fork mr-2"></i> 例题解析
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 例题1 -->
                 <div class="example-box">
@@ -520,11 +528,11 @@
                             C. 木马<br>
                             D. 宏病毒
                         </div>
-                        
+
                         <div class="mb-3">
                             <strong>答案：B</strong>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-3 rounded">
                             <strong>解析：</strong>
                             <p class="text-gray-700 text-sm mt-1">
@@ -535,7 +543,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 例题2 -->
                 <div class="example-box">
                     <div class="example-header">
@@ -549,11 +557,11 @@
                             C. DTPD<br>
                             D. HXTG
                         </div>
-                        
+
                         <div class="mb-3">
                             <strong>答案：A</strong>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-3 rounded">
                             <strong>解析：</strong>
                             <p class="text-gray-700 text-sm mt-1">
@@ -567,7 +575,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 例题3 -->
                 <div class="example-box">
                     <div class="example-header">
@@ -581,11 +589,11 @@
                             C. RSA<br>
                             D. 凯撒密码
                         </div>
-                        
+
                         <div class="mb-3">
                             <strong>答案：C</strong>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-3 rounded">
                             <strong>解析：</strong>
                             <p class="text-gray-700 text-sm mt-1">
@@ -596,7 +604,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 例题4 -->
                 <div class="example-box">
                     <div class="example-header">
@@ -610,11 +618,11 @@
                             C. 不使用U盘<br>
                             D. 安装最新版本的操作系统
                         </div>
-                        
+
                         <div class="mb-3">
                             <strong>答案：B</strong>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-3 rounded">
                             <strong>解析：</strong>
                             <p class="text-gray-700 text-sm mt-1">
@@ -641,14 +649,14 @@
     <script>
         // 初始化高亮显示
         hljs.highlightAll();
-        
+
         // 修复标签页切换功能 - 修复了属性名错误
         document.querySelectorAll('.tab-button').forEach(button => {
             button.addEventListener('click', () => {
                 // 移除所有标签页的active类
                 document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
                 document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                
+
                 // 为当前点击的标签页添加active类
                 button.classList.add('active');
                 // 修复了属性名错误，将data-tab改为data-tab
@@ -656,7 +664,7 @@
                 document.getElementById(tabId).classList.add('active');
             });
         });
-        
+
         // 凯撒密码演示
         const caesarShift = document.getElementById('caesar-shift');
         const caesarShiftValue = document.getElementById('caesar-shift-value');
@@ -664,19 +672,19 @@
         const caesarCiphertext = document.getElementById('caesar-ciphertext');
         const caesarEncrypt = document.getElementById('caesar-encrypt');
         const caesarExplanation = document.getElementById('caesar-explanation');
-        
+
         // 更新偏移量显示
         caesarShift.addEventListener('input', () => {
             caesarShiftValue.textContent = caesarShift.value;
         });
-        
+
         // 加密功能
         caesarEncrypt.addEventListener('click', () => {
             const plaintext = caesarPlaintext.value.toUpperCase();
             const shift = parseInt(caesarShift.value);
             let ciphertext = '';
             let explanation = `每个字母向后移动${shift}位：<br>`;
-            
+
             for (let i = 0; i < plaintext.length; i++) {
                 const char = plaintext[i];
                 if (char >= 'A' && char <= 'Z') {
@@ -684,7 +692,7 @@
                     const newPos = (originalPos + shift) % 26;
                     const newChar = String.fromCharCode(newPos + 'A'.charCodeAt(0));
                     ciphertext += newChar;
-                    
+
                     // 添加到解释
                     if (i > 0) explanation += ', ';
                     explanation += `${char} → ${newChar}`;
@@ -692,11 +700,11 @@
                     ciphertext += char;
                 }
             }
-            
+
             caesarCiphertext.textContent = ciphertext;
             caesarExplanation.innerHTML = explanation;
         });
-        
+
         // 病毒传播模拟 - 修复了函数名冲突
         const virusSimulation = document.getElementById('virus-simulation');
         const startSimulationBtn = document.getElementById('start-simulation');
@@ -706,12 +714,12 @@
         let simulationInterval;
         let grid = [];
         const gridSize = 12; // 12x12网格
-        
+
         // 初始化网格
         function initGrid() {
             virusSimulation.innerHTML = '';
             grid = [];
-            
+
             for (let i = 0; i < gridSize; i++) {
                 grid[i] = [];
                 for (let j = 0; j < gridSize; j++) {
@@ -722,13 +730,13 @@
                     grid[i][j] = cell;
                 }
             }
-            
+
             // 初始感染一个随机细胞
             const randomX = Math.floor(Math.random() * gridSize);
             const randomY = Math.floor(Math.random() * gridSize);
             infectCell(randomX, randomY);
         }
-        
+
         // 感染细胞
         function infectCell(x, y) {
             if (x >= 0 && x < gridSize && y >= 0 && y < gridSize) {
@@ -741,7 +749,7 @@
             }
             return false;
         }
-        
+
         // 添加防护
         function protectRandomCell() {
             let cells = [];
@@ -752,7 +760,7 @@
                     }
                 }
             }
-            
+
             if (cells.length > 0) {
                 const randomCell = cells[Math.floor(Math.random() * cells.length)];
                 const cell = grid[randomCell.x][randomCell.y];
@@ -760,11 +768,11 @@
                 cell.className = 'aspect-square bg-blue-500 rounded-sm transition-colors duration-300';
             }
         }
-        
+
         // 传播一步
         function spreadVirus() {
             let newInfections = [];
-            
+
             // 找出所有已感染的细胞
             for (let i = 0; i < gridSize; i++) {
                 for (let j = 0; j < gridSize; j++) {
@@ -774,12 +782,12 @@
                             {x: -1, y: 0}, {x: 1, y: 0},
                             {x: 0, y: -1}, {x: 0, y: 1}
                         ];
-                        
+
                         directions.forEach(dir => {
                             const newX = i + dir.x;
                             const newY = j + dir.y;
                             if (newX >= 0 && newX < gridSize && newY >= 0 && newY < gridSize) {
-                                if (grid[newX][newY].dataset.status === 'healthy' && 
+                                if (grid[newX][newY].dataset.status === 'healthy' &&
                                     !newInfections.some(cell => cell.x === newX && cell.y === newY)) {
                                     newInfections.push({x: newX, y: newY});
                                 }
@@ -788,14 +796,14 @@
                     }
                 }
             }
-            
+
             // 实际感染新细胞（随机感染一部分，模拟传播概率）
             newInfections.forEach(cell => {
                 if (Math.random() < 0.7) { // 70%的概率感染成功
                     infectCell(cell.x, cell.y);
                 }
             });
-            
+
             // 检查是否还有可感染的细胞
             let hasHealthy = false;
             for (let i = 0; i < gridSize; i++) {
@@ -807,12 +815,12 @@
                 }
                 if (hasHealthy) break;
             }
-            
+
             if (!hasHealthy) {
                 stopSimulation();
             }
         }
-        
+
         // 开始模拟 - 修复了函数名冲突
         function startSimulation() {
             if (!simulationRunning) {
@@ -823,14 +831,14 @@
                 stopSimulation();
             }
         }
-        
+
         // 停止模拟
         function stopSimulation() {
             simulationRunning = false;
             startSimulationBtn.innerHTML = '<i class="fa fa-play mr-1"></i> 开始传播';
             clearInterval(simulationInterval);
         }
-        
+
         // 事件监听 - 修复了事件绑定
         startSimulationBtn.addEventListener('click', startSimulation);
         addFirewall.addEventListener('click', protectRandomCell);
@@ -838,11 +846,12 @@
             stopSimulation();
             initGrid();
         });
-        
+
         // 初始化页面
         window.addEventListener('DOMContentLoaded', () => {
             initGrid();
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

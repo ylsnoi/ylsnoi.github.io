@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>归并排序 - 艾科斯信奥网</title>
+
+    <meta name="description" content="归并排序课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/suanfa/paixu/guibing.html">
+    <meta property="og:title" content="归并排序 - 艾科斯信奥网">
+    <meta property="og:description" content="归并排序课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/suanfa/paixu/guibing.html">
+<title>归并排序 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -129,8 +136,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -204,7 +212,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="merge-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -251,7 +259,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">归并排序的基本步骤</h3>
                     <div class="space-y-3">
@@ -268,7 +276,7 @@
                             <strong>递归</strong>：重复上述过程，直到所有子数组合并成一个完整的有序数组
                         </div>
                     </div>
-                    
+
                     <div class="mt-6">
                         <h4 class="font-semibold mb-3">归并排序的分治策略图示</h4>
                         <div class="bg-white p-4 rounded-lg border border-gray-200">
@@ -378,7 +386,7 @@
             <h2 class="text-2xl font-bold text-merge mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 归并排序过程演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 归并排序动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -389,13 +397,13 @@
                                 下面的动画展示了归并排序的完整过程，包括数组分解和合并两个主要阶段。
                                 可以通过输入框自定义数组，或使用随机数组进行演示。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">输入数组元素(用逗号分隔):</label>
                                 <input type="text" id="array-input" value="38,27,43,3,9,82,10"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-merge">
                             </div>
-                            
+
                             <div class="flex space-x-2 mb-4">
                                 <button id="random-array" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-random mr-2"></i> 随机数组
@@ -404,7 +412,7 @@
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div class="flex space-x-2 mb-4">
                                 <button id="merge-start" class="bg-merge hover:bg-merge/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 开始演示
@@ -413,16 +421,16 @@
                                     <i class="fa fa-step-forward mr-2"></i> 单步执行
                                 </button>
                             </div>
-                            
+
                             <div class="animation-progress">
                                 <div id="merge-progress-bar" class="animation-progress-bar" style="width: 0%"></div>
                             </div>
-                            
+
                             <div id="merge-status" class="animation-status">
                                 状态: 等待开始
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-2">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 mb-4" id="merge-visualization">
                                 <div class="text-center text-gray-500 py-8">
@@ -430,7 +438,7 @@
                                     <p>点击"开始演示"观看归并排序过程</p>
                                 </div>
                             </div>
-                            
+
                             <div class="bg-white border border-gray-200 rounded-lg p-4" id="merge-steps">
                                 <h4 class="font-semibold mb-2">归并步骤说明</h4>
                                 <div id="merge-step-description" class="text-gray-700">
@@ -440,14 +448,14 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 归并操作单独演示 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">合并操作演示</h3>
                     <p class="text-gray-700 mb-4">
                         合并操作是归并排序的核心，下面演示如何将两个有序数组合并成一个有序数组
                     </p>
-                    
+
                     <div class="merge-section">
                         <div class="merge-left">
                             <h4 class="font-semibold mb-2">左数组</h4>
@@ -479,7 +487,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="flex justify-center">
                         <button id="merge-demo" class="bg-algorithm hover:bg-algorithm/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                             <i class="fa fa-random mr-2"></i> 演示合并过程
@@ -494,7 +502,7 @@
             <h2 class="text-2xl font-bold text-merge mb-6 flex items-center">
                 <i class="fa fa-code mr-2"></i> 归并排序代码实现 (C++)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 递归实现 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -502,7 +510,7 @@
                     <p class="text-gray-700 mb-3">
                         归并排序的标准实现方式，使用递归进行分治操作
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp" id="merge-code">// 归并排序 - 递归实现
 #include &lt;iostream&gt;
 #include &lt;vector&gt;
@@ -512,16 +520,16 @@ using namespace std;
 void merge(vector&lt;int&gt;& arr, int left, int mid, int right) {
     int n1 = mid - left + 1;  // 左子数组长度
     int n2 = right - mid;     // 右子数组长度
-    
+
     // 创建临时数组
     vector&lt;int&gt; L(n1), R(n2);
-    
+
     // 复制数据到临时数组
     for (int i = 0; i < n1; i++)
         L[i] = arr[left + i];
     for (int j = 0; j < n2; j++)
         R[j] = arr[mid + 1 + j];
-    
+
     // 合并临时数组到原数组
     int i = 0, j = 0, k = left;
     while (i < n1 && j < n2) {
@@ -534,7 +542,7 @@ void merge(vector&lt;int&gt;& arr, int left, int mid, int right) {
         }
         k++;
     }
-    
+
     // 复制剩余元素
     while (i < n1) {
         arr[k] = L[i];
@@ -553,12 +561,12 @@ void mergeSort(vector&lt;int&gt;& arr, int left, int right) {
     if (left < right) {
         // 计算中间位置
         int mid = left + (right - left) / 2;
-        
+
         // 递归排序左半部分
         mergeSort(arr, left, mid);
         // 递归排序右半部分
         mergeSort(arr, mid + 1, right);
-        
+
         // 合并两个有序部分
         merge(arr, left, mid, right);
     }
@@ -576,12 +584,12 @@ int main() {
     vector&lt;int&gt; arr = {38, 27, 43, 3, 9, 82, 10};
     cout << "原始数组: ";
     printArray(arr);
-    
+
     mergeSort(arr, 0, arr.size() - 1);
-    
+
     cout << "排序后数组: ";
     printArray(arr);
-    
+
     return 0;
 }</code></pre>
 
@@ -591,14 +599,14 @@ int main() {
                         </button>
                     </div>
                 </div>
-                
+
                 <!-- 迭代实现 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">2. 迭代实现（非递归）</h3>
                     <p class="text-gray-700 mb-3">
                         归并排序的非递归实现，避免递归调用开销，适合处理大数据
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">// 归并排序 - 迭代实现
 #include &lt;iostream&gt;
 #include &lt;vector&gt;
@@ -608,14 +616,14 @@ using namespace std;
 void merge(vector&lt;int&gt;& arr, int left, int mid, int right) {
     int n1 = mid - left + 1;
     int n2 = right - mid;
-    
+
     vector&lt;int&gt; L(n1), R(n2);
-    
+
     for (int i = 0; i < n1; i++)
         L[i] = arr[left + i];
     for (int j = 0; j < n2; j++)
         R[j] = arr[mid + 1 + j];
-    
+
     int i = 0, j = 0, k = left;
     while (i < n1 && j < n2) {
         if (L[i] <= R[j]) {
@@ -627,7 +635,7 @@ void merge(vector&lt;int&gt;& arr, int left, int mid, int right) {
         }
         k++;
     }
-    
+
     while (i < n1) {
         arr[k] = L[i];
         i++;
@@ -643,7 +651,7 @@ void merge(vector&lt;int&gt;& arr, int left, int mid, int right) {
 // 归并排序迭代实现
 void mergeSort(vector&lt;int&gt;& arr) {
     int n = arr.size();
-    
+
     // 子数组长度从1开始，每次翻倍
     for (int size = 1; size < n; size *= 2) {
         // 遍历所有子数组
@@ -651,7 +659,7 @@ void mergeSort(vector&lt;int&gt;& arr) {
             // 计算中间位置和右边界
             int mid = min(left + size - 1, n - 1);
             int right = min(left + 2 * size - 1, n - 1);
-            
+
             // 合并子数组
             merge(arr, left, mid, right);
         }
@@ -670,12 +678,12 @@ int main() {
     vector&lt;int&gt; arr = {38, 27, 43, 3, 9, 82, 10};
     cout << "原始数组: ";
     printArray(arr);
-    
+
     mergeSort(arr);
-    
+
     cout << "排序后数组: ";
     printArray(arr);
-    
+
     return 0;
 }</code></pre>
                 </div>
@@ -687,14 +695,14 @@ int main() {
             <h2 class="text-2xl font-bold text-merge mb-6 flex items-center">
                 <i class="fa fa-clock-o mr-2"></i> 时间复杂度分析
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">归并排序的时间复杂度</h3>
                     <p class="text-gray-700 mb-4">
                         归并排序的时间复杂度分析可以通过递归树或递推公式来进行：
                     </p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <h4 class="font-semibold text-merge mb-2">递归树分析</h4>
@@ -716,7 +724,7 @@ int main() {
                             </p>
                         </div>
                     </div>
-                    
+
                     <div class="mt-4">
                         <h4 class="font-semibold mb-2">复杂度总结</h4>
                         <div class="overflow-x-auto">
@@ -749,13 +757,13 @@ int main() {
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">归并排序的优化</h3>
                     <p class="text-gray-700 mb-3">
                         基本归并排序可以通过以下方式进行优化，提高实际运行效率：
                     </p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-white p-3 rounded-lg border border-gray-200">
                             <h4 class="font-semibold mb-2">小规模数组使用插入排序</h4>
@@ -791,7 +799,7 @@ int main() {
             <h2 class="text-2xl font-bold text-merge mb-6 flex items-center">
                 <i class="fa fa-tasks mr-2"></i> 洛谷相关题目推荐
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 模板题 -->
                 <div>
@@ -800,14 +808,14 @@ int main() {
                         模板题
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <a href="https://www.luogu.com.cn/problem/P1177" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full">
+                        <a href="https://www.luogu.com.cn/problem/P1177" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full" rel="noopener noreferrer">
                             <div class="font-medium mb-1">P1177 【模板】排序</div>
                             <div class="text-sm text-gray-600 flex-grow">
                                 对数组进行排序，直接应用归并排序算法的基础题目
                             </div>
                             <div class="mt-2 text-xs text-gray-500">难度：普及-</div>
                         </a>
-                        <a href="https://www.luogu.com.cn/problem/P1908" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full">
+                        <a href="https://www.luogu.com.cn/problem/P1908" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full" rel="noopener noreferrer">
                             <div class="font-medium mb-1">P1908 逆序对</div>
                             <div class="text-sm text-gray-600 flex-grow">
                                 利用归并排序的思想计算逆序对数量，经典应用
@@ -816,7 +824,7 @@ int main() {
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- 入门题 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-4 flex items-center">
@@ -824,21 +832,21 @@ int main() {
                         入门题
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <a href="https://www.luogu.com.cn/problem/P1271" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full">
+                        <a href="https://www.luogu.com.cn/problem/P1271" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full" rel="noopener noreferrer">
                             <div class="font-medium mb-1">P1271 选举学生会</div>
                             <div class="text-sm text-gray-600 flex-grow">
                                 对投票结果进行排序统计，可应用归并排序解决
                             </div>
                             <div class="mt-2 text-xs text-gray-500">难度：普及-</div>
                         </a>
-                        <a href="https://www.luogu.com.cn/problem/P1093" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full">
+                        <a href="https://www.luogu.com.cn/problem/P1093" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full" rel="noopener noreferrer">
                             <div class="font-medium mb-1">P1093 奖学金</div>
                             <div class="text-sm text-gray-600 flex-grow">
                                 多关键字排序问题，可扩展归并排序实现多关键字比较
                             </div>
                             <div class="mt-2 text-xs text-gray-500">难度：普及-</div>
                         </a>
-                        <a href="https://www.luogu.com.cn/problem/P2676" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full">
+                        <a href="https://www.luogu.com.cn/problem/P2676" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full" rel="noopener noreferrer">
                             <div class="font-medium mb-1">P2676 [USACO07DEC] Bookshelf B</div>
                             <div class="text-sm text-gray-600 flex-grow">
                                 结合排序和贪心的问题，可使用归并排序预处理
@@ -847,7 +855,7 @@ int main() {
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- 进阶题 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-4 flex items-center">
@@ -855,21 +863,21 @@ int main() {
                         进阶题
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <a href="https://www.luogu.com.cn/problem/P3810" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full">
+                        <a href="https://www.luogu.com.cn/problem/P3810" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full" rel="noopener noreferrer">
                             <div class="font-medium mb-1">P3810 【模板】三维偏序（陌上花开）</div>
                             <div class="text-sm text-gray-600 flex-grow">
                                 复杂的多维排序问题，可结合归并排序和树状数组解决
                             </div>
                             <div class="mt-2 text-xs text-gray-500">难度：提高+/省选-</div>
                         </a>
-                        <a href="https://www.luogu.com.cn/problem/P4402" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full">
+                        <a href="https://www.luogu.com.cn/problem/P4402" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full" rel="noopener noreferrer">
                             <div class="font-medium mb-1">P4402 [Cerc2007]robotic sort 机械排序</div>
                             <div class="text-sm text-gray-600 flex-grow">
                                 模拟机械排序过程，可利用归并排序思想优化
                             </div>
                             <div class="mt-2 text-xs text-gray-500">难度：提高+/省选-</div>
                         </a>
-                        <a href="https://www.luogu.com.cn/problem/P5396" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full">
+                        <a href="https://www.luogu.com.cn/problem/P5396" target="_blank" class="subtopic-item hover:border-merge hover:bg-merge/5 flex flex-col h-full" rel="noopener noreferrer">
                             <div class="font-medium mb-1">P5396 【模板】第二类斯特林数·列</div>
                             <div class="text-sm text-gray-600 flex-grow">
                                 数论问题，可使用归并排序优化卷积计算
@@ -886,7 +894,7 @@ int main() {
         // 初始化代码高亮
         document.addEventListener('DOMContentLoaded', function() {
             hljs.highlightAll();
-            
+
             // 初始化数组演示
             initMergeDemo();
             initCodeExecution();
@@ -899,27 +907,27 @@ int main() {
             const leftArray = document.getElementById('left-array');
             const rightArray = document.getElementById('right-array');
             const mergedArray = document.getElementById('merged-array');
-            
+
             mergeDemoBtn.addEventListener('click', function() {
                 // 重置演示状态
                 mergedArray.innerHTML = '';
-                
+
                 // 获取左右数组元素
                 const leftElements = Array.from(leftArray.getElementsByClassName('array-element'));
                 const rightElements = Array.from(rightArray.getElementsByClassName('array-element'));
-                
+
                 // 提取数值
                 const leftValues = leftElements.map(el => parseInt(el.textContent));
                 const rightValues = rightElements.map(el => parseInt(el.textContent));
-                
+
                 // 重置高亮
                 leftElements.forEach(el => el.classList.remove('array-element-active'));
                 rightElements.forEach(el => el.classList.remove('array-element-active'));
-                
+
                 // 模拟合并过程
                 let i = 0, j = 0;
                 const mergeSteps = [];
-                
+
                 while (i < leftValues.length && j < rightValues.length) {
                     if (leftValues[i] <= rightValues[j]) {
                         mergeSteps.push({ type: 'left', index: i });
@@ -929,24 +937,24 @@ int main() {
                         j++;
                     }
                 }
-                
+
                 while (i < leftValues.length) {
                     mergeSteps.push({ type: 'left', index: i });
                     i++;
                 }
-                
+
                 while (j < rightValues.length) {
                     mergeSteps.push({ type: 'right', index: j });
                     j++;
                 }
-                
+
                 // 执行合并动画
                 let stepIndex = 0;
                 const animateMerge = () => {
                     if (stepIndex < mergeSteps.length) {
                         const step = mergeSteps[stepIndex];
                         let element, sourceArray;
-                        
+
                         if (step.type === 'left') {
                             sourceArray = leftElements;
                             element = leftElements[step.index];
@@ -954,18 +962,18 @@ int main() {
                             sourceArray = rightElements;
                             element = rightElements[step.index];
                         }
-                        
+
                         // 高亮当前元素
                         sourceArray.forEach(el => el.classList.remove('array-element-active'));
                         element.classList.add('array-element-active');
-                        
+
                         // 复制元素到结果数组
                         setTimeout(() => {
                             const newElement = document.createElement('div');
                             newElement.className = 'array-element array-element-merged';
                             newElement.textContent = element.textContent;
                             mergedArray.appendChild(newElement);
-                            
+
                             stepIndex++;
                             animateMerge();
                         }, 800);
@@ -975,10 +983,10 @@ int main() {
                         rightElements.forEach(el => el.classList.remove('array-element-active'));
                     }
                 };
-                
+
                 animateMerge();
             });
-            
+
             // 归并排序完整演示
             const mergeStartBtn = document.getElementById('merge-start');
             const mergeStepBtn = document.getElementById('merge-step');
@@ -989,12 +997,12 @@ int main() {
             const mergeStatus = document.getElementById('merge-status');
             const mergeProgressBar = document.getElementById('merge-progress-bar');
             const mergeStepDescription = document.getElementById('merge-step-description');
-            
+
             let currentArray = [];
             let animationSteps = [];
             let currentStep = 0;
             let isAnimating = false;
-            
+
             // 初始化数组
             function initArray() {
                 try {
@@ -1013,7 +1021,7 @@ int main() {
                     return false;
                 }
             }
-            
+
             // 生成随机数组
             randomArrayBtn.addEventListener('click', function() {
                 const size = Math.floor(Math.random() * 5) + 5; // 5-9个元素
@@ -1024,13 +1032,13 @@ int main() {
                 arrayInput.value = arr.join(',');
                 initArray();
             });
-            
+
             // 重置数组
             resetArrayBtn.addEventListener('click', function() {
                 initArray();
                 resetAnimation();
             });
-            
+
             // 重置动画状态
             function resetAnimation() {
                 currentStep = 0;
@@ -1041,39 +1049,39 @@ int main() {
                 mergeProgressBar.style.width = '0%';
                 mergeStepDescription.textContent = "准备开始归并排序演示...";
             }
-            
+
             // 渲染数组
             function renderArray(arr, left = -1, right = -1, merged = []) {
                 mergeVisualization.innerHTML = '';
                 const container = document.createElement('div');
                 container.className = 'flex flex-wrap justify-center gap-2';
-                
+
                 for (let i = 0; i < arr.length; i++) {
                     const element = document.createElement('div');
                     element.className = 'array-element';
                     element.textContent = arr[i];
-                    
+
                     // 标记当前处理范围
                     if (left !== -1 && right !== -1 && i >= left && i <= right) {
                         element.classList.add('bg-merge/20');
                     }
-                    
+
                     // 标记已合并元素
                     if (merged.includes(i)) {
                         element.classList.add('array-element-merged');
                     }
-                    
+
                     container.appendChild(element);
                 }
-                
+
                 mergeVisualization.appendChild(container);
             }
-            
+
             // 生成归并排序动画步骤
             function generateMergeSteps(arr) {
                 const steps = [];
                 const tempArr = [...arr];
-                
+
                 // 递归生成步骤
                 function mergeSortStep(arr, left, right, depth = 0) {
                     steps.push({
@@ -1083,20 +1091,20 @@ int main() {
                         right: right,
                         description: `分解数组: 处理区间 [${left}, ${right}]`
                     });
-                    
+
                     if (left < right) {
                         const mid = Math.floor((left + right) / 2);
-                        
+
                         // 排序左半部分
                         mergeSortStep(arr, left, mid, depth + 1);
-                        
+
                         // 排序右半部分
                         mergeSortStep(arr, mid + 1, right, depth + 1);
-                        
+
                         // 合并
                         const merged = [...arr];
                         let i = left, j = mid + 1, k = left;
-                        
+
                         while (i <= mid && j <= right) {
                             steps.push({
                                 type: 'compare',
@@ -1107,7 +1115,7 @@ int main() {
                                 j: j,
                                 description: `比较元素: arr[${i}] = ${arr[i]} 和 arr[${j}] = ${arr[j]}`
                             });
-                            
+
                             if (arr[i] <= arr[j]) {
                                 merged[k] = arr[i];
                                 i++;
@@ -1116,7 +1124,7 @@ int main() {
                                 j++;
                             }
                             k++;
-                            
+
                             steps.push({
                                 type: 'merge',
                                 array: [...merged],
@@ -1126,7 +1134,7 @@ int main() {
                                 description: `合并元素: 放置 ${merged[k - 1]} 到位置 ${k - 1}`
                             });
                         }
-                        
+
                         while (i <= mid) {
                             merged[k] = arr[i];
                             i++;
@@ -1140,7 +1148,7 @@ int main() {
                                 description: `合并剩余元素: 放置 ${merged[k - 1]} 到位置 ${k - 1}`
                             });
                         }
-                        
+
                         while (j <= right) {
                             merged[k] = arr[j];
                             j++;
@@ -1154,12 +1162,12 @@ int main() {
                                 description: `合并剩余元素: 放置 ${merged[k - 1]} 到位置 ${k - 1}`
                             });
                         }
-                        
+
                         // 更新原数组
                         for (let i = left; i <= right; i++) {
                             arr[i] = merged[i];
                         }
-                        
+
                         steps.push({
                             type: 'merged',
                             array: [...arr],
@@ -1177,18 +1185,18 @@ int main() {
                         });
                     }
                 }
-                
+
                 mergeSortStep(tempArr, 0, tempArr.length - 1);
                 return steps;
             }
-            
+
             // 执行一步动画
             function executeStep() {
                 if (currentStep < animationSteps.length) {
                     const step = animationSteps[currentStep];
                     mergeStatus.textContent = `状态: ${step.description}`;
                     mergeStepDescription.textContent = step.description;
-                    
+
                     // 渲染当前步骤
                     if (step.type === 'compare') {
                         renderArray(step.array, step.left, step.right);
@@ -1204,10 +1212,10 @@ int main() {
                     } else {
                         renderArray(step.array, step.left, step.right);
                     }
-                    
+
                     currentStep++;
                     mergeProgressBar.style.width = `${(currentStep / animationSteps.length) * 100}%`;
-                    
+
                     // 检查是否完成
                     if (currentStep >= animationSteps.length) {
                         mergeStatus.textContent = "状态: 归并排序完成";
@@ -1216,32 +1224,32 @@ int main() {
                         mergeStepBtn.disabled = true;
                         isAnimating = false;
                     }
-                    
+
                     return true;
                 }
                 return false;
             }
-            
+
             // 开始演示
             mergeStartBtn.addEventListener('click', function() {
                 if (!initArray()) return;
-                
+
                 resetAnimation();
                 animationSteps = generateMergeSteps([...currentArray]);
                 mergeStartBtn.disabled = true;
                 mergeStepBtn.disabled = false;
                 isAnimating = true;
-                
+
                 // 自动播放动画
                 function autoStep() {
                     if (isAnimating && executeStep()) {
                         setTimeout(autoStep, 1000);
                     }
                 }
-                
+
                 autoStep();
             });
-            
+
             // 单步执行
             mergeStepBtn.addEventListener('click', function() {
                 if (animationSteps.length === 0) {
@@ -1249,10 +1257,10 @@ int main() {
                     animationSteps = generateMergeSteps([...currentArray]);
                     mergeStartBtn.disabled = true;
                 }
-                
+
                 executeStep();
             });
-            
+
             // 初始化数组
             initArray();
         }
@@ -1261,7 +1269,7 @@ int main() {
         function initCodeExecution() {
             const runCodeBtn = document.getElementById('run-code');
             const codeBlock = document.getElementById('merge-code');
-            
+
             // 代码执行步骤
             const codeSteps = [
                 { line: 5, desc: "进入merge函数，准备合并两个有序数组" },
@@ -1294,29 +1302,29 @@ int main() {
                 { line: 69, desc: "调用mergeSort开始排序" },
                 { line: 75, desc: "排序完成，输出结果" }
             ];
-            
+
             let currentCodeStep = 0;
             let codeLines = [];
-            
+
             // 初始化代码行
             function initCodeLines() {
                 const codeHTML = codeBlock.innerHTML;
                 const lines = codeHTML.split('\n');
-                codeBlock.innerHTML = lines.map((line, index) => 
+                codeBlock.innerHTML = lines.map((line, index) =>
                     `<div class="code-line" id="code-line-${index + 1}">${line}</div>`
                 ).join('\n');
-                
-                codeLines = Array.from({ length: lines.length }, (_, i) => 
+
+                codeLines = Array.from({ length: lines.length }, (_, i) =>
                     document.getElementById(`code-line-${i + 1}`)
                 );
             }
-            
+
             // 重置代码高亮
             function resetCodeHighlight() {
                 codeLines.forEach(line => line.classList.remove('code-line-highlight'));
                 currentCodeStep = 0;
             }
-            
+
             // 执行代码步骤
             function executeCodeStep() {
                 if (currentCodeStep < codeSteps.length) {
@@ -1327,7 +1335,7 @@ int main() {
                             codeLines[prevLine].classList.remove('code-line-highlight');
                         }
                     }
-                    
+
                     // 添加当前步高亮
                     const step = codeSteps[currentCodeStep];
                     const lineIndex = step.line - 1;
@@ -1336,10 +1344,10 @@ int main() {
                         // 滚动到当前行
                         codeLines[lineIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
-                    
+
                     mergeStatus.textContent = `代码执行: ${step.desc}`;
                     currentCodeStep++;
-                    
+
                     // 如果是最后一步，保持高亮
                     if (currentCodeStep >= codeSteps.length) {
                         mergeStatus.textContent = "代码执行完成: 归并排序成功";
@@ -1349,17 +1357,18 @@ int main() {
                     }
                 }
             }
-            
+
             // 运行代码
             runCodeBtn.addEventListener('click', function() {
                 initCodeLines();
                 resetCodeHighlight();
                 executeCodeStep();
             });
-            
+
             // 初始化代码行
             initCodeLines();
         }
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>集合与逻辑 - CSP初赛知识点</title>
+
+    <meta name="description" content="集合与逻辑 - CSP初赛知识点课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/chusai/shuxue/jihe.html">
+    <meta property="og:title" content="集合与逻辑 - CSP初赛知识点">
+    <meta property="og:description" content="集合与逻辑 - CSP初赛知识点课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/chusai/shuxue/jihe.html">
+<title>集合与逻辑 - CSP初赛知识点</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -73,8 +80,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -126,7 +134,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="bg-gradient-to-r from-set/10 to-logic/10 rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -155,7 +163,7 @@
             <h2 class="text-2xl font-bold text-set mb-6 flex items-center">
                 <i class="fa fa-cubes mr-2"></i> 集合运算
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">集合的基本概念</h3>
@@ -171,7 +179,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <!-- 集合运算动画演示 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">集合运算动态演示</h3>
@@ -181,10 +189,10 @@
                                 演示集合的基本运算：交集、并集、差集和补集。
                                 拖动滑块可以调整集合A和集合B的元素，点击相应按钮查看运算结果。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">集合A元素范围:</label>
-                                <input type="range" id="set-a-range" min="1" max="10" value="5" 
+                                <input type="range" id="set-a-range" min="1" max="10" value="5"
                                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-set">
                                 <div class="flex justify-between text-xs text-gray-500 mt-1">
                                     <span>1-1</span>
@@ -192,10 +200,10 @@
                                     <span>1-10</span>
                                 </div>
                             </div>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">集合B元素范围:</label>
-                                <input type="range" id="set-b-range" min="1" max="10" value="7" 
+                                <input type="range" id="set-b-range" min="1" max="10" value="7"
                                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-set">
                                 <div class="flex justify-between text-xs text-gray-500 mt-1">
                                     <span>5-5</span>
@@ -203,7 +211,7 @@
                                     <span>5-14</span>
                                 </div>
                             </div>
-                            
+
                             <div class="flex flex-wrap gap-2">
                                 <button id="btn-union" class="bg-set hover:bg-set/90 text-white px-3 py-1 rounded-md transition-all text-sm">
                                     并集 (A∪B)
@@ -221,17 +229,17 @@
                                     重置
                                 </button>
                             </div>
-                            
+
                             <div id="set-result" class="mt-4 p-3 bg-white border border-gray-200 rounded-md hidden">
                                 <h4 class="font-medium text-sm mb-1">运算结果：</h4>
                                 <p id="result-text" class="text-sm"></p>
                             </div>
                         </div>
-                        
+
                         <div class="relative h-64 flex items-center justify-center">
                             <div id="universal-set" class="absolute w-72 h-72 border-2 border-gray-300 rounded-full flex items-center justify-center bg-gray-50">
                                 <span class="text-xs text-gray-500">全集 U = {1,2,...,14}</span>
-                                
+
                                 <!-- 集合A -->
                                 <div id="set-a" class="venn-circle w-48 h-48 border-2 border-blue-500 bg-blue-500/10">
                                     <div id="set-a-elements" class="flex flex-wrap gap-1 justify-center">
@@ -239,7 +247,7 @@
                                     </div>
                                     <div class="absolute -top-6 text-blue-600 font-medium text-sm">A</div>
                                 </div>
-                                
+
                                 <!-- 集合B -->
                                 <div id="set-b" class="venn-circle w-48 h-48 border-2 border-red-500 bg-red-500/10">
                                     <div id="set-b-elements" class="flex flex-wrap gap-1 justify-center">
@@ -251,7 +259,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 集合运算定律 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">集合运算定律</h3>
@@ -278,11 +286,11 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 集合相关例题 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">集合相关例题</h3>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg mb-4">
                         <h4 class="font-semibold mb-2">例题1：集合的基本运算</h4>
                         <p class="text-gray-700 mb-3">
@@ -295,7 +303,7 @@
                             <p class="text-sm">A - B = {1, 2}</p>
                         </div>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h4 class="font-semibold mb-2">例题2：集合的计数</h4>
                         <p class="text-gray-700 mb-3">
@@ -315,7 +323,7 @@
             <h2 class="text-2xl font-bold text-logic mb-6 flex items-center">
                 <i class="fa fa-check-square-o mr-2"></i> 逻辑命题与布尔代数
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">逻辑命题的基本概念</h3>
@@ -352,7 +360,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 真值表演示 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">真值表动态演示</h3>
@@ -361,7 +369,7 @@
                             <p class="text-gray-700 mb-4">
                                 选择不同的逻辑运算，查看其真值表。点击表格中的单元格可以改变输入值，观察输出结果的变化。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">选择逻辑运算:</label>
                                 <select id="logic-operation" class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-logic">
@@ -373,7 +381,7 @@
                                     <option value="equivalent">等价运算 (P ↔ Q)</option>
                                 </select>
                             </div>
-                            
+
                             <div id="truth-table-container" class="overflow-x-auto">
                                 <table class="truth-table">
                                     <thead>
@@ -408,7 +416,7 @@
                                 </table>
                             </div>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-semibold mb-3">运算规则说明</h4>
                             <div id="operation-description" class="space-y-2 text-sm">
@@ -418,7 +426,7 @@
                                     应用场景：需要同时满足多个条件时使用，如判断一个数是否在某个范围内。
                                 </p>
                             </div>
-                            
+
                             <div class="mt-6">
                                 <h4 class="font-semibold mb-3">C++中的短路特性</h4>
                                 <p class="text-sm text-gray-700 mb-2">
@@ -439,7 +447,7 @@ cout << b;  // 输出5，而不是6</pre>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 布尔代数定律 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">布尔代数定律</h3>
@@ -476,11 +484,11 @@ cout << b;  // 输出5，而不是6</pre>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 解题技巧 -->
                 <div class="bg-logic/10 p-5 rounded-lg">
                     <h3 class="text-xl font-semibold mb-4 text-logic">CSP初赛解题技巧</h3>
-                    
+
                     <div class="space-y-4">
                         <div>
                             <h4 class="font-medium mb-2">集合运算题解题技巧</h4>
@@ -491,7 +499,7 @@ cout << b;  // 输出5，而不是6</pre>
                                 <li>德摩根律在处理集合补集运算时非常有用：¬(A ∪ B) = ¬A ∩ ¬B</li>
                             </ul>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium mb-2">逻辑推理题解题技巧</h4>
                             <ul class="list-disc pl-6 text-sm space-y-1">
@@ -504,11 +512,11 @@ cout << b;  // 输出5，而不是6</pre>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 逻辑相关例题 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">逻辑相关例题</h3>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg mb-4">
                         <h4 class="font-semibold mb-2">例题1：逻辑表达式化简</h4>
                         <p class="text-gray-700 mb-3">
@@ -521,7 +529,7 @@ cout << b;  // 输出5，而不是6</pre>
                             <p class="text-sm">原式 = (¬P ∧ ¬Q) ∨ (¬P ∧ Q) = ¬P ∧ (¬Q ∨ Q) = ¬P ∧ 真 = ¬P</p>
                         </div>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg mb-4">
                         <h4 class="font-semibold mb-2">例题2：程序逻辑分析</h4>
                         <p class="text-gray-700 mb-3">
@@ -538,7 +546,7 @@ x = b;</pre>
                             <p class="text-sm mt-2"><strong>解析：</strong> 由于a > 5为假，根据&&的短路特性，右侧的(b = 10)不会执行，b的值仍为5，因此x最终为5。</p>
                         </div>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h4 class="font-semibold mb-2">例题3：集合与逻辑综合题</h4>
                         <p class="text-gray-700 mb-3">
@@ -568,12 +576,12 @@ x = b;</pre>
     <script>
         // 初始化代码高亮
         hljs.highlightAll();
-        
+
         // 集合运算演示
         let aSize = 5;
         let bStart = 5;
         let bSize = 3;
-        
+
         // 更新集合A的显示
         function updateSetA() {
             const container = document.getElementById('set-a-elements');
@@ -586,7 +594,7 @@ x = b;</pre>
             }
             document.getElementById('set-a-value').textContent = `1-${aSize}`;
         }
-        
+
         // 更新集合B的显示
         function updateSetB() {
             const container = document.getElementById('set-b-elements');
@@ -599,18 +607,18 @@ x = b;</pre>
             }
             document.getElementById('set-b-value').textContent = `${bStart}-${bStart + bSize - 1}`;
         }
-        
+
         // 初始化集合
         updateSetA();
         updateSetB();
-        
+
         // 监听集合A范围变化
         document.getElementById('set-a-range').addEventListener('input', function(e) {
             aSize = parseInt(e.target.value);
             updateSetA();
             clearHighlight();
         });
-        
+
         // 监听集合B范围变化
         document.getElementById('set-b-range').addEventListener('input', function(e) {
             const val = parseInt(e.target.value);
@@ -619,7 +627,7 @@ x = b;</pre>
             updateSetB();
             clearHighlight();
         });
-        
+
         // 清除高亮
         function clearHighlight() {
             document.querySelectorAll('.set-element').forEach(el => {
@@ -627,35 +635,35 @@ x = b;</pre>
             });
             document.getElementById('set-result').classList.add('hidden');
         }
-        
+
         // 计算并集
         document.getElementById('btn-union').addEventListener('click', function() {
             clearHighlight();
             const result = new Set();
-            
+
             // 添加A的所有元素
             for (let i = 1; i <= aSize; i++) {
                 result.add(i);
             }
-            
+
             // 添加B的所有元素
             for (let i = bStart; i < bStart + bSize; i++) {
                 result.add(i);
             }
-            
+
             // 高亮结果元素
             document.querySelectorAll('.set-element').forEach(el => {
                 if (result.has(parseInt(el.textContent))) {
                     el.classList.add('set-element-highlight');
                 }
             });
-            
+
             // 显示结果
             const resultText = document.getElementById('result-text');
             resultText.textContent = `A∪B = {${Array.from(result).sort((a, b) => a - b).join(', ')}}`;
             document.getElementById('set-result').classList.remove('hidden');
         });
-        
+
         // 计算交集
         document.getElementById('btn-intersection').addEventListener('click', function() {
             clearHighlight();
@@ -663,27 +671,27 @@ x = b;</pre>
             for (let i = 1; i <= aSize; i++) {
                 setA.add(i);
             }
-            
+
             const result = new Set();
             for (let i = bStart; i < bStart + bSize; i++) {
                 if (setA.has(i)) {
                     result.add(i);
                 }
             }
-            
+
             // 高亮结果元素
             document.querySelectorAll('.set-element').forEach(el => {
                 if (result.has(parseInt(el.textContent))) {
                     el.classList.add('set-element-highlight');
                 }
             });
-            
+
             // 显示结果
             const resultText = document.getElementById('result-text');
             resultText.textContent = `A∩B = {${Array.from(result).sort((a, b) => a - b).join(', ')}}`;
             document.getElementById('set-result').classList.remove('hidden');
         });
-        
+
         // 计算差集
         document.getElementById('btn-difference').addEventListener('click', function() {
             clearHighlight();
@@ -691,32 +699,32 @@ x = b;</pre>
             for (let i = 1; i <= aSize; i++) {
                 setA.add(i);
             }
-            
+
             const setB = new Set();
             for (let i = bStart; i < bStart + bSize; i++) {
                 setB.add(i);
             }
-            
+
             const result = new Set();
             for (const elem of setA) {
                 if (!setB.has(elem)) {
                     result.add(elem);
                 }
             }
-            
+
             // 高亮结果元素
             document.querySelectorAll('.set-element').forEach(el => {
                 if (result.has(parseInt(el.textContent))) {
                     el.classList.add('set-element-highlight');
                 }
             });
-            
+
             // 显示结果
             const resultText = document.getElementById('result-text');
             resultText.textContent = `A-B = {${Array.from(result).sort((a, b) => a - b).join(', ')}}`;
             document.getElementById('set-result').classList.remove('hidden');
         });
-        
+
         // 计算对称差集
         document.getElementById('btn-symmetric').addEventListener('click', function() {
             clearHighlight();
@@ -724,12 +732,12 @@ x = b;</pre>
             for (let i = 1; i <= aSize; i++) {
                 setA.add(i);
             }
-            
+
             const setB = new Set();
             for (let i = bStart; i < bStart + bSize; i++) {
                 setB.add(i);
             }
-            
+
             const result = new Set();
             for (const elem of setA) {
                 if (!setB.has(elem)) {
@@ -741,20 +749,20 @@ x = b;</pre>
                     result.add(elem);
                 }
             }
-            
+
             // 高亮结果元素
             document.querySelectorAll('.set-element').forEach(el => {
                 if (result.has(parseInt(el.textContent))) {
                     el.classList.add('set-element-highlight');
                 }
             });
-            
+
             // 显示结果
             const resultText = document.getElementById('result-text');
             resultText.textContent = `A△B = {${Array.from(result).sort((a, b) => a - b).join(', ')}}`;
             document.getElementById('set-result').classList.remove('hidden');
         });
-        
+
         // 重置集合
         document.getElementById('reset-sets').addEventListener('click', function() {
             aSize = 5;
@@ -766,7 +774,7 @@ x = b;</pre>
             updateSetB();
             clearHighlight();
         });
-        
+
         // 真值表演示
         const operations = {
             and: {
@@ -830,13 +838,13 @@ x = b;</pre>
                 hasQ: true
             }
         };
-        
+
         // 更新真值表
         function updateTruthTable(op) {
             const operation = operations[op];
             const header = document.getElementById('table-header');
             const body = document.getElementById('table-body');
-            
+
             // 更新表头
             header.innerHTML = '';
             header.innerHTML += '<th>P</th>';
@@ -844,15 +852,15 @@ x = b;</pre>
                 header.innerHTML += '<th>Q</th>';
             }
             header.innerHTML += `<th>${operation.name}</th>`;
-            
+
             // 更新表格内容
             body.innerHTML = '';
             const rows = operation.hasQ ? 4 : 2;
-            
+
             for (let i = 0; i < rows; i++) {
                 const row = document.createElement('tr');
                 const p = i < 2; // P值：前两行真，后两行假（对二元运算）
-                
+
                 // 添加P列
                 const pCell = document.createElement('td');
                 pCell.className = 'cursor-pointer logic-input';
@@ -860,7 +868,7 @@ x = b;</pre>
                 pCell.dataset.col = 0;
                 pCell.textContent = p ? 'T' : 'F';
                 row.appendChild(pCell);
-                
+
                 // 添加Q列（如果需要）
                 if (operation.hasQ) {
                     const q = i % 2 === 0; // Q值：第1、3行真，第2、4行假
@@ -871,32 +879,32 @@ x = b;</pre>
                     qCell.textContent = q ? 'T' : 'F';
                     row.appendChild(qCell);
                 }
-                
+
                 // 添加结果列
                 const resultCell = document.createElement('td');
                 resultCell.className = 'logic-output';
                 resultCell.dataset.row = i;
                 row.appendChild(resultCell);
-                
+
                 body.appendChild(row);
             }
-            
+
             // 更新描述
             document.getElementById('operation-description').innerHTML = operation.description;
-            
+
             // 计算结果
             calculateTruthTable(op);
         }
-        
+
         // 计算真值表结果
         function calculateTruthTable(op) {
             const operation = operations[op];
             const rows = document.querySelectorAll('#table-body tr');
-            
+
             rows.forEach((row, i) => {
                 const pCell = row.querySelector('td:nth-child(1)');
                 const p = pCell.textContent === 'T';
-                
+
                 let result;
                 if (operation.hasQ) {
                     const qCell = row.querySelector('td:nth-child(2)');
@@ -905,18 +913,18 @@ x = b;</pre>
                 } else {
                     result = operation.evaluate(p);
                 }
-                
+
                 const resultCell = row.querySelector('.logic-output');
                 resultCell.textContent = result ? 'T' : 'F';
                 resultCell.style.backgroundColor = result ? '#dcfce7' : '#fee2e2';
             });
         }
-        
+
         // 监听逻辑运算选择变化
         document.getElementById('logic-operation').addEventListener('change', function(e) {
             updateTruthTable(e.target.value);
         });
-        
+
         // 监听输入单元格点击（切换T/F）
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('logic-input')) {
@@ -925,9 +933,10 @@ x = b;</pre>
                 calculateTruthTable(document.getElementById('logic-operation').value);
             }
         });
-        
+
         // 初始化真值表
         updateTruthTable('and');
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

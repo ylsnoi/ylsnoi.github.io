@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>广度优先搜索(BFS) - 艾科斯信奥网</title>
+
+    <meta name="description" content="广度优先搜索(BFS)课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/suanfa/sousuosuanfa/guangsou.html">
+    <meta property="og:title" content="广度优先搜索(BFS) - 艾科斯信奥网">
+    <meta property="og:description" content="广度优先搜索(BFS)课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/suanfa/sousuosuanfa/guangsou.html">
+<title>广度优先搜索(BFS) - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -147,8 +154,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50 transition-all duration-300" id="navbar">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -222,7 +230,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="bfs-bg rounded-lg p-6 mb-8 shadow-sm transform transition-all duration-500 hover:shadow-md">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -273,7 +281,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">BFS的基本步骤</h3>
                     <div class="space-y-3">
@@ -353,7 +361,7 @@
             <h2 class="text-2xl font-bold text-bfs mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> BFS执行过程演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- BFS动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
@@ -364,7 +372,7 @@
                                 下面的动画展示了BFS从起点到终点的完整搜索过程，包括节点访问顺序、队列变化和最短路径生成。
                                 左侧为图结构，中间为算法执行过程，右侧为代码及执行高亮。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">选择起点和终点:</label>
                                 <div class="grid grid-cols-2 gap-4">
@@ -398,7 +406,7 @@
                                     <option value="tree">树状图</option>
                                 </select>
                             </div>
-                            
+
                             <div class="flex flex-wrap gap-2 mt-4">
                                 <button id="bfs-run" class="control-btn bg-bfs hover:bg-bfs/90 text-white shadow-sm">
                                     <i class="fa fa-play mr-1.5"></i> 运行
@@ -424,16 +432,16 @@
                                     <button class="speed-btn" data-speed="3000">极慢</button>
                                 </div>
                             </div>
-                            
+
                             <div class="animation-progress mt-4">
                                 <div id="bfs-progress-bar" class="animation-progress-bar" style="width: 0%"></div>
                             </div>
-                            
+
                             <div id="bfs-status" class="animation-status">
                                 状态: 等待开始
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto" id="bfs-execution">
                                 <div class="text-center text-gray-500 py-8">
@@ -442,7 +450,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="flex items-center justify-between mb-2">
                                 <h4 class="font-medium text-gray-700 text-sm">BFS算法代码</h4>
@@ -503,14 +511,14 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- 图形展示区域 -->
                     <div class="mt-6 flex justify-center">
                         <div id="graph-container" class="relative w-full max-w-2xl h-80 border border-gray-200 rounded-lg bg-white p-4">
                             <!-- 节点和边将通过JavaScript动态生成 -->
                         </div>
                     </div>
-                    
+
                     <!-- 队列展示 -->
                     <div class="mt-4 bg-white p-3 rounded-lg border border-gray-200">
                         <h4 class="font-medium text-gray-700 mb-2 flex items-center">
@@ -529,7 +537,7 @@
             <h2 class="text-2xl font-bold text-bfs mb-6 flex items-center">
                 <i class="fa fa-code mr-2"></i> BFS算法实现 (C++)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 基础BFS示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
@@ -537,7 +545,7 @@
                     <p class="text-gray-700 mb-3">
                         使用邻接表表示图，实现BFS遍历并输出访问顺序
                     </p>
-                    
+
                     <div class="flex justify-end mb-2">
                         <button class="copy-btn text-xs text-gray-500 hover:text-primary transition-colors" data-target="code-block-1">
                             <i class="fa fa-copy mr-1"></i> 复制代码
@@ -558,22 +566,22 @@ bool visited[100];
 void bfs(int start) {
     // 创建队列
     queue<int> q;
-    
+
     // 初始化：将起点加入队列并标记为已访问
     q.push(start);
     visited[start] = true;
-    
+
     cout << "BFS访问顺序: ";
-    
+
     // 队列不为空时循环
     while (!q.empty()) {
         // 取出队首节点
         int current = q.front();
         q.pop();
-        
+
         // 访问当前节点
         cout << current << " ";
-        
+
         // 将所有未访问的邻接节点加入队列
         for (int neighbor : adj[current]) {
             if (!visited[neighbor]) {
@@ -589,10 +597,10 @@ int main() {
     int n, m;
     cout << "输入节点数和边数: ";
     cin >> n >> m;
-    
+
     // 初始化访问标记
     memset(visited, false, sizeof(visited));
-    
+
     // 读入边
     cout << "输入" << m << "条边: " << endl;
     for (int i = 0; i < m; i++) {
@@ -601,25 +609,25 @@ int main() {
         adj[u].push_back(v);
         adj[v].push_back(u); // 无向图
     }
-    
+
     int start;
     cout << "输入起始节点: ";
     cin >> start;
-    
+
     // 执行BFS
     bfs(start);
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 二维网格BFS示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
                     <h3 class="font-semibold text-lg mb-3">2. 网格最短路径 - 迷宫问题</h3>
                     <p class="text-gray-700 mb-3">
                         使用BFS求解迷宫最短路径问题，0表示可走，1表示障碍物
                     </p>
-                    
+
                     <div class="flex justify-end mb-2">
                         <button class="copy-btn text-xs text-gray-500 hover:text-primary transition-colors" data-target="code-block-2">
                             <i class="fa fa-copy mr-1"></i> 复制代码
@@ -653,7 +661,7 @@ int n, m;
 int bfs() {
     // 初始化队列
     queue<pair<int, int>> q;
-    
+
     // 初始化距离为-1（不可达）
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
@@ -661,12 +669,12 @@ int bfs() {
             visited[i][j] = false;
         }
     }
-    
+
     // 起点入队
     q.push({start_x, start_y});
     visited[start_x][start_y] = true;
     dist[start_x][start_y] = 0;
-    
+
     // 队列不为空时循环
     while (!q.empty()) {
         // 取出队首元素
@@ -674,19 +682,19 @@ int bfs() {
         q.pop();
         int x = current.first;
         int y = current.second;
-        
+
         // 如果到达终点，返回距离
         if (x == end_x && y == end_y) {
             return dist[x][y];
         }
-        
+
         // 探索四个方向
         for (int i = 0; i < 4; i++) {
             int nx = x + dx[i];
             int ny = y + dy[i];
-            
+
             // 检查新位置是否合法
-            if (nx >= 0 && nx < n && ny >= 0 && ny < m 
+            if (nx >= 0 && nx < n && ny >= 0 && ny < m
                 && maze[nx][ny] == 0 && !visited[nx][ny]) {
                 // 合法则加入队列
                 q.push({nx, ny});
@@ -695,7 +703,7 @@ int bfs() {
             }
         }
     }
-    
+
     // 无法到达终点
     return -1;
 }
@@ -703,45 +711,45 @@ int bfs() {
 int main() {
     cout << "输入迷宫大小(n m): ";
     cin >> n >> m;
-    
+
     cout << "输入迷宫: " << endl;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
             cin >> maze[i][j];
         }
     }
-    
+
     cout << "输入起点坐标(x y): ";
     cin >> start_x >> start_y;
-    
+
     cout << "输入终点坐标(x y): ";
     cin >> end_x >> end_y;
-    
+
     // 检查起点和终点是否合法
     if (maze[start_x][start_y] == 1 || maze[end_x][end_y] == 1) {
         cout << "起点或终点是障碍物，无法到达！" << endl;
         return 0;
     }
-    
+
     int shortest_dist = bfs();
-    
+
     if (shortest_dist == -1) {
         cout << "无法从起点到达终点！" << endl;
     } else {
         cout << "最短路径长度为: " << shortest_dist << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- BFS层次遍历示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
                     <h3 class="font-semibold text-lg mb-3">3. 二叉树层次遍历</h3>
                     <p class="text-gray-700 mb-3">
                         使用BFS实现二叉树的层次遍历，按层次输出节点值
                     </p>
-                    
+
                     <div class="flex justify-end mb-2">
                         <button class="copy-btn text-xs text-gray-500 hover:text-primary transition-colors" data-target="code-block-3">
                             <i class="fa fa-copy mr-1"></i> 复制代码
@@ -764,24 +772,24 @@ struct TreeNode {
 vector<vector<int>> levelOrder(TreeNode* root) {
     vector<vector<int>> result;
     if (root == NULL) return result;
-    
+
     // 创建队列，存储每一层的节点
     queue<TreeNode*> q;
     q.push(root);
-    
+
     while (!q.empty()) {
         // 当前层的节点数量
         int level_size = q.size();
         vector<int> current_level;
-        
+
         // 遍历当前层的所有节点
         for (int i = 0; i < level_size; i++) {
             TreeNode* node = q.front();
             q.pop();
-            
+
             // 记录当前节点值
             current_level.push_back(node->val);
-            
+
             // 将子节点加入队列
             if (node->left != NULL) {
                 q.push(node->left);
@@ -790,11 +798,11 @@ vector<vector<int>> levelOrder(TreeNode* root) {
                 q.push(node->right);
             }
         }
-        
+
         // 将当前层的节点值加入结果
         result.push_back(current_level);
     }
-    
+
     return result;
 }
 
@@ -805,20 +813,20 @@ TreeNode* createTree() {
     if (val == -1) { // 用-1表示空节点
         return NULL;
     }
-    
+
     TreeNode* root = new TreeNode(val);
     root->left = createTree();
     root->right = createTree();
-    
+
     return root;
 }
 
 int main() {
     cout << "按先序遍历输入二叉树节点值(-1表示空节点):" << endl;
     TreeNode* root = createTree();
-    
+
     vector<vector<int>> levels = levelOrder(root);
-    
+
     cout << "层次遍历结果:" << endl;
     for (auto& level : levels) {
         for (int val : level) {
@@ -826,7 +834,7 @@ int main() {
         }
         cout << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
@@ -837,7 +845,7 @@ int main() {
                     <p class="text-gray-700 mb-3">
                         双向BFS从起点和终点同时开始搜索，相遇时找到最短路径，效率更高
                     </p>
-                    
+
                     <div class="flex justify-end mb-2">
                         <button class="copy-btn text-xs text-gray-500 hover:text-primary transition-colors" data-target="code-block-4">
                             <i class="fa fa-copy mr-1"></i> 复制代码
@@ -854,23 +862,23 @@ using namespace std;
 int bidirectionalBFS(map<char, vector<char>>& graph, char start, char end) {
     // 起点和终点相同
     if (start == end) return 0;
-    
+
     // 两个方向的队列
     queue<char> qStart, qEnd;
     // 记录访问过的节点及距离
     map<char, int> distStart, distEnd;
     // 记录已访问节点
     unordered_set<char> visitedStart, visitedEnd;
-    
+
     // 初始化
     qStart.push(start);
     visitedStart.insert(start);
     distStart[start] = 0;
-    
+
     qEnd.push(end);
     visitedEnd.insert(end);
     distEnd[end] = 0;
-    
+
     // 双向BFS主循环
     while (!qStart.empty() && !qEnd.empty()) {
         // 从起点方向搜索一步
@@ -878,12 +886,12 @@ int bidirectionalBFS(map<char, vector<char>>& graph, char start, char end) {
         for (int i = 0; i < sizeStart; i++) {
             char current = qStart.front();
             qStart.pop();
-            
+
             // 检查是否与另一端相遇
             if (visitedEnd.count(current)) {
                 return distStart[current] + distEnd[current];
             }
-            
+
             // 扩展邻居节点
             for (char neighbor : graph[current]) {
                 if (!visitedStart.count(neighbor)) {
@@ -893,18 +901,18 @@ int bidirectionalBFS(map<char, vector<char>>& graph, char start, char end) {
                 }
             }
         }
-        
+
         // 从终点方向搜索一步
         int sizeEnd = qEnd.size();
         for (int i = 0; i < sizeEnd; i++) {
             char current = qEnd.front();
             qEnd.pop();
-            
+
             // 检查是否与另一端相遇
             if (visitedStart.count(current)) {
                 return distStart[current] + distEnd[current];
             }
-            
+
             // 扩展邻居节点
             for (char neighbor : graph[current]) {
                 if (!visitedEnd.count(neighbor)) {
@@ -915,7 +923,7 @@ int bidirectionalBFS(map<char, vector<char>>& graph, char start, char end) {
             }
         }
     }
-    
+
     // 无法到达
     return -1;
 }
@@ -930,16 +938,16 @@ int main() {
         {'E', {'B', 'F'}},
         {'F', {'C', 'E'}}
     };
-    
+
     char start = 'A', end = 'F';
     int shortestDistance = bidirectionalBFS(graph, start, end);
-    
+
     if (shortestDistance == -1) {
         cout << "从" << start << "到" << end << "没有路径！" << endl;
     } else {
         cout << "从" << start << "到" << end << "的最短路径长度为: " << shortestDistance << endl;
     }
-    
+
     return 0;
 }</code></pre>
                 </div>
@@ -951,7 +959,7 @@ int main() {
             <h2 class="text-2xl font-bold text-bfs mb-6 flex items-center">
                 <i class="fa fa-lightbulb-o mr-2"></i> BFS的算法应用
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">BFS在信息学奥赛中的典型应用</h3>
@@ -1036,7 +1044,7 @@ int main() {
             <h2 class="text-2xl font-bold text-bfs mb-6 flex items-center">
                 <i class="fa fa-trophy mr-2"></i> 推荐练习题目 (洛谷)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 模板题 -->
                 <div>
@@ -1052,11 +1060,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 给定一个n*m的棋盘，以及马的起始位置，要求计算马到达棋盘上每个点的最少步数。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1443" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1443" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white border border-gray-200 rounded-lg p-4 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P5318 【深基18.例3】查找文献</h4>
@@ -1065,11 +1073,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 给定一个无向图，输出从1号节点开始的BFS遍历顺序和DFS遍历顺序。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P5318" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P5318" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white border border-gray-200 rounded-lg p-4 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P2895 [USACO08FEB] Hotel G</h4>
@@ -1078,13 +1086,13 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 一个有N个房间的酒店，从1到N编号，计算从房间1到房间N的最短路径。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P2895" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P2895" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 入门题 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary flex items-center">
@@ -1099,11 +1107,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 给定一个方阵，其中0表示白色，1表示黑色，将被黑色包围的白色区域填充为黑色。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1162" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1162" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white border border-gray-200 rounded-lg p-4 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1332 血色先锋队</h4>
@@ -1112,11 +1120,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 给定一个城市地图，计算每个健康的居民被感染的最早时间。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1332" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1332" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white border border-gray-200 rounded-lg p-4 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P1596 [USACO10OCT] Lake Counting S</h4>
@@ -1125,13 +1133,13 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 一个农场地图，计算有多少个独立的池塘，八连通的水域被视为一个池塘。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1596" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1596" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 进阶题 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary flex items-center">
@@ -1146,11 +1154,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 给定一个01迷宫，每次可以向相邻的与当前格子值不同的格子移动，计算每个格子所在连通块的大小。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1141" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1141" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white border border-gray-200 rounded-lg p-4 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P2661 信息传递</h4>
@@ -1159,11 +1167,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 有n个同学，每个同学都有一个信息传递对象，求最小的传递环的长度。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P2661" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P2661" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white border border-gray-200 rounded-lg p-4 hover-scale">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold">P3959 宝藏</h4>
@@ -1172,7 +1180,7 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 在一个无向图中，选择一个起点建造宝藏，按一定规则开采其他节点，求最小代价。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P3959" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P3959" target="_blank" class="text-bfs hover:text-bfs/80 text-sm flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -1215,7 +1223,7 @@ int main() {
         // 初始化代码高亮
         document.addEventListener('DOMContentLoaded', function() {
             hljs.highlightAll();
-            
+
             // 导航栏滚动效果
             const navbar = document.getElementById('navbar');
             window.addEventListener('scroll', function() {
@@ -1225,7 +1233,7 @@ int main() {
                     navbar.classList.remove('shadow');
                 }
             });
-            
+
             // 图的定义 - 支持多种图结构
             const graphs = {
                 simple: {
@@ -1272,23 +1280,23 @@ int main() {
                     }
                 }
             };
-            
+
             // 当前使用的图
             let currentGraph = 'simple';
-            
+
             // 生成图函数
             function generateGraph(graphType) {
                 const graph = graphs[graphType];
                 const container = document.getElementById('graph-container');
                 container.innerHTML = '';
-                
+
                 // 创建SVG用于绘制边
                 // 创建SVG用于绘制边
                 const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
                 svg.setAttribute('class', 'absolute inset-0 w-full h-full');
                 svg.style.zIndex = '0';
                 container.appendChild(svg);
-                
+
                 // 创建节点
                 graph.nodes.forEach(nodeId => {
                     const node = document.createElement('div');
@@ -1300,24 +1308,24 @@ int main() {
                     node.textContent = nodeId;
                     container.appendChild(node);
                 });
-                
+
                 // 创建边
                 graph.edges.forEach(edge => {
                     const [from, to] = edge;
                     const fromNode = document.querySelector(`.bfs-node[data-node="${from}"]`);
                     const toNode = document.querySelector(`.bfs-node[data-node="${to}"]`);
-                    
+
                     if (fromNode && toNode) {
                         const fromRect = fromNode.getBoundingClientRect();
                         const toRect = toNode.getBoundingClientRect();
                         const containerRect = container.getBoundingClientRect();
-                        
+
                         // 计算相对于容器的百分比位置
                         const x1 = ((fromRect.left + fromRect.width/2 - containerRect.left) / containerRect.width) * 100;
                         const y1 = ((fromRect.top + fromRect.height/2 - containerRect.top) / containerRect.height) * 100;
                         const x2 = ((toRect.left + toRect.width/2 - containerRect.left) / containerRect.width) * 100;
                         const y2 = ((toRect.top + toRect.height/2 - containerRect.top) / containerRect.height) * 100;
-                        
+
                         const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
                         line.setAttribute('x1', `${x1}%`);
                         line.setAttribute('y1', `${y1}%`);
@@ -1329,19 +1337,19 @@ int main() {
                         svg.appendChild(line);
                     }
                 });
-                
+
                 // 更新起点和终点选择器
                 const startSelect = document.getElementById('start-node');
                 const endSelect = document.getElementById('end-node');
-                
+
                 // 保存当前选中值
                 const currentStart = startSelect.value;
                 const currentEnd = endSelect.value;
-                
+
                 // 清空选择器
                 startSelect.innerHTML = '';
                 endSelect.innerHTML = '';
-                
+
                 // 添加新选项
                 graph.nodes.forEach(nodeId => {
                     const startOption = document.createElement('option');
@@ -1351,7 +1359,7 @@ int main() {
                         startOption.selected = true;
                     }
                     startSelect.appendChild(startOption);
-                    
+
                     const endOption = document.createElement('option');
                     endOption.value = nodeId;
                     endOption.textContent = nodeId;
@@ -1361,50 +1369,50 @@ int main() {
                     endSelect.appendChild(endOption);
                 });
             }
-            
+
             // 初始生成图
             generateGraph(currentGraph);
-            
+
             // 图类型选择事件
             document.getElementById('graph-type').addEventListener('change', function() {
                 currentGraph = this.value;
                 resetAnimation();
                 generateGraph(currentGraph);
             });
-            
+
             // 获取当前图的邻接表
             function getGraphAdjacencyList() {
                 const graph = graphs[currentGraph];
                 const adjList = {};
-                
+
                 graph.nodes.forEach(node => {
                     adjList[node] = [];
                 });
-                
+
                 graph.edges.forEach(edge => {
                     const [from, to] = edge;
                     adjList[from].push(to);
                     adjList[to].push(from);
                 });
-                
+
                 return adjList;
             }
-            
+
             // BFS动画步骤
             const steps = [];
             let currentStep = 0;
             let animationInterval;
             let animationSpeed = 1000; // 默认中等速度
-            
+
             // 重置函数
             function resetAnimation() {
                 // 停止动画
                 clearInterval(animationInterval);
-                
+
                 // 重置按钮状态
                 document.getElementById('bfs-run').classList.remove('hidden');
                 document.getElementById('bfs-pause').classList.add('hidden');
-                
+
                 // 重置节点状态
                 document.querySelectorAll('.bfs-node').forEach(node => {
                     node.className = 'bfs-node bfs-node-unvisited absolute';
@@ -1414,20 +1422,20 @@ int main() {
                     node.style.top = pos.top;
                     node.style.left = pos.left;
                 });
-                
+
                 // 重置边状态
                 document.querySelectorAll('.bfs-edge').forEach(edge => {
                     edge.className = 'bfs-edge';
                 });
-                
+
                 // 重置队列显示
                 document.getElementById('queue-status').innerHTML = '<div class="text-gray-500 italic">队列是空的</div>';
-                
+
                 // 重置代码高亮
                 document.querySelectorAll('.code-line').forEach(line => {
                     line.classList.remove('code-line-highlight');
                 });
-                
+
                 // 重置状态
                 document.getElementById('bfs-status').textContent = '状态: 等待开始';
                 document.getElementById('bfs-progress-bar').style.width = '0%';
@@ -1437,12 +1445,12 @@ int main() {
                         <p>点击"运行"或"单步"开始演示</p>
                     </div>
                 `;
-                
+
                 // 重置步骤
                 currentStep = 0;
                 steps.length = 0;
             }
-            
+
             // 生成BFS步骤
             function generateSteps(start, end) {
                 steps.length = 0;
@@ -1452,7 +1460,7 @@ int main() {
                 const parent = {};
                 parent[start] = null;
                 visited.add(start);
-                
+
                 // 添加初始化步骤
                 steps.push({
                     type: 'init',
@@ -1462,12 +1470,12 @@ int main() {
                     message: `初始化：将起点${start}加入队列并标记为已访问`,
                     codeLine: 14
                 });
-                
+
                 let found = false;
-                
+
                 while (queue.length > 0 && !found) {
                     const current = queue.shift();
-                    
+
                     // 添加处理当前节点步骤
                     steps.push({
                         type: 'process',
@@ -1477,20 +1485,20 @@ int main() {
                         message: `处理节点${current}：从队列中取出并访问`,
                         codeLine: 20
                     });
-                    
+
                     // 如果找到终点，退出
                     if (current === end) {
                         found = true;
                         break;
                     }
-                    
+
                     // 处理邻居节点
                     for (const neighbor of graph[current]) {
                         if (!visited.has(neighbor)) {
                             visited.add(neighbor);
                             queue.push(neighbor);
                             parent[neighbor] = current;
-                            
+
                             // 添加发现邻居步骤
                             steps.push({
                                 type: 'discover',
@@ -1504,7 +1512,7 @@ int main() {
                         }
                     }
                 }
-                
+
                 // 如果找到终点，添加路径步骤
                 if (found) {
                     // 重建路径
@@ -1514,7 +1522,7 @@ int main() {
                         path.unshift(curr);
                         curr = parent[curr];
                     }
-                    
+
                     steps.push({
                         type: 'found',
                         queue: [...queue],
@@ -1534,7 +1542,7 @@ int main() {
                     });
                 }
             }
-            
+
             // 执行单个步骤
             function executeStep(step) {
                 // 重置所有高亮
@@ -1548,10 +1556,10 @@ int main() {
                 document.querySelectorAll('.code-line').forEach(line => {
                     line.classList.remove('code-line-highlight');
                 });
-                
+
                 // 更新状态信息
                 document.getElementById('bfs-status').textContent = `状态: ${step.message}`;
-                
+
                 // 更新执行过程区域
                 const executionDiv = document.getElementById('bfs-execution');
                 const newEntry = document.createElement('div');
@@ -1559,16 +1567,16 @@ int main() {
                 newEntry.innerHTML = `<strong>${steps.length > 0 ? currentStep + 1 : 0}/${steps.length}</strong>: ${step.message}`;
                 executionDiv.appendChild(newEntry);
                 executionDiv.scrollTop = executionDiv.scrollHeight;
-                
+
                 // 更新进度条
                 const progress = ((currentStep + 1) / steps.length) * 100;
                 document.getElementById('bfs-progress-bar').style.width = `${progress}%`;
-                
+
                 // 高亮当前代码行
                 if (step.codeLine !== -1) {
                     document.getElementById(`code-${step.codeLine}`).classList.add('code-line-highlight');
                 }
-                
+
                 // 更新节点状态
                 step.visited.forEach(nodeId => {
                     const node = document.querySelector(`.bfs-node[data-node="${nodeId}"]`);
@@ -1577,7 +1585,7 @@ int main() {
                         node.classList.add('bfs-node-visited');
                     }
                 });
-                
+
                 // 高亮当前节点
                 if (step.current) {
                     const currentNode = document.querySelector(`.bfs-node[data-node="${step.current}"]`);
@@ -1585,21 +1593,21 @@ int main() {
                         currentNode.classList.add('bfs-node-current');
                     }
                 }
-                
+
                 // 高亮边（如果是发现邻居步骤）
                 if (step.type === 'discover' && step.current && step.neighbor) {
                     document.querySelectorAll('.bfs-edge').forEach(edge => {
                         const from = edge.getAttribute('data-from');
                         const to = edge.getAttribute('data-to');
-                        
-                        if ((from === step.current && to === step.neighbor) || 
+
+                        if ((from === step.current && to === step.neighbor) ||
                             (from === step.neighbor && to === step.current)) {
                             edge.classList.remove('bfs-edge');
                             edge.classList.add('bfs-edge-active');
                         }
                     });
                 }
-                
+
                 // 高亮路径（如果是找到终点步骤）
                 if (step.type === 'found' && step.path) {
                     step.path.forEach(nodeId => {
@@ -1609,17 +1617,17 @@ int main() {
                             node.classList.add('bfs-node-path');
                         }
                     });
-                    
+
                     // 高亮路径上的边
                     for (let i = 0; i < step.path.length - 1; i++) {
                         const fromNode = step.path[i];
                         const toNode = step.path[i + 1];
-                        
+
                         document.querySelectorAll('.bfs-edge').forEach(edge => {
                             const from = edge.getAttribute('data-from');
                             const to = edge.getAttribute('data-to');
-                            
-                            if ((from === fromNode && to === toNode) || 
+
+                            if ((from === fromNode && to === toNode) ||
                                 (from === toNode && to === fromNode)) {
                                 edge.classList.remove('bfs-edge', 'bfs-edge-active');
                                 edge.classList.add('bfs-edge-path');
@@ -1627,7 +1635,7 @@ int main() {
                         });
                     }
                 }
-                
+
                 // 更新队列显示
                 const queueDiv = document.getElementById('queue-status');
                 if (step.queue.length === 0) {
@@ -1642,34 +1650,34 @@ int main() {
                     });
                 }
             }
-            
+
             // 运行动画
             function runAnimation() {
                 const start = document.getElementById('start-node').value;
                 const end = document.getElementById('end-node').value;
-                
+
                 if (start === end) {
                     alert('起点和终点不能相同！');
                     return;
                 }
-                
+
                 // 如果是重新开始，重置动画
                 if (currentStep > 0) {
                     resetAnimation();
                 }
-                
+
                 generateSteps(start, end);
-                
+
                 if (steps.length === 0) return;
-                
+
                 // 切换按钮状态
                 document.getElementById('bfs-run').classList.add('hidden');
                 document.getElementById('bfs-pause').classList.remove('hidden');
-                
+
                 // 执行第一步
                 executeStep(steps[currentStep]);
                 currentStep++;
-                
+
                 // 设置定时器执行后续步骤
                 animationInterval = setInterval(() => {
                     if (currentStep < steps.length) {
@@ -1683,27 +1691,27 @@ int main() {
                     }
                 }, animationSpeed);
             }
-            
+
             // 单步执行
             function stepAnimation() {
                 const start = document.getElementById('start-node').value;
                 const end = document.getElementById('end-node').value;
-                
+
                 if (start === end) {
                     alert('起点和终点不能相同！');
                     return;
                 }
-                
+
                 // 如果是第一步，生成步骤
                 if (steps.length === 0) {
                     generateSteps(start, end);
                 }
-                
+
                 // 如果还有步骤未执行
                 if (currentStep < steps.length) {
                     executeStep(steps[currentStep]);
                     currentStep++;
-                    
+
                     // 如果已经完成所有步骤
                     if (currentStep >= steps.length) {
                         document.getElementById('bfs-status').textContent = '状态: 动画演示完成';
@@ -1712,7 +1720,7 @@ int main() {
                     document.getElementById('bfs-status').textContent = '状态: 已完成所有步骤，请重置';
                 }
             }
-            
+
             // 暂停动画
             function pauseAnimation() {
                 clearInterval(animationInterval);
@@ -1720,7 +1728,7 @@ int main() {
                 document.getElementById('bfs-pause').classList.add('hidden');
                 document.getElementById('bfs-status').textContent = '状态: 已暂停';
             }
-            
+
             // 设置动画速度
             document.querySelectorAll('.speed-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -1729,10 +1737,10 @@ int main() {
                         b.classList.remove('active');
                     });
                     this.classList.add('active');
-                    
+
                     // 更新速度
                     animationSpeed = parseInt(this.getAttribute('data-speed'));
-                    
+
                     // 如果动画正在运行，重新启动定时器
                     if (document.getElementById('bfs-pause').classList.contains('hidden') === false) {
                         clearInterval(animationInterval);
@@ -1750,18 +1758,18 @@ int main() {
                     }
                 });
             });
-            
+
             // 代码复制功能
             document.getElementById('copy-code').addEventListener('click', function() {
                 const codeElement = document.getElementById('bfs-code');
                 let codeText = '';
-                
+
                 codeElement.querySelectorAll('.code-line').forEach(line => {
                     // 替换HTML实体为实际字符
                     let text = line.textContent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ');
                     codeText += text + '\n';
                 });
-                
+
                 navigator.clipboard.writeText(codeText).then(() => {
                     const originalText = this.innerHTML;
                     this.innerHTML = '<i class="fa fa-check mr-1"></i> 已复制';
@@ -1770,14 +1778,14 @@ int main() {
                     }, 2000);
                 });
             });
-            
+
             // 代码块复制功能
             document.querySelectorAll('.copy-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const targetId = this.getAttribute('data-target');
                     const codeBlock = document.getElementById(targetId);
                     const codeText = codeBlock.textContent;
-                    
+
                     navigator.clipboard.writeText(codeText).then(() => {
                         const originalText = this.innerHTML;
                         this.innerHTML = '<i class="fa fa-check mr-1"></i> 已复制';
@@ -1787,18 +1795,18 @@ int main() {
                     });
                 });
             });
-            
+
             // 绑定按钮事件
             document.getElementById('bfs-run').addEventListener('click', runAnimation);
             document.getElementById('bfs-pause').addEventListener('click', pauseAnimation);
             document.getElementById('bfs-step').addEventListener('click', stepAnimation);
             document.getElementById('bfs-reset').addEventListener('click', resetAnimation);
-            
+
             // 平滑滚动
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
-                    
+
                     document.querySelector(this.getAttribute('href')).scrollIntoView({
                         behavior: 'smooth'
                     });
@@ -1806,5 +1814,6 @@ int main() {
             });
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

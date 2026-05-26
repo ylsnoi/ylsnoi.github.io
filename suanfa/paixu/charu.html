@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>插入排序 - 艾科斯信奥网</title>
+
+    <meta name="description" content="插入排序课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/suanfa/paixu/charu.html">
+    <meta property="og:title" content="插入排序 - 艾科斯信奥网">
+    <meta property="og:description" content="插入排序课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/suanfa/paixu/charu.html">
+<title>插入排序 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/css/font/font-awesome/css/font.font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -125,8 +132,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -200,7 +208,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="insertion-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -247,7 +255,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">插入排序的基本步骤</h3>
                     <div class="space-y-3">
@@ -281,7 +289,7 @@
             <h2 class="text-2xl font-bold text-insertion mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 插入排序过程演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 排序动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -292,13 +300,13 @@
                                 下面的动画展示了插入排序的完整过程，包括元素的比较、移动和插入操作。
                                 可以自定义输入数组或使用随机数组进行演示。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">输入数组元素 (用逗号分隔):</label>
                                 <input type="text" id="array-input" value="5,3,8,4,2"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-insertion">
                             </div>
-                            
+
                             <div class="flex space-x-2 mb-4">
                                 <button id="random-array" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-md transition-all flex items-center text-sm">
                                     <i class="fa fa-random mr-1"></i> 随机数组
@@ -307,7 +315,7 @@
                                     <i class="fa fa-refresh mr-1"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div class="flex space-x-2 mb-4">
                                 <button id="sort-run" class="bg-insertion hover:bg-insertion/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 开始排序
@@ -319,22 +327,22 @@
                                     <i class="fa fa-step-forward mr-2"></i> 单步执行
                                 </button>
                             </div>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">动画速度:</label>
                                 <input type="range" id="animation-speed" min="100" max="2000" value="800" step="100"
                                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-insertion">
                             </div>
-                            
+
                             <div id="sort-status" class="animation-status">
                                 状态: 准备就绪
                             </div>
-                            
+
                             <div class="animation-progress">
                                 <div id="sort-progress-bar" class="animation-progress-bar" style="width: 0%"></div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 flex items-center justify-center" id="array-visualization">
                                 <!-- 数组可视化将在这里动态生成 -->
@@ -343,7 +351,7 @@
                                 请点击"开始排序"或"单步执行"查看排序过程
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="sort-code">
                                 <div class="code-line" id="code-1">// 插入排序实现</div>
@@ -376,7 +384,7 @@
             <h2 class="text-2xl font-bold text-insertion mb-6 flex items-center">
                 <i class="fa fa-code mr-2"></i> 插入排序实现与优化
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 基础实现 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -384,7 +392,7 @@
                     <p class="text-gray-700 mb-3">
                         标准的插入排序实现，适用于大多数基本排序场景
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 using namespace std;
 
@@ -395,7 +403,7 @@ void insertionSort(int arr[], int n) {
     for (i = 1; i < n; i++) {
         key = arr[i];  // 当前待插入元素
         j = i - 1;     // 已排序部分的最后一个元素索引
-        
+
         // 在已排序部分寻找插入位置
         while (j >= 0 && arr[j] > key) {
             arr[j + 1] = arr[j];  // 元素后移
@@ -416,26 +424,26 @@ void printArray(int arr[], int size) {
 int main() {
     int arr[] = {5, 3, 8, 4, 2};
     int n = sizeof(arr) / sizeof(arr[0]);
-    
+
     cout << "排序前: ";
     printArray(arr, n);
-    
+
     insertionSort(arr, n);
-    
+
     cout << "排序后: ";
     printArray(arr, n);
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 优化版本 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">2. 优化版本 - 二分查找插入排序</h3>
                     <p class="text-gray-700 mb-3">
                         利用二分查找优化插入位置的查找过程，将比较次数从O(n)降至O(log n)
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 using namespace std;
 
@@ -444,13 +452,13 @@ int binarySearch(int arr[], int key, int low, int high) {
     if (high <= low) {
         return (key > arr[low]) ? (low + 1) : low;
     }
-    
+
     int mid = (low + high) / 2;
-    
+
     if (key == arr[mid]) {
         return mid + 1;
     }
-    
+
     if (key > arr[mid]) {
         return binarySearch(arr, key, mid + 1, high);
     }
@@ -460,14 +468,14 @@ int binarySearch(int arr[], int key, int low, int high) {
 // 二分插入排序
 void binaryInsertionSort(int arr[], int n) {
     int i, j, key, pos;
-    
+
     for (i = 1; i < n; i++) {
         j = i - 1;
         key = arr[i];
-        
+
         // 使用二分查找找到插入位置
         pos = binarySearch(arr, key, 0, j);
-        
+
         // 移动元素
         while (j >= pos) {
             arr[j + 1] = arr[j];
@@ -488,19 +496,19 @@ void printArray(int arr[], int size) {
 int main() {
     int arr[] = {5, 3, 8, 4, 2};
     int n = sizeof(arr) / sizeof(arr[0]);
-    
+
     cout << "排序前: ";
     printArray(arr, n);
-    
+
     binaryInsertionSort(arr, n);
-    
+
     cout << "排序后: ";
     printArray(arr, n);
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 性能分析 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">3. 插入排序性能分析</h3>
@@ -539,7 +547,7 @@ int main() {
             <h2 class="text-2xl font-bold text-insertion mb-6 flex items-center">
                 <i class="fa fa-trophy mr-2"></i> 洛谷推荐练习题目
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-4">模板题（直接应用插入排序）</h3>
@@ -552,11 +560,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 对给定的n个整数进行排序并输出，直接应用插入排序算法即可完成。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1177" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1177" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-primary transition-all duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold text-primary">P5713 【深基3.例5】洛谷团队系统</h4>
@@ -565,13 +573,13 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 简单的排序问题，适合初学者练习插入排序的基本应用。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P5713" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P5713" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4">入门题（插入排序应用）</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -583,11 +591,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 需要按照多关键字排序，可使用插入排序实现多条件比较。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1093" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1093" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-primary transition-all duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold text-primary">P1781 宇宙总统</h4>
@@ -596,13 +604,13 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 对大数字进行排序，需要自定义比较函数，适合练习插入排序的变体。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1781" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1781" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4">进阶题（插入排序优化与应用）</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -614,11 +622,11 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 寻找第k小的整数，可结合插入排序思想优化部分排序过程。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1138" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1138" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
-                        
+
                         <div class="bg-white p-4 rounded-lg border border-gray-200 hover:border-primary transition-all duration-300">
                             <div class="flex justify-between items-start mb-2">
                                 <h4 class="font-semibold text-primary">P2141 珠心算测验</h4>
@@ -627,7 +635,7 @@ int main() {
                             <p class="text-gray-600 text-sm mb-3">
                                 需要先排序再进行查找，可使用插入排序并结合二分查找优化。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P2141" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P2141" target="_blank" class="text-sm text-primary hover:text-primary/80 flex items-center" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -658,7 +666,7 @@ int main() {
             const sortProgressBar = document.getElementById('sort-progress-bar');
             const arrayVisualization = document.getElementById('array-visualization');
             const stepExplanation = document.getElementById('step-explanation');
-            
+
             // 代码行元素
             const codeLines = {
                 line6: document.getElementById('code-6'),
@@ -669,7 +677,7 @@ int main() {
                 line13: document.getElementById('code-13'),
                 line16: document.getElementById('code-16')
             };
-            
+
             // 排序状态变量
             let originalArray = [5, 3, 8, 4, 2];
             let currentArray = [...originalArray];
@@ -681,10 +689,10 @@ int main() {
             let j = 0;
             let key = 0;
             let n = originalArray.length;
-            
+
             // 初始化数组显示
             renderArray();
-            
+
             // 生成随机数组
             randomArrayBtn.addEventListener('click', function() {
                 const size = Math.floor(Math.random() * 5) + 5; // 5-9个元素
@@ -695,17 +703,17 @@ int main() {
                 arrayInput.value = newArray.join(',');
                 resetArray();
             });
-            
+
             // 重置数组
             resetArrayBtn.addEventListener('click', resetArray);
-            
+
             function resetArray() {
                 // 停止当前动画
                 if (animationId) {
                     clearTimeout(animationId);
                     animationId = null;
                 }
-                
+
                 // 解析输入的数组
                 try {
                     const inputValue = arrayInput.value.trim();
@@ -722,7 +730,7 @@ int main() {
                     alert('请输入有效的数组，用逗号分隔数字');
                     return;
                 }
-                
+
                 // 重置排序状态
                 currentArray = [...originalArray];
                 isSorting = false;
@@ -732,51 +740,51 @@ int main() {
                 j = 0;
                 key = 0;
                 n = originalArray.length;
-                
+
                 // 更新UI
                 sortRunBtn.classList.remove('hidden');
                 sortPauseBtn.classList.add('hidden');
                 sortStatus.textContent = '状态: 准备就绪';
                 sortProgressBar.style.width = '0%';
                 stepExplanation.textContent = '请点击"开始排序"或"单步执行"查看排序过程';
-                
+
                 // 清除代码高亮
                 Object.values(codeLines).forEach(line => {
                     line.classList.remove('code-line-highlight');
                 });
-                
+
                 // 重新渲染数组
                 renderArray();
             }
-            
+
             // 开始排序
             sortRunBtn.addEventListener('click', startSorting);
-            
+
             // 暂停排序
             sortPauseBtn.addEventListener('click', pauseSorting);
-            
+
             // 单步执行
             sortStepBtn.addEventListener('click', stepSorting);
-            
+
             function startSorting() {
                 if (isSorting && !isPaused) return;
-                
+
                 isSorting = true;
                 isPaused = false;
                 sortRunBtn.classList.add('hidden');
                 sortPauseBtn.classList.remove('hidden');
-                
+
                 if (i >= n) {
                     completeSorting();
                     return;
                 }
-                
+
                 continueSorting();
             }
-            
+
             function pauseSorting() {
                 if (!isSorting || isPaused) return;
-                
+
                 isPaused = true;
                 if (animationId) {
                     clearTimeout(animationId);
@@ -786,28 +794,28 @@ int main() {
                 sortPauseBtn.classList.add('hidden');
                 sortStatus.textContent = '状态: 已暂停';
             }
-            
+
             function stepSorting() {
                 if (isSorting && !isPaused) return;
-                
+
                 isSorting = true;
                 isPaused = true;
                 sortRunBtn.classList.remove('hidden');
                 sortPauseBtn.classList.add('hidden');
-                
+
                 if (i >= n) {
                     completeSorting();
                     return;
                 }
-                
+
                 executeOneStep();
             }
-            
+
             function continueSorting() {
                 if (!isSorting || isPaused) return;
-                
+
                 executeOneStep();
-                
+
                 if (i < n) {
                     const speed = 2100 - animationSpeed.value; // 反转速度值，使滑块右侧更快
                     animationId = setTimeout(continueSorting, speed);
@@ -815,90 +823,90 @@ int main() {
                     completeSorting();
                 }
             }
-            
+
             function executeOneStep() {
                 // 第一步：初始化key和j
                 if (sortStep === 0) {
                     key = currentArray[i];
                     j = i - 1;
-                    
+
                     sortStatus.textContent = `状态: 处理元素 ${key} (i=${i})`;
                     stepExplanation.textContent = `取出第${i+1}个元素${key}作为待插入元素`;
-                    
+
                     // 高亮代码行
                     highlightCodeLines(['line6', 'line7', 'line8']);
-                    
+
                     sortStep = 1;
-                } 
+                }
                 // 第二步：比较并移动元素
                 else if (sortStep === 1) {
                     if (j >= 0 && currentArray[j] > key) {
                         // 需要移动元素
                         currentArray[j + 1] = currentArray[j];
-                        
+
                         sortStatus.textContent = `状态: 移动元素 ${currentArray[j]} (j=${j})`;
                         stepExplanation.textContent = `元素${currentArray[j]}大于${key}，向后移动`;
-                        
+
                         // 高亮代码行
                         highlightCodeLines(['line11', 'line12']);
-                        
+
                         j--;
                     } else {
                         // 找到插入位置
                         sortStep = 2;
-                        
+
                         sortStatus.textContent = `状态: 找到插入位置 (j+1=${j+1})`;
                         stepExplanation.textContent = `找到插入位置，准备插入元素${key}`;
-                        
+
                         // 高亮代码行
                         highlightCodeLines(['line11']);
                     }
-                } 
+                }
                 // 第三步：插入元素
                 else if (sortStep === 2) {
                     currentArray[j + 1] = key;
-                    
+
                     sortStatus.textContent = `状态: 插入元素 ${key} (位置${j+1})`;
                     stepExplanation.textContent = `将元素${key}插入到位置${j+1}`;
-                    
+
                     // 高亮代码行
                     highlightCodeLines(['line16']);
-                    
+
                     // 准备下一轮
                     i++;
                     sortStep = 0;
-                    
+
                     // 更新进度
                     const progress = (i / n) * 100;
                     sortProgressBar.style.width = `${progress}%`;
                 }
-                
+
                 // 重新渲染数组
                 renderArray();
             }
-            
+
             function completeSorting() {
                 isSorting = false;
                 sortRunBtn.classList.remove('hidden');
                 sortPauseBtn.classList.add('hidden');
                 sortStatus.textContent = '状态: 排序完成';
                 stepExplanation.textContent = '插入排序已完成，数组已按升序排列';
-                
+
                 // 清除代码高亮
                 Object.values(codeLines).forEach(line => {
                     line.classList.remove('code-line-highlight');
                 });
-                
+
                 // 更新进度
                 sortProgressBar.style.width = '100%';
             }
-            
+
             function highlightCodeLines(lineNames) {
                 // 先清除所有高亮
                 Object.values(codeLines).forEach(line => {
                     line.classList.remove('code-line-highlight');
                 });
-                
+
                 // 高亮指定行
                 lineNames.forEach(name => {
                     if (codeLines[name]) {
@@ -906,15 +914,15 @@ int main() {
                     }
                 });
             }
-            
+
             function renderArray() {
                 arrayVisualization.innerHTML = '';
-                
+
                 currentArray.forEach((value, index) => {
                     const element = document.createElement('div');
                     element.className = 'array-element array-element-normal';
                     element.textContent = value;
-                    
+
                     // 标记已排序元素
                     if (index < i) {
                         // 当前元素是已排序部分，但排除正在处理的位置
@@ -923,23 +931,24 @@ int main() {
                             element.classList.add('array-element-sorted');
                         }
                     }
-                    
+
                     // 标记当前待插入元素
                     if (sortStep > 0 && index === i) {
                         element.classList.remove('array-element-normal', 'array-element-sorted');
                         element.classList.add('array-element-current');
                     }
-                    
+
                     // 标记正在比较的元素
                     if (sortStep === 1 && index === j) {
                         element.classList.remove('array-element-normal', 'array-element-sorted');
                         element.classList.add('array-element-compare');
                     }
-                    
+
                     arrayVisualization.appendChild(element);
                 });
             }
         }
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

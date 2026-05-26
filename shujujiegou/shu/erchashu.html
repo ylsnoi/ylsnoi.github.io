@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>二叉树 - 艾科斯信奥网</title>
+
+    <meta name="description" content="二叉树课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/shujujiegou/shu/erchashu.html">
+    <meta property="og:title" content="二叉树 - 艾科斯信奥网">
+    <meta property="og:description" content="二叉树课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/shujujiegou/shu/erchashu.html">
+<title>二叉树 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -111,8 +118,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -186,7 +194,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="bintree-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -222,7 +230,7 @@
                         二叉树是n(n≥0)个节点的有限集合，它或者是空集(n=0)，或者由一个根节点和两棵互不相交的、分别称为根节点的左子树和右子树的二叉树组成。
                         二叉树的每个节点最多有两个子节点，分别称为左孩子和右孩子。
                     </p>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg mt-3">
                         <h4 class="font-semibold mb-2">二叉树的基本特点：</h4>
                         <ul class="list-disc pl-5 space-y-2">
@@ -232,7 +240,7 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">二叉树的基本形态</h3>
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
@@ -267,7 +275,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">二叉树的存储结构</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
@@ -293,7 +301,7 @@ struct TreeNode {
     int data;               // 数据域
     TreeNode* left;         // 左孩子指针
     TreeNode* right;        // 右孩子指针
-    
+
     // 构造函数
     TreeNode(int val) : data(val), left(nullptr), right(nullptr) {}
 };</code></pre>
@@ -308,7 +316,7 @@ struct TreeNode {
             <h2 class="text-2xl font-bold text-bintree mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 二叉树遍历过程演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 遍历动画 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -317,7 +325,7 @@ struct TreeNode {
                         二叉树的遍历是指按某种顺序访问树中的所有节点，使每个节点被访问一次且仅被访问一次。
                         常见的深度优先遍历方式有：前序遍历(根左右)、中序遍历(左根右)、后序遍历(左右根)。
                     </p>
-                    
+
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="lg:col-span-1">
                             <div class="mb-4">
@@ -328,21 +336,21 @@ struct TreeNode {
                                     <option value="post">后序遍历 (左右根)</option>
                                 </select>
                             </div>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">遍历步骤:</label>
                                 <div id="traversal-steps" class="bg-white p-3 rounded border border-gray-200 h-32 overflow-y-auto text-sm">
                                     请点击"开始遍历"按钮
                                 </div>
                             </div>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">遍历结果:</label>
                                 <div id="traversal-result" class="bg-white p-3 rounded border border-gray-200">
                                     -
                                 </div>
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="traversal-start" class="bg-bintree hover:bg-bintree/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-play mr-2"></i> 开始遍历
@@ -352,7 +360,7 @@ struct TreeNode {
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 flex items-center justify-center" id="tree-visualization">
                                 <!-- 二叉树可视化区域 -->
@@ -398,7 +406,7 @@ struct TreeNode {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="lg:col-span-1">
                             <div class="bg-gray-800 text-gray-100 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm" id="traversal-code">
                                 <div class="code-line" id="code-1">#include &lt;iostream&gt;</div>
@@ -446,7 +454,7 @@ struct TreeNode {
             <h2 class="text-2xl font-bold text-bintree mb-6 flex items-center">
                 <i class="fa fa-cogs mr-2"></i> 二叉树基本操作
             </h2>
-            
+
             <div class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-gray-50 p-4 rounded-lg">
@@ -461,36 +469,36 @@ TreeNode* buildSampleTree() {
     root->left->right = new TreeNode(5);
     root->right->left = new TreeNode(6);
     root->right->right = new TreeNode(7);
-    
+
     return root;
 }
 
 // 根据前序遍历和中序遍历构建二叉树
 TreeNode* buildTreeFromPreAndIn(vector<int>& preorder, vector<int>& inorder) {
     if (preorder.empty() || inorder.empty()) return nullptr;
-    
+
     // 根节点的值是前序遍历的第一个元素
     int rootVal = preorder[0];
     TreeNode* root = new TreeNode(rootVal);
-    
+
     // 查找根节点在中序遍历中的位置
     auto it = find(inorder.begin(), inorder.end(), rootVal);
     int pos = it - inorder.begin();
-    
+
     // 分割左子树和右子树的遍历序列
     vector<int> leftPre(preorder.begin() + 1, preorder.begin() + pos + 1);
     vector<int> rightPre(preorder.begin() + pos + 1, preorder.end());
     vector<int> leftIn(inorder.begin(), it);
     vector<int> rightIn(it + 1, inorder.end());
-    
+
     // 递归构建左子树和右子树
     root->left = buildTreeFromPreAndIn(leftPre, leftIn);
     root->right = buildTreeFromPreAndIn(rightPre, rightIn);
-    
+
     return root;
 }</code></pre>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <h3 class="font-semibold text-lg mb-3">二叉树的深度与节点数</h3>
                         <pre class="code-block"><code class="language-cpp">// 计算二叉树的深度
@@ -521,7 +529,7 @@ int getLeafCount(TreeNode* root) {
 }</code></pre>
                     </div>
                 </div>
-                
+
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">二叉搜索树(BST)的操作</h3>
                     <p class="text-gray-700 mb-3">
@@ -533,14 +541,14 @@ TreeNode* insertBST(TreeNode* root, int val) {
     if (root == nullptr) {
         return new TreeNode(val);
     }
-    
+
     // 否则递归插入到左子树或右子树
     if (val < root->data) {
         root->left = insertBST(root->left, val);
     } else if (val > root->data) {
         root->right = insertBST(root->right, val);
     }
-    
+
     // 返回当前节点
     return root;
 }
@@ -551,7 +559,7 @@ TreeNode* searchBST(TreeNode* root, int val) {
     if (root == nullptr || root->data == val) {
         return root;
     }
-    
+
     // 如果值小于当前节点，在左子树中查找
     if (val < root->data) {
         return searchBST(root->left, val);
@@ -571,7 +579,7 @@ TreeNode* findMin(TreeNode* node) {
 // 二叉搜索树的删除
 TreeNode* deleteBST(TreeNode* root, int val) {
     if (root == nullptr) return nullptr;
-    
+
     // 查找要删除的节点
     if (val < root->data) {
         root->left = deleteBST(root->left, val);
@@ -579,7 +587,7 @@ TreeNode* deleteBST(TreeNode* root, int val) {
         root->right = deleteBST(root->right, val);
     } else {
         // 找到要删除的节点
-        
+
         // 情况1：叶子节点
         if (root->left == nullptr && root->right == nullptr) {
             delete root;
@@ -616,7 +624,7 @@ TreeNode* deleteBST(TreeNode* root, int val) {
             <h2 class="text-2xl font-bold text-bintree mb-6 flex items-center">
                 <i class="fa fa-code mr-2"></i> 二叉树综合示例 (C++)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 完整示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -624,7 +632,7 @@ TreeNode* deleteBST(TreeNode* root, int val) {
                     <p class="text-gray-700 mb-3">
                         以下示例包含二叉树的创建、三种遍历方式、计算深度和节点数等操作
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 #include <vector>
 #include <algorithm>
@@ -697,23 +705,23 @@ void destroyTree(TreeNode* root) {
 int main() {
     // 构建二叉树
     TreeNode* root = buildSampleTree();
-    
+
     cout << "二叉树遍历结果：" << endl;
     cout << "前序遍历: ";
     preOrder(root);
     cout << endl;
-    
+
     cout << "中序遍历: ";
     inOrder(root);
     cout << endl;
-    
+
     cout << "后序遍历: ";
     postOrder(root);
     cout << endl;
-    
+
     cout << "二叉树深度: " << getDepth(root) << endl;
     cout << "二叉树节点总数: " << getNodeCount(root) << endl;
-    
+
     // 释放内存
     destroyTree(root);
     return 0;
@@ -721,21 +729,21 @@ int main() {
 
 /* 输出结果：
 二叉树遍历结果：
-前序遍历: 1 2 4 5 3 6 7 
-中序遍历: 4 2 5 1 6 3 7 
-后序遍历: 4 5 2 6 7 3 1 
+前序遍历: 1 2 4 5 3 6 7
+中序遍历: 4 2 5 1 6 3 7
+后序遍历: 4 5 2 6 7 3 1
 二叉树深度: 3
 二叉树节点总数: 7
 */</code></pre>
                 </div>
-                
+
                 <!-- 二叉搜索树示例 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">二叉搜索树操作示例</h3>
                     <p class="text-gray-700 mb-3">
                         以下示例实现了二叉搜索树的插入、查找和删除操作
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include <iostream>
 using namespace std;
 
@@ -751,13 +759,13 @@ TreeNode* insert(TreeNode* root, int val) {
     if (root == nullptr) {
         return new TreeNode(val);
     }
-    
+
     if (val < root->data) {
         root->left = insert(root->left, val);
     } else if (val > root->data) {
         root->right = insert(root->right, val);
     }
-    
+
     return root;
 }
 
@@ -766,7 +774,7 @@ TreeNode* search(TreeNode* root, int val) {
     if (root == nullptr || root->data == val) {
         return root;
     }
-    
+
     if (val < root->data) {
         return search(root->left, val);
     }
@@ -784,7 +792,7 @@ TreeNode* findMin(TreeNode* node) {
 // 删除节点
 TreeNode* deleteNode(TreeNode* root, int val) {
     if (root == nullptr) return nullptr;
-    
+
     if (val < root->data) {
         root->left = deleteNode(root->left, val);
     } else if (val > root->data) {
@@ -800,7 +808,7 @@ TreeNode* deleteNode(TreeNode* root, int val) {
             delete root;
             return temp;
         }
-        
+
         TreeNode* temp = findMin(root->right);
         root->data = temp->data;
         root->right = deleteNode(root->right, temp->data);
@@ -818,7 +826,7 @@ void inOrder(TreeNode* root) {
 
 int main() {
     TreeNode* root = nullptr;
-    
+
     // 插入节点
     root = insert(root, 50);
     insert(root, 30);
@@ -827,11 +835,11 @@ int main() {
     insert(root, 40);
     insert(root, 60);
     insert(root, 80);
-    
+
     cout << "二叉搜索树中序遍历: ";
     inOrder(root);  // 输出：20 30 40 50 60 70 80
     cout << endl;
-    
+
     // 查找节点
     int key = 40;
     TreeNode* found = search(root, key);
@@ -840,13 +848,13 @@ int main() {
     } else {
         cout << "未找到节点: " << key << endl;
     }
-    
+
     // 删除节点
     root = deleteNode(root, 30);
     cout << "删除节点30后中序遍历: ";
     inOrder(root);  // 输出：20 40 50 60 70 80
     cout << endl;
-    
+
     return 0;
 }</code></pre>
                 </div>
@@ -858,7 +866,7 @@ int main() {
             <h2 class="text-2xl font-bold text-bintree mb-6 flex items-center">
                 <i class="fa fa-trophy mr-2"></i> 推荐练习题目
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary">模板题</h3>
@@ -869,7 +877,7 @@ int main() {
                             <p class="text-gray-700 text-sm">
                                 给定一棵二叉树的前序遍历和中序遍历，求其后序遍历。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1030" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm">
+                            <a href="https://www.luogu.com.cn/problem/P1030" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -879,7 +887,7 @@ int main() {
                             <p class="text-gray-700 text-sm">
                                 求给定二叉树的深度，是二叉树基本操作的直接应用。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1588" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm">
+                            <a href="https://www.luogu.com.cn/problem/P1588" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -889,13 +897,13 @@ int main() {
                             <p class="text-gray-700 text-sm">
                                 根据给定序列建立二叉搜索树，并输出其前序遍历和后序遍历。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1305" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm">
+                            <a href="https://www.luogu.com.cn/problem/P1305" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary">入门题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -905,7 +913,7 @@ int main() {
                             <p class="text-gray-700 text-sm">
                                 实现二叉树的层次遍历，按层次输出二叉树的节点值。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1428" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm">
+                            <a href="https://www.luogu.com.cn/problem/P1428" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -915,7 +923,7 @@ int main() {
                             <p class="text-gray-700 text-sm">
                                 判断一棵二叉树是否为对称二叉树，考察二叉树的性质理解。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P5018" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm">
+                            <a href="https://www.luogu.com.cn/problem/P5018" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -925,13 +933,13 @@ int main() {
                             <p class="text-gray-700 text-sm">
                                 计算二叉树的最大宽度，需要层次遍历并记录每层节点数。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1501" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm">
+                            <a href="https://www.luogu.com.cn/problem/P1501" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-4 text-primary">进阶题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -941,7 +949,7 @@ int main() {
                             <p class="text-gray-700 text-sm">
                                 求二叉树中两个节点的最近公共祖先，是二叉树的经典应用问题。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P3379" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm">
+                            <a href="https://www.luogu.com.cn/problem/P3379" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -951,7 +959,7 @@ int main() {
                             <p class="text-gray-700 text-sm">
                                 将二叉搜索树转换为排序的双向链表，考察对BST性质的深入理解。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1397" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm">
+                            <a href="https://www.luogu.com.cn/problem/P1397" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -961,7 +969,7 @@ int main() {
                             <p class="text-gray-700 text-sm">
                                 找到树的重心，删除该节点后剩余各连通分量中节点数的最大值最小。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1364" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm">
+                            <a href="https://www.luogu.com.cn/problem/P1364" target="_blank" class="inline-block mt-3 text-primary hover:text-primary/80 text-sm" rel="noopener noreferrer">
                                 查看题目 <i class="fa fa-external-link ml-1"></i>
                             </a>
                         </div>
@@ -975,7 +983,7 @@ int main() {
         // 初始化代码高亮
         document.addEventListener('DOMContentLoaded', function() {
             hljs.highlightAll();
-            
+
             // 二叉树遍历动画逻辑
             const traversalStartBtn = document.getElementById('traversal-start');
             const traversalResetBtn = document.getElementById('traversal-reset');
@@ -983,14 +991,14 @@ int main() {
             const traversalSteps = document.getElementById('traversal-steps');
             const traversalResult = document.getElementById('traversal-result');
             const codeLines = document.querySelectorAll('.code-line');
-            
+
             // 节点访问顺序 - 根据不同遍历方式
             const traversalOrders = {
                 pre: [1, 2, 4, 5, 3, 6, 7],
                 in: [4, 2, 5, 1, 6, 3, 7],
                 post: [4, 5, 2, 6, 7, 3, 1]
             };
-            
+
             // 代码行高亮映射
             const codeHighlights = {
                 pre: {
@@ -1021,27 +1029,27 @@ int main() {
                     1: 32
                 }
             };
-            
+
             // 重置状态
             function resetTraversal() {
                 // 移除所有节点高亮
                 document.querySelectorAll('.tree-node').forEach(node => {
                     node.classList.remove('tree-node-current');
                 });
-                
+
                 // 移除所有代码行高亮
                 codeLines.forEach(line => {
                     line.classList.remove('code-line-highlight');
                 });
-                
+
                 // 重置步骤和结果
                 traversalSteps.innerHTML = '请点击"开始遍历"按钮';
                 traversalResult.textContent = '-';
-                
+
                 // 启用开始按钮
                 traversalStartBtn.disabled = false;
             }
-            
+
             // 执行遍历动画
             function startTraversal() {
                 const type = traversalType.value;
@@ -1049,13 +1057,13 @@ int main() {
                 const highlights = codeHighlights[type];
                 let result = [];
                 let stepsHTML = '';
-                
+
                 // 禁用开始按钮
                 traversalStartBtn.disabled = true;
-                
+
                 // 重置状态
                 resetTraversal();
-                
+
                 // 遍历每个节点
                 order.forEach((nodeId, index) => {
                     setTimeout(() => {
@@ -1063,20 +1071,20 @@ int main() {
                         document.querySelectorAll('.tree-node').forEach(node => {
                             node.classList.remove('tree-node-current');
                         });
-                        
+
                         // 移除所有代码行高亮
                         codeLines.forEach(line => {
                             line.classList.remove('code-line-highlight');
                         });
-                        
+
                         // 高亮当前节点
                         const currentNode = document.getElementById(`node-${nodeId}`);
                         currentNode.classList.add('tree-node-current');
-                        
+
                         // 高亮对应的代码行
                         const codeLine = document.getElementById(`code-${highlights[nodeId]}`);
                         codeLine.classList.add('code-line-highlight');
-                        
+
                         // 高亮当前遍历方式的函数定义
                         if (type === 'pre') {
                             document.getElementById('code-12').classList.add('code-line-highlight');
@@ -1085,22 +1093,23 @@ int main() {
                         } else if (type === 'post') {
                             document.getElementById('code-28').classList.add('code-line-highlight');
                         }
-                        
+
                         // 更新步骤
                         result.push(nodeId);
                         stepsHTML += `<div>步骤 ${index + 1}: 访问节点 ${nodeId}</div>`;
                         traversalSteps.innerHTML = stepsHTML;
                         traversalResult.textContent = result.join(' ');
-                        
+
                     }, index * 1000); // 每个步骤间隔1秒
                 });
             }
-            
+
             // 绑定事件
             traversalStartBtn.addEventListener('click', startTraversal);
             traversalResetBtn.addEventListener('click', resetTraversal);
             traversalType.addEventListener('change', resetTraversal);
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

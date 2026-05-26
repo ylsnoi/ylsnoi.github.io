@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图论基础 - 艾科斯信奥网</title>
+
+    <meta name="description" content="图论基础课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/chusai/shuxue/tulun.html">
+    <meta property="og:title" content="图论基础 - 艾科斯信奥网">
+    <meta property="og:description" content="图论基础课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/chusai/shuxue/tulun.html">
+<title>图论基础 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -123,8 +130,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -198,7 +206,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="graph-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -257,7 +265,7 @@
                 <div>
                     <h3 class="text-xl font-semibold mb-3">图的存储方式</h3>
                     <p class="text-gray-700 mb-4">在程序中，图通常有两种主要存储方式：</p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h4 class="font-semibold mb-2 text-graph">1. 邻接矩阵</h4>
@@ -279,7 +287,7 @@ void addEdge(int u, int v) {
                                 <p><strong>缺点</strong>：空间复杂度高(O(n²))，适合稠密图</p>
                             </div>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h4 class="font-semibold mb-2 text-graph">2. 邻接表</h4>
                             <p class="text-gray-700 text-sm mb-3">
@@ -330,7 +338,7 @@ void addEdge(int u, int v) {
                 <div>
                     <h3 class="text-xl font-semibold mb-3">连通性</h3>
                     <p class="text-gray-700 mb-4">连通性是图论中的核心概念，描述图中顶点之间的可达关系：</p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <h4 class="font-semibold mb-2 text-graph">无向图的连通性</h4>
@@ -362,7 +370,7 @@ void addEdge(int u, int v) {
             <h2 class="text-2xl font-bold text-graph mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 图论动态演示
             </h2>
-            
+
             <div class="space-y-8">
                 <!-- 图的基本概念演示 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -372,7 +380,7 @@ void addEdge(int u, int v) {
                             <p class="text-gray-700 mb-4">
                                 下面展示了不同类型的图及其特性，点击按钮可切换不同的图类型。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">图类型:</label>
                                 <div class="flex flex-wrap gap-2">
@@ -387,13 +395,13 @@ void addEdge(int u, int v) {
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div id="graph-info" class="animation-status">
                                 <p><strong>无向图</strong>：边没有方向，顶点A和B之间的边表示双向可达</p>
                                 <p>顶点的度：A(2), B(3), C(2), D(1)</p>
                             </div>
                         </div>
-                        
+
                         <div>
                             <div id="basic-graph" class="graph-container">
                                 <!-- 图将通过JavaScript动态生成 -->
@@ -401,7 +409,7 @@ void addEdge(int u, int v) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 路径查找演示 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-4">路径查找演示</h3>
@@ -410,7 +418,7 @@ void addEdge(int u, int v) {
                             <p class="text-gray-700 mb-4">
                                 演示从起点到终点的路径查找过程，支持深度优先搜索(DFS)和广度优先搜索(BFS)两种算法。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">算法选择:</label>
                                 <div class="flex flex-wrap gap-2">
@@ -422,7 +430,7 @@ void addEdge(int u, int v) {
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">选择起点和终点:</label>
                                 <div class="flex gap-4">
@@ -448,7 +456,7 @@ void addEdge(int u, int v) {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="find-path" class="bg-graph hover:bg-graph/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-search mr-2"></i> 查找路径
@@ -457,17 +465,17 @@ void addEdge(int u, int v) {
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div class="animation-progress mt-4">
                                 <div id="path-progress" class="animation-progress-bar" style="width: 0%"></div>
                             </div>
-                            
+
                             <div class="animation-step bg-blue-50 text-blue-800 p-3 rounded-lg mt-4">
                                 <h4 class="font-medium mb-1">当前步骤说明</h4>
                                 <p id="path-step-info" class="text-sm">点击"查找路径"开始演示</p>
                             </div>
                         </div>
-                        
+
                         <div>
                             <div id="path-graph" class="graph-container">
                                 <!-- 图将通过JavaScript动态生成 -->
@@ -479,7 +487,7 @@ void addEdge(int u, int v) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 连通分量演示 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-4">连通分量演示</h3>
@@ -488,7 +496,7 @@ void addEdge(int u, int v) {
                             <p class="text-gray-700 mb-4">
                                 演示图中连通分量的识别过程。连通分量是图中的最大连通子图，即子图中任意两个顶点都相互可达，且不与子图外的顶点连通。
                             </p>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="find-components" class="bg-graph hover:bg-graph/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-sitemap mr-2"></i> 查找连通分量
@@ -497,12 +505,12 @@ void addEdge(int u, int v) {
                                     <i class="fa fa-refresh mr-2"></i> 重置
                                 </button>
                             </div>
-                            
+
                             <div class="animation-status mt-4">
                                 <p id="components-info">点击"查找连通分量"开始演示</p>
                             </div>
                         </div>
-                        
+
                         <div>
                             <div id="components-graph" class="graph-container">
                                 <!-- 图将通过JavaScript动态生成 -->
@@ -522,7 +530,7 @@ void addEdge(int u, int v) {
             <h2 class="text-2xl font-bold text-graph mb-6 flex items-center">
                 <i class="fa fa-lightbulb-o mr-2"></i> CSP初赛图论题解题技巧
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">基本概念题解题技巧</h3>
@@ -550,7 +558,7 @@ void addEdge(int u, int v) {
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">连通性问题解题技巧</h3>
                     <div class="space-y-4">
@@ -577,7 +585,7 @@ void addEdge(int u, int v) {
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">图的存储与遍历技巧</h3>
                     <div class="space-y-4">
@@ -612,7 +620,7 @@ void addEdge(int u, int v) {
             <h2 class="text-2xl font-bold text-graph mb-6 flex items-center">
                 <i class="fa fa-puzzle-piece mr-2"></i> CSP初赛图论例题解析
             </h2>
-            
+
             <div class="space-y-8">
                 <!-- 例题1 -->
                 <div class="bg-gray-50 p-5 rounded-lg">
@@ -622,7 +630,7 @@ void addEdge(int u, int v) {
                             一个具有n个顶点的无向图，最少有____条边，最多有____条边。
                         </p>
                     </div>
-                    
+
                     <div class="space-y-4">
                         <div>
                             <h4 class="font-medium text-graph">解题步骤：</h4>
@@ -633,7 +641,7 @@ void addEdge(int u, int v) {
                                 <li>题目中没有说明图必须连通，因此最少边数为0</li>
                             </ol>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium text-graph">答案总结：</h4>
                             <p class="bg-white p-3 rounded border border-gray-200">
@@ -642,7 +650,7 @@ void addEdge(int u, int v) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 例题2 -->
                 <div class="bg-gray-50 p-5 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">例题2：路径与连通性</h3>
@@ -651,7 +659,7 @@ void addEdge(int u, int v) {
                             对于一个有n个顶点的连通图，其边数至少为____，此时图的形状是____。若要保证图是连通的，至少需要____条边。
                         </p>
                     </div>
-                    
+
                     <div class="space-y-4">
                         <div>
                             <h4 class="font-medium text-graph">解题步骤：</h4>
@@ -662,7 +670,7 @@ void addEdge(int u, int v) {
                                 <li>因此，要保证n个顶点的图是连通的，至少需要n-1条边</li>
                             </ol>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium text-graph">答案总结：</h4>
                             <p class="bg-white p-3 rounded border border-gray-200">
@@ -671,7 +679,7 @@ void addEdge(int u, int v) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 例题3 -->
                 <div class="bg-gray-50 p-5 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">例题3：图的遍历</h3>
@@ -681,7 +689,7 @@ void addEdge(int u, int v) {
                             （图：A与B、C相连，B与D相连，C与D相连）
                         </p>
                     </div>
-                    
+
                     <div class="space-y-4">
                         <div>
                             <h4 class="font-medium text-graph">解题步骤：</h4>
@@ -695,7 +703,7 @@ void addEdge(int u, int v) {
                                 <li>如果A先访问C，则顺序可能为A→C→D→B</li>
                             </ol>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium text-graph">答案总结：</h4>
                             <p class="bg-white p-3 rounded border border-gray-200">
@@ -704,7 +712,7 @@ void addEdge(int u, int v) {
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 例题4 -->
                 <div class="bg-gray-50 p-5 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">例题4：连通分量</h3>
@@ -713,7 +721,7 @@ void addEdge(int u, int v) {
                             一个无向图有8个顶点，若其中3个顶点构成一个连通分量，2个顶点构成另一个连通分量，其余顶点都是孤立点，则该图共有____个连通分量。
                         </p>
                     </div>
-                    
+
                     <div class="space-y-4">
                         <div>
                             <h4 class="font-medium text-graph">解题步骤：</h4>
@@ -725,7 +733,7 @@ void addEdge(int u, int v) {
                                 <li>总连通分量数为1+1+3=5个</li>
                             </ol>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium text-graph">答案总结：</h4>
                             <p class="bg-white p-3 rounded border border-gray-200">
@@ -741,64 +749,64 @@ void addEdge(int u, int v) {
     <script>
         // 初始化代码高亮
         hljs.highlightAll();
-        
+
         // 图论演示相关JavaScript代码
         document.addEventListener('DOMContentLoaded', function() {
             // 基本图演示
             drawBasicGraph('undefirected');
-            
+
             // 路径查找图初始化
             initPathGraph();
-            
+
             // 连通分量图初始化
             initComponentsGraph();
-            
+
             // 按钮事件绑定
             document.getElementById('show-undefirected').addEventListener('click', function() {
                 setActiveButton(this);
                 drawBasicGraph('undefirected');
-                document.getElementById('graph-info').innerHTML = 
+                document.getElementById('graph-info').innerHTML =
                     '<p><strong>无向图</strong>：边没有方向，顶点A和B之间的边表示双向可达</p>' +
                     '<p>顶点的度：A(2), B(3), C(2), D(1)</p>';
             });
-            
+
             document.getElementById('show-directed').addEventListener('click', function() {
                 setActiveButton(this);
                 drawBasicGraph('directed');
-                document.getElementById('graph-info').innerHTML = 
+                document.getElementById('graph-info').innerHTML =
                     '<p><strong>有向图</strong>：边有方向，箭头表示从起点到终点的可达性</p>' +
                     '<p>顶点的度：A(出度1, 入度1), B(出度2, 入度1), C(出度0, 入度2), D(出度1, 入度0)</p>';
             });
-            
+
             document.getElementById('show-weighted').addEventListener('click', function() {
                 setActiveButton(this);
                 drawBasicGraph('weighted');
-                document.getElementById('graph-info').innerHTML = 
+                document.getElementById('graph-info').innerHTML =
                     '<p><strong>加权图</strong>：边带有权重，表示顶点之间关系的强度或代价</p>' +
                     '<p>总权重：1+2+3+4=10</p>';
             });
-            
+
             // 路径查找按钮事件
             document.getElementById('use-dfs').addEventListener('click', function() {
                 setActiveButton(this);
                 document.getElementById('use-bfs').classList.remove('bg-graph', 'text-white');
                 document.getElementById('use-bfs').classList.add('bg-white', 'border', 'border-gray-300', 'text-gray-700');
             });
-            
+
             document.getElementById('use-bfs').addEventListener('click', function() {
                 setActiveButton(this);
                 document.getElementById('use-dfs').classList.remove('bg-graph', 'text-white');
                 document.getElementById('use-dfs').classList.add('bg-white', 'border', 'border-gray-300', 'text-gray-700');
             });
-            
+
             document.getElementById('find-path').addEventListener('click', startPathFinding);
             document.getElementById('reset-path').addEventListener('click', resetPathFinding);
-            
+
             // 连通分量按钮事件
             document.getElementById('find-components').addEventListener('click', findComponents);
             document.getElementById('reset-components').addEventListener('click', resetComponents);
         });
-        
+
         // 设置按钮为激活状态
         function setActiveButton(button) {
             // 移除所有兄弟按钮的激活状态
@@ -810,12 +818,12 @@ void addEdge(int u, int v) {
             button.classList.remove('bg-white', 'border', 'border-gray-300', 'text-gray-700');
             button.classList.add('bg-graph', 'text-white');
         }
-        
+
         // 绘制基本图
         function drawBasicGraph(type) {
             const container = document.getElementById('basic-graph');
             container.innerHTML = '';
-            
+
             // 顶点位置
             const nodes = {
                 A: { x: 150, y: 100 },
@@ -823,7 +831,7 @@ void addEdge(int u, int v) {
                 C: { x: 50, y: 180 },
                 D: { x: 150, y: 260 }
             };
-            
+
             // 绘制边
             if (type === 'undefirected' || type === 'weighted') {
                 drawEdge(container, nodes.A, nodes.B, type, 1);
@@ -836,7 +844,7 @@ void addEdge(int u, int v) {
                 drawDirectedEdge(container, nodes.B, nodes.C);
                 drawDirectedEdge(container, nodes.B, nodes.D);
             }
-            
+
             // 绘制顶点
             for (const [id, pos] of Object.entries(nodes)) {
                 const node = document.createElement('div');
@@ -847,18 +855,18 @@ void addEdge(int u, int v) {
                 container.appendChild(node);
             }
         }
-        
+
         // 绘制无向边
         function drawEdge(container, from, to, type, weight) {
             const edge = document.createElement('div');
             edge.className = 'graph-edge';
-            
+
             // 计算边的长度和角度
             const dx = to.x - from.x;
             const dy = to.y - from.y;
             const length = Math.sqrt(dx * dx + dy * dy);
             const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-            
+
             // 设置边的位置和样式
             edge.style.width = `${length}px`;
             edge.style.height = '2px';
@@ -866,9 +874,9 @@ void addEdge(int u, int v) {
             edge.style.top = `${from.y + 15}px`;
             edge.style.transformOrigin = '0 50%';
             edge.style.transform = `rotate(${angle}deg)`;
-            
+
             container.appendChild(edge);
-            
+
             // 如果是加权图，添加权重标签
             if (type === 'weighted') {
                 const weightLabel = document.createElement('div');
@@ -879,37 +887,37 @@ void addEdge(int u, int v) {
                 container.appendChild(weightLabel);
             }
         }
-        
+
         // 绘制有向边
         function drawDirectedEdge(container, from, to) {
             drawEdge(container, from, to, 'directed');
-            
+
             // 添加箭头
             const arrow = document.createElement('div');
             arrow.className = 'absolute w-0 h-0 border-l-8 border-l-gray-300 border-t-4 border-t-transparent border-b-4 border-b-transparent z-10';
-            
+
             // 计算箭头位置（稍微偏离终点）
             const dx = to.x - from.x;
             const dy = to.y - from.y;
             const length = Math.sqrt(dx * dx + dy * dy);
             const ratio = (length - 30) / length;  // 30是为了让箭头离终点有一段距离
-            
+
             const arrowX = from.x + dx * ratio + 15;
             const arrowY = from.y + dy * ratio + 15;
             const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-            
+
             arrow.style.left = `${arrowX}px`;
             arrow.style.top = `${arrowY}px`;
             arrow.style.transform = `rotate(${angle}deg)`;
-            
+
             container.appendChild(arrow);
         }
-        
+
         // 初始化路径查找图
         function initPathGraph() {
             const container = document.getElementById('path-graph');
             container.innerHTML = '';
-            
+
             // 顶点位置
             const nodes = {
                 A: { x: 100, y: 100 },
@@ -918,10 +926,10 @@ void addEdge(int u, int v) {
                 D: { x: 200, y: 200 },
                 E: { x: 300, y: 150 }
             };
-            
+
             // 存储节点信息，供后续使用
             container.nodes = nodes;
-            
+
             // 绘制边
             drawEdge(container, nodes.A, nodes.B);
             drawEdge(container, nodes.A, nodes.C);
@@ -929,7 +937,7 @@ void addEdge(int u, int v) {
             drawEdge(container, nodes.C, nodes.D);
             drawEdge(container, nodes.B, nodes.E);
             drawEdge(container, nodes.D, nodes.E);
-            
+
             // 绘制顶点
             for (const [id, pos] of Object.entries(nodes)) {
                 const node = document.createElement('div');
@@ -940,7 +948,7 @@ void addEdge(int u, int v) {
                 node.dataset.id = id;
                 container.appendChild(node);
             }
-            
+
             // 存储图的邻接关系
             container.graph = {
                 A: ['B', 'C'],
@@ -950,21 +958,21 @@ void addEdge(int u, int v) {
                 E: ['B', 'D']
             };
         }
-        
+
         // 开始路径查找
         function startPathFinding() {
             const container = document.getElementById('path-graph');
             const startNode = document.getElementById('start-node').value;
             const endNode = document.getElementById('end-node').value;
             const isDFS = document.getElementById('use-dfs').classList.contains('bg-graph');
-            
+
             // 重置之前的状态
             resetPathFinding(false);
-            
+
             // 更新状态信息
-            document.getElementById('path-step-info').textContent = 
+            document.getElementById('path-step-info').textContent =
                 `开始${isDFS ? '深度优先搜索' : '广度优先搜索'}，从${startNode}到${endNode}`;
-            
+
             // 执行搜索
             if (isDFS) {
                 dfsPathFinding(container, startNode, endNode);
@@ -972,7 +980,7 @@ void addEdge(int u, int v) {
                 bfsPathFinding(container, startNode, endNode);
             }
         }
-        
+
         // 深度优先搜索路径
         function dfsPathFinding(container, start, end) {
             const visited = new Set();
@@ -981,22 +989,22 @@ void addEdge(int u, int v) {
             const graph = container.graph;
             let step = 0;
             const totalSteps = Object.keys(graph).length;
-            
+
             // 递归DFS函数
             function dfs(current) {
                 return new Promise(resolve => {
                     step++;
                     // 更新进度条
                     document.getElementById('path-progress').style.width = `${(step / totalSteps) * 100}%`;
-                    
+
                     // 标记当前节点为已访问
                     visited.add(current);
                     path.push(current);
-                    
+
                     // 更新UI
                     updateNodeStatus(current, 'current');
                     document.getElementById('path-step-info').textContent = `访问节点${current}`;
-                    
+
                     // 如果找到终点，返回成功
                     if (current === end) {
                         setTimeout(() => {
@@ -1005,41 +1013,41 @@ void addEdge(int u, int v) {
                         }, 800);
                         return;
                     }
-                    
+
                     // 遍历邻接节点
                     const neighbors = graph[current];
                     let found = false;
-                    
+
                     setTimeout(async () => {
                         for (const neighbor of neighbors) {
                             if (!visited.has(neighbor)) {
                                 // 高亮当前边
                                 highlightEdge(container, current, neighbor, true);
-                                
+
                                 // 递归搜索
                                 found = await dfs(neighbor);
                                 if (found) {
                                     resolve(true);
                                     return;
                                 }
-                                
+
                                 // 取消边高亮
                                 highlightEdge(container, current, neighbor, false);
                             }
                         }
-                        
+
                         // 如果没有找到，回溯
                         updateNodeStatus(current, 'visited');
                         path.pop();
                         document.getElementById('path-step-info').textContent = `回溯，离开节点${current}`;
-                        
+
                         setTimeout(() => {
                             resolve(false);
                         }, 500);
                     }, 800);
                 });
             }
-            
+
             // 开始DFS
             dfs(start).then(found => {
                 if (!found) {
@@ -1047,7 +1055,7 @@ void addEdge(int u, int v) {
                 }
             });
         }
-        
+
         // 广度优先搜索路径
         function bfsPathFinding(container, start, end) {
             const visited = new Set();
@@ -1056,60 +1064,60 @@ void addEdge(int u, int v) {
             const graph = container.graph;
             let step = 0;
             const totalSteps = Object.keys(graph).length;
-            
+
             // 标记起点为已访问
             visited.add(start);
             updateNodeStatus(start, 'current');
             document.getElementById('path-step-info').textContent = `开始BFS，起点为${start}`;
-            
+
             // BFS循环
             setTimeout(async () => {
                 while (queue.length > 0) {
                     step++;
                     document.getElementById('path-progress').style.width = `${(step / totalSteps) * 100}%`;
-                    
+
                     const currentPath = queue.shift();
                     const currentNode = currentPath[currentPath.length - 1];
-                    
+
                     // 更新当前节点状态
                     updateNodeStatus(currentNode, 'current');
                     document.getElementById('path-step-info').textContent = `访问节点${currentNode}`;
-                    
+
                     // 如果找到终点，返回路径
                     if (currentNode === end) {
                         await new Promise(resolve => setTimeout(resolve, 800));
                         showPathResult(currentPath, true);
                         return;
                     }
-                    
+
                     // 等待一段时间
                     await new Promise(resolve => setTimeout(resolve, 800));
-                    
+
                     // 标记为已访问
                     updateNodeStatus(currentNode, 'visited');
-                    
+
                     // 遍历邻接节点
                     const neighbors = graph[currentNode];
                     for (const neighbor of neighbors) {
                         if (!visited.has(neighbor)) {
                             visited.add(neighbor);
                             queue.push([...currentPath, neighbor]);
-                            
+
                             // 高亮边
                             highlightEdge(container, currentNode, neighbor, true);
                             document.getElementById('path-step-info').textContent = `发现未访问节点${neighbor}，加入队列`;
-                            
+
                             await new Promise(resolve => setTimeout(resolve, 500));
                             highlightEdge(container, currentNode, neighbor, false);
                         }
                     }
                 }
-                
+
                 // 如果队列为空仍未找到终点
                 showPathResult([], false);
             }, 800);
         }
-        
+
         // 更新节点状态
         function updateNodeStatus(nodeId, status) {
             const nodes = document.querySelectorAll('.graph-node');
@@ -1124,19 +1132,19 @@ void addEdge(int u, int v) {
                 }
             });
         }
-        
+
         // 高亮边
         function highlightEdge(container, fromId, toId, highlight) {
             const from = container.nodes[fromId];
             const to = container.nodes[toId];
             const edges = container.querySelectorAll('.graph-edge');
-            
+
             // 计算边的位置和角度，找到对应的边
             const dx = to.x - from.x;
             const dy = to.y - from.y;
             const angle = Math.atan2(dy, dx) * 180 / Math.PI;
             const length = Math.sqrt(dx * dx + dy * dy);
-            
+
             edges.forEach(edge => {
                 if (Math.abs(parseFloat(edge.style.width) - length) < 5 &&
                     Math.abs(parseFloat(edge.style.transform.replace(/[^0-9.-]/g, '')) - angle) < 5) {
@@ -1148,24 +1156,24 @@ void addEdge(int u, int v) {
                 }
             });
         }
-        
+
         // 显示路径查找结果
         function showPathResult(path, found) {
             const resultEl = document.getElementById('path-result');
             const foundEl = document.getElementById('path-found');
-            
+
             resultEl.classList.remove('hidden');
-            
+
             if (found) {
                 // 高亮最终路径
                 for (let i = 0; i < path.length - 1; i++) {
                     highlightEdge(document.getElementById('path-graph'), path[i], path[i+1], true);
                 }
-                
+
                 // 标记起点和终点
                 updateNodeStatus(path[0], 'active');
                 updateNodeStatus(path[path.length - 1], 'active');
-                
+
                 foundEl.textContent = `找到路径：${path.join(' → ')}，长度为${path.length - 1}`;
                 document.getElementById('path-step-info').textContent = `搜索完成，找到路径`;
             } else {
@@ -1173,7 +1181,7 @@ void addEdge(int u, int v) {
                 document.getElementById('path-step-info').textContent = `搜索完成，未找到路径`;
             }
         }
-        
+
         // 重置路径查找
         function resetPathFinding(showMessage = true) {
             initPathGraph();
@@ -1183,12 +1191,12 @@ void addEdge(int u, int v) {
                 document.getElementById('path-step-info').textContent = '点击"查找路径"开始演示';
             }
         }
-        
+
         // 初始化连通分量图
         function initComponentsGraph() {
             const container = document.getElementById('components-graph');
             container.innerHTML = '';
-            
+
             // 顶点位置（有意分成3个连通分量）
             const nodes = {
                 A: { x: 100, y: 100 },
@@ -1199,16 +1207,16 @@ void addEdge(int u, int v) {
                 F: { x: 100, y: 250 },
                 G: { x: 300, y: 250 }
             };
-            
+
             // 存储节点信息
             container.nodes = nodes;
-            
+
             // 绘制边（形成3个连通分量：A-B-C, D-E, F, G）
             drawEdge(container, nodes.A, nodes.B);
             drawEdge(container, nodes.B, nodes.C);
             drawEdge(container, nodes.A, nodes.C);
             drawEdge(container, nodes.D, nodes.E);
-            
+
             // 绘制顶点
             for (const [id, pos] of Object.entries(nodes)) {
                 const node = document.createElement('div');
@@ -1219,7 +1227,7 @@ void addEdge(int u, int v) {
                 node.dataset.id = id;
                 container.appendChild(node);
             }
-            
+
             // 存储图的邻接关系
             container.graph = {
                 A: ['B', 'C'],
@@ -1231,7 +1239,7 @@ void addEdge(int u, int v) {
                 G: []
             };
         }
-        
+
         // 查找连通分量
         function findComponents() {
             const container = document.getElementById('components-graph');
@@ -1240,10 +1248,10 @@ void addEdge(int u, int v) {
             const components = [];
             const allNodes = Object.keys(graph);
             let componentIndex = 0;
-            
+
             // 重置状态
             resetComponents(false);
-            
+
             // 定义不同连通分量的颜色
             const colors = [
                 'bg-blue-500 text-white border-blue-500',
@@ -1251,69 +1259,69 @@ void addEdge(int u, int v) {
                 'bg-purple-500 text-white border-purple-500',
                 'bg-yellow-500 text-white border-yellow-500'
             ];
-            
+
             // 遍历所有节点
             setTimeout(async () => {
                 for (const node of allNodes) {
                     if (!visited.has(node)) {
                         componentIndex++;
                         const component = [];
-                        
+
                         // BFS查找连通分量
                         const queue = [node];
                         visited.add(node);
-                        
-                        document.getElementById('components-info').textContent = 
+
+                        document.getElementById('components-info').textContent =
                             `发现新的连通分量 #${componentIndex}，从节点${node}开始搜索`;
-                        
+
                         // 高亮当前起始节点
                         updateComponentNodeStatus(node, colors[componentIndex % colors.length]);
                         await new Promise(resolve => setTimeout(resolve, 800));
-                        
+
                         while (queue.length > 0) {
                             const current = queue.shift();
                             component.push(current);
-                            
+
                             // 遍历邻接节点
                             for (const neighbor of graph[current]) {
                                 if (!visited.has(neighbor)) {
                                     visited.add(neighbor);
                                     queue.push(neighbor);
-                                    
+
                                     // 高亮边和节点
                                     highlightEdge(container, current, neighbor, true);
                                     updateComponentNodeStatus(neighbor, colors[componentIndex % colors.length]);
-                                    
-                                    document.getElementById('components-info').textContent = 
+
+                                    document.getElementById('components-info').textContent =
                                         `连通分量 #${componentIndex} 包含节点: ${component.join(', ')}`;
-                                    
+
                                     await new Promise(resolve => setTimeout(resolve, 600));
                                     highlightEdge(container, current, neighbor, false);
                                 }
                             }
                         }
-                        
+
                         components.push(component);
                         await new Promise(resolve => setTimeout(resolve, 500));
                     }
                 }
-                
+
                 // 显示结果
-                document.getElementById('components-info').textContent = 
+                document.getElementById('components-info').textContent =
                     `连通分量查找完成，共发现${components.length}个连通分量`;
-                
+
                 const resultEl = document.getElementById('components-result');
                 const countEl = document.getElementById('components-count');
-                
+
                 resultEl.classList.remove('hidden');
                 countEl.innerHTML = '';
-                
+
                 components.forEach((comp, idx) => {
                     countEl.innerHTML += `连通分量 #${idx+1}：${comp.join(', ')}（共${comp.length}个节点）<br>`;
                 });
             }, 500);
         }
-        
+
         // 更新连通分量节点状态
         function updateComponentNodeStatus(nodeId, colorClass) {
             const nodes = document.querySelectorAll('.graph-node');
@@ -1326,7 +1334,7 @@ void addEdge(int u, int v) {
                 }
             });
         }
-        
+
         // 重置连通分量演示
         function resetComponents(showMessage = true) {
             initComponentsGraph();
@@ -1336,5 +1344,6 @@ void addEdge(int u, int v) {
             }
         }
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

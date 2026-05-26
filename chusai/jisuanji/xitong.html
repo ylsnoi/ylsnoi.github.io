@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>操作系统基础 - CSP初赛考点</title>
+
+    <meta name="description" content="操作系统基础 - CSP初赛考点课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/chusai/jisuanji/xitong.html">
+    <meta property="og:title" content="操作系统基础 - CSP初赛考点">
+    <meta property="og:description" content="操作系统基础 - CSP初赛考点课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/chusai/jisuanji/xitong.html">
+<title>操作系统基础 - CSP初赛考点</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -83,8 +90,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -135,7 +143,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="os-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -210,7 +218,7 @@
             <h2 class="text-2xl font-bold text-process mb-6 flex items-center">
                 <i class="fa fa-tasks mr-2"></i> 进程管理
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 进程基本概念 -->
                 <div>
@@ -243,21 +251,21 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 进程调度算法演示 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">进程调度算法演示</h3>
                     <p class="text-gray-700 mb-4">
                         进程调度是操作系统按某种策略或规则选择进程占用CPU运行的过程。CSP常考的调度算法有：
                     </p>
-                    
+
                     <div class="mb-4">
                         <div class="flex flex-wrap gap-2 mb-4">
                             <button class="tab-button active" data-tab="fcfs">先来先服务(FCFS)</button>
                             <button class="tab-button" data-tab="sjf">短作业优先(SJF)</button>
                             <button class="tab-button" data-tab="rr">时间片轮转(RR)</button>
                         </div>
-                        
+
                         <!-- 先来先服务调度 -->
                         <div class="tab-content active" id="fcfs">
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -267,7 +275,7 @@
                                         先来先服务(FCFS)是最简单的调度算法，按照进程到达的先后顺序进行调度。
                                         优点是公平、实现简单；缺点是不利于短作业，平均周转时间可能较长。
                                     </p>
-                                    
+
                                     <div class="mb-4">
                                         <h4 class="font-medium mb-2">进程信息</h4>
                                         <div class="overflow-x-auto">
@@ -299,7 +307,7 @@
                                             </table>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="flex space-x-2">
                                         <button id="fcfs-run" class="bg-process hover:bg-process/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                             <i class="fa fa-play mr-2"></i> 运行演示
@@ -309,7 +317,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                
+
                                 <div>
                                     <h4 class="font-medium mb-2">调度过程演示</h4>
                                     <div class="bg-white border border-gray-200 rounded-lg p-4 h-64">
@@ -321,7 +329,7 @@
                                                 <div id="fcfs-p3" class="process-block bg-process" style="width: 10%; opacity: 0.5;">P3</div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="mb-2">
                                             <div class="text-sm text-gray-600 mb-1">时间轴</div>
                                             <div class="flex justify-between text-xs text-gray-500">
@@ -334,7 +342,7 @@
                                                 <span>6</span>
                                             </div>
                                         </div>
-                                        
+
                                         <div id="fcfs-result" class="mt-6 text-sm">
                                             <p>等待演示结果...</p>
                                         </div>
@@ -342,7 +350,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- 短作业优先调度 -->
                         <div class="tab-content" id="sjf">
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -352,7 +360,7 @@
                                         短作业优先(SJF)调度算法优先选择运行时间最短的进程执行。
                                         优点是可以降低平均周转时间；缺点是可能导致长作业饥饿，且需要预知作业运行时间。
                                     </p>
-                                    
+
                                     <div class="mb-4">
                                         <h4 class="font-medium mb-2">进程信息</h4>
                                         <div class="overflow-x-auto">
@@ -384,7 +392,7 @@
                                             </table>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="flex space-x-2">
                                         <button id="sjf-run" class="bg-process hover:bg-process/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                             <i class="fa fa-play mr-2"></i> 运行演示
@@ -394,7 +402,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                
+
                                 <div>
                                     <h4 class="font-medium mb-2">调度过程演示</h4>
                                     <div class="bg-white border border-gray-200 rounded-lg p-4 h-64">
@@ -406,7 +414,7 @@
                                                 <div id="sjf-p2" class="process-block bg-process" style="width: 20%; opacity: 0.5;">P2</div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="mb-2">
                                             <div class="text-sm text-gray-600 mb-1">时间轴</div>
                                             <div class="flex justify-between text-xs text-gray-500">
@@ -419,7 +427,7 @@
                                                 <span>6</span>
                                             </div>
                                         </div>
-                                        
+
                                         <div id="sjf-result" class="mt-6 text-sm">
                                             <p>等待演示结果...</p>
                                         </div>
@@ -427,7 +435,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- 时间片轮转调度 -->
                         <div class="tab-content" id="rr">
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -438,7 +446,7 @@
                                         当时间片用完时，即使进程未执行完，也必须释放CPU给下一个进程。
                                         优点是公平性好，响应快；缺点是上下文切换开销大。
                                     </p>
-                                    
+
                                     <div class="mb-4">
                                         <h4 class="font-medium mb-2">进程信息</h4>
                                         <div class="overflow-x-auto">
@@ -473,7 +481,7 @@
                                             <label class="text-sm">时间片大小: 1</label>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="flex space-x-2">
                                         <button id="rr-run" class="bg-process hover:bg-process/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                             <i class="fa fa-play mr-2"></i> 运行演示
@@ -483,7 +491,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                
+
                                 <div>
                                     <h4 class="font-medium mb-2">调度过程演示</h4>
                                     <div class="bg-white border border-gray-200 rounded-lg p-4 h-64">
@@ -498,7 +506,7 @@
                                                 <div id="rr-p1-3" class="process-block bg-process" style="width: 10%; opacity: 0.5;">P1</div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="mb-2">
                                             <div class="text-sm text-gray-600 mb-1">时间轴</div>
                                             <div class="flex justify-between text-xs text-gray-500">
@@ -511,7 +519,7 @@
                                                 <span>6</span>
                                             </div>
                                         </div>
-                                        
+
                                         <div id="rr-result" class="mt-6 text-sm">
                                             <p>等待演示结果...</p>
                                         </div>
@@ -521,7 +529,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 进程同步与死锁 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">进程同步与死锁</h3>
@@ -533,7 +541,7 @@
                                 临界区需要互斥访问，即同一时间只能有一个进程进入临界区。
                             </p>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium mb-2">死锁</h4>
                             <p class="text-gray-700 text-sm mb-2">
@@ -549,7 +557,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 解题技巧 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="text-xl font-semibold mb-3">解题技巧</h3>
@@ -560,7 +568,7 @@
                         <li><strong>关键区分</strong>：区分进程与线程的区别（线程是进程内的执行单元，共享进程资源）</li>
                     </ul>
                 </div>
-                
+
                 <!-- 例题解析 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">例题解析</h3>
@@ -582,7 +590,7 @@
                         </div>
                         <p class="text-sm font-medium">答案：18.33</p>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg mt-4">
                         <h4 class="font-medium mb-2">例题2：死锁判断</h4>
                         <p class="text-gray-700 mb-3">
@@ -612,7 +620,7 @@
             <h2 class="text-2xl font-bold text-memory mb-6 flex items-center">
                 <i class="fa fa-microchip mr-2"></i> 内存管理
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 内存管理基本概念 -->
                 <div>
@@ -621,7 +629,7 @@
                         内存管理是操作系统对内存资源进行分配、回收和保护的过程，主要目的是提高内存利用率，
                         方便用户使用，并为多道程序运行提供良好环境。
                     </p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="border border-gray-200 rounded-lg p-3">
                             <h4 class="font-medium text-memory mb-2">内存管理的功能</h4>
@@ -642,11 +650,11 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 内存分配方式 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">内存分配方式</h3>
-                    
+
                     <div class="space-y-4">
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h4 class="font-medium mb-2">连续分配方式</h4>
@@ -659,7 +667,7 @@
                                 <li><strong>动态分区分配</strong>：根据程序大小动态分配连续的内存空间</li>
                             </ul>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h4 class="font-medium mb-2">非连续分配方式</h4>
                             <p class="text-sm text-gray-700 mb-2">
@@ -673,7 +681,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 分页存储管理演示 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">分页存储管理演示</h3>
@@ -682,7 +690,7 @@
                         同时将物理内存空间分成与页大小相等的块(Block)。
                         逻辑地址由页号和页内偏移量组成。
                     </p>
-                    
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
                             <h4 class="font-medium mb-2">基本原理</h4>
@@ -692,14 +700,14 @@
                             <div class="bg-white p-3 rounded border border-gray-200 mb-3 text-center font-mono text-sm">
                                 物理地址 = 块号 × 块大小 + 页内偏移量
                             </div>
-                            
+
                             <div class="mb-4">
                                 <h4 class="font-medium mb-2">页表与地址转换</h4>
                                 <div class="mb-3">
                                     <label class="block text-sm mb-1">页大小: 1024 bytes</label>
                                     <label class="block text-sm mb-1">逻辑地址: <input type="number" id="logical-address" value="2500" class="w-24 border border-gray-300 rounded px-2 py-1 text-sm"></label>
                                 </div>
-                                
+
                                 <div class="flex space-x-2">
                                     <button id="address-convert" class="bg-memory hover:bg-memory/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                         <i class="fa fa-exchange mr-2"></i> 转换地址
@@ -708,7 +716,7 @@
                                         <i class="fa fa-refresh mr-2"></i> 重置
                                     </button>
                                 </div>
-                                
+
                                 <div id="address-result" class="mt-4 p-3 bg-white border border-gray-200 rounded text-sm">
                                     <p>页号: ?</p>
                                     <p>页内偏移量: ?</p>
@@ -717,7 +725,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium mb-2">页表与内存分配演示</h4>
                             <div class="bg-white border border-gray-200 rounded-lg p-4">
@@ -752,7 +760,7 @@
                                         </table>
                                     </div>
                                 </div>
-                                
+
                                 <div>
                                     <h5 class="text-sm font-medium mb-2">物理内存分配</h5>
                                     <div class="grid grid-cols-8 gap-1">
@@ -776,7 +784,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 虚拟内存技术 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">虚拟内存技术</h3>
@@ -785,7 +793,7 @@
                         而实际上，它通常是被分隔成多个物理内存碎片，还有部分暂时存储在外部磁盘存储器上，
                         在需要时进行数据交换。
                     </p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="border border-gray-200 rounded-lg p-3">
                             <h4 class="font-medium text-memory mb-2">虚拟内存的特征</h4>
@@ -807,7 +815,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 解题技巧 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="text-xl font-semibold mb-3">解题技巧</h3>
@@ -818,7 +826,7 @@
                         <li><strong>虚拟内存</strong>：理解虚拟内存的作用是扩大逻辑内存空间，基于局部性原理</li>
                     </ul>
                 </div>
-                
+
                 <!-- 例题解析 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">例题解析</h3>
@@ -840,7 +848,7 @@
                         </div>
                         <p class="text-sm font-medium">答案：12345</p>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg mt-4">
                         <h4 class="font-medium mb-2">例题2：页面置换</h4>
                         <p class="text-gray-700 mb-3">
@@ -962,7 +970,7 @@
             <h2 class="text-2xl font-bold text-file mb-6 flex items-center">
                 <i class="fa fa-folder mr-2"></i> 文件系统
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 文件系统基本概念 -->
                 <div>
@@ -971,7 +979,7 @@
                         文件系统是操作系统中负责管理和存储文件信息的软件机构，它负责为用户创建文件、
                         撤销文件、读写文件、修改文件、复制文件和对文件进行保护。
                     </p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div class="border border-gray-200 rounded-lg p-3">
                             <h4 class="font-medium text-file mb-2">文件的属性</h4>
@@ -997,14 +1005,14 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 文件目录结构 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">文件目录结构</h3>
                     <p class="text-gray-700 mb-4">
                         文件目录用于组织和管理系统中的大量文件，常见的目录结构有：
                     </p>
-                    
+
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
                             <div class="space-y-4">
@@ -1015,7 +1023,7 @@
                                         有一个根目录，之下可以包含文件和子目录，子目录又可以包含文件和更深层次的子目录。
                                     </p>
                                 </div>
-                                
+
                                 <div class="bg-gray-50 p-4 rounded-lg">
                                     <h4 class="font-medium mb-2">2. 路径</h4>
                                     <p class="text-sm text-gray-700 mb-2">
@@ -1028,7 +1036,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium mb-2">目录树演示</h4>
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-64 overflow-y-auto">
@@ -1066,7 +1074,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="mt-4">
                                     <label class="block text-sm mb-1">当前目录: /home</label>
                                     <div class="flex">
@@ -1083,14 +1091,14 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 文件的物理结构 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">文件的物理结构</h3>
                     <p class="text-gray-700 mb-3">
                         文件的物理结构是指文件在外存上的存储组织形式，常见的有：
                     </p>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                         <div class="border border-gray-200 rounded-lg p-3">
                             <h4 class="font-medium text-file mb-2">连续结构</h4>
@@ -1115,7 +1123,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 解题技巧 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="text-xl font-semibold mb-3">解题技巧</h3>
@@ -1126,7 +1134,7 @@
                         <li><strong>文件操作</strong>：理解各种文件操作的作用和执行顺序，如打开→读写→关闭的流程</li>
                     </ul>
                 </div>
-                
+
                 <!-- 例题解析 -->
                 <div>
                     <h3 class="text-xl font-semibold mb-3">例题解析</h3>
@@ -1147,7 +1155,7 @@
                         </div>
                         <p class="text-sm font-medium">答案：/usr/home/user/file.txt</p>
                     </div>
-                    
+
                     <div class="bg-gray-50 p-4 rounded-lg mt-4">
                         <h4 class="font-medium mb-2">例题2：目录树结构</h4>
                         <p class="text-gray-700 mb-3">
@@ -1181,7 +1189,7 @@
     <script>
         // 初始化代码高亮
         hljs.highlightAll();
-        
+
         // 标签切换功能
         document.querySelectorAll('.tab-button').forEach(button => {
             button.addEventListener('click', () => {
@@ -1192,14 +1200,14 @@
                 document.querySelectorAll('.tab-content').forEach(content => {
                     content.classList.remove('active');
                 });
-                
+
                 // 为当前点击的标签添加active类
                 button.classList.add('active');
                 const tabId = button.getAttribute('data-tab');
                 document.getElementById(tabId).classList.add('active');
             });
         });
-        
+
         // 进程调度算法演示 - FCFS
         document.getElementById('fcfs-run').addEventListener('click', () => {
             document.getElementById('fcfs-p1').style.opacity = '1';
@@ -1216,14 +1224,14 @@
                 }, 1000);
             }, 1500);
         });
-        
+
         document.getElementById('fcfs-reset').addEventListener('click', () => {
             document.getElementById('fcfs-p1').style.opacity = '1';
             document.getElementById('fcfs-p2').style.opacity = '0.5';
             document.getElementById('fcfs-p3').style.opacity = '0.5';
             document.getElementById('fcfs-result').innerHTML = '<p>等待演示结果...</p>';
         });
-        
+
         // 进程调度算法演示 - SJF
         document.getElementById('sjf-run').addEventListener('click', () => {
             document.getElementById('sjf-p1').style.opacity = '1';
@@ -1240,21 +1248,21 @@
                 }, 500);
             }, 1500);
         });
-        
+
         document.getElementById('sjf-reset').addEventListener('click', () => {
             document.getElementById('sjf-p1').style.opacity = '1';
             document.getElementById('sjf-p3').style.opacity = '0.5';
             document.getElementById('sjf-p2').style.opacity = '0.5';
             document.getElementById('sjf-result').innerHTML = '<p>等待演示结果...</p>';
         });
-        
+
         // 进程调度算法演示 - RR
         document.getElementById('rr-run').addEventListener('click', () => {
             let elements = [
-                'rr-p1-1', 'rr-p2-1', 'rr-p3-1', 
+                'rr-p1-1', 'rr-p2-1', 'rr-p3-1',
                 'rr-p1-2', 'rr-p2-2', 'rr-p1-3'
             ];
-            
+
             elements.forEach((id, index) => {
                 setTimeout(() => {
                     document.getElementById(id).style.opacity = '1';
@@ -1269,13 +1277,13 @@
                 }, index * 500);
             });
         });
-        
+
         document.getElementById('rr-reset').addEventListener('click', () => {
             let elements = [
-                'rr-p1-1', 'rr-p2-1', 'rr-p3-1', 
+                'rr-p1-1', 'rr-p2-1', 'rr-p3-1',
                 'rr-p1-2', 'rr-p2-2', 'rr-p1-3'
             ];
-            
+
             elements.forEach((id, index) => {
                 if (index === 0) {
                     document.getElementById(id).style.opacity = '1';
@@ -1285,23 +1293,23 @@
             });
             document.getElementById('rr-result').innerHTML = '<p>等待演示结果...</p>';
         });
-        
+
         // 地址转换演示
         document.getElementById('address-convert').addEventListener('click', () => {
             const logicalAddress = parseInt(document.getElementById('logical-address').value);
             const pageSize = 1024;
-            
+
             if (isNaN(logicalAddress) || logicalAddress < 0) {
                 alert('请输入有效的逻辑地址');
                 return;
             }
-            
+
             const pageNumber = Math.floor(logicalAddress / pageSize);
             const offset = logicalAddress % pageSize;
-            
+
             // 页表映射
             const pageTable = {0: 2, 1: 5, 2: 7, 3: 1};
-            
+
             if (pageTable[pageNumber] === undefined) {
                 document.getElementById('address-result').innerHTML = `
                     <p>页号: ${pageNumber}</p>
@@ -1310,10 +1318,10 @@
                 `;
                 return;
             }
-            
+
             const frameNumber = pageTable[pageNumber];
             const physicalAddress = frameNumber * pageSize + offset;
-            
+
             document.getElementById('address-result').innerHTML = `
                 <p>页号: ${pageNumber}</p>
                 <p>页内偏移量: ${offset}</p>
@@ -1321,7 +1329,7 @@
                 <p>物理地址: ${physicalAddress}</p>
             `;
         });
-        
+
         document.getElementById('address-reset').addEventListener('click', () => {
             document.getElementById('logical-address').value = 2500;
             document.getElementById('address-result').innerHTML = `
@@ -1331,15 +1339,15 @@
                 <p>物理地址: ?</p>
             `;
         });
-        
+
         // 路径解析演示
         document.getElementById('resolve-path').addEventListener('click', () => {
             const currentDir = '/home';
             const relativePath = document.getElementById('file-path').value;
-            
+
             // 简单的路径解析逻辑
             let absolutePath = currentDir;
-            
+
             if (relativePath.startsWith('/')) {
                 absolutePath = relativePath;
             } else {
@@ -1356,9 +1364,10 @@
                     }
                 });
             }
-            
+
             document.getElementById('path-result').innerHTML = `绝对路径: ${absolutePath}`;
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>

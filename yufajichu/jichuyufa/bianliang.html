@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>变量与数据类型 - 艾科斯信奥网</title>
+
+    <meta name="description" content="变量与数据类型课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <link rel="canonical" href="https://ylsnoi.github.io/yufajichu/jichuyufa/bianliang.html">
+    <meta property="og:title" content="变量与数据类型 - 艾科斯信奥网">
+    <meta property="og:description" content="变量与数据类型课程讲义，来自艾科斯信奥网信息学奥赛学习体系，包含知识梳理、示例代码和训练建议。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ylsnoi.github.io/yufajichu/jichuyufa/bianliang.html">
+<title>变量与数据类型 - 艾科斯信奥网</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
@@ -116,8 +123,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="../../assets/site.css">
 </head>
-<body class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -191,7 +199,7 @@
     </div>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 py-8">
         <!-- 页面标题 -->
         <div class="variable-bg rounded-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between">
@@ -238,7 +246,7 @@
                         </p>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">变量命名规则</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -262,13 +270,13 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">基本数据类型</h3>
                     <p class="text-gray-700 mb-4">
                         C++语言提供了多种基本数据类型，用于存储不同类型的数据：
                     </p>
-                    
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="data-type-box">
                             <h4 class="font-bold text-variable">int</h4>
@@ -276,49 +284,49 @@
                             <p class="text-xs text-gray-500 mt-2">通常4字节</p>
                             <p class="text-xs text-gray-600 mt-1">范围: -2^31 ~ 2^31-1</p>
                         </div>
-                        
+
                         <div class="data-type-box">
                             <h4 class="font-bold text-variable">long long</h4>
                             <p class="text-sm mt-1">长整数类型</p>
                             <p class="text-xs text-gray-500 mt-2">通常8字节</p>
                             <p class="text-xs text-gray-600 mt-1">范围: -2^63 ~ 2^63-1</p>
                         </div>
-                        
+
                         <div class="data-type-box">
                             <h4 class="font-bold text-variable">float</h4>
                             <p class="text-sm mt-1">单精度浮点型</p>
                             <p class="text-xs text-gray-500 mt-2">通常4字节</p>
                             <p class="text-xs text-gray-600 mt-1">约6-7位有效数字</p>
                         </div>
-                        
+
                         <div class="data-type-box">
                             <h4 class="font-bold text-variable">double</h4>
                             <p class="text-sm mt-1">双精度浮点型</p>
                             <p class="text-xs text-gray-500 mt-2">通常8字节</p>
                             <p class="text-xs text-gray-600 mt-1">约15-17位有效数字</p>
                         </div>
-                        
+
                         <div class="data-type-box">
                             <h4 class="font-bold text-variable">char</h4>
                             <p class="text-sm mt-1">字符类型</p>
                             <p class="text-xs text-gray-500 mt-2">通常1字节</p>
                             <p class="text-xs text-gray-600 mt-1">存储单个字符</p>
                         </div>
-                        
+
                         <div class="data-type-box">
                             <h4 class="font-bold text-variable">bool</h4>
                             <p class="text-sm mt-1">布尔类型</p>
                             <p class="text-xs text-gray-500 mt-2">通常1字节</p>
                             <p class="text-xs text-gray-600 mt-1">值: true 或 false</p>
                         </div>
-                        
+
                         <div class="data-type-box">
                             <h4 class="font-bold text-variable">short</h4>
                             <p class="text-sm mt-1">短整数类型</p>
                             <p class="text-xs text-gray-500 mt-2">通常2字节</p>
                             <p class="text-xs text-gray-600 mt-1">范围: -2^15 ~ 2^15-1</p>
                         </div>
-                        
+
                         <div class="data-type-box">
                             <h4 class="font-bold text-variable">long</h4>
                             <p class="text-sm mt-1">长整数类型</p>
@@ -327,7 +335,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">数据类型选择原则</h3>
                     <ul class="list-disc pl-6 space-y-2">
@@ -345,7 +353,7 @@
             <h2 class="text-2xl font-bold text-variable mb-6 flex items-center">
                 <i class="fa fa-play-circle mr-2"></i> 变量存储演示
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 变量内存演示 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -356,7 +364,7 @@
                                 下面的动画演示了不同类型变量在内存中的存储方式和大小差异。
                                 每种类型的变量占用不同的内存空间，存储不同范围的值。
                             </p>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">选择变量类型:</label>
                                 <select id="variable-type" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-variable">
@@ -368,13 +376,13 @@
                                     <option value="bool">bool (布尔)</option>
                                 </select>
                             </div>
-                            
+
                             <div class="mb-4">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">变量值:</label>
-                                <input type="text" id="variable-value" value="42" 
+                                <input type="text" id="variable-value" value="42"
                                     class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-variable">
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="allocate-variable" class="bg-variable hover:bg-variable/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-plus mr-2"></i> 分配变量
@@ -383,12 +391,12 @@
                                     <i class="fa fa-trash mr-2"></i> 清空内存
                                 </button>
                             </div>
-                            
+
                             <div id="memory-status" class="animation-status hidden">
                                 状态: 等待分配变量
                             </div>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium mb-3">内存模拟</h4>
                             <div class="memory-visualization min-h-[200px]" id="memory-simulation">
@@ -405,7 +413,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 类型转换演示 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">数据类型转换</h3>
@@ -414,7 +422,7 @@
                             <p class="text-gray-700 mb-4">
                                 演示不同数据类型之间的转换效果，包括隐式转换和显式转换：
                             </p>
-                            
+
                             <div class="space-y-4 mb-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">源类型:</label>
@@ -425,13 +433,13 @@
                                         <option value="char">char</option>
                                     </select>
                                 </div>
-                                
+
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">源值:</label>
-                                    <input type="text" id="source-value" value="65" 
+                                    <input type="text" id="source-value" value="65"
                                         class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-variable">
                                 </div>
-                                
+
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">目标类型:</label>
                                     <select id="target-type" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-variable">
@@ -442,19 +450,19 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <div class="flex space-x-2">
                                 <button id="convert-type" class="bg-variable hover:bg-variable/90 text-white px-4 py-2 rounded-md transition-all flex items-center">
                                     <i class="fa fa-exchange mr-2"></i> 执行转换
                                 </button>
                             </div>
-                            
+
                             <div class="animation-step bg-blue-50 text-blue-800 p-3 rounded-lg mt-4">
                                 <h4 class="font-medium mb-1">转换结果</h4>
                                 <p id="conversion-result" class="text-sm">点击"执行转换"查看结果</p>
                             </div>
                         </div>
-                        
+
                         <div>
                             <h4 class="font-medium mb-3">类型转换说明</h4>
                             <div class="bg-white border border-gray-200 rounded-lg p-4 h-[300px] overflow-y-auto">
@@ -466,7 +474,7 @@
                                             这种转换通常是安全的，不会导致数据丢失。
                                         </p>
                                     </div>
-                                    
+
                                     <div>
                                         <h5 class="font-semibold text-variable">显式转换（强制转换）</h5>
                                         <p class="text-sm text-gray-700">
@@ -474,7 +482,7 @@
                                             从"宽"类型到"窄"类型的转换可能导致数据丢失或精度降低。
                                         </p>
                                     </div>
-                                    
+
                                     <div>
                                         <h5 class="font-semibold text-variable">常见转换问题</h5>
                                         <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
@@ -497,7 +505,7 @@
             <h2 class="text-2xl font-bold text-variable mb-6 flex items-center">
                 <i class="fa fa-code mr-2"></i> 变量与数据类型代码示例 (C++)
             </h2>
-            
+
             <div class="space-y-6">
                 <!-- 变量声明与初始化 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
@@ -505,7 +513,7 @@
                     <p class="text-gray-700 mb-3">
                         变量需要先声明后使用，声明时指定数据类型和变量名，可以同时进行初始化：
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
 using namespace std;
 
@@ -515,34 +523,34 @@ int main() {
     double height;
     char grade;
     bool isStudent;
-    
+
     // 变量赋值
     age = 16;
     height = 175.5;
     grade = 'A';
     isStudent = true;
-    
+
     // 声明的同时初始化
     int score = 95;
     long long population = 7800000000LL;
     float pi = 3.14f;
-    
+
     // 输出变量值
     cout << "年龄: " << age << endl;
     cout << "身高: " << height << "cm" << endl;
     cout << "成绩等级: " << grade << endl;
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 数据类型范围 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">2. 数据类型范围演示</h3>
                     <p class="text-gray-700 mb-3">
                         不同数据类型有不同的取值范围，超出范围会导致溢出：
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
 #include &lt;limits&gt; // 包含获取类型范围的函数
 using namespace std;
@@ -552,33 +560,33 @@ int main() {
     cout << "int 类型范围: " << endl;
     cout << "最小值: " << INT_MIN << endl;
     cout << "最大值: " << INT_MAX << endl << endl;
-    
+
     cout << "long long 类型范围: " << endl;
     cout << "最小值: " << LLONG_MIN << endl;
     cout << "最大值: " << LLONG_MAX << endl << endl;
-    
+
     // 演示整数溢出
     int max_int = INT_MAX;
     cout << "int 最大值: " << max_int << endl;
     cout << "int 最大值 + 1: " << max_int + 1 << endl; // 溢出，结果不正确
-    
+
     // 浮点类型精度
     float f1 = 0.1f;
     double d1 = 0.1;
     cout << endl << "float 0.1: " << f1 << endl;
     cout << "double 0.1: " << d1 << endl;
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 类型转换 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">3. 类型转换示例</h3>
                     <p class="text-gray-700 mb-3">
                         C++中的类型转换包括隐式转换和显式转换：
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
 using namespace std;
 
@@ -587,41 +595,41 @@ int main() {
     int a = 10;
     double b = a; // int 转换为 double
     cout << "a = " << a << ", b = " << b << endl;
-    
+
     // 隐式转换可能导致精度损失
     double c = 3.14159;
     int d = c; // double 转换为 int，小数部分被截断
     cout << "c = " << c << ", d = " << d << endl;
-    
+
     // 显式转换（强制转换）
     double e = 9.99;
     int f = (int)e; // 强制转换为 int
     cout << "e = " << e << ", f = " << f << endl;
-    
+
     // 另一种显式转换方式
     int g = static_cast<int>(e);
     cout << "e = " << e << ", g = " << g << endl;
-    
+
     // char 与 int 之间的转换
     char h = 'A';
     int i = h; // char 转换为 int，得到 ASCII 码
     cout << "h = " << h << ", i = " << i << endl;
-    
+
     int j = 66;
     char k = static_cast<char>(j); // int 转换为 char
     cout << "j = " << j << ", k = " << k << endl;
-    
+
     return 0;
 }</code></pre>
                 </div>
-                
+
                 <!-- 常量定义 -->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <h3 class="font-semibold text-lg mb-3">4. 常量定义</h3>
                     <p class="text-gray-700 mb-3">
                         常量是值不能改变的变量，使用const关键字定义：
                     </p>
-                    
+
                     <pre class="code-block"><code class="language-cpp">#include &lt;iostream&gt;
 using namespace std;
 
@@ -630,16 +638,16 @@ int main() {
     const int MAX_SCORE = 100;
     const double PI = 3.1415926535;
     const char NEW_LINE = '\n';
-    
+
     cout << "最高分: " << MAX_SCORE << NEW_LINE;
     cout << "圆周率: " << PI << NEW_LINE;
-    
+
     // 常量的值不能被修改
     // MAX_SCORE = 90; // 编译错误：不能修改常量的值
-    
+
     // 定义常量时必须初始化
     // const int MIN_AGE; // 编译错误：常量未初始化
-    
+
     return 0;
 }</code></pre>
                 </div>
@@ -651,7 +659,7 @@ int main() {
             <h2 class="text-2xl font-bold text-variable mb-6 flex items-center">
                 <i class="fa fa-exclamation-triangle mr-2"></i> 常见问题与注意事项
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">变量使用常见错误</h3>
@@ -692,7 +700,7 @@ a = a + 1;          // 溢出，结果为负数</pre>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">竞赛中的数据类型选择策略</h3>
                     <ul class="list-disc pl-6 space-y-2">
@@ -703,7 +711,7 @@ a = a + 1;          // 溢出，结果为负数</pre>
                         <li><strong>常量定义</strong>：使用const定义常量，提高代码可读性和可维护性</li>
                     </ul>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">调试技巧</h3>
                     <ul class="list-disc pl-6 space-y-2">
@@ -721,7 +729,7 @@ a = a + 1;          // 溢出，结果为负数</pre>
             <h2 class="text-2xl font-bold text-variable mb-6 flex items-center">
                 <i class="fa fa-puzzle-piece mr-2"></i> 洛谷推荐题目
             </h2>
-            
+
             <div class="space-y-6">
                 <div>
                     <h3 class="text-xl font-semibold mb-3">入门题</h3>
@@ -731,7 +739,7 @@ a = a + 1;          // 溢出，结果为负数</pre>
                             输入两个整数a、b，输出它们的和。看似简单的题目，但需要注意数据范围和类型选择。
                         </p>
                         <div class="flex space-x-3 mt-3">
-                            <a href="https://www.luogu.com.cn/problem/P1001" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-all flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1001" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-all flex items-center" rel="noopener noreferrer">
                                 <i class="fa fa-external-link mr-2"></i> 题目链接
                             </a>
                             <a href="../../index.html#practice" class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md transition-all flex items-center">
@@ -740,7 +748,7 @@ a = a + 1;          // 溢出，结果为负数</pre>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">基础题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -750,7 +758,7 @@ a = a + 1;          // 溢出，结果为负数</pre>
                                 形如2^P-1的素数称为麦森数，这时P一定也是个素数。但反过来不一定，即如果P是个素数，2^P-1不一定也是素数。
                                 本题要求计算2^P-1的最后500位数字。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1045" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1045" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 <i class="fa fa-external-link mr-1"></i> 查看题目
                             </a>
                         </div>
@@ -760,13 +768,13 @@ a = a + 1;          // 溢出，结果为负数</pre>
                                 一个n个元素的整数数组，如果数组两个连续元素之间差的绝对值包括了1到n-1的所有整数，则称之符合"欢乐的跳"。
                                 给定一个数组，判断是否符合"欢乐的跳"。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1152" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1152" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 <i class="fa fa-external-link mr-1"></i> 查看题目
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-xl font-semibold mb-3">进阶题</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -776,7 +784,7 @@ a = a + 1;          // 溢出，结果为负数</pre>
                                 一元n次多项式可用如下的表达式表示：f(x) = a_nx^n + a_{n-1}x^{n-1} + ... + a_1x + a_0，其中，a_i是系数，x是变量。
                                 本题要求编写程序，按规定格式输出多项式。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1067" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1067" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 <i class="fa fa-external-link mr-1"></i> 查看题目
                             </a>
                         </div>
@@ -786,7 +794,7 @@ a = a + 1;          // 溢出，结果为负数</pre>
                                 有n个玩具围成一圈，每个玩具有一个方向和一个号码。玩家从0号玩具开始，根据给出的指令移动，
                                 指令包含方向和步数。需要计算最终停在哪个玩具上。
                             </p>
-                            <a href="https://www.luogu.com.cn/problem/P1563" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center">
+                            <a href="https://www.luogu.com.cn/problem/P1563" target="_blank" class="text-primary hover:text-primary/80 text-sm flex items-center" rel="noopener noreferrer">
                                 <i class="fa fa-external-link mr-1"></i> 查看题目
                             </a>
                         </div>
@@ -829,7 +837,7 @@ a = a + 1;          // 溢出，结果为负数</pre>
         // 初始化代码高亮
         document.addEventListener('DOMContentLoaded', function() {
             hljs.highlightAll();
-            
+
             // 内存模拟相关功能
             const memorySimulation = document.getElementById('memory-simulation');
             const allocateButton = document.getElementById('allocate-variable');
@@ -837,14 +845,14 @@ a = a + 1;          // 溢出，结果为负数</pre>
             const variableTypeSelect = document.getElementById('variable-type');
             const variableValueInput = document.getElementById('variable-value');
             const memoryStatus = document.getElementById('memory-status');
-            
+
             // 类型转换相关功能
             const convertButton = document.getElementById('convert-type');
             const sourceTypeSelect = document.getElementById('source-type');
             const targetTypeSelect = document.getElementById('target-type');
             const sourceValueInput = document.getElementById('source-value');
             const conversionResult = document.getElementById('conversion-result');
-            
+
             // 初始化内存模拟区域
             function initMemory() {
                 memorySimulation.innerHTML = '';
@@ -859,23 +867,23 @@ a = a + 1;          // 溢出，结果为负数</pre>
                 memoryStatus.textContent = '状态: 内存已清空';
                 memoryStatus.classList.remove('hidden');
             }
-            
+
             // 初始化内存
             initMemory();
-            
+
             // 清除内存
             clearButton.addEventListener('click', initMemory);
-            
+
             // 分配变量到内存
             allocateButton.addEventListener('click', function() {
                 const type = variableTypeSelect.value;
                 const value = variableValueInput.value;
-                
+
                 // 根据类型获取占用字节数
                 let bytes = 0;
                 let typeName = '';
                 let displayValue = value;
-                
+
                 switch(type) {
                     case 'int':
                         bytes = 4;
@@ -926,11 +934,11 @@ a = a + 1;          // 溢出，结果为负数</pre>
                         displayValue = value.toLowerCase() === 'true' ? 'true' : 'false';
                         break;
                 }
-                
+
                 // 查找连续的空闲内存单元
                 let startIndex = -1;
                 let consecutiveFree = 0;
-                
+
                 for (let i = 0; i < 32; i++) {
                     const cell = document.getElementById(`memory-cell-${i}`);
                     if (!cell.classList.contains('memory-cell-occupied')) {
@@ -943,12 +951,12 @@ a = a + 1;          // 溢出，结果为负数</pre>
                         consecutiveFree = 0;
                     }
                 }
-                
+
                 if (startIndex === -1) {
                     alert('内存不足，无法分配变量');
                     return;
                 }
-                
+
                 // 标记内存单元为已占用
                 for (let i = startIndex; i < startIndex + bytes; i++) {
                     const cell = document.getElementById(`memory-cell-${i}`);
@@ -960,20 +968,20 @@ a = a + 1;          // 溢出，结果为负数</pre>
                         cell.innerHTML = `<span class="text-xs">+${i - startIndex}</span>`;
                     }
                 }
-                
+
                 memoryStatus.textContent = `状态: 已分配 ${typeName} 类型变量，占用 ${bytes} 字节`;
             });
-            
+
             // 类型转换功能
             convertButton.addEventListener('click', function() {
                 const sourceType = sourceTypeSelect.value;
                 const targetType = targetTypeSelect.value;
                 const sourceValue = sourceValueInput.value;
-                
+
                 let convertedValue;
                 let explanation = '';
                 let success = true;
-                
+
                 // 先将源值转换为JavaScript中的对应类型
                 let value;
                 switch(sourceType) {
@@ -1000,12 +1008,12 @@ a = a + 1;          // 溢出，结果为负数</pre>
                         }
                         break;
                 }
-                
+
                 if (!success) {
                     conversionResult.textContent = explanation;
                     return;
                 }
-                
+
                 // 执行转换
                 switch(targetType) {
                     case 'int':
@@ -1035,10 +1043,10 @@ a = a + 1;          // 溢出，结果为负数</pre>
                         }
                         break;
                 }
-                
+
                 conversionResult.textContent = `转换结果: ${convertedValue} (${explanation})`;
             });
-            
+
             // 数据类型选择时自动调整默认值
             variableTypeSelect.addEventListener('change', function() {
                 const type = this.value;
@@ -1063,7 +1071,7 @@ a = a + 1;          // 溢出，结果为负数</pre>
                         break;
                 }
             });
-            
+
             // 源类型选择时自动调整默认值
             sourceTypeSelect.addEventListener('change', function() {
                 const type = this.value;
@@ -1082,5 +1090,6 @@ a = a + 1;          // 溢出，结果为负数</pre>
             });
         });
     </script>
+    <script src="../../assets/site.js" defer></script>
 </body>
 </html>
