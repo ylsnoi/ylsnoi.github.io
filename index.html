@@ -635,7 +635,7 @@
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">联系我们</h3>
                     <ul class="space-y-2 text-sm">
                         <li class="flex items-center"><i class="fa fa-envelope-o mr-2 text-primary"></i> <a href="mailto:contact@aixnoi.com" class="text-gray-600 hover:text-primary">contact@aixnoi.com</a></li>
-                        <li class="flex items-center"><i class="fa fa-phone mr-2 text-primary"></i> <span class="text-gray-600">400-123-4567</span></li>
+                        <li class="flex items-center"><i class="fa fa-weixin mr-2 text-primary"></i> <span class="text-gray-600">aixnoi</span></li>
                         <li class="flex items-center"><i class="fa fa-weixin mr-2 text-primary"></i> <span class="text-gray-600">aixnoi</span></li>
                     </ul>
                 </div>
@@ -829,20 +829,23 @@
             }
         });
         
-        // 内容区块动画
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('opacity-100', 'translate-y-0');
-                    entry.target.classList.remove('opacity-0', 'translate-y-4');
-                }
+        // 内容区块动画：默认保持可见，只在浏览器支持时添加轻量入场效果。
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('opacity-100', 'translate-y-0');
+                        entry.target.classList.remove('translate-y-4');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.topic-card').forEach(card => {
+                card.classList.add('transition-all', 'duration-700', 'opacity-100', 'translate-y-4');
+                observer.observe(card);
             });
-        }, { threshold: 0.1 });
-        
-        document.querySelectorAll('.topic-card').forEach(card => {
-            card.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-4');
-            observer.observe(card);
-        });
+        }
     </script>
 
     </body></html>

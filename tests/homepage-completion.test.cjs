@@ -41,6 +41,57 @@ function fileExistsForUrl(baseFile, url) {
   return fs.existsSync(resolved);
 }
 
+function getFragmentTargets(html) {
+  const targets = new Set();
+  for (const match of html.matchAll(/\b(?:id|name)=(["'])([^"']+)\1/g)) {
+    targets.add(match[2]);
+  }
+  return targets;
+}
+
+function decodeFragment(fragment) {
+  try {
+    return decodeURIComponent(fragment);
+  } catch {
+    return fragment;
+  }
+}
+
+function assertLocalLinksResolve(page, html) {
+  const anchorPattern = /<a\b[^>]*\bhref=(["'])(.*?)\1/gi;
+  const currentTargets = getFragmentTargets(html);
+
+  for (const match of html.matchAll(anchorPattern)) {
+    const href = match[2].trim();
+    if (!href || href.includes('${')) continue;
+    assert(href !== '#', `${page} should not contain empty hash links`);
+    assert(!/^javascript:/i.test(href), `${page} should not contain javascript pseudo-links`);
+    if (/^(https?:|mailto:|tel:)/i.test(href) || href.startsWith('//')) continue;
+
+    const hashIndex = href.indexOf('#');
+    const pathPart = (hashIndex >= 0 ? href.slice(0, hashIndex) : href).split('?')[0];
+    const fragment = hashIndex >= 0 ? href.slice(hashIndex + 1) : '';
+    let targetHtml = html;
+    let targetTargets = currentTargets;
+
+    if (pathPart) {
+      const clean = pathPart.replace(/\\/g, '/');
+      const targetPath = path.resolve(root, path.dirname(page), clean);
+      assert(fs.existsSync(targetPath), `${page} local link should point to an existing file: ${href}`);
+
+      if (targetPath.endsWith('.html')) {
+        targetHtml = fs.readFileSync(targetPath, 'utf8');
+        targetTargets = getFragmentTargets(targetHtml);
+      }
+    }
+
+    if (fragment) {
+      const target = decodeFragment(fragment);
+      assert(targetTargets.has(target), `${page} link should point to an existing fragment: ${href}`);
+    }
+  }
+}
+
 for (const page of pages) {
   const html = read(page);
   assert(html.includes('id="mobile-menu-button"'), `${page} should have a mobile menu button`);
@@ -73,9 +124,15 @@ assert(cspHtml.includes('查看备考计划'), 'cspchusai.html should promote th
 
 for (const page of listHtmlPages(root)) {
   const html = read(page);
+  assert(!/href=(["'])#\1/.test(html), `${page} should not contain empty hash links`);
+  assert(!/javascript:;/i.test(html), `${page} should not contain javascript placeholder links`);
   assert(!html.includes('姚老师信奥网'), `${page} should not contain the old site name`);
   assert(!html.includes('yaoteacher'), `${page} should not contain old brand contact handles`);
   assert(!html.includes('contact@yaoteacher.com'), `${page} should not contain old brand contact email`);
+  assert(!html.includes('400-123-4567'), `${page} should not contain placeholder phone numbers`);
+  assert(!html.includes('京ICP备12345678号'), `${page} should not contain placeholder ICP records`);
+  assert(!html.includes('信息学奥赛教程'), `${page} should not contain the old generic site title`);
+  assertLocalLinksResolve(page, html);
 }
 
-console.log('homepage completion checks passed');
+console.log('site completion checks passed');
