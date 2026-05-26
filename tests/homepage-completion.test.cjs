@@ -47,6 +47,11 @@ for (const page of pages) {
   assert(html.includes('id="mobile-menu"'), `${page} should have a mobile menu container`);
   assert(html.includes('mobileMenuButton.addEventListener'), `${page} should wire the mobile menu button`);
   assert(!html.includes('href="#" class="nav-item"'), `${page} should not keep desktop nav placeholder links`);
+  assert(html.includes('class="skip-link"'), `${page} should provide a skip link`);
+  assert(html.includes('id="main-content"'), `${page} should expose a main content landmark`);
+  assert(html.includes('aria-live="polite"'), `${page} search results should be announced to assistive tech`);
+  assert(html.includes('aria-label="关闭搜索结果"'), `${page} search close button should be labelled`);
+  assert(html.includes('document.addEventListener(\'keydown\''), `${page} should close overlays with Escape`);
 
   const searchData = extractSearchData(html);
   assert(searchData.length >= 10, `${page} should expose useful search data`);
@@ -58,9 +63,19 @@ for (const page of pages) {
   assert(html.includes('result-card'), `${page} should render search results as clickable cards`);
 }
 
+const indexHtml = read('index.html');
+assert(indexHtml.includes('id="roadmap"'), 'index.html should include a learning roadmap section');
+assert(indexHtml.includes('查看学习路径'), 'index.html should promote the learning roadmap in the hero');
+
+const cspHtml = read('cspchusai.html');
+assert(cspHtml.includes('id="exam-plan"'), 'cspchusai.html should include an exam preparation plan');
+assert(cspHtml.includes('查看备考计划'), 'cspchusai.html should promote the exam plan in the hero');
+
 for (const page of listHtmlPages(root)) {
   const html = read(page);
   assert(!html.includes('姚老师信奥网'), `${page} should not contain the old site name`);
+  assert(!html.includes('yaoteacher'), `${page} should not contain old brand contact handles`);
+  assert(!html.includes('contact@yaoteacher.com'), `${page} should not contain old brand contact email`);
 }
 
 console.log('homepage completion checks passed');

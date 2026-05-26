@@ -64,10 +64,14 @@
             .site-title {
                 @apply text-2xl font-bold text-primary tracking-tight;
             }
+            .skip-link {
+                @apply fixed left-4 top-4 z-[60] -translate-y-24 rounded-md bg-primary px-4 py-2 text-white shadow-md transition-transform duration-200 focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-primary/30;
+            }
         }
     </style>
 </head>
-<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen">
+<body id="top" class="bg-darkbg text-gray-800 font-sans min-h-screen overflow-x-hidden">
+    <a href="#main-content" class="skip-link">跳到主要内容</a>
     <!-- 顶部导航栏 -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -77,6 +81,7 @@
             </div>
             <div class="hidden md:flex items-center space-x-6">
                 <a href="#top" class="nav-item">首页</a>
+                <a href="#roadmap" class="nav-item">学习路径</a>
                 <a href="#courses" class="nav-item">课程</a>
                 <a href="#practice" class="nav-item">题库</a>
                 <a href="#about" class="nav-item">关于我们</a>
@@ -84,8 +89,8 @@
             <div class="flex items-center space-x-4">
                 <!-- 搜索框 -->
                 <div class="relative hidden md:block">
-                    <input type="text" id="search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
-                    <button id="search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                    <input type="text" id="search-input" aria-label="搜索算法和数据结构" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-64">
+                    <button id="search-button" aria-label="提交搜索" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
                         <i class="fa fa-search"></i>
                     </button>
                 </div>
@@ -99,14 +104,15 @@
         <!-- 移动端搜索框 -->
         <div class="md:hidden px-4 pb-3">
             <div class="relative">
-                <input type="text" id="mobile-search-input" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
-                <button id="mobile-search-button" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                <input type="text" id="mobile-search-input" aria-label="搜索算法和数据结构" placeholder="搜索算法、数据结构..." class="pl-10 pr-4 py-2 rounded-md bg-darkbg border border-gray-200 focus:outline-none focus:border-primary text-gray-700 w-full">
+                <button id="mobile-search-button" aria-label="提交搜索" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
                     <i class="fa fa-search"></i>
                 </button>
             </div>
         </div>
         <nav id="mobile-menu" class="hidden md:hidden border-t border-gray-100 px-4 py-3">
             <a href="#top" class="mobile-menu-link">首页</a>
+            <a href="#roadmap" class="mobile-menu-link">学习路径</a>
             <a href="#courses" class="mobile-menu-link">课程</a>
             <a href="#practice" class="mobile-menu-link">题库</a>
             <a href="#about" class="mobile-menu-link">关于我们</a>
@@ -114,12 +120,12 @@
     </header>
 
     <!-- 主要内容区 -->
-    <main class="container mx-auto px-4 py-8">
+    <main id="main-content" tabindex="-1" class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- 搜索结果区域 -->
-        <div id="search-results" class="hidden mb-8 bg-white rounded-lg p-5 card-shadow">
+        <div id="search-results" role="region" aria-live="polite" aria-label="搜索结果" class="hidden mb-8 bg-white rounded-lg p-5 card-shadow">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-xl font-bold text-primary">搜索结果</h2>
-                <button id="close-search" class="text-gray-500 hover:text-primary">
+                <button id="close-search" aria-label="关闭搜索结果" class="text-gray-500 hover:text-primary">
                     <i class="fa fa-times"></i>
                 </button>
             </div>
@@ -130,35 +136,92 @@
         </div>
 
         <!-- 介绍卡片 -->
-        <div class="bg-white rounded-lg p-6 mb-8 card-shadow">
-            <h2 class="text-2xl font-bold text-primary mb-4">信息学奥赛学习平台</h2>
-            <p class="text-gray-700 mb-6">
-                欢迎来到艾科斯信奥网！这里提供丰富的信息学奥赛学习资源，包括语法知识、经典算法和数据结构的详细讲解及案例模板。
-            </p>
-            <div class="flex flex-wrap gap-4">
-                <a href="#syntax" class="bg-syntax/10 hover:bg-syntax/20 text-syntax px-4 py-2 rounded-md transition-all flex items-center hover-scale">
-                    <i class="fa fa-code mr-2"></i> 语法基础
+        <section class="bg-white rounded-lg p-6 md:p-8 mb-8 card-shadow">
+            <div class="grid grid-cols-1 lg:grid-cols-[1.35fr_0.85fr] gap-8 items-center">
+                <div>
+                    <p class="text-sm font-semibold text-primary mb-2">艾科斯信奥网</p>
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">信息学奥赛学习平台</h2>
+                    <p class="text-gray-700 leading-7 mb-6">
+                        按“语法基础、算法设计、数据结构、CSP 初赛”组织学习内容，把入门讲义、常用模板和备考入口集中到一个页面，方便学生按阶段推进。
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="#roadmap" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-md transition-all flex items-center hover-scale">
+                            <i class="fa fa-map-signs mr-2"></i> 查看学习路径
+                        </a>
+                        <a href="cspchusai.html" class="bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-md transition-all flex items-center hover-scale">
+                            <i class="fa fa-book mr-2"></i> CSP 初赛备考
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 mt-6">
+                        <div class="rounded-md bg-darkbg p-3">
+                            <p class="text-xl font-bold text-primary">50+</p>
+                            <p class="text-xs text-gray-600">站内讲义</p>
+                        </div>
+                        <div class="rounded-md bg-darkbg p-3">
+                            <p class="text-xl font-bold text-algorithm">4</p>
+                            <p class="text-xs text-gray-600">学习阶段</p>
+                        </div>
+                        <div class="rounded-md bg-darkbg p-3">
+                            <p class="text-xl font-bold text-datastructure">2</p>
+                            <p class="text-xs text-gray-600">备考入口</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="rounded-lg border border-gray-100 bg-darkbg p-5">
+                    <h3 class="font-semibold text-gray-900 mb-4">推荐学习顺序</h3>
+                    <ol class="space-y-3 text-sm text-gray-700">
+                        <li class="flex gap-3">
+                            <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-syntax/10 text-syntax font-semibold">1</span>
+                            <a href="#syntax" class="hover:text-primary">先补齐 C++ 基础语法和递归、文件、字符串处理。</a>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-algorithm/10 text-algorithm font-semibold">2</span>
+                            <a href="#algorithm" class="hover:text-primary">再训练排序、搜索、动态规划和最短路模型。</a>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-datastructure/10 text-datastructure font-semibold">3</span>
+                            <a href="#datastructure" class="hover:text-primary">同步掌握线性结构、树和图的实现方式。</a>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold">4</span>
+                            <a href="cspchusai.html" class="hover:text-primary">最后用 CSP 初赛页补基础知识和选择题。</a>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="bg-white rounded-lg p-6 mb-8 card-shadow">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-5">
+                <div>
+                    <p class="text-sm font-semibold text-primary mb-1">从哪里开始</p>
+                    <h2 class="text-2xl font-bold text-gray-900">学习路径</h2>
+                </div>
+                <p class="text-gray-600 text-sm max-w-2xl">把页面内容拆成四条路线，适合课堂讲解、课后复习和赛前查漏补缺。</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <a href="#syntax" class="rounded-lg border border-gray-100 p-4 hover:border-syntax/50 hover:bg-syntax/5 transition-all">
+                    <i class="fa fa-code text-syntax text-2xl mb-3"></i>
+                    <h3 class="font-semibold text-gray-900 mb-2">入门语法</h3>
+                    <p class="text-sm text-gray-600">变量、分支、循环、函数、递归和常用输入输出。</p>
                 </a>
-                <a href="#algorithm" class="bg-algorithm/10 hover:bg-algorithm/20 text-algorithm px-4 py-2 rounded-md transition-all flex items-center hover-scale">
-                    <i class="fa fa-cogs mr-2"></i> 算法设计
+                <a href="#algorithm" class="rounded-lg border border-gray-100 p-4 hover:border-algorithm/50 hover:bg-algorithm/5 transition-all">
+                    <i class="fa fa-cogs text-algorithm text-2xl mb-3"></i>
+                    <h3 class="font-semibold text-gray-900 mb-2">算法基础</h3>
+                    <p class="text-sm text-gray-600">排序、搜索、动态规划、图论和经典竞赛模型。</p>
                 </a>
-                <a href="#datastructure" class="bg-datastructure/10 hover:bg-datastructure/20 text-datastructure px-4 py-2 rounded-md transition-all flex items-center hover-scale">
-                    <i class="fa fa-database mr-2"></i> 数据结构
+                <a href="#datastructure" class="rounded-lg border border-gray-100 p-4 hover:border-datastructure/50 hover:bg-datastructure/5 transition-all">
+                    <i class="fa fa-database text-datastructure text-2xl mb-3"></i>
+                    <h3 class="font-semibold text-gray-900 mb-2">数据结构</h3>
+                    <p class="text-sm text-gray-600">数组、链表、栈队列、树、图和高级结构入门。</p>
+                </a>
+                <a href="cspchusai.html" class="rounded-lg border border-gray-100 p-4 hover:border-primary/50 hover:bg-primary/5 transition-all">
+                    <i class="fa fa-book text-primary text-2xl mb-3"></i>
+                    <h3 class="font-semibold text-gray-900 mb-2">CSP 初赛</h3>
+                    <p class="text-sm text-gray-600">计算机基础、数学知识、复杂度和真题练习。</p>
                 </a>
             </div>
-        </div>
-        <div class="bg-white rounded-lg p-6 mb-8 card-shadow">
-            <h2 class="text-2xl font-bold text-primary mb-4">csp初赛备考模块</h2>
-            <p class="text-gray-700 mb-6">
-                点击进入csp初赛备考模块。
-            </p>
-            <div class="flex flex-wrap gap-4">
-                <a href="cspchusai.html" target="_blank" class="bg-syntax/10 hover:bg-syntax/20 text-syntax px-4 py-2 rounded-md transition-all flex items-center hover-scale">
-                    <i class="fa fa-code mr-2"></i> 点击进入
-                </a>
-                
-            </div>
-        </div>
+        </section>
 
         <!-- 内容分类部分 -->
         <div id="courses" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -562,6 +625,7 @@
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">快速链接</h3>
                     <ul class="space-y-2 text-sm">
                         <li><a href="#top" class="text-gray-600 hover:text-primary">首页</a></li>
+                        <li><a href="#roadmap" class="text-gray-600 hover:text-primary">学习路径</a></li>
                         <li><a href="#courses" class="text-gray-600 hover:text-primary">课程</a></li>
                         <li><a href="#practice" class="text-gray-600 hover:text-primary">题库</a></li>
                         <li><a href="#about" class="text-gray-600 hover:text-primary">关于我们</a></li>
@@ -570,9 +634,9 @@
                 <div>
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">联系我们</h3>
                     <ul class="space-y-2 text-sm">
-                        <li class="flex items-center"><i class="fa fa-envelope-o mr-2 text-primary"></i> <a href="mailto:contact@yaoteacher.com" class="text-gray-600 hover:text-primary">contact@yaoteacher.com</a></li>
+                        <li class="flex items-center"><i class="fa fa-envelope-o mr-2 text-primary"></i> <a href="mailto:contact@aixnoi.com" class="text-gray-600 hover:text-primary">contact@aixnoi.com</a></li>
                         <li class="flex items-center"><i class="fa fa-phone mr-2 text-primary"></i> <span class="text-gray-600">400-123-4567</span></li>
-                        <li class="flex items-center"><i class="fa fa-weixin mr-2 text-primary"></i> <span class="text-gray-600">yaoteacher</span></li>
+                        <li class="flex items-center"><i class="fa fa-weixin mr-2 text-primary"></i> <span class="text-gray-600">aixnoi</span></li>
                     </ul>
                 </div>
                 <div>
@@ -657,18 +721,35 @@
         ];
         
         function performSearch(query) {
-            if (!query.trim()) {
+            const normalizedQuery = query.trim().toLowerCase();
+            if (!normalizedQuery) {
                 searchResultsContent.innerHTML = '<p class="text-gray-500 italic">请输入关键词进行搜索</p>';
+                searchResults.classList.remove('hidden');
                 return;
             }
             
-            const results = searchData.filter(item => 
-                item.name.toLowerCase().includes(query.toLowerCase()) || 
-                item.description.toLowerCase().includes(query.toLowerCase())
-            );
+            const results = searchData.filter(item => {
+                const searchableText = [
+                    item.name,
+                    item.description,
+                    item.category,
+                    categoryLabels[item.category] || ''
+                ].join(' ').toLowerCase();
+                return searchableText.includes(normalizedQuery);
+            });
             
             if (results.length === 0) {
-                searchResultsContent.innerHTML = '<p class="text-gray-500 italic">没有找到相关结果</p>';
+                searchResultsContent.innerHTML = `
+                    <div class="rounded-md border border-gray-100 bg-darkbg p-4">
+                        <p class="text-gray-600 mb-3">没有找到相关结果，可以先从这些入口继续浏览。</p>
+                        <div class="flex flex-wrap gap-2 text-sm">
+                            <a href="#roadmap" class="px-3 py-1 rounded-md bg-primary/10 text-primary hover:bg-primary/20">学习路径</a>
+                            <a href="#syntax" class="px-3 py-1 rounded-md bg-syntax/10 text-syntax hover:bg-syntax/20">语法基础</a>
+                            <a href="#algorithm" class="px-3 py-1 rounded-md bg-algorithm/10 text-algorithm hover:bg-algorithm/20">算法设计</a>
+                            <a href="#datastructure" class="px-3 py-1 rounded-md bg-datastructure/10 text-datastructure hover:bg-datastructure/20">数据结构</a>
+                        </div>
+                    </div>
+                `;
             } else {
                 searchResultsContent.innerHTML = results.map(result => `
                     <a href="${result.url}" target="${result.url.startsWith('#') ? '_self' : '_blank'}" class="result-card block bg-white p-3 rounded-md border border-gray-100 hover:border-primary/50 transition-all">
@@ -696,6 +777,13 @@
         });
         closeSearch.addEventListener('click', () => {
             searchResults.classList.add('hidden');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                searchResults.classList.add('hidden');
+                closeMobileMenu();
+            }
         });
         
         // 子主题点击事件
